@@ -1,0 +1,7 @@
+# Local tooling / editor state (not needed for GitHub Pages deploy)
+.claude/
+.entire/
+
+# OS / misc
+Thumbs.db
+.DS_Store

@@ -1,0 +1,84 @@
+/* ============================================================
+   tokens.css — Design tokens (light default + dark override)
+   Brand colors (SAP blue/yellow) stay constant across themes.
+   ============================================================ */
+:root {
+  color-scheme: light;
+
+  /* Brand (fixed — both themes) */
+  --sap-blue: #0070F2;
+  --sap-cyan: #0FAAFF;
+  --sap-yellow: #FFC700;
+
+  /* Semantic tokens — light theme */
+  --sap-blue-deep: #003A8F;
+  --sap-blue-soft: #E6F2FF;
+  --sap-yellow-soft: #FFF6D6;
+
+  --ink:   #0B1B33;
+  --ink-2: #3A4A63;
+  --ink-3: #6B7A90;
+  --line:  #E4E9F1;
+  --bg:    #F7F9FC;
+  --white: #FFFFFF;           /* "surface" — card / panel background */
+  --ok:    #0E8F62;
+
+  --danger: #9E1B1B;
+  --danger-soft: #FFE5E5;
+
+  /* Non-flipping tokens — primary CTA & footer stay visually consistent */
+  --btn-primary-bg:   #0B1B33;
+  --btn-primary-text: #FFFFFF;
+  --footer-bg:        #0B1B33;
+  --footer-text:      #C7D2E3;
+  --footer-muted:     #9AB0D0;
+  --footer-fade:      #6E83A5;
+
+  /* Tints/overlays used by nav, etc. */
+  --nav-bg: rgba(255, 255, 255, 0.85);
+
+  /* Geometry */
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(11,27,51,.04), 0 2px 8px rgba(11,27,51,.04);
+  --shadow-md: 0 4px 16px rgba(11,27,51,.06), 0 10px 32px rgba(11,27,51,.06);
+}
+
+/* ---------- Dark theme ---------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --sap-blue-deep: #6FC0FF;    /* flipped for readability on dark */
+  --sap-blue-soft: #10284A;
+  --sap-yellow-soft: #2E2412;
+
+  --ink:   #E9EFF7;            /* primary text */
+  --ink-2: #A8B3C8;
+  --ink-3: #7186A4;
+  --line:  #1F2A3E;
+  --bg:    #0B1425;            /* page alt bg */
+  --white: #111E33;            /* card / surface bg */
+  --ok:    #4ED7A0;
+
+  --danger:      #FF7C7C;
+  --danger-soft: #3A1818;
+
+  /* Primary CTA inverts — light surface with dark text on dark bg */
+  --btn-primary-bg:   #FFFFFF;
+  --btn-primary-text: #0B1B33;
+
+  /* Footer keeps inherent dark (slightly deeper than page) */
+  --footer-bg:    #060E1C;
+  --footer-text:  #A8B3C8;
+  --footer-muted: #7186A4;
+  --footer-fade:  #4F5D78;
+
+  --nav-bg: rgba(17, 30, 51, 0.82);
+
+  /* Softer shadows on dark (lower ambient light) */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.40), 0 10px 32px rgba(0,0,0,.30);
+}

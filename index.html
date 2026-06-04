@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Super-Claude for SAP — SAP ABAP 개발을 위한 Claude Code 플러그인</title>
+<meta name="description" content="sc4sap — Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 플러그인. ECC / S/4HANA On-Premise / S/4HANA Cloud 전 플랫폼. MCP 기반 150여 개 도구, 25 전문 에이전트, 14 업종 × 16 국가 컨텍스트." />
+<meta property="og:title" content="Super-Claude for SAP" />
+<meta property="og:description" content="SAP ABAP 개발, 이제 Claude가 끝까지 씁니다." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="apple-touch-icon" href="assets/favicon.svg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<link rel="stylesheet" href="css/sections.css" />
+
+<!-- Theme resolver — runs before render to prevent FOUC flash -->
+<script>
+(function () {
+  try {
+    var stored = localStorage.getItem('sc4sap-theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (stored === 'dark' || (!stored && prefersDark)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  } catch (e) { /* silent */ }
+})();
+</script>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <span class="brand-mark"><span>SC4</span><span>SAP</span></span>
+      <span class="brand-text"><b>Super-Claude</b> for SAP</span>
+    </div>
+    <button class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="nav-links">
+      <a href="#top">Intro</a>
+      <a href="#contact">Contact</a>
+      <button type="button" class="theme-toggle" aria-label="테마 전환" data-theme-toggle>
+        <svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============== 1. HERO ============== -->
+<header id="top" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <span class="hero-eyebrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      Claude Code Plugin · MCP ABAP ADT · 150+ Tools
+    </span>
+    <h1>
+      <span class="grad">Super-Claude for SAP</span><br/>
+    </h1>
+    <h2>"SAP 패러다임의 대전환, 새로운 판이 열립니다"</h2>
+
+    <div class="install-wrap">
+      <div class="install-row">
+        <pre class="install-line"><code data-install-cmd>/plugin install sc4sap</code></pre>
+        <button type="button" class="install-line-copy" data-install-copy aria-label="명령어 복사">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>Copy</span>
+        </button>
+      </div>
+      <div class="install-meta">
+        <span>Open source · MIT licensed</span>
+        <span class="install-meta-sep">|</span>
+        <a href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener" class="install-meta-stars" aria-label="GitHub 저장소 스타">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span data-gh-stars>—</span>
+        </a>
+      </div>
+    </div>
+
+    <h2 class="sub">SC4SAP 는 Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 플러그인입니다</h2>
+    <p class="hero-desc">
+      ECC · S/4HANA On-Premise · S/4HANA Cloud(Public·Private) 전 플랫폼에서
+      <br/>클래스 · 리포트 · CDS · Dynpro · GUI Status까지 MCP 기반 150여 개 도구로
+      <br/>직접 읽고, 쓰고, 활성화합니다
+    </p>
+    <div class="hero-tags">
+      <span class="tag"><span class="dot"></span>SAP ECC 6.0</span>
+      <span class="tag"><span class="dot"></span>S/4HANA On-Premise</span>
+      <span class="tag"><span class="dot"></span>S/4HANA Cloud</span>
+    </div>
+
+    <!-- Capability detail panel — populated on cap-card click -->
+    <div class="cap-detail" data-cap-detail aria-live="polite" style="margin-top:40px;">
+      <div class="cap-detail-empty">
+        <div class="cap-detail-empty-icon" aria-hidden="true">
+          <span class="cap-finger">👇</span>
+        </div>
+        <p>아래 12개 카드를 클릭하면 각 기능의 세부 내용을 볼 수 있습니다</p>
+      </div>
+    </div>
+
+    <!-- Core Capabilities 12 cards (README 원문 기반) -->
+    <div class="cap-grid" aria-label="Core Capabilities 12">
+      <div class="cap-card" data-cap-id="01">
+        <span class="cap-no">#01</span>
+        <div class="cap-icon">🔧</div>
+        <h4>Auto MCP Install</h4>
+        <p><code>/sc4sap:setup</code><br/>MCP 서버·권한·블록리스트 훅 원클릭 설치</p>
+      </div>
+      <div class="cap-card" data-cap-id="02">
+        <span class="cap-no">#02</span>
+        <div class="cap-icon">🧠</div>
+        <h4>Specialist Agents</h4>
+        <p>Core 10 · BC 1 · Modules 14 <br/><code>/sc4sap:team</code> 으로 병렬 협업</p>
+      </div>
+      <div class="cap-card" data-cap-id="03">
+        <span class="cap-no">#03</span>
+        <div class="cap-icon">🔍</div>
+        <h4>Program Analyze</h4>
+        <p><code>/sc4sap:program-to-spec</code><br/>프로그램을 기능/기술 스펙으로 역공학</p>
+      </div>
+      <div class="cap-card" data-cap-id="04">
+        <span class="cap-no">#04</span>
+        <div class="cap-icon">🧪</div>
+        <h4>Analyze Code</h4>
+        <p>Clean ABAP · 성능 · 보안 정적 리뷰<br/>severity-ranked 수정 제안</p>
+      </div>
+      <div class="cap-card" data-cap-id="05">
+        <span class="cap-no">#05</span>
+        <div class="cap-icon">⚖️</div>
+        <h4>Compare Programs</h4>
+        <p>2–5 프로그램을 10차원으로 비교
+          <br/>복제·분기 판별 수행</p>
+      </div>
+      <div class="cap-card" data-cap-id="06">
+        <span class="cap-no">#06</span>
+        <div class="cap-icon">🩺</div>
+        <h4>Maintenance Diagnosis</h4>
+        <p>ST22 · SM02 · Gateway 로그 · 프로파일러를 Claude 안에서 1차 분석</p>
+      </div>
+      <div class="cap-card" data-cap-id="07">
+        <span class="cap-no">#07</span>
+        <div class="cap-icon">🔒</div>
+        <h4>Fit to System</h4>
+        <p>문서화 · 장애 대응 · 데이터 보호까지
+          <br/>오직 한 패키지로</p>
+      </div>
+      <div class="cap-card" data-cap-id="08">
+        <span class="cap-no">#08</span>
+        <div class="cap-icon">🗃️</div>
+        <h4>Reusability · CBO Reuse</h4>
+        <p><code>/sc4sap:analyze-cbo-obj</code>
+          <br/>이미 있는 Z 프로그램을 다시 만들지 않도록</p>
+      </div>
+      <div class="cap-card" data-cap-id="09">
+        <span class="cap-no">#09</span>
+        <div class="cap-icon">🏭</div>
+        <h4>Industry Context</h4>
+        <p>14 업종 레퍼런스. Retail · Auto · Pharma · Banking · Steel · Utilities ···</p>
+      </div>
+      <div class="cap-card" data-cap-id="10">
+        <span class="cap-no">#10</span>
+        <div class="cap-icon">🌏</div>
+        <h4>Country / Localization</h4>
+        <p>16 국가 로컬라이제이션<br/>E-invoicing · 은행 · 세금 · 법정 리포트</p>
+      </div>
+      <div class="cap-card" data-cap-id="11">
+        <span class="cap-no">#11</span>
+        <div class="cap-icon">🎯</div>
+        <h4>Active-Module Awareness</h4>
+        <p>활성 모듈 조합 자동 인지<br/>MM+PS → WBS / SD+CO → CO-PA</p>
+      </div>
+      <div class="cap-card" data-cap-id="12">
+        <span class="cap-no">#12</span>
+        <div class="cap-icon">🏗️</div>
+        <h4>Formatted Auto Program Maker</h4>
+        <p>Main+Include·ALV·Dynpro·GUI Status·Text Element·ABAP Unit까지 완성</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<!-- ============== FOOTER / CONTACT ============== -->
+<footer id="contact">
+  <div class="foot-inner">
+    <div class="foot-top">
+      <h3>Super-Claude for SAP, 지금 바로 사용할 수 있습니다</h3>
+      <p>Claude Code에 커스텀 마켓플레이스로 추가하면 곧바로 사용 가능합니다</p>
+    </div>
+
+    <div class="foot-main">
+      <div class="foot-contact">
+        <h4>Contact</h4>
+        <ul>
+          <li>
+            <a href="https://www.linkedin.com/in/seunghyun-paek-5b83b7183/" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.45 20.45h-3.56v-5.56c0-1.33-.03-3.04-1.86-3.04-1.86 0-2.14 1.45-2.14 2.95v5.65H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.86 3.37-1.86 3.6 0 4.27 2.37 4.27 5.46v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0z"/>
+              </svg>
+              <span class="foot-name">백승현</span>
+              <span class="foot-role">LinkedIn</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/sihun-kim-27737132b/" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.45 20.45h-3.56v-5.56c0-1.33-.03-3.04-1.86-3.04-1.86 0-2.14 1.45-2.14 2.95v5.65H9.33V9h3.42v1.56h.05c.48-.9 1.64-1.86 3.37-1.86 3.6 0 4.27 2.37 4.27 5.46v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0z"/>
+              </svg>
+              <span class="foot-name">김시훈</span>
+              <span class="foot-role">LinkedIn</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="foot-actions">
+        <a href="https://github.com/babamba2/superclaude-for-sap" class="btn btn-yellow" target="_blank" rel="noopener">
+          GitHub 저장소로 이동
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+        </a>
+        <a href="https://www.npmjs.com/package/@babamba2/abap-mcp-adt-powerup" class="btn btn-primary foot-npm" target="_blank" rel="noopener">
+          npm · abap-mcp-adt-powerup
+        </a>
+      </div>
+    </div>
+
+    <div class="foot-meta">
+      © Super-Claude for SAP · Licensed under MIT · Built on Claude Code + MCP ABAP ADT
+    </div>
+  </div>
+</footer>
+
+<!-- Twemoji — replaces unicode emoji (e.g. 🇰🇷 regional indicator pairs) with
+     SVG images so flags render consistently on Windows / Linux too. -->
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>

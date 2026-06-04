@@ -1,0 +1,64 @@
+/* ============================================================
+   base.css — Reset, typography, utilities
+   ============================================================ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .3s ease, color .3s ease;
+}
+
+/* Soft theme-transition on elements that commonly flip */
+.panel, .phase-card, .fit-card, .cap-card, .ext-card, .active-row,
+.region-card, .agent-row, .agent-head, .modules-cloud, .rules-list,
+.effect-box, .callout, .review-wrap, .mechanism-note, .big-stat,
+.profile, .defense-table, .hard-rule, .ack-demo, .ack-output,
+.nav, .hero-bg, footer, .gif-slot, .gif-slot figcaption, .tag, .chip,
+.marquee, .kw-chip, .conv-item, .dim-item, .phase-no {
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+}
+
+code, pre, .mono {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+a { color: var(--sap-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Global emphasis color — light: navy, dark: yellow. Brand text keeps its own color via .brand-text b override. */
+b { color: var(--sap-blue-deep); }
+[data-theme="dark"] b { color: var(--sap-yellow); }
+
+img { max-width: 100%; display: block; }
+
+/* Accessibility — focus-visible ring (Phase B/C) */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--sap-blue);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Utility */
+.muted { color: var(--ink-3); }
+
+/* Reduced motion — disable hover-lift transforms + autoplay */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .gif-slot video { display: none; }
+  .gif-slot img.poster { display: block; }
+}
