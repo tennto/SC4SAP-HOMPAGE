@@ -396,6 +396,10 @@ footer .foot-npm {
 }
 @media (max-width: 720px) {
   .copy-toast { top: 90px; left: 16px; padding: 8px 14px; font-size: 12.5px; }
+  .install-wrap { width: 100%; }
+  .install-row { min-width: 0; width: 100%; }
+  .install-line { padding: 10px 16px; }
+  .install-line-copy { padding: 0 12px; }
 }
 
 [data-theme="dark"] .install-row {
