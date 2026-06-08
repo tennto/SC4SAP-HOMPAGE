@@ -991,7 +991,7 @@ function parseTwemoji(node) {
     });
   }
 
-  function selectCard(card) {
+  function selectCard(card, opts) {
     cards.forEach(c => c.classList.remove('is-active'));
     card.classList.add('is-active');
     activeCardEl = card;
@@ -1029,7 +1029,11 @@ function parseTwemoji(node) {
       initAckDemo(panel);
     }
 
-    panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Skip scrolling when this is a silent re-render (e.g. language change) —
+    // only scroll into view on an explicit user card selection.
+    if (!opts || opts.scroll !== false) {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
   cards.forEach(card => {
@@ -1045,8 +1049,9 @@ function parseTwemoji(node) {
   });
 
   // Re-render the open panel in the new language when the user switches it.
+  // Keep the scroll position fixed — language change shouldn't move the page.
   document.addEventListener('sc4:langchange', () => {
-    if (activeCardEl) selectCard(activeCardEl);
+    if (activeCardEl) selectCard(activeCardEl, { scroll: false });
   });
 })();
 

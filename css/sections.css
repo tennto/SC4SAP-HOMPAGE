@@ -331,6 +331,11 @@
   fill: var(--ink-2);
   font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
 }
+/* EN / JA body labels run longer than the Korean originals — shrink them a
+   touch so they stay inside the fixed-width (178u) cards. CSS font-size
+   overrides the inline font-size="13" presentation attribute. */
+html[lang="en"] .capd-info4-svg .info4-bd text { font-size: 11px; }
+html[lang="ja"] .capd-info4-svg .info4-bd text { font-size: 10.5px; }
 .capd-info4-svg .info4-tt-w { fill: #FFFFFF; }
 .capd-info4-svg .info4-tt-d { fill: #4A3500; }
 
@@ -712,16 +717,16 @@
 /* — Variant 11 — module combo equations */
 .capd-combos { display: flex; flex-direction: column; gap: 10px; }
 .capd-combo {
-  display: grid; grid-template-columns: 200px 1fr; gap: 14px; align-items: center;
+  display: grid; grid-template-columns: minmax(200px, max-content) 1fr; gap: 14px; align-items: center;
   background: var(--white); border: 1px solid var(--line); border-radius: 12px;
   padding: 12px 16px;
 }
 .capd-combo-eq {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; white-space: nowrap;
   font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 800; color: var(--sap-blue);
 }
 .capd-combo-eq .arrow { color: var(--ink-3); font-weight: 800; }
-.capd-combo-eq .out { color: #B88900; }
+.capd-combo-eq .out { color: #B88900; white-space: nowrap; }
 .capd-combo p { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.55; }
 @media (max-width: 720px) { .capd-combo { grid-template-columns: 1fr; gap: 4px; } }
 
