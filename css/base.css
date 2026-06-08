@@ -14,6 +14,18 @@ body {
   transition: background-color .3s ease, color .3s ease;
 }
 
+/* Japanese — prefer Noto Sans JP so kanji/kana don't render with Korean
+   (Noto Sans KR) glyph shapes. Latin still uses Inter / JetBrains Mono.
+   Higher specificity than the per-element 'Noto Sans KR' stacks it overrides. */
+html[lang="ja"] body,
+html[lang="ja"] .install-line-copy,
+html[lang="ja"] .capd-info4-svg .info4-bd text {
+  font-family: 'Inter', 'Noto Sans JP', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+html[lang="ja"] .capd-combo-eq {
+  font-family: 'JetBrains Mono', 'Noto Sans JP', ui-monospace, monospace;
+}
+
 /* Soft theme-transition on elements that commonly flip */
 .panel, .phase-card, .fit-card, .cap-card, .ext-card, .active-row,
 .region-card, .agent-row, .agent-head, .modules-cloud, .rules-list,
