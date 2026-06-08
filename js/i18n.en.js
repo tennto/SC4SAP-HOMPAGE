@@ -239,11 +239,11 @@ window.SC4_PANELS_EN = (function () {
         <!-- Body text — 3 lines centered both axes inside the white card (y 100→215, center y=157.5).
              Lines at y=137 / 157 / 177 with dominant-baseline=middle = visual centers there. font 13 (was 11). -->
         <g class="info4-bd">
-          <text x="95"  y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">Naming · single responsibility</text>
-          <text x="95"  y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">Magic numbers · global vars</text>
-          <text x="95"  y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">OOP / Procedural consistency</text>
+          <text x="95"  y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">Naming · SRP</text>
+          <text x="95"  y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">Magic numbers · globals</text>
+          <text x="95"  y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">OOP / Proc. consistency</text>
 
-          <text x="283" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SELECT patterns · indexes</text>
+          <text x="283" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SELECT · indexes</text>
           <text x="283" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">Nested LOOP · INTO TABLE</text>
           <text x="283" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">sorted / hashed usage</text>
 

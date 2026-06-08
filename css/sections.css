@@ -334,8 +334,8 @@
 /* EN / JA body labels run longer than the Korean originals — shrink them a
    touch so they stay inside the fixed-width (178u) cards. CSS font-size
    overrides the inline font-size="13" presentation attribute. */
-html[lang="en"] .capd-info4-svg .info4-bd text { font-size: 11px; }
-html[lang="ja"] .capd-info4-svg .info4-bd text { font-size: 10.5px; }
+html[lang="en"] .capd-info4-svg .info4-bd text { font-size: 12px; }
+html[lang="ja"] .capd-info4-svg .info4-bd text { font-size: 11px; }
 .capd-info4-svg .info4-tt-w { fill: #FFFFFF; }
 .capd-info4-svg .info4-tt-d { fill: #4A3500; }
 
@@ -727,6 +727,10 @@ html[lang="ja"] .capd-info4-svg .info4-bd text { font-size: 10.5px; }
 }
 .capd-combo-eq .arrow { color: var(--ink-3); font-weight: 800; }
 .capd-combo-eq .out { color: #B88900; white-space: nowrap; }
+/* EN out-labels run longer; pin a uniform wider first column so all four
+   rows stay aligned AND the FI+TR label stays on one line. KO/JA keep the
+   minmax(200px,…) above (their labels fit at 200). */
+html[lang="en"] .capd-combo { grid-template-columns: 250px 1fr; }
 .capd-combo p { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.55; }
 @media (max-width: 720px) { .capd-combo { grid-template-columns: 1fr; gap: 4px; } }
 

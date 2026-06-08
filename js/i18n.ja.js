@@ -242,10 +242,10 @@ window.SC4_PANELS_JA = (function () {
              Lines at y=137 / 157 / 177 with dominant-baseline=middle = visual centers there. font 13 (was 11). -->
         <g class="info4-bd">
           <text x="95"  y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">命名 · 単一責任</text>
-          <text x="95"  y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">マジックナンバー · グローバル変数</text>
+          <text x="95"  y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">マジックナンバー · 大域変数</text>
           <text x="95"  y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">OOP / Proceduralの一貫性</text>
 
-          <text x="283" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SELECTパターン · インデックス</text>
+          <text x="283" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SELECT · インデックス</text>
           <text x="283" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">ネストLOOP · INTO TABLE</text>
           <text x="283" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">sorted / hashedの使用</text>
 
