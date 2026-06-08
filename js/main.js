@@ -797,6 +797,20 @@ function parseTwemoji(node) {
 
   let activeTypewriter = null;
   let activeStops = [];   // stop callbacks for any sliders/carousels in the current panel
+  let activeCardEl = null;  // currently-open card — re-rendered on language change
+
+  // DETAILS above is the Korean baseline. EN / JA panel sets are loaded from
+  // js/i18n.en.js / js/i18n.ja.js (window.SC4_PANELS_EN / _JA). Pick the set
+  // for the active language, falling back to Korean for any missing panel.
+  window.SC4_PANELS_KO = DETAILS;
+  function currentLang() {
+    return (window.SC4_I18N && window.SC4_I18N.current && window.SC4_I18N.current()) || 'ko';
+  }
+  function panelFor(id) {
+    const sets = { ko: DETAILS, en: window.SC4_PANELS_EN, ja: window.SC4_PANELS_JA };
+    const set = sets[currentLang()] || DETAILS;
+    return (set && set[id]) || DETAILS[id];
+  }
 
   function render(d) {
     panel.innerHTML = d.html;
@@ -980,8 +994,9 @@ function parseTwemoji(node) {
   function selectCard(card) {
     cards.forEach(c => c.classList.remove('is-active'));
     card.classList.add('is-active');
+    activeCardEl = card;
     const id = card.dataset.capId;
-    const data = DETAILS[id];
+    const data = panelFor(id);
     if (!data) return;
 
     // Stop any previous typewriter still running on the now-detached panel
@@ -1027,6 +1042,11 @@ function parseTwemoji(node) {
         selectCard(card);
       }
     });
+  });
+
+  // Re-render the open panel in the new language when the user switches it.
+  document.addEventListener('sc4:langchange', () => {
+    if (activeCardEl) selectCard(activeCardEl);
   });
 })();
 
@@ -1255,19 +1275,16 @@ function initAckDemo(scope) {
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const kw = btn.dataset.kw || btn.textContent.trim();
+      const t = (k) => (window.SC4_I18N && window.SC4_I18N.t) ? window.SC4_I18N.t(k) : k;
       output.classList.remove('pass', 'deny');
       if (PASS.has(kw)) {
         output.classList.add('pass');
-        output.innerHTML =
-          `→ <b>PASS</b> — 명시적 긍정 키워드 "<b>${kw}</b>" 인식. ` +
-          `GetTableContents(BNKA) 허용 (per-call · per-table · per-session).`;
+        output.innerHTML = t('ackPass').replace(/\{kw\}/g, kw);
       } else if (AMBIGUOUS.has(kw)) {
         output.classList.add('deny');
-        output.innerHTML =
-          `→ <b>DENY</b> — 모호한 명령 "<b>${kw}</b>"은(는) acknowledge_risk로 인정되지 않습니다. ` +
-          `명시적 키워드(yes / 승인 / authorize 등)로 다시 요청하세요.`;
+        output.innerHTML = t('ackDeny').replace(/\{kw\}/g, kw);
       } else {
-        output.textContent = '→ 위 키워드 중 하나를 클릭해 게이트 동작을 확인하세요.';
+        output.textContent = t('ackDefault');
       }
     });
   });

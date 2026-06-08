@@ -81,6 +81,31 @@
 [data-theme="dark"] .theme-toggle .tt-sun  { transform: rotate(90deg)  scale(0); opacity: 0; }
 [data-theme="dark"] .theme-toggle .tt-moon { transform: rotate(0deg)   scale(1); opacity: 1; }
 
+/* Language switch (nav) — KO / EN / JP segmented pill, matches toggle styling */
+.lang-switch {
+  display: inline-flex; align-items: center;
+  gap: 2px; padding: 3px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+}
+.lang-opt {
+  appearance: none; border: 0; background: transparent;
+  cursor: pointer;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font: 700 12px/1 'Inter', system-ui, sans-serif;
+  letter-spacing: .02em;
+  color: var(--ink-2);
+  transition: background-color .18s ease, color .18s ease;
+}
+.lang-opt:hover { color: var(--sap-blue); }
+.lang-opt.is-active {
+  background: var(--sap-blue);
+  color: #fff;
+}
+
 /* Mobile hamburger (Phase B addition) */
 .nav-toggle {
   display: none;
