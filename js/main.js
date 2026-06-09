@@ -103,6 +103,23 @@ function parseTwemoji(node) {
   });
 })();
 
+// Nav scroll reaction — condense + elevate the bar once the page has moved.
+// rAF-throttled scroll for smoothness.
+(function initNavScroll() {
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const y = window.scrollY || document.documentElement.scrollTop;
+    nav.classList.toggle('scrolled', y > 8);
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
+})();
+
 // Capability card → detail panel renderer
 // Clicking any #01..#12 cap-card populates the panel above with full info.
 (function initCapabilityDetail() {

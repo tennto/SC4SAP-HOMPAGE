@@ -8,12 +8,25 @@
   background: var(--nav-bg);
   backdrop-filter: saturate(180%) blur(10px);
   border-bottom: 1px solid var(--line);
+  transition: box-shadow .3s ease, border-color .3s ease, background-color .3s ease;
+}
+/* Scrolled state — adds elevation + condenses the bar so the top nav
+   reacts as the page moves instead of staying flat. Toggled in main.js. */
+.nav.scrolled {
+  box-shadow: 0 6px 24px rgba(15, 23, 42, .10);
+  border-bottom-color: transparent;
+  background: var(--nav-bg-scrolled, var(--nav-bg));
+}
+[data-theme="dark"] .nav.scrolled {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .45);
 }
 .nav-inner {
   max-width: 1280px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 24px;
+  transition: padding .3s ease;
 }
+.nav.scrolled .nav-inner { padding-top: 9px; padding-bottom: 9px; }
 .brand {
   display: flex; align-items: center; gap: 10px;
   font-weight: 800; letter-spacing: -0.01em;
@@ -127,6 +140,11 @@
   .nav-links.open { display: flex; }
   .nav-links a { font-size: 15px; padding: 8px 6px; }
   .nav-toggle { display: inline-flex; }
+
+  /* Language pill spans the menu width → distribute KO/EN/JP as 3 equal segments
+     instead of clustering the labels on the left of a full-width pill. */
+  .nav-links .lang-switch { justify-content: space-between; }
+  .nav-links .lang-switch .lang-opt { flex: 1; text-align: center; padding: 7px 0; }
 }
 
 /* ---------- Buttons ---------- */
