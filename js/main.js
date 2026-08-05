@@ -112,7 +112,13 @@ function parseTwemoji(node) {
   function update() {
     ticking = false;
     const y = window.scrollY || document.documentElement.scrollTop;
-    nav.classList.toggle('scrolled', y > 8);
+    // Hysteresis — the sticky nav condenses (its height shrinks) when the
+    // 'scrolled' class lands, which shifts scrollY itself. A single 8px
+    // threshold made the class flip back and forth around that point,
+    // visibly vibrating the page. Engage at 36px, release only below 4px.
+    const isScrolled = nav.classList.contains('scrolled');
+    if (!isScrolled && y > 36)     nav.classList.add('scrolled');
+    else if (isScrolled && y < 4)  nav.classList.remove('scrolled');
   }
   window.addEventListener('scroll', () => {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
@@ -1049,8 +1055,50 @@ function parseTwemoji(node) {
     // Skip scrolling when this is a silent re-render (e.g. language change) —
     // only scroll into view on an explicit user card selection.
     if (!opts || opts.scroll !== false) {
-      panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      scrollPanelIntoView();
     }
+  }
+
+  // Custom eased scroll — always aligns to the PANEL TOP (so the #NN
+  // heading is what lands on screen, even for tall panels like #07/#08/#10
+  // where scrollIntoView({block:'center'}) used to overshoot past the head),
+  // and decelerates hard near the end (ease-out quart) for a soft settle.
+  function scrollPanelIntoView() {
+    const nav = document.querySelector('.nav');
+    const navH = nav ? nav.offsetHeight : 0;
+    const targetY = Math.max(0,
+      panel.getBoundingClientRect().top + window.scrollY - navH - 24);
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.scrollTo(0, targetY);
+      return;
+    }
+
+    const startY = window.scrollY;
+    const dist = targetY - startY;
+    if (Math.abs(dist) < 2) return;
+
+    // Duration scales gently with distance, clamped for predictability
+    const duration = Math.min(1100, Math.max(550, Math.abs(dist) * 0.45));
+    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+    const t0 = performance.now();
+
+    // CSS `scroll-behavior: smooth` would re-smooth every rAF step and
+    // fight our easing — suspend it for the duration of the animation.
+    const rootStyle = document.documentElement.style;
+    const prevBehavior = rootStyle.scrollBehavior;
+    rootStyle.scrollBehavior = 'auto';
+
+    function frame(now) {
+      const p = Math.min(1, (now - t0) / duration);
+      window.scrollTo(0, startY + dist * easeOutQuart(p));
+      if (p < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        rootStyle.scrollBehavior = prevBehavior;
+      }
+    }
+    requestAnimationFrame(frame);
   }
 
   cards.forEach(card => {

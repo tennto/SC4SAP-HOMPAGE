@@ -6,17 +6,73 @@
 .hero {
   position: relative;
   padding: 96px 24px 72px;
-  overflow: hidden;
+  overflow: hidden;          /* fallback for browsers without `clip` */
+  overflow: clip visible;    /* clip x (blob bleed), let y extend behind footer */
 }
+/* Layered ambient background —
+   base:      vertical surface gradient + three large brand-color glows
+   ::before   fine dot grid, fading out toward the bottom (masked)
+   ::after    slow-drifting blurred color blobs (the "alive" layer)     */
 .hero-bg {
-  position: absolute; inset: 0; z-index: 0;
+  /* Extends 240px below the hero so the ambient bg shows through the
+     footer's rounded shoulders + top margin strip — no seam. Kept well
+     under the footer's height so it never adds scrollable dead space. */
+  position: absolute; inset: 0 0 -240px 0; z-index: 0;
   background:
-    radial-gradient(1200px 500px at 80% -10%, rgba(15,170,255,.18), transparent 60%),
-    radial-gradient(900px 500px at 10% 10%, rgba(255,199,0,.18), transparent 60%),
+    radial-gradient(1100px 520px at 85% -12%, rgba(15, 170, 255, .17), transparent 60%),
+    radial-gradient(900px 500px  at 6%  4%,   rgba(255, 199, 0, .15),  transparent 58%),
+    radial-gradient(1100px 700px at 50% 58%,  rgba(0, 112, 242, .07),  transparent 62%),
+    radial-gradient(900px 560px  at 88% 96%,  rgba(255, 199, 0, .08),  transparent 58%),
     linear-gradient(180deg, var(--white) 0%, var(--bg) 100%);
 }
+.hero-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(11, 27, 51, .07) 1.1px, transparent 1.1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.5) 40%, rgba(0,0,0,.25) 70%, transparent 96%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.5) 40%, rgba(0,0,0,.25) 70%, transparent 96%);
+  pointer-events: none;
+}
+.hero-bg::after {
+  content: '';
+  /* fixed vertical bleed (not %) — keeps total downward overflow small
+     enough to stay hidden behind the footer */
+  position: absolute; inset: -80px -12%;
+  background:
+    radial-gradient(circle at 16% 22%, rgba(0, 112, 242, .13), transparent 28%),
+    radial-gradient(circle at 85% 48%, rgba(15, 170, 255, .13), transparent 25%),
+    radial-gradient(circle at 58% 8%,  rgba(255, 199, 0, .11),  transparent 20%),
+    radial-gradient(circle at 30% 88%, rgba(15, 170, 255, .09), transparent 24%);
+  filter: blur(52px);
+  animation: heroDrift 24s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform;
+}
+@keyframes heroDrift {
+  from { transform: translate(0, 0) scale(1) rotate(0deg); }
+  to   { transform: translate(-2.5%, 2.2%) scale(1.07) rotate(1.5deg); }
+}
 [data-theme="dark"] .hero-bg {
-  background: linear-gradient(180deg, #0F1C35 0%, var(--bg) 100%);
+  background:
+    radial-gradient(1100px 520px at 85% -12%, rgba(15, 170, 255, .13), transparent 60%),
+    radial-gradient(900px 500px  at 6%  4%,   rgba(255, 199, 0, .07),  transparent 55%),
+    radial-gradient(1100px 700px at 50% 58%,  rgba(0, 112, 242, .10),  transparent 62%),
+    radial-gradient(900px 560px  at 88% 96%,  rgba(111, 192, 255, .06), transparent 58%),
+    linear-gradient(180deg, #16263F 0%, var(--bg) 100%);
+}
+[data-theme="dark"] .hero-bg::before {
+  background-image: radial-gradient(circle, rgba(159, 196, 255, .085) 1.1px, transparent 1.1px);
+}
+[data-theme="dark"] .hero-bg::after {
+  background:
+    radial-gradient(circle at 16% 22%, rgba(0, 112, 242, .17), transparent 28%),
+    radial-gradient(circle at 85% 48%, rgba(15, 170, 255, .14), transparent 25%),
+    radial-gradient(circle at 58% 8%,  rgba(255, 199, 0, .07),  transparent 20%),
+    radial-gradient(circle at 30% 88%, rgba(79, 195, 247, .10), transparent 24%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg::after { animation: none; }
 }
 .hero-inner {
   position: relative; z-index: 1;
@@ -45,6 +101,126 @@
   background-clip: text;
   color: transparent;
 }
+
+/* Hero title — display treatment: flowing gradient wordmark + SAP badge.
+   "Super-Claude" carries an animated gradient sweep; "SAP" sits in a
+   tilted logo-like gradient block with a yellow corner accent.        */
+.hero h1.hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0 0.28em;
+  font-family: 'Sora', 'Plus Jakarta Sans', 'IBM Plex Sans KR', system-ui, sans-serif;
+  font-size: clamp(40px, 6.2vw, 72px);
+  font-weight: 800;
+}
+.hero-title > span { animation: heroWordIn .7s cubic-bezier(.25,.8,.3,1) both; }
+.hero-title .ht-super { animation-delay: .05s; }
+.hero-title .ht-for   { animation-delay: .22s; }
+.hero-title .ht-sap   { animation: heroSapIn .8s cubic-bezier(.34,1.45,.55,1) .38s both; }
+
+.ht-super {
+  background: linear-gradient(100deg,
+    var(--sap-blue-deep) 0%, var(--sap-blue) 28%, var(--sap-cyan) 52%,
+    var(--sap-blue) 76%, var(--sap-blue-deep) 100%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.035em;
+  animation-name: heroWordIn;
+}
+/* gradient sweep runs on a wrapper-less trick: combine entrance (once)
+   then hand off to the infinite sweep via two comma-joined animations */
+.hero-title .ht-super {
+  animation: heroWordIn .7s cubic-bezier(.25,.8,.3,1) .05s both,
+             gradSweep 7s ease-in-out 1.2s infinite;
+}
+[data-theme="dark"] .ht-super {
+  background-image: linear-gradient(100deg,
+    #8FD0FF 0%, var(--sap-cyan) 30%, #C9E6FF 52%,
+    var(--sap-cyan) 74%, #8FD0FF 100%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.ht-for {
+  font-family: 'Plus Jakarta Sans', 'IBM Plex Sans KR', system-ui, sans-serif;
+  font-size: 0.42em;
+  font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  transform: translateY(0.18em);
+}
+.ht-sap {
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  background: linear-gradient(145deg, var(--sap-cyan) -20%, var(--sap-blue) 45%, #003A8F 115%);
+  padding: 0.1em 0.28em 0.08em;
+  border-radius: 0.16em;
+  transform: rotate(-2deg);
+  box-shadow:
+    0 14px 34px rgba(0, 112, 242, .32),
+    inset 0 -0.06em 0.12em rgba(0, 0, 0, .18);
+  transition: transform .45s cubic-bezier(.34,1.45,.55,1), box-shadow .45s ease;
+}
+/* Hover — playful side-to-side wiggle. The entrance animation
+   (heroSapIn) is kept in the list with identical parameters so the
+   browser doesn't restart it when the wiggle is added/removed.       */
+.ht-sap:hover {
+  animation:
+    heroSapIn .8s cubic-bezier(.34, 1.45, .55, 1) .38s both,
+    sapWiggle 1.5s ease-in-out infinite;
+  box-shadow:
+    0 18px 44px rgba(0, 112, 242, .42),
+    inset 0 -0.06em 0.12em rgba(0, 0, 0, .18);
+}
+@keyframes sapWiggle {
+  0%, 100% { transform: rotate(-2deg)   scale(1.03); }
+  20%      { transform: rotate(0.5deg)  scale(1.04); }
+  45%      { transform: rotate(-3.5deg) scale(1.04); }
+  70%      { transform: rotate(-0.5deg) scale(1.03); }
+}
+/* yellow corner accent — echoes the brand-mark's yellow half */
+.ht-sap::after {
+  content: '';
+  position: absolute;
+  top: -0.12em; right: -0.12em;
+  width: 0.22em; height: 0.22em;
+  border-radius: 0.07em;
+  background: var(--sap-yellow);
+  transform: rotate(14deg);
+  box-shadow: 0 4px 12px rgba(255, 199, 0, .45);
+}
+@keyframes heroWordIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes heroSapIn {
+  from { opacity: 0; transform: rotate(-11deg) scale(.55) translateY(14px); }
+  to   { opacity: 1; transform: rotate(-2deg) scale(1) translateY(0); }
+}
+@keyframes gradSweep {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+/* .ht-for entrance keeps its baseline offset after the animation */
+.hero-title .ht-for {
+  animation: heroForIn .7s cubic-bezier(.25,.8,.3,1) .22s both;
+}
+@keyframes heroForIn {
+  from { opacity: 0; transform: translateY(calc(0.18em + 20px)); }
+  to   { opacity: 1; transform: translateY(0.18em); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-title > span, .hero-title .ht-super, .hero-title .ht-for, .hero-title .ht-sap {
+    animation: none !important;
+    opacity: 1;
+  }
+}
 .hero h2:not(.sub) {
   font-size: clamp(22px, 2.6vw, 28px);
   margin: 0 0 24px;
@@ -71,33 +247,72 @@
 @media (max-width: 1020px) { .cap-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 760px)  { .cap-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 420px)  { .cap-grid { grid-template-columns: 1fr; } }
+/* Each card carries one of four pastel accents (cycled by position) —
+   the accent drives its number chip, icon squircle, hover glow, and
+   the top bar that sweeps in on hover / selection.                    */
+.cap-grid .cap-card:nth-child(4n+1) { --ca: var(--a-blue);   --ca-t: var(--t-blue); }
+.cap-grid .cap-card:nth-child(4n+2) { --ca: var(--a-violet); --ca-t: var(--t-violet); }
+.cap-grid .cap-card:nth-child(4n+3) { --ca: var(--a-mint);   --ca-t: var(--t-mint); }
+.cap-grid .cap-card:nth-child(4n)   { --ca: var(--a-amber);  --ca-t: var(--t-amber); }
 .cap-card {
+  position: relative;
+  overflow: hidden;
   background: var(--white); border: 1px solid var(--line);
-  border-radius: var(--radius-md); padding: 20px 20px 22px;
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s;
+  border-radius: 18px; padding: 20px 20px 22px;
+  transition: transform .35s cubic-bezier(.25, .8, .3, 1),
+              box-shadow .35s cubic-bezier(.25, .8, .3, 1),
+              border-color .35s ease;
   cursor: pointer;
   user-select: none;
 }
+.cap-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ca), color-mix(in srgb, var(--ca) 30%, transparent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s cubic-bezier(.25, .8, .3, 1);
+}
+.cap-card:hover::before,
+.cap-card.is-active::before { transform: scaleX(1); }
 .cap-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  border-color: #BFDCFF;
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px color-mix(in srgb, var(--ca) 14%, transparent);
+  border-color: color-mix(in srgb, var(--ca) 38%, var(--line));
 }
 .cap-card:focus-visible {
   outline: 2px solid var(--sap-blue);
   outline-offset: 3px;
 }
 .cap-card.is-active {
-  border-color: var(--sap-blue);
-  box-shadow: 0 0 0 3px rgba(0, 112, 242, 0.18), var(--shadow-sm);
-  transform: translateY(-2px);
+  border-color: var(--ca);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--ca) 20%, transparent),
+    0 14px 32px color-mix(in srgb, var(--ca) 14%, transparent);
+  transform: translateY(-4px);
 }
 .cap-card .cap-no {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; font-weight: 700; color: var(--sap-blue);
+  font-size: 11px; font-weight: 700; color: var(--ca);
   letter-spacing: .08em;
 }
-.cap-card .cap-icon { font-size: 24px; line-height: 1; margin: 10px 0 12px; }
+.cap-card .cap-icon {
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  font-size: 23px; line-height: 1;
+  background: var(--ca-t);
+  border-radius: 15px;
+  margin: 10px 0 12px;
+  transition: transform .45s cubic-bezier(.34, 1.45, .55, 1),
+              border-radius .45s cubic-bezier(.25, .8, .3, 1);
+}
+.cap-card:hover .cap-icon,
+.cap-card.is-active .cap-icon {
+  transform: rotate(-6deg) scale(1.12);
+  border-radius: 50%;
+}
 .cap-card h4 { margin: 0 0 8px; font-size: 14.5px; font-weight: 700; color: var(--ink); }
 .cap-card p  { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.6; }
 
@@ -117,61 +332,105 @@
   text-align: center;
   color: var(--ink-3);
 }
+/* Empty-state visual — gradient orb with downward chevron, expanding
+   sonar rings, and twinkling yellow sparks. Replaces the finger emoji:
+   theme-aware, crisp on every OS (no emoji font dependency).          */
 .cap-detail-empty-icon {
   position: relative;
-  width: 64px; height: 64px;
-  margin: 0 auto 14px;
+  width: 88px; height: 88px;
+  margin: 0 auto 16px;
   display: grid; place-items: center;
 }
-.cap-detail-empty-icon .cap-finger {
-  display: inline-block;
-  font-size: 38px; line-height: 1;
-  transform-origin: 50% 20%;
-  animation: capTap 1.6s cubic-bezier(.4,.0,.2,1) infinite;
-  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .12));
+.tap-orb {
+  position: relative; z-index: 2;
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  color: #fff;
+  background: linear-gradient(140deg, var(--sap-cyan) -10%, var(--sap-blue) 55%, #0058C4 115%);
+  box-shadow:
+    0 12px 28px rgba(0, 112, 242, .35),
+    inset 0 -4px 9px rgba(0, 0, 0, .16),
+    inset 0 3px 7px rgba(255, 255, 255, .28);
+  animation: orbBob 2.4s cubic-bezier(.45, 0, .4, 1) infinite;
 }
-.cap-detail-empty-icon::after {
-  content: '';
-  position: absolute; left: 50%; bottom: 4px;
-  width: 38px; height: 10px;
-  border-radius: 999px;
-  background: radial-gradient(ellipse at center, rgba(15, 100, 180, .35), transparent 70%);
-  transform: translateX(-50%) scale(.6);
-  animation: capRipple 1.6s ease-out infinite;
+.tap-orb svg { width: 25px; height: 25px; }
+.tap-ring {
+  position: absolute; z-index: 1;
+  left: 50%; top: 50%;
+  width: 54px; height: 54px;
+  margin: -27px 0 0 -27px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(15, 170, 255, .55);
+  opacity: 0;
+  animation: ringPing 2.4s ease-out infinite;
   pointer-events: none;
 }
-[data-theme="dark"] .cap-detail-empty-icon::after {
-  /* Dark-on-dark blue is invisible — use SAP-cyan with higher alpha */
-  background: radial-gradient(ellipse at center, rgba(111, 192, 255, .55), transparent 70%);
+.tap-ring.r2 { animation-delay: 1.2s; }
+[data-theme="dark"] .tap-ring { border-color: rgba(111, 192, 255, .6); }
+.tap-spark {
+  position: absolute; z-index: 3;
+  color: var(--sap-yellow);
+  font-size: 13px; line-height: 1;
+  text-shadow: 0 1px 6px rgba(255, 199, 0, .45);
+  animation: sparkTwinkle 2.4s ease-in-out infinite;
+  pointer-events: none;
 }
+.tap-spark.s1 { top: 3px;  left: 8px; }
+.tap-spark.s2 { top: 14px; right: 3px;  font-size: 10px; animation-delay: .8s; }
+.tap-spark.s3 { bottom: 8px; left: 2px; font-size: 9px;  animation-delay: 1.5s; }
 .cap-detail-empty p { margin: 0; font-size: 14px; }
-@keyframes capTap {
-  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
-  18%      { transform: translateY(-9px) rotate(-4deg) scale(1.04); }
-  38%      { transform: translateY(4px) rotate(3deg) scale(.96); }
-  55%      { transform: translateY(-3px) rotate(-2deg) scale(1.02); }
-  72%      { transform: translateY(1px) rotate(0) scale(1); }
+@keyframes orbBob {
+  0%, 100% { transform: translateY(-2px); }
+  50%      { transform: translateY(6px); }
 }
-@keyframes capRipple {
-  0%, 28% { opacity: 0; transform: translateX(-50%) scale(.5); }
-  42%     { opacity: 1; transform: translateX(-50%) scale(1); }
-  85%     { opacity: 0; transform: translateX(-50%) scale(1.7); }
-  100%    { opacity: 0; transform: translateX(-50%) scale(1.7); }
+@keyframes ringPing {
+  0%   { transform: scale(.65); opacity: 0; }
+  18%  { opacity: .9; }
+  100% { transform: scale(1.85); opacity: 0; }
+}
+@keyframes sparkTwinkle {
+  0%, 100% { opacity: .12; transform: scale(.65) rotate(0deg); }
+  50%      { opacity: 1;   transform: scale(1.15) rotate(26deg); }
 }
 @keyframes capFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .cap-detail-empty-icon .cap-finger,
-  .cap-detail-empty-icon::after { animation: none; }
+  .tap-orb, .tap-spark { animation: none; }
+  .tap-ring { animation: none; opacity: .35; transform: scale(1); }
+  .tap-ring.r2 { display: none; }
 }
 
 .capd {
-  animation: capFade .25s ease;
+  animation: capFade .5s cubic-bezier(.25, .8, .3, 1);
   /* Each panel sizes to its actual content + a 20px bottom breathing
      margin — no uniform min-height lock. Different cards will have
      different natural heights, which is fine. */
   padding: 12px 4px 84px;
   display: flex;
   flex-direction: column;
+}
+
+/* Staggered entrance — panel children rise in one after another so the
+   content settles softly instead of popping in all at once.            */
+.capd > * {
+  opacity: 0;
+  animation: capRise .65s cubic-bezier(.25, .8, .3, 1) forwards;
+}
+.capd > *:nth-child(1) { animation-delay: .04s; }
+.capd > *:nth-child(2) { animation-delay: .14s; }
+.capd > *:nth-child(3) { animation-delay: .24s; }
+.capd > *:nth-child(4) { animation-delay: .34s; }
+.capd > *:nth-child(5) { animation-delay: .44s; }
+.capd > *:nth-child(6) { animation-delay: .54s; }
+.capd > *:nth-child(7) { animation-delay: .64s; }
+.capd > *:nth-child(8) { animation-delay: .74s; }
+.capd > *:nth-child(n+9) { animation-delay: .84s; }
+@keyframes capRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .capd > * { animation: none; opacity: 1; }
 }
 .capd-hd { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
 /* #10 specifically needs more breathing room between head and the long
@@ -329,7 +588,7 @@
 }
 .capd-info4-svg .info4-bd text {
   fill: var(--ink-2);
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'IBM Plex Sans KR', 'Noto Sans KR', system-ui, sans-serif;
 }
 /* EN / JA body labels run longer than the Korean originals — shrink them a
    touch so they stay inside the fixed-width (178u) cards. CSS font-size

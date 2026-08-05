@@ -23,10 +23,15 @@
 .nav-inner {
   max-width: 1280px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 24px;
-  transition: padding .3s ease;
+  padding: 12px 24px;
 }
-.nav.scrolled .nav-inner { padding-top: 9px; padding-bottom: 9px; }
+/* Condense on scroll — transform-only (GPU-composited), NEVER layout.
+   The old padding animation changed the sticky nav's height, reflowing
+   the whole document every frame for 300ms — which stuttered any scroll
+   that crossed the threshold (e.g. the card-click scroll animation).   */
+.nav.scrolled .brand-mark  { transform: scale(.86); }
+.nav.scrolled .brand       { transform: translateX(-2px); }
+.brand-mark, .brand { transition: transform .3s cubic-bezier(.25, .8, .3, 1); }
 .brand {
   display: flex; align-items: center; gap: 10px;
   font-weight: 800; letter-spacing: -0.01em;
@@ -108,7 +113,7 @@
   cursor: pointer;
   padding: 5px 9px;
   border-radius: 999px;
-  font: 700 12px/1 'Inter', system-ui, sans-serif;
+  font: 700 12px/1 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   letter-spacing: .02em;
   color: var(--ink-2);
   transition: background-color .18s ease, color .18s ease;
@@ -263,9 +268,38 @@
 }
 
 /* ---------- Footer / Contact ---------- */
+/* Rounded top shoulders + dimensional lift: a soft ambient shadow rises
+   above the footer, a light gradient band brightens its upper edge, and
+   a hairline highlight traces the curve — reads as a raised panel.     */
 footer {
-  padding: 72px 24px 40px;
-  background: var(--footer-bg); color: var(--footer-text);
+  position: relative;
+  padding: 76px 24px 40px;
+  background:
+    linear-gradient(180deg, #16294D 0%, var(--footer-bg) 30%);
+  color: var(--footer-text);
+  border-radius: 36px 36px 0 0;
+  box-shadow: 0 -20px 48px rgba(11, 27, 51, .20);
+  /* Wider breathing gap between the cap-grid and the footer — the strip
+     shows the extended hero-bg ambient background (glows/dots) through. */
+  margin-top: 40px;
+}
+/* Dark theme — footer sits flat: no lifted gradient band or drop shadow
+   (the lighter halo read as a floating box on the dark page bg). The
+   rounded shoulders + hairline highlight carry the shape on their own. */
+[data-theme="dark"] footer {
+  background: var(--footer-bg);
+  box-shadow: none;
+}
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1.5px;
+  border-radius: 36px 36px 0 0;
+  background: linear-gradient(90deg,
+    transparent 4%, rgba(255, 255, 255, .22) 30%,
+    rgba(255, 255, 255, .32) 50%, rgba(255, 255, 255, .22) 70%, transparent 96%);
+  pointer-events: none;
 }
 .foot-inner {
   max-width: 1280px; margin: 0 auto;
@@ -275,8 +309,16 @@ footer {
   text-align: left;
 }
 footer h3 {
-  font-size: 28px; color: #FFFFFF; margin: 0 0 14px;
+  font-size: clamp(19px, 4.6vw, 28px);
+  color: #FFFFFF; margin: 0 0 14px;
   letter-spacing: -0.02em;
+  word-break: keep-all;   /* Korean: wrap between words, not mid-word */
+}
+/* Mobile-only line break inside the footer heading — hidden on desktop,
+   forces "Super-Claude for SAP," / "지금 바로…" onto two lines on phones. */
+footer h3 .m-br { display: none; }
+@media (max-width: 720px) {
+  footer h3 .m-br { display: inline; }
 }
 footer p { margin: 0; color: var(--footer-muted); }
 
@@ -383,7 +425,7 @@ footer .foot-npm {
   border: none;
   border-left: 1px solid var(--line);
   color: var(--ink-2);
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'IBM Plex Sans KR', 'Noto Sans KR', system-ui, sans-serif;
   font-size: 13px; font-weight: 600;
   cursor: pointer;
   transition: color .15s ease, background-color .15s ease;
