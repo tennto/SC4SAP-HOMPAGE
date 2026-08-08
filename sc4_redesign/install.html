@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>설치 가이드 - Super-Claude for SAP</title>
+<meta name="description" content="SC4SAP 설치 및 설정 가이드. Claude Code에 커스텀 마켓플레이스를 추가하고 /sc4sap:setup 위저드로 MCP 서버, SAP 프로필, 권한 훅까지 한 번에 구성합니다." />
+<meta property="og:title" content="설치 가이드 - Super-Claude for SAP" />
+<meta property="og:description" content="Claude Code에 마켓플레이스를 추가하고 설정 위저드를 한 번 돌리면 끝납니다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sc4sap.dev/install.html" />
+<meta property="og:image" content="https://sc4sap.dev/assets/thumb.png?v=2" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="96x96" href="../assets/favicon-96.png" />
+<link rel="icon" href="../favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/layout.css" />
+<link rel="stylesheet" href="css/guide.css" />
+
+<script>
+(function () {
+  try {
+    var s = localStorage.getItem('sc4sap-theme');
+    if (s === 'dark' || (!s && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  } catch (e) { /* private mode */ }
+  document.documentElement.classList.remove('no-js');
+})();
+</script>
+</head>
+<body class="no-js">
+
+<a href="#install-steps" class="sr-only">본문으로 건너뛰기</a>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-text"><b>Super-Claude</b> for SAP</span>
+    </a>
+
+    <button type="button" class="icon-btn nav-toggle" aria-expanded="false"
+            aria-controls="nav-links" data-t-aria="ariaMenu" aria-label="메뉴 열기">
+      <i class="ph ph-list" aria-hidden="true"></i>
+      <i class="ph ph-x" aria-hidden="true"></i>
+    </button>
+
+    <div class="nav-links" id="nav-links">
+      <a href="index.html#capabilities" data-t="navCapabilities">기능</a>
+      <a href="install.html" aria-current="page" data-t="navInstall">설치 가이드</a>
+      <a href="index.html#contact" data-t="navContact">연락처</a>
+
+      <span class="nav-sep" aria-hidden="true"></span>
+
+      <div class="nav-foot">
+        <div class="lang no-anim" role="group" data-t-aria="ariaLang" aria-label="언어 선택">
+          <span class="lang-thumb" aria-hidden="true"></span>
+          <button type="button" data-lang-btn="ko" aria-pressed="false">KO</button>
+          <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
+          <button type="button" data-lang-btn="ja" aria-pressed="false">JP</button>
+        </div>
+        <button type="button" class="icon-btn theme-btn" data-theme-toggle
+                data-t-aria="ariaTheme" aria-label="테마 전환">
+          <i class="ph ph-sun tt-sun" aria-hidden="true"></i>
+          <i class="ph ph-moon tt-moon" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<span data-nav-sentinel aria-hidden="true" style="position:absolute;top:0;height:1px;width:1px;"></span>
+
+<!-- ===================== PAGE HEAD ===================== -->
+<header class="page-head">
+  <div class="shell">
+    <h1 class="t-display" data-t="insTitle">설치 가이드</h1>
+    <p class="t-lede" data-t="insLede">Claude Code 세션 안에서 마켓플레이스를 추가하고, 설정 위저드를 한 번 돌리면 끝납니다.</p>
+    <div class="head-links">
+      <a class="btn btn-ghost" href="index.html">
+        <i class="ph ph-arrow-left" aria-hidden="true"></i>
+        <span data-t="insBack">메인으로</span>
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.ko.md" target="_blank" rel="noopener">
+        <i class="ph ph-book-open" aria-hidden="true"></i>
+        <span data-t="insDocLink">전체 원문 문서</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== REQUIREMENTS ===================== -->
+<section class="band band-sunk dash-top">
+  <div class="shell">
+    <h2 class="t-h2 reveal" data-t="insReqH">요구사항</h2>
+
+    <dl class="spec reveal">
+      <div>
+        <dt data-t="insReq1K">Node.js</dt>
+        <dd data-t="insReq1V">20.0.0 이상</dd>
+      </div>
+      <div>
+        <dt data-t="insReq2K">Claude Code</dt>
+        <dd data-t="insReq2V">CLI 설치 완료 (Max·Pro 구독 또는 API 키)</dd>
+      </div>
+      <div>
+        <dt data-t="insReq3K">SAP 시스템</dt>
+        <dd data-t="insReq3V">ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud (Public·Private), ADT 활성화</dd>
+      </div>
+    </dl>
+
+    <p class="note reveal">
+      <i class="ph ph-info" aria-hidden="true"></i>
+      <span data-t-html="insReqNote"></span>
+    </p>
+  </div>
+</section>
+
+<!-- ===================== INSTALL ===================== -->
+<section id="install-steps" class="band dash-top">
+  <div class="shell">
+    <h2 class="t-h2 reveal" data-t="insInstallH">설치</h2>
+
+    <p class="note reveal">
+      <i class="ph ph-warning-circle" aria-hidden="true"></i>
+      <span data-t="insInstallNote">sc4sap 은 아직 공식 마켓플레이스에 등록되어 있지 않습니다.</span>
+    </p>
+
+    <div class="opts">
+      <div class="opt primary reveal">
+        <span class="opt-tag" data-t="insOptAK">권장</span>
+        <h3 class="t-h3" data-t="insOptAH">커스텀 마켓플레이스로 추가</h3>
+        <p data-t="insOptAP">Claude Code 세션 안에서 두 줄을 차례로 실행합니다.</p>
+
+        <div class="cmd-block">
+<pre><code>/plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
+/plugin install sc4sap</code></pre>
+          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+            <i class="ph ph-copy" aria-hidden="true"></i>
+            <i class="ph ph-check" aria-hidden="true"></i>
+            <span data-copy-label data-t="copy">복사</span>
+          </button>
+        </div>
+
+        <p class="opt-sub" data-t="insUpdateH">업데이트할 때</p>
+        <div class="cmd-block">
+<pre><code>/plugin marketplace update babamba2/superclaude-for-sap
+/plugin install sc4sap</code></pre>
+          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+            <i class="ph ph-copy" aria-hidden="true"></i>
+            <i class="ph ph-check" aria-hidden="true"></i>
+            <span data-copy-label data-t="copy">복사</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="opt reveal">
+        <span class="opt-tag" data-t="insOptBK">대안</span>
+        <h3 class="t-h3" data-t="insOptBH">소스에서 설치</h3>
+        <p data-t-html="insOptBP"></p>
+
+        <div class="cmd-block">
+<pre><code>git clone https://github.com/babamba2/superclaude-for-sap.git
+cd superclaude-for-sap
+npm install &amp;&amp; npm run build</code></pre>
+          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+            <i class="ph ph-copy" aria-hidden="true"></i>
+            <i class="ph ph-check" aria-hidden="true"></i>
+            <span data-copy-label data-t="copy">복사</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SETUP WIZARD ===================== -->
+<section class="band band-sunk dash-top">
+  <div class="shell">
+    <h2 class="t-h2 reveal" data-t="insSetupH">설정 위저드</h2>
+    <p class="t-lede reveal" style="margin-top:16px;" data-t="insSetupP">위저드는 한 번에 한 질문만 합니다.</p>
+
+    <div class="cmd-block reveal" style="max-width:420px;">
+<pre><code>/sc4sap:setup</code></pre>
+      <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+        <i class="ph ph-copy" aria-hidden="true"></i>
+        <i class="ph ph-check" aria-hidden="true"></i>
+        <span data-copy-label data-t="copy">복사</span>
+      </button>
+    </div>
+
+    <div class="spine reveal">
+      <div class="step">
+        <span class="step-n">01</span>
+        <div>
+          <h3 class="t-h3" data-t="insW1H">시스템과 업종</h3>
+          <p data-t-html="insW1P"></p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">02</span>
+        <div>
+          <h3 class="t-h3" data-t="insW2H">MCP 서버 설치</h3>
+          <p data-t-html="insW2P"></p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">03</span>
+        <div>
+          <h3 class="t-h3" data-t="insW3H">프로필 생성과 연결</h3>
+          <p data-t-html="insW3P"></p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">04</span>
+        <div>
+          <h3 class="t-h3" data-t="insW4H">연결 검증</h3>
+          <p data-t-html="insW4P"></p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">05</span>
+        <div>
+          <h3 class="t-h3" data-t="insW5H">ABAP 유틸 객체 생성</h3>
+          <p data-t-html="insW5P"></p>
+        </div>
+      </div>
+      <div class="step required">
+        <span class="step-n">06</span>
+        <div>
+          <h3 class="t-h3">
+            <span data-t="insW6H">권한 훅 설치</span>
+            <span class="step-flag">required</span>
+          </h3>
+          <p data-t-html="insW6P"></p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-h reveal" data-t="insOptionalH">선택 단계</h3>
+    <ul class="plain-list reveal">
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional1"></span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional2"></span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional3"></span></li>
+    </ul>
+
+    <h3 class="sub-h reveal" data-t="insSubH">서브커맨드</h3>
+    <div class="cmd-block reveal">
+<pre><code>/sc4sap:setup                # 전체 위저드
+/sc4sap:setup doctor         # 상태 점검으로 라우팅
+/sc4sap:setup mcp            # MCP 설정으로 라우팅
+/sc4sap:setup spro           # SPRO 설정 추출만
+/sc4sap:setup customizations # Z*/Y* 인벤토리만</code></pre>
+      <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+        <i class="ph ph-copy" aria-hidden="true"></i>
+        <i class="ph ph-check" aria-hidden="true"></i>
+        <span data-copy-label data-t="copy">복사</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MULTI PROFILE ===================== -->
+<section class="band dash-top">
+  <div class="shell">
+    <h2 class="t-h2 reveal" data-t="insProfileH">멀티 프로필</h2>
+
+    <div class="tree-grid">
+      <div class="tree reveal">
+        <div class="tree-head">~/.sc4sap · &lt;project&gt;/.sc4sap</div>
+<pre><code><span class="t-dir">~/.sc4sap/</span>                      <span class="t-note">저장소 간 공유</span>
+└── profiles/
+    ├── <span class="t-dir">KR-DEV/</span>  sap.env · config.json
+    ├── <span class="t-dir">KR-QA/</span>   sap.env · config.json
+    └── <span class="t-dir">KR-PRD/</span>  sap.env · config.json
+
+<span class="t-dir">&lt;project&gt;/.sc4sap/</span>              <span class="t-note">프로젝트 범위</span>
+├── active-profile.txt        <span class="t-note">"KR-DEV"</span>
+└── work/
+    ├── <span class="t-dir">KR-DEV/</span>  program · cbo · ...
+    └── <span class="t-dir">KR-PRD/</span>  ...</code></pre>
+      </div>
+
+      <div class="reveal">
+        <p class="t-lede" data-t="insProfileP">한 Claude Code 세션에서 여러 SAP 연결을 다룹니다.</p>
+        <ul class="plain-list" style="margin-top:22px;">
+          <li><i class="ph ph-lock-key" aria-hidden="true"></i><span data-t-html="insTier1"></span></li>
+          <li><i class="ph ph-prohibit" aria-hidden="true"></i><span data-t-html="insTier2"></span></li>
+          <li><i class="ph ph-key" aria-hidden="true"></i><span data-t-html="insTier3"></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DEFENSE LAYERS ===================== -->
+<section class="band band-sunk dash-top">
+  <div class="shell">
+    <h2 class="t-h2 reveal" data-t="insDefenseH">3중 방어</h2>
+    <p class="t-lede reveal" style="margin-top:16px;" data-t="insDefenseP">운영계에 붙이기 전에 가장 먼저 검토되는 부분입니다.</p>
+
+    <div class="layers reveal">
+      <div class="layer">
+        <span class="layer-tag">L1a</span>
+        <div>
+          <h3 data-t="insL1aH">행 추출 차단</h3>
+          <p data-t-html="insL1aP"></p>
+        </div>
+      </div>
+      <div class="layer">
+        <span class="layer-tag">L1b</span>
+        <div>
+          <h3 data-t="insL1bH">tier 변이 차단</h3>
+          <p data-t-html="insL1bP"></p>
+        </div>
+      </div>
+      <div class="layer hard">
+        <span class="layer-tag">L2</span>
+        <div>
+          <h3 data-t="insL2H">MCP 서버 자체 가드</h3>
+          <p data-t-html="insL2P"></p>
+        </div>
+      </div>
+    </div>
+
+    <p class="note reveal">
+      <i class="ph ph-shield-check" aria-hidden="true"></i>
+      <span data-t-html="insDefenseNote"></span>
+    </p>
+  </div>
+</section>
+
+<!-- ===================== AFTER SETUP ===================== -->
+<section class="band dash-top">
+  <div class="shell">
+    <h2 class="t-h2 reveal" data-t="insAfterH">설정 완료 후</h2>
+
+    <dl class="ref reveal">
+      <div>
+        <dt data-t="insAfter1K">활성 시스템 전환</dt>
+        <dd><code>/sc4sap:sap-option switch &lt;alias&gt;</code></dd>
+      </div>
+      <div>
+        <dt data-t="insAfter2K">법인이나 tier 추가</dt>
+        <dd><code>/sc4sap:sap-option add</code></dd>
+      </div>
+      <div>
+        <dt data-t="insAfter3K">프로필 목록</dt>
+        <dd><code>/sc4sap:sap-option list</code></dd>
+      </div>
+      <div>
+        <dt data-t="insAfter4K">상태 점검</dt>
+        <dd><code>/sc4sap:sap-doctor</code></dd>
+      </div>
+      <div>
+        <dt data-t="insAfter5K">SPRO 재추출</dt>
+        <dd><code>/sc4sap:setup spro</code></dd>
+      </div>
+    </dl>
+
+    <h3 class="sub-h reveal" data-t="insMoreH">더 읽을거리</h3>
+    <div class="reading reveal">
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.ko.md" target="_blank" rel="noopener">
+        <span data-t="insMore1">설치 및 설정 원문</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+      </a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/FEATURES.ko.md" target="_blank" rel="noopener">
+        <span data-t="insMore2">기능 상세</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+      </a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/CHANGELOG.ko.md" target="_blank" rel="noopener">
+        <span data-t="insMore3">변경 이력</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer id="contact" class="foot dash-top">
+  <div class="shell">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="brand-text"><b>Super-Claude</b> for SAP</span>
+        <p class="t-body" data-t="footTagline">Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다.</p>
+      </div>
+
+      <div>
+        <h3 data-t="footContact">연락처</h3>
+        <div class="foot-links">
+          <a href="https://www.linkedin.com/in/seunghyun-paek-5b83b7183/" target="_blank" rel="noopener">
+            <i class="ph ph-linkedin-logo" aria-hidden="true"></i>백승현<span class="foot-role">LinkedIn</span>
+          </a>
+          <a href="https://www.linkedin.com/in/sihun-kim-27737132b/" target="_blank" rel="noopener">
+            <i class="ph ph-linkedin-logo" aria-hidden="true"></i>김시훈<span class="foot-role">LinkedIn</span>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 data-t="footProject">프로젝트</h3>
+        <div class="foot-links">
+          <a href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener">
+            <i class="ph ph-github-logo" aria-hidden="true"></i><span data-t="ghBtn">GitHub</span>
+          </a>
+          <a href="https://www.npmjs.com/package/@babamba2/abap-mcp-adt-powerup" target="_blank" rel="noopener">
+            <i class="ph ph-package" aria-hidden="true"></i>abap-mcp-adt-powerup
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-meta">
+      <span data-t="footMeta">© Super-Claude for SAP · MIT 라이선스</span>
+      <span data-t="footBuilt">Built on Claude Code + MCP ABAP ADT</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/strings.js" defer></script>
+<script src="js/strings.install.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

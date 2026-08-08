@@ -1,0 +1,691 @@
+/* ============================================================
+   panel.css — Dossier re-skin of the capability detail panels.
+
+   The panel markup (window.SC4_PANELS_KO / _EN / _JA) is carried over
+   verbatim from the deployed site so all 12 panels stay translated in
+   3 languages. Everything below re-maps that markup onto the Dossier
+   tokens: one accent, one radius family, hairline rules, no emoji
+   ornament, no simulated window chrome.
+   ============================================================ */
+
+.capd {
+  padding: 8px 8px 44px;
+  max-width: 100%;
+}
+
+/* ---------- Panel header ---------- */
+
+.capd-hd {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--rule);
+}
+.capd-hd h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.capd-no {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent-text);
+  letter-spacing: 0.06em;
+}
+/* Decorative emoji from the previous design: removed, not restyled. */
+.capd-icon, .fit-icon, .rx-icon { display: none; }
+
+.capd-cmd,
+.capd-hd code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  border-radius: var(--r-sm);
+  padding: 4px 8px;
+}
+
+/* ---------- Panel prose ---------- */
+
+.capd-lede {
+  font-size: var(--fs-lede);
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 68ch;
+  margin-bottom: 14px;
+}
+.capd-lede b { font-weight: 600; }
+
+.capd-desc {
+  font-size: var(--fs-sm);
+  line-height: 1.72;
+  color: var(--ink-2);
+  max-width: 78ch;
+  margin-bottom: 28px;
+}
+.capd-desc b, .capd-lede b { color: var(--ink); }
+
+.capd :is(p, div, li) > code:not([class]) {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  border-radius: var(--r-sm);
+  padding: 0.1em 0.36em;
+}
+
+.capd h4 {
+  font-size: 0.98rem;
+  letter-spacing: -0.008em;
+  margin-bottom: 8px;
+}
+.capd h5, .capd h6 {
+  font-size: var(--fs-sm);
+  margin-bottom: 4px;
+}
+
+/* ---------- Shared surface for every boxed group ---------- */
+
+.setup-wrap, .agent-heads, .modules-cloud, .rules-list, .capd-flow,
+.capd-xlsx, .capd-sev, .fit-wrap, .reuse-cross, .capd-combos,
+.dev-flow, .defense-table, .ack-demo, .capd-chips, .cmp-stage,
+.capd-marquee, .capd-carousel, .capd-active-country, .callout,
+.tagline-strong, .mechanism-note, .hard-rule, .profile {
+  margin-block: 22px;
+}
+
+/* ---------- Numbered check list (#01) ---------- */
+
+.setup-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+@media (max-width: 860px) { .setup-wrap { grid-template-columns: 1fr; } }
+
+.check-list { display: grid; gap: 16px; }
+.check-list li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 12px;
+  font-size: var(--fs-sm);
+  line-height: 1.62;
+  color: var(--ink-2);
+}
+.check-list .check {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-sm);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+.check-list b { color: var(--ink); font-weight: 600; }
+
+/* ---------- Transcript blocks (terminal, ack output) ----------
+   Plain typeset output. The three traffic-light dots that simulated a
+   window are hidden; they carried no information. */
+
+.terminal, .cmp-window, .ack-output {
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-md);
+  background: var(--sheet);
+  overflow: hidden;
+}
+.terminal-bar, .cmp-titlebar {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 55%, var(--sheet));
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.terminal-bar span:not([class]), .cmp-dot { display: none; }
+
+.terminal-body, .ack-output {
+  padding: 16px 14px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.9;
+  color: var(--ink-2);
+  overflow-x: auto;
+}
+.terminal-body .prompt { color: var(--accent-text); font-weight: 600; }
+.terminal-body .cmd    { color: var(--ink); font-weight: 600; }
+.terminal-body .dim, .capd .dim { color: var(--ink-3); }
+.terminal-body .y, .capd .y     { color: var(--warn); }
+.terminal-body .ok, .capd .ok   { color: var(--ok); font-weight: 600; }
+
+/* ---------- Agent heads (#02) ---------- */
+
+.agent-heads {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.agent-head {
+  background: var(--sheet);
+  padding: 20px;
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+.agent-head .count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  color: var(--accent-text);
+}
+.agent-head p {
+  font-size: var(--fs-xs);
+  line-height: 1.72;
+  color: var(--ink-2);
+}
+/* The old design tinted one card yellow to stand out. One accent now. */
+.agent-head.yellow .count { color: var(--ink-3); }
+
+/* ---------- Chips ---------- */
+
+.modules-cloud, .capd-chips {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 20px;
+  background: var(--sheet);
+}
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+.chip, .dev-pill, .capd-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.chip.blue, .dev-pill {
+  border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+.chip2 {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 8px 13px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--sheet);
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  white-space: nowrap;
+}
+.chip2 em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* ---------- Rules list ---------- */
+
+.rules-list {
+  border-left: 2px solid var(--accent);
+  padding: 4px 0 4px 20px;
+}
+.rules-list ul { display: grid; gap: 11px; margin-top: 12px; }
+.rules-list li {
+  font-size: var(--fs-sm);
+  line-height: 1.66;
+  color: var(--ink-2);
+}
+.rules-list b { color: var(--ink); font-weight: 600; }
+
+/* ---------- Pipeline flow (#03) ---------- */
+
+.capd-flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.capd-flow-step {
+  background: var(--sheet);
+  padding: 18px 16px;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+}
+.capd-flow-step b {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  color: var(--accent-text);
+  font-weight: 500;
+}
+.capd-flow-step span { font-weight: 600; font-size: var(--fs-sm); color: var(--ink); }
+.capd-flow-step small { font-size: var(--fs-xs); line-height: 1.7; color: var(--ink-3); }
+
+/* ---------- Workbook output (#03) ---------- */
+
+.capd-xlsx {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--sheet);
+}
+.capd-xlsx-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 55%, var(--sheet));
+  font-size: var(--fs-sm);
+}
+.capd-xlsx-head .icon { display: none; }
+.capd-xlsx-head code { font-family: var(--font-mono); color: var(--ink); font-weight: 600; }
+.capd-xlsx-head .meta { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); }
+
+.capd-xlsx-rows { display: grid; }
+.capd-xlsx-rows li {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  padding: 13px 16px;
+  align-items: baseline;
+}
+.capd-xlsx-rows li + li { border-top: 1px solid var(--rule); }
+.capd-xlsx-no {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.capd-xlsx-rows h6 { font-size: var(--fs-sm); font-weight: 600; color: var(--ink); }
+.capd-xlsx-rows p  { font-size: var(--fs-xs); color: var(--ink-2); line-height: 1.6; }
+.capd-xlsx-rows li.warn .capd-xlsx-no { color: var(--warn); }
+
+/* ---------- Severity rows (#04) ---------- */
+
+.capd-sev { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--r-md); overflow: hidden; }
+.capd-sev-row {
+  background: var(--sheet);
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 14px;
+  padding: 13px 16px;
+  align-items: baseline;
+}
+.capd-sev-tag {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent-text);
+}
+.capd-sev-text { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.6; }
+
+/* ---------- Category infographic SVG (#04) ----------
+   The source SVG hardcodes the old SAP blue/yellow gradient. Repainted
+   onto the single accent so the page keeps one color. */
+
+.capd-info4-svg { width: 100%; height: auto; margin-block: 22px; }
+.capd-info4-svg linearGradient#info4_g1 stop:first-child { stop-color: #5C3600; }
+.capd-info4-svg linearGradient#info4_g1 stop:last-child  { stop-color: #472A00; }
+.capd-info4-svg linearGradient#info4_g2 stop:first-child { stop-color: #8F5300; }
+.capd-info4-svg linearGradient#info4_g2 stop:last-child  { stop-color: #7A4700; }
+.capd-info4-svg linearGradient#info4_g3 stop:first-child { stop-color: #C07200; }
+.capd-info4-svg linearGradient#info4_g3 stop:last-child  { stop-color: #A96400; }
+.capd-info4-svg linearGradient#info4_g4 stop:first-child { stop-color: #E0A353; }
+.capd-info4-svg linearGradient#info4_g4 stop:last-child  { stop-color: #CC8F3A; }
+.capd-info4-svg .info4-bg rect { fill: var(--sheet); }
+.capd-info4-svg .info4-bd { stroke: var(--rule); }
+.capd-info4-svg .info4-tt-w { fill: var(--ink); }
+.capd-info4-svg .info4-tt-d { fill: var(--ink-3); }
+
+/* ---------- Compare stage (#05) ---------- */
+
+.cmp-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0;
+}
+@media (max-width: 820px) {
+  .cmp-body { grid-template-columns: 1fr; }
+  .cmp-divider { border-block: 1px solid var(--rule); padding-block: 8px; }
+}
+.cmp-col { padding: 18px 16px; min-width: 0; }
+.cmp-divider {
+  display: grid;
+  place-items: center;
+  padding-inline: 14px;
+  border-inline: 1px solid var(--rule);
+}
+.cmp-vs {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+}
+.cmp-col-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.cmp-col-tag {
+  display: grid;
+  place-items: center;
+  width: 20px; height: 20px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+.cmp-col-tag.b { background: var(--ink-3); }
+.cmp-col-head code { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600; color: var(--ink); }
+.cmp-col-meta { margin-left: auto; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); }
+
+.cmp-rows { display: grid; gap: 9px; }
+.cmp-rows li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: baseline;
+  font-size: var(--fs-xs);
+}
+.cmp-bullet { font-size: 9px; line-height: 1.9; }
+.cmp-rows li.match .cmp-bullet { color: var(--ok); }
+.cmp-rows li.diff  .cmp-bullet { color: var(--warn); }
+.cmp-rows li.opp   .cmp-bullet { color: var(--danger); }
+.cmp-row-label { color: var(--ink-3); }
+.cmp-row-val   { font-family: var(--font-mono); color: var(--ink-2); text-align: right; }
+
+.cmp-legend, .cmp-verdict {
+  padding: 14px 16px;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+.cmp-legend-meta { color: var(--ink-3); font-family: var(--font-mono); }
+.cmp-verdict-mark { color: var(--accent-text); font-weight: 600; }
+
+/* ---------- Fit cards (#07) ---------- */
+
+.fit-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.fit-card {
+  background: var(--sheet);
+  padding: 22px 20px;
+}
+.fit-card p { font-size: var(--fs-xs); color: var(--ink-2); line-height: 1.68; }
+.fit-card ul { display: grid; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.fit-card li {
+  font-size: var(--fs-xs);
+  line-height: 1.62;
+  color: var(--ink-2);
+  padding-left: 13px;
+  position: relative;
+}
+.fit-card li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.62em;
+  width: 5px; height: 1px;
+  background: var(--accent);
+}
+
+/* ---------- Reuse cross (#08) ---------- */
+
+.reuse-cross {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+@media (max-width: 860px) { .reuse-cross { grid-template-columns: 1fr; } }
+
+.rx-card, .rx-hub {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  background: var(--sheet);
+  padding: 18px 16px;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+}
+.rx-card code { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--accent-text); }
+.rx-card p { font-size: var(--fs-xs); color: var(--ink-3); line-height: 1.62; }
+
+.rx-hub {
+  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  grid-row: span 2;
+  gap: 10px;
+}
+.rx-top   { grid-column: 2; grid-row: 1; }
+.rx-hub   { grid-column: 2; grid-row: 2; }
+.rx-left  { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+.rx-right { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+.rx-bot   { grid-column: 2; grid-row: 3; }
+
+@media (max-width: 860px) {
+  .rx-card, .rx-hub { grid-column: 1 !important; grid-row: auto !important; }
+}
+
+.rx-hub-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--accent-text);
+}
+.rx-hub h4 { color: var(--ink); }
+.rx-hub-cmd {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent-text);
+  justify-self: start;
+}
+.rx-hub-bullets { display: grid; gap: 8px; margin-top: 4px; }
+.rx-hub-bullets li { font-size: var(--fs-xs); line-height: 1.6; color: var(--ink-2); }
+.rx-callout {
+  margin-top: 18px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+
+/* ---------- Industry and country references (#09, #10) ----------
+   The previous design scrolled these past the reader in a marquee and a
+   step-snap carousel. Fourteen industries and sixteen countries are the
+   evidence for "your context is already loaded", so they are laid out
+   flat and all at once instead of animating. */
+
+.capd-marquee-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: auto;
+}
+
+.capd-carousel-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 8px;
+  width: auto;
+}
+
+.capd-flag {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 12px 14px;
+  white-space: normal;
+}
+.capd-flag .em img { width: 18px; height: 18px; }
+.capd-flag .nm { font-weight: 600; color: var(--ink); font-family: var(--font-sans); font-size: var(--fs-sm); }
+.capd-flag .tx { font-size: var(--fs-xs); color: var(--ink-3); line-height: 1.55; }
+
+/* The "now highlighted" readout existed to name whichever country the
+   carousel had centred. With all sixteen on screen it has nothing left
+   to say, so it is dropped rather than restyled. */
+.capd-active-country { display: none; }
+
+/* ---------- Module combos (#11) ---------- */
+
+.capd-combos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.capd-combo { background: var(--sheet); padding: 18px 16px; }
+.capd-combo p { font-size: var(--fs-xs); color: var(--ink-2); line-height: 1.66; margin-top: 10px; }
+.capd-combo-eq {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+}
+.capd-combo-eq span {
+  padding: 4px 8px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+  color: var(--ink-2);
+}
+.capd-combo-eq .arrow { border: 0; background: none; color: var(--ink-3); padding: 0; }
+.capd-combo-eq .out {
+  border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+/* ---------- Dev flow / result (#12) ---------- */
+
+.dev-flow { display: grid; gap: 12px; }
+.dev-spine { display: grid; gap: 10px; }
+.dev-step {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  background: var(--sheet);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.62;
+}
+.dev-result {
+  border-left: 2px solid var(--accent);
+  padding: 4px 0 4px 20px;
+  margin-top: 22px;
+}
+.dev-result-line { display: flex; gap: 10px; align-items: baseline; }
+.dev-result-prompt { color: var(--accent-text); font-family: var(--font-mono); }
+.dev-result-text { font-size: var(--fs-lede); color: var(--ink); line-height: 1.55; }
+.dev-result-sub { margin-top: 10px; font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.66; }
+
+/* ---------- Callouts ---------- */
+
+.tagline-strong, .callout, .mechanism-note, .rx-callout, .hard-rule {
+  border-left: 2px solid var(--accent);
+  padding: 12px 0 12px 20px;
+  font-size: var(--fs-sm);
+  line-height: 1.72;
+  color: var(--ink-2);
+}
+.tagline-strong b, .callout b, .hard-rule b { color: var(--ink); font-weight: 600; }
+
+/* ---------- Interactive acknowledge demo (#07) ---------- */
+
+.ack-demo { display: grid; gap: 12px; }
+.ack-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.ack-btn {
+  appearance: none;
+  padding: 10px 14px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm);
+  background: var(--sheet);
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease),
+              background var(--t-fast) var(--ease),
+              border-color var(--t-fast) var(--ease);
+}
+@media (pointer: coarse) { .ack-btn { min-height: 44px; } }
+.ack-btn:hover { color: var(--ink); border-color: var(--ink-3); }
+.ack-btn[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.ack-output {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+.ack-output b { color: var(--ink); }
+
+/* ---------- Misc leftovers from the old sheet ---------- */
+
+.defense-table { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--r-md); overflow: hidden; }
+.defense-table > * { background: var(--sheet); padding: 12px 16px; font-size: var(--fs-xs); color: var(--ink-2); line-height: 1.62; }
+.profile, .profile-row { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.66; }
+.capd .subhead { font-size: var(--fs-sm); font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.capd .bad  { color: var(--danger); }
+.capd .crit { color: var(--danger); font-weight: 600; }
+.capd .maj  { color: var(--warn);   font-weight: 600; }
+.capd .kw   { color: var(--accent-text); font-weight: 600; }

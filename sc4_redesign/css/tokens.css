@@ -1,0 +1,142 @@
+/* ============================================================
+   tokens.css — Dossier design system
+
+   One accent (deep indigo). One radius family (4 / 6 / 10, all
+   "near-square document"). One theme at a time, light or dark,
+   never mixed per section.
+
+   Light  = ivory paper, white sheet, charcoal ink.
+   Dark   = warm near-black, same paper metaphor after hours.
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Surfaces ---- */
+  --paper:       #F6F3EC;   /* page canvas — ivory */
+  --paper-sunk:  #EEEAE0;   /* recessed band, one step down from paper */
+  --sheet:       #FFFFFF;   /* raised sheet — the only elevated surface */
+
+  /* ---- Ink ---- */
+  --ink:    #1C1A17;        /* headlines, primary body */
+  --ink-2:  #55504A;        /* secondary body            6.9:1 on paper */
+  --ink-3:  #6E685D;        /* captions, meta            4.6:1 on paper */
+
+  /* ---- Rules ---- */
+  --rule:        #E0DACE;   /* hairline between rows */
+  --rule-strong: #CBC3B2;   /* section boundary */
+
+  /* ---- Accent (the only one on this page) ----
+     Swap these five values to recolour the whole page.
+     Previous navy set, kept here for a one-step revert:
+       --accent #2A3D6B · --accent-text #2A3D6B · --accent-hi #3B5391
+       --accent-soft #E7EBF4 · --accent-ink #FFFFFF
+
+     Amber sits at 2.85:1 on this ivory, which is under AA for text and
+     under 3:1 for meaningful icons, so the vivid value is reserved for
+     fills, marks, rules, and graphics, and text takes the darkened cut
+     of the same hue at 5.6:1. Navy needed no such split because it
+     already cleared 9.5:1. */
+  --accent:      #D17D00;   /* fills, marks, borders, graphics */
+  --accent-text: #8F5300;   /* text and icons on light   5.6:1 */
+  --accent-hi:   #E08E14;   /* hover / lighter step */
+  --accent-soft: #FBF0DE;   /* tinted fill */
+  --accent-ink:  #201A10;   /* text on the accent fill   5.7:1 */
+
+  /* ---- Semantic ---- */
+  --ok:     #1F6B4B;
+  --warn:   #8A5A12;
+  --danger: #8E2A22;
+
+  /* ---- Geometry: one family, near-square ---- */
+  --r-sm: 4px;              /* chips, code, buttons, inputs */
+  --r-md: 6px;              /* cards, sheets */
+  --r-lg: 10px;             /* large panels */
+
+  /* ---- Elevation: tinted to the paper hue, never pure black ---- */
+  --lift-1: 0 1px 2px rgba(60, 48, 28, .05);
+  --lift-2: 0 2px 4px rgba(60, 48, 28, .05), 0 8px 24px rgba(60, 48, 28, .06);
+  --lift-3: 0 4px 8px rgba(60, 48, 28, .06), 0 18px 48px rgba(60, 48, 28, .09);
+
+  /* ---- Type ----
+     IBM Plex was drawn for engineering and enterprise documentation, which
+     is exactly the register this page needs, and it ships matching Korean
+     and Japanese cuts. One family carries all three languages instead of
+     a Latin face bolted onto Noto fallbacks. */
+  --font-sans: 'IBM Plex Sans', 'IBM Plex Sans KR', 'IBM Plex Sans JP', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Mono', monospace;
+
+  /* Headlines only. Schibsted Grotesk was drawn for newspaper and news
+     product headlines: narrow apertures, tight fit, real weight at large
+     sizes, which is exactly what Plex Sans lacks in display. It carries no
+     CJK, so Korean and Japanese glyphs fall through to the Plex cuts and
+     the two faces meet inside the same headline. */
+  --font-display: 'Schibsted Grotesk', 'IBM Plex Sans KR', 'IBM Plex Sans JP', var(--font-sans);
+
+  /* 4.25rem overflowed the hero column in every language, not just CJK:
+     "Your whole SAP stack," needs ~714px at that size against a 650px
+     column, so the headline dropped to three lines. 3.4rem fits all three
+     scripts on two lines with room to spare. */
+  --fs-display: clamp(2.2rem, 1.45rem + 2.7vw, 3.4rem);
+  --fs-h2:      clamp(1.7rem, 1.25rem + 1.9vw, 2.6rem);
+  --fs-h3:      clamp(1.15rem, 1.02rem + 0.55vw, 1.5rem);
+  --fs-lede:    clamp(1.02rem, 0.96rem + 0.35vw, 1.22rem);
+  --fs-body:    1rem;
+  --fs-sm:      0.875rem;
+  --fs-xs:      0.785rem;
+
+  /* ---- Rhythm ---- */
+  --shell:      1240px;     /* max content width */
+  --gutter:     clamp(20px, 5vw, 64px);
+  --band:       clamp(72px, 9vw, 132px);   /* vertical section padding */
+
+  /* ---- Motion (MOTION_INTENSITY 4) ---- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 140ms;
+  --t-base: 260ms;
+  --t-slow: 620ms;
+}
+
+/* ---------- Dark: same paper metaphor, warm near-black ---------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper:       #171613;
+  --paper-sunk:  #100F0D;
+  --sheet:       #201E1A;
+
+  --ink:    #EFEADF;
+  --ink-2:  #B4AEA1;
+  --ink-3:  #8B8479;
+
+  --rule:        #322F29;
+  --rule-strong: #4A453C;
+
+  /* On the warm near-black the amber lightens to 9:1, so fill and text
+     can share one value here. Previous navy set: #9FB3DF · #BCCAEA ·
+     #21283A · #101422. */
+  --accent:      #E8A93C;
+  --accent-text: #E8A93C;
+  --accent-hi:   #F2BC5C;
+  --accent-soft: #33270F;
+  --accent-ink:  #1C1508;
+
+  --ok:     #64C79B;
+  --warn:   #DCA94A;
+  --danger: #E58A80;
+
+  --lift-1: 0 1px 2px rgba(0, 0, 0, .40);
+  --lift-2: 0 2px 4px rgba(0, 0, 0, .38), 0 8px 24px rgba(0, 0, 0, .34);
+  --lift-3: 0 4px 8px rgba(0, 0, 0, .42), 0 18px 48px rgba(0, 0, 0, .44);
+}
+
+/* Japanese needs the JP cut ahead of the KR cut so shared CJK glyphs are
+   not rendered in Korean styling. */
+html[lang="ja"] {
+  --font-sans: 'IBM Plex Sans', 'IBM Plex Sans JP', 'IBM Plex Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Schibsted Grotesk', 'IBM Plex Sans JP', 'IBM Plex Sans KR', var(--font-sans);
+}
+
+/* One display scale now covers all three scripts, so there is no
+   per-language override here. Korean and Japanese still get
+   `word-break: keep-all` and `text-wrap: balance` in base.css. */
