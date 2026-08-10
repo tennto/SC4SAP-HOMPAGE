@@ -13,8 +13,8 @@ window.SC4_PANELS_KO = (function () {
     '01': { html: `<div class="capd capd-01">
       ${head('01','🔧','Auto MCP Install','/sc4sap:setup')}
       <p class="capd-lede">
-        SAP 개발 환경을 꾸리다 보면 MCP 서버 설치 · 인증 정보 분리 · 권한 훅 등록 · SPRO 캐시 생성까지
-        반나절이 사라집니다, SC4SAP는 이 과정을 질문 하나당 한 답으로 분해해<br/><b>셋업 마법사 안에서 끝냅니다</b>
+        SAP 개발 환경을 꾸리다 보면 MCP 서버 설치 · 인증 정보 분리 · 권한 훅 등록 · SPRO 캐시 생성까지<br class="br-wide"/>
+        반나절이 사라집니다. SC4SAP는 이 과정을 질문 하나당 한 답으로 분해해 <b>셋업 마법사 안에서 끝냅니다</b>
       </p>
 
       <div class="setup-wrap">
@@ -22,27 +22,28 @@ window.SC4_PANELS_KO = (function () {
           <li>
             <span class="check">1</span>
             <div><b>MCP 서버 자동 설치</b> - <code>abap-mcp-adt-powerup</code>을 클론 · 빌드 · 등록합니다
-            <code>claude_desktop_config.json</code> 직접 편집 불필요</div>
+            <span class="check-note"><code>claude_desktop_config.json</code>을 직접 편집할 필요가 없습니다</span></div>
           </li>
           <li>
             <span class="check">2</span>
-            <div><b>.sc4sap/sap.env 자동 생성</b> - URL · 클라이언트 · 계정 · 인증 방식을 한 줄씩 묻고 저장
-            <br/>비밀번호 마스킹 + <code>sap.env.bak</code> 백업</div>
+            <div><b>.sc4sap/sap.env 자동 생성</b> - URL · 클라이언트 · 계정 · 인증 방식을 한 줄씩 묻고 저장합니다
+            <span class="check-note">비밀번호는 마스킹하고 <code>sap.env.bak</code>으로 백업합니다</span></div>
           </li>
           <li>
             <span class="check">3</span>
-            <div><b>버전·업종·국가 동기화</b> - SAP 버전 · ABAP 릴리즈 · 업종 · 국가를
-            <code>.sc4sap/config.json</code>에 기록 <br/>모든 에이전트가 같은 컨텍스트 공유</div>
+            <div><b>버전 · 업종 · 국가 동기화</b> - SAP 버전 · ABAP 릴리즈 · 업종 · 국가를
+            <code>.sc4sap/config.json</code>에 기록합니다
+            <span class="check-note">모든 에이전트가 같은 컨텍스트를 공유합니다</span></div>
           </li>
           <li>
             <span class="check">4</span>
             <div><b>데이터 추출 블록리스트 훅 등록</b> - BNKA 스모크 테스트로
-            <br/><code>permissionDecision: deny</code>가 정상 동작하는지 검증</div>
+            <code>permissionDecision: deny</code>가 정상 동작하는지 검증합니다</div>
           </li>
         </ul>
 
         <div class="terminal" aria-hidden="true">
-          <div class="terminal-bar"><span></span><span></span><span></span></div>
+          <div class="terminal-bar"><span class="terminal-tab">/sc4sap:setup</span></div>
           <div class="terminal-body">
 <span class="prompt">$</span> <span class="cmd">/sc4sap:setup</span><br/>
 <span class="dim">→ SAP 시스템: </span><span class="y">S4 / ECC ?</span> <span class="ok">S4</span><br/>
@@ -52,21 +53,20 @@ window.SC4_PANELS_KO = (function () {
 <span class="dim">→ SAP 연결 테스트…</span> <span class="ok">✓ GetSession OK</span><br/>
 <span class="dim">→ 블록리스트 훅 등록…</span> <span class="ok">✓ deny(BNKA) 확인</span><br/>
 <br/>
-<span class="y">setup complete.</span> <span class="dim">ready to code.</span>
+<span class="y">setup complete</span> <span class="dim">ready to run</span>
           </div>
         </div>
       </div>
 
       <div class="tagline-strong">
-        결과 - SAP 시스템 정보만 한 번 답하면 MCP 서버 설치부터 권한 검증, 블록리스트 훅 등록까지 한 번에 완료되며
-        팀원이 같은 환경을 다시 셋업할 때도 <code>sap.env</code> 하나의 파일만 공유하면 됩니다
+        결과 - SAP 시스템 정보만 한 번 답하면 MCP 서버 설치부터 권한 검증, 블록리스트 훅 등록까지 한 번에 끝납니다.
+        팀원이 같은 환경을 다시 셋업할 때도 <code>sap.env</code> 파일 하나만 공유하면 됩니다
       </div>
     </div>` },
 
     '02': { html: `<div class="capd capd-02">
       ${head('02','🧠','Specialist Agents','25 agents · 역할별 전문 협업')}
-      <p class="capd-lede">하나의 프롬프트가 모든 결정을 내리지 않습니다. 분석 · 설계 · 구현 · 리뷰 · 디버깅이 <b>역할별 전문 에이전트</b>에게 위임되고, 모듈별 업무 판단은 컨설턴트로 다시 에스컬레이션됩니다
-      <br/>같은 SAP 작업을 generalist 한 명이 처리하던 패턴과는 정반대 - 각자 자기 분야에서만 답하고, "그럴싸한 SAP 지식"으로 답을 지어내는 경로 자체가 구조적으로 막혀 있습니다</p>
+      <p class="capd-lede">분석 · 설계 · 구현 · 리뷰 · 디버깅이 <b>역할별 전문 에이전트</b>에게 위임됩니다.<br class="br-wide"/>각자 자기 분야에서만 답하고, "그럴싸한 SAP 지식"으로 답을 지어내는 경로 자체가 구조적으로 막혀 있습니다</p>
 
       <div class="agent-heads">
         <div class="agent-head">
@@ -176,7 +176,7 @@ window.SC4_PANELS_KO = (function () {
             </div>
           </li>
           <li class="warn">
-            <span class="capd-xlsx-no">⚠</span>
+            <span class="capd-xlsx-no"><i class="ph ph-warning" aria-hidden="true"></i></span>
             <div>
               <h6>Warnings</h6>
               <p>파싱 불가 · 위험 패턴 · 미해결 항목</p>
@@ -194,77 +194,55 @@ window.SC4_PANELS_KO = (function () {
       <br/>보안 카테고리는 SQL Injection · AUTHORITY-CHECK 누락 · 동적 코드 실행 같은 OWASP 패턴을 정적 분석으로 탐지하고
       <br/>성능 카테고리는 중첩 LOOP·SELECT를 sorted/hashed table look-up으로 리팩토링하는 구체적 패치 코드까지 첨부합니다</p>
 
-      <!-- 4 review categories - chevron-stitched infographic with SAP-brand gradient
-           (deep blue → sap blue → sap cyan → sap yellow) -->
-      <svg class="capd-info4-svg" viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" aria-label="Analyze Code 4 review categories" role="img">
-        <defs>
-          <linearGradient id="info4_g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0B4FA8"/><stop offset="100%" stop-color="#003A8F"/></linearGradient>
-          <linearGradient id="info4_g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0070F2"/><stop offset="100%" stop-color="#0058C4"/></linearGradient>
-          <linearGradient id="info4_g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#33B6FF"/><stop offset="100%" stop-color="#0FAAFF"/></linearGradient>
-          <linearGradient id="info4_g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFD13E"/><stop offset="100%" stop-color="#FFC700"/></linearGradient>
-          <filter id="info4_shadow" x="-5%" y="-5%" width="110%" height="125%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2.5"/>
-            <feOffset dx="0" dy="2" result="ofb"/>
-            <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
-            <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- White card backgrounds (4 separate panels with light shadow) -->
-        <g filter="url(#info4_shadow)" class="info4-bg">
-          <rect x="6"   y="100" width="178" height="115" rx="12"/>
-          <rect x="194" y="100" width="178" height="115" rx="12"/>
-          <rect x="382" y="100" width="178" height="115" rx="12"/>
-          <rect x="570" y="100" width="178" height="115" rx="12"/>
-        </g>
-
-        <!-- Top chevron sections - Panel 1: rounded left + tip right -->
-        <path d="M 18 5 L 184 5 L 200 50 L 184 95 L 18 95 Q 6 95 6 83 L 6 17 Q 6 5 18 5 Z" fill="url(#info4_g1)"/>
-        <!-- Panel 2: notch left + tip right -->
-        <path d="M 194 5 L 372 5 L 388 50 L 372 95 L 194 95 L 210 50 Z" fill="url(#info4_g2)"/>
-        <!-- Panel 3: notch left + tip right -->
-        <path d="M 382 5 L 560 5 L 576 50 L 560 95 L 382 95 L 398 50 Z" fill="url(#info4_g3)"/>
-        <!-- Panel 4: notch left + rounded right -->
-        <path d="M 570 5 L 736 5 Q 748 5 748 17 L 748 83 Q 748 95 736 95 L 570 95 L 586 50 Z" fill="url(#info4_g4)"/>
-
-        <!-- Icons in chevron tops - vertical center y=38 (chevron mid = 50, icon group sits slightly above to share center with title below) -->
-        <text x="95"  y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🧼</text>
-        <text x="290" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🚀</text>
-        <text x="478" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🛡️</text>
-        <text x="660" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">✨</text>
-
-        <!-- Titles - y=68 with middle baseline → icon (38) + title (68) form a centered pair around y=53, visually balanced inside chevron -->
-        <text x="95"  y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">CLEAN ABAP</text>
-        <text x="290" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">PERFORMANCE</text>
-        <text x="478" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">SECURITY</text>
-        <text x="666" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-d">MODERNIZATION</text>
-
-        <!-- Body text - 3 lines centered both axes inside the white card (y 100→215, center y=157.5).
-             Lines at y=137 / 157 / 177 with dominant-baseline=middle = visual centers there. font 13 (was 11). -->
-        <g class="info4-bd">
-          <text x="95"  y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">네이밍 · 단일 책임</text>
-          <text x="95"  y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">매직 넘버 · 글로벌 변수</text>
-          <text x="95"  y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">OOP / Procedural 일관성</text>
-
-          <text x="283" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SELECT 패턴 · 인덱스</text>
-          <text x="283" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">중첩 LOOP · INTO TABLE</text>
-          <text x="283" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">sorted / hashed 사용</text>
-
-          <text x="471" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SQL Injection</text>
-          <text x="471" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">AUTHORITY-CHECK 누락</text>
-          <text x="471" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">동적 코드 sanitize</text>
-
-          <text x="659" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">VALUE / REDUCE / COND</text>
-          <text x="659" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">FILTER · 람다식</text>
-          <text x="659" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">신규 syntax 도입</text>
-        </g>
-      </svg>
+      <!-- The four review categories. Plain markup on the same hairline grid
+           the other panels use: the previous design drew this as a fixed
+           760x220 chevron with brand gradients, drop shadows, emoji for
+           icons, and text sized in viewBox units that grew and shrank with
+           the container instead of holding a reading size. -->
+      <div class="capd-review">
+        <div class="capd-review-cat">
+          <i class="ph ph-broom" aria-hidden="true"></i>
+          <h6>CLEAN ABAP</h6>
+          <ul>
+            <li>네이밍 · 단일 책임</li>
+            <li>매직 넘버 · 글로벌 변수</li>
+            <li>OOP / Procedural 일관성</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-gauge" aria-hidden="true"></i>
+          <h6>PERFORMANCE</h6>
+          <ul>
+            <li>SELECT 패턴 · 인덱스</li>
+            <li>중첩 LOOP · INTO TABLE</li>
+            <li>sorted / hashed 사용</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-lock-key" aria-hidden="true"></i>
+          <h6>SECURITY</h6>
+          <ul>
+            <li>SQL Injection</li>
+            <li>AUTHORITY-CHECK 누락</li>
+            <li>동적 코드 sanitize</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-arrow-circle-up" aria-hidden="true"></i>
+          <h6>MODERNIZATION</h6>
+          <ul>
+            <li>VALUE / REDUCE / COND</li>
+            <li>FILTER · 람다식</li>
+            <li>신규 syntax 도입</li>
+          </ul>
+        </div>
+      </div>
 
       <!-- Sample severity findings - top 3 issues from a typical legacy report -->
       <div class="capd-sev">
-        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><span class="capd-sev-text"><b>SQL Injection 가능성</b> - 동적 WHERE 절에 사용자 입력이 직접 결합됩니다 (line 412). <code>WHERE (lv_where)</code> → escaped binding으로 교체</span></div>
-        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><span class="capd-sev-text"><b>AUTHORITY-CHECK 누락</b> - <code>BUKRS</code> 기반 조회 후 권한 검증 없이 출력 (line 78). <code>F_BKPF_BUK</code> 권한 객체 체크 추가 필요</span></div>
-        <div class="capd-sev-row"><span class="capd-sev-tag maj">MAJOR</span><span class="capd-sev-text"><b>SELECT … ENDSELECT 루프</b> - <code>INTO TABLE</code> + <code>LOOP AT</code>으로 변경 시 약 <b>70% 성능 개선</b> 예상</span></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><div class="capd-sev-body"><b>SQL Injection 가능성</b><span class="capd-sev-text">동적 WHERE 절에 사용자 입력이 직접 결합됩니다 (line 412). <code>WHERE (lv_where)</code> → escaped binding으로 교체</span></div></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><div class="capd-sev-body"><b>AUTHORITY-CHECK 누락</b><span class="capd-sev-text"><code>BUKRS</code> 기반 조회 후 권한 검증 없이 출력 (line 78). <code>F_BKPF_BUK</code> 권한 객체 체크 추가 필요</span></div></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag maj">MAJOR</span><div class="capd-sev-body"><b>SELECT … ENDSELECT 루프</b><span class="capd-sev-text"><code>INTO TABLE</code> + <code>LOOP AT</code>으로 변경 시 약 <b>70% 성능 개선</b> 예상</span></div></div>
       </div>
     </div>` },
 
@@ -336,7 +314,7 @@ window.SC4_PANELS_KO = (function () {
 
     '06': { html: `<div class="capd capd-06">
       ${head('06','🩺','Maintenance Diagnosis','/sc4sap:analyze-symptom')}
-      <p class="capd-lede">덤프 ID만 주면 SAP Note 후보까지, Claude 안에서 1차 분석 종료.</p>
+      <p class="capd-lede">덤프 ID만 주면 SAP Note 후보까지, Claude 안에서 1차 분석 종료</p>
       <p class="capd-desc">ST22 · SM02 · /IWFND/ERROR_LOG · SAT 프로파일러를 MCP 도구로 직접 끌어와 분석합니다. <code>sap-debugger</code> / <code>sap-bc-consultant</code>에 자동 위임되어 모르는 영역까지 안전하게 확장됩니다
       <br/>단순 스택 트레이스 출력이 아니라 <b>호출 체인 · 변수 덤프 · 메모리 상태</b>를 통합해 가설을 제시하고, 후속 액션(Note 적용 · 코드 수정 · 권한 추가)을 선택지로 돌려줍니다
       <br/>운영 인계 직후 처음 보는 덤프도 1차 분석을 마치고 BC팀에 정확한 질문으로 넘길 수 있습니다</p>
@@ -349,12 +327,12 @@ window.SC4_PANELS_KO = (function () {
       </div>
 
       <div class="capd-chips">
-        <span class="chip2">🔥 ST22 Runtime Dumps</span>
-        <span class="chip2">📢 SM02 System Msgs</span>
-        <span class="chip2">🌐 /IWFND/ERROR_LOG</span>
-        <span class="chip2">⏱️ SAT Profiler</span>
-        <span class="chip2">🔓 SU53 Auth Check</span>
-        <span class="chip2">🚧 SM12 Lock Entries</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-bug" aria-hidden="true"></i>ST22 Runtime Dumps</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-megaphone" aria-hidden="true"></i>SM02 System Msgs</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-globe" aria-hidden="true"></i>/IWFND/ERROR_LOG</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-timer" aria-hidden="true"></i>SAT Profiler</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-key" aria-hidden="true"></i>SU53 Auth Check</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-lock-simple" aria-hidden="true"></i>SM12 Lock Entries</span>
       </div>
     </div>` },
 
@@ -423,19 +401,19 @@ window.SC4_PANELS_KO = (function () {
       <div class="profile-row">
         <div class="profile strict">
           <span class="name">strict</span>
-          <p>PII + 크리덴셜 + HR + 거래 재무 + 감사 로그 + 워크플로. <b>기본값</b>.</p>
+          <p>PII + 크리덴셜 + HR + 거래 재무 + 감사 로그 + 워크플로. <b>기본값</b></p>
         </div>
         <div class="profile standard">
           <span class="name">standard</span>
-          <p>PII + 크리덴셜 + HR + 거래 재무. 일반 프로젝트 기본값.</p>
+          <p>PII + 크리덴셜 + HR + 거래 재무. 일반 프로젝트 기본값</p>
         </div>
         <div class="profile minimal">
           <span class="name">minimal</span>
-          <p>PII + 크리덴셜 + HR + Tax. 업무 테이블 조회는 허용.</p>
+          <p>PII + 크리덴셜 + HR + Tax. 업무 테이블 조회는 허용</p>
         </div>
         <div class="profile custom">
           <span class="name">custom</span>
-          <p><code>.sc4sap/blocklist-custom.txt</code>에 사용자 지정 리스트.</p>
+          <p><code>.sc4sap/blocklist-custom.txt</code>에 사용자 지정 리스트</p>
         </div>
       </div>
 
@@ -444,7 +422,7 @@ window.SC4_PANELS_KO = (function () {
         <h4><code>acknowledge_risk</code> - per-call · per-table · per-session 명시적 승인</h4>
         <p>
           <code>GetTableContents</code> / <code>GetSqlQuery</code>로 민감 테이블에 접근하려면,
-          사용자가 <b>명시적 긍정 키워드</b>로 허가해야 합니다.
+          사용자가 <b>명시적 긍정 키워드</b>로 허가해야 합니다
         </p>
         <p>
           인정되는 표현:
@@ -463,30 +441,33 @@ window.SC4_PANELS_KO = (function () {
           <span class="bad">해봐</span>
         </p>
         <p style="margin-top:14px;">
-          승인은 <b>호출 단위 · 테이블 단위 · 세션 단위로만 유효</b>하며, 다음 요청으로 이월되지 않습니다.
-          <b>"AI가 실수로 민감 테이블을 뽑는 경로" 자체를 없애는 것</b>이 설계 목표입니다.
+          승인은 <b>호출 단위 · 테이블 단위 · 세션 단위로만 유효</b>하며, 다음 요청으로 이월되지 않습니다
+          <b>"AI가 실수로 민감 테이블을 뽑는 경로" 자체를 없애는 것</b>이 설계 목표입니다
         </p>
       </div>
 
       <div class="ack-demo">
-        <h5>▶ 게이트 체험 - 키워드를 클릭해 보세요</h5>
+        <h5 class="ack-head"><i class="ph ph-cursor-click" aria-hidden="true"></i>게이트 체험 - 키워드를 클릭해 보세요</h5>
         <div class="ack-buttons">
           <button class="ack-btn" data-kw="yes">yes</button>
-          <button class="ack-btn" data-kw="승인">승인</button>
-          <button class="ack-btn" data-kw="authorize">authorize</button>
-          <button class="ack-btn" data-kw="approve">approve</button>
           <button class="ack-btn" data-kw="뽑아봐">뽑아봐</button>
-          <button class="ack-btn" data-kw="try it">try it</button>
+          <button class="ack-btn" data-kw="authorize">authorize</button>
           <button class="ack-btn" data-kw="my mistake">my mistake</button>
           <button class="ack-btn" data-kw="해봐">해봐</button>
+          <button class="ack-btn" data-kw="승인">승인</button>
+          <button class="ack-btn" data-kw="approve">approve</button>
+          <button class="ack-btn" data-kw="try it">try it</button>
         </div>
-        <div class="ack-output" aria-live="polite">→ 위 키워드 중 하나를 클릭해 게이트 동작을 확인하세요.</div>
+        <div class="ack-window">
+          <div class="terminal-bar"><span class="terminal-tab">acknowledge_risk</span></div>
+          <div class="ack-output" aria-live="polite">→ 위 키워드 중 하나를 클릭해 게이트 동작을 확인하세요</div>
+        </div>
       </div>
     </div>` },
 
     '08': { html: `<div class="capd capd-08">
       ${head('08','🗃️','Reusability · CBO Reuse','/sc4sap:analyze-cbo-obj')}
-      <p class="capd-lede">이미 있는 Z 오브젝트를 AI가 다시 만들지 않도록.</p>
+      <p class="capd-lede">이미 있는 Z 오브젝트를 AI가 다시 만들지 않도록</p>
       <p class="capd-desc">
         수 년간 사용해온 SAP 시스템일수록 <code>ZCL_*</code> · <code>ZFM_*</code> · <code>Z*_DE</code> · 커스텀 구조체·테이블 타입이
         수백 개씩 쌓여 있습니다, 이 자산을 모른 채 AI에게 개발을 맡기게되면
@@ -531,8 +512,8 @@ window.SC4_PANELS_KO = (function () {
       </div>
 
       <div class="callout rx-callout">
-        <b>"새 CBO를 만들어야 하는가"는 항상 마지막 질문입니다.</b>
-        sc4sap은 user-exit · 치환/검증 · BAdI 구현 · APPEND 구조체까지 인벤토리에 포함해, 브라운필드의 <b>"중복 Z" 사고</b>를 구조적으로 차단합니다.
+        <b>"새 CBO를 만들어야 하는가"는 항상 마지막 질문입니다</b>
+        sc4sap은 user-exit · 치환/검증 · BAdI 구현 · APPEND 구조체까지 인벤토리에 포함해, 브라운필드의 <b>"중복 Z" 사고</b>를 구조적으로 차단합니다
       </div>
     </div>` },
 
@@ -613,26 +594,26 @@ window.SC4_PANELS_KO = (function () {
 
     '11': { html: `<div class="capd capd-11">
       ${head('11','🎯','Active-Module Awareness')}
-      <p class="capd-lede">모듈 조합에 따라 표준 객체를 바꿔 씁니다.</p>
+      <p class="capd-lede">모듈 조합에 따라 표준 객체를 바꿔 씁니다</p>
       <p class="capd-desc">같은 "원가 분석"이라도 프로젝트가 <b>MM + PS</b>면 WBS 기준, <b>SD + CO</b>면 CO-PA 세그먼트 기준으로 달라집니다
       <br/><code>config.json</code>의 activeModules 리스트를 근거로 에이전트가 조합 별 <b>Standard</b> 객체와 <b>BAPI</b>를 자동 선택하고, 교차 접점을 플래그합니다
       <br/><b>FI + TR</b>이 활성화되면 지급 제안 → 현금관리 → House Bank 이체 경로까지 설계되고, <b>QM + PP</b>면 생산오더 단계 별 in-process 검사 lot이 자동 생성되도록 흐름을 가져갑니다</p>
       <div class="capd-combos">
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>MM</span><span>+</span><span>PS</span><span class="arrow">⇒</span><span class="out">WBS 비용</span></div>
-          <p>WBS 요소에 비용 직접 집계. <code>BANFN</code> · <code>EBELN</code>의 <code>PS_PSP_PNR</code> 키로 프로젝트 귀속.</p>
+          <p>WBS 요소에 비용 직접 집계. <code>BANFN</code> · <code>EBELN</code>의 <code>PS_PSP_PNR</code> 키로 프로젝트 귀속</p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>SD</span><span>+</span><span>CO</span><span class="arrow">⇒</span><span class="out">CO-PA</span></div>
-          <p>주문 · 청구 기준 세그먼트 채널로 전표 전기. 수량·금액을 <code>CE1</code> / <code>CE4</code>로 분해.</p>
+          <p>주문 · 청구 기준 세그먼트 채널로 전표 전기. 수량·금액을 <code>CE1</code> / <code>CE4</code>로 분해</p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>FI</span><span>+</span><span>TR</span><span class="arrow">⇒</span><span class="out">자금·하우스뱅크</span></div>
-          <p>지급 제안 → TR 현금관리 → House Bank 이체. <code>FEBAN</code> · <code>FF7A</code> 연계 경로 자동 인지.</p>
+          <p>지급 제안 → TR 현금관리 → House Bank 이체. <code>FEBAN</code> · <code>FF7A</code> 연계 경로 자동 인지</p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>QM</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">검사 lot</span></div>
-          <p>생산오더 단계별 in-process 검사 lot 생성. 수입검사 · 최종검사 시점 자동 분기.</p>
+          <p>생산오더 단계별 in-process 검사 lot 생성. 수입검사 · 최종검사 시점 자동 분기</p>
         </div>
       </div>
     </div>` },

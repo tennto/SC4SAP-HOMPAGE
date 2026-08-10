@@ -17,11 +17,13 @@
 <meta name="twitter:image" content="https://sc4sap.dev/assets/thumb.png?v=2" />
 <meta name="google-site-verification" content="2xZ2mbceS386_QWnVunYUDkvQtaaiKH0DnHpxnmZPIg" />
 
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
-<link rel="icon" type="image/png" sizes="96x96" href="../assets/favicon-96.png" />
-<link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
-<link rel="icon" href="../favicon.ico" sizes="any" />
-<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+<link rel="icon" type="image/svg+xml" href="favicon/sc4_charcoal_rounded.svg" />
+<link rel="icon" type="image/png" sizes="512x512" href="favicon/sc4_charcoal_512_rounded.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/sc4_charcoal_32_rounded.png" />
+<link rel="icon" href="favicon/favicon.ico" sizes="any" />
+<!-- Square on purpose: iOS masks the home screen icon itself, and a
+     pre-rounded one comes out cut twice. -->
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/sc4_charcoal_512.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -94,12 +96,13 @@
   <div class="hero-ambient" aria-hidden="true">
     <span class="ha-grid"></span>
     <span class="ha-wash"></span>
+    <span class="ha-noise"></span>
   </div>
 
   <div class="shell hero-grid">
     <div>
       <h1 class="t-display hero-title" data-hero-title data-t-html="heroTitle">SAP 시스템 전체를<br><em>Claude Code</em> 안에서</h1>
-      <p class="t-lede hero-enter" style="--enter-delay:420ms" data-t="heroLede">ECC부터 S/4HANA Cloud까지, ABAP을 직접 읽고 쓰고 활성화하는 MCP 기반 도구 150여 개.</p>
+      <p class="t-lede hero-enter" style="--enter-delay:420ms" data-t="heroLede">ECC부터 S/4HANA Cloud까지, ABAP을 직접 읽고 쓰고 활성화하는 MCP 기반 도구 150여 개</p>
       <div class="hero-actions hero-enter" style="--enter-delay:540ms">
         <a class="btn btn-ghost" href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener">
           <i class="ph ph-github-logo" aria-hidden="true"></i>
@@ -209,46 +212,97 @@
   </div>
 </section>
 
-<!-- ===================== SEE IT ===================== -->
-<section id="see-it" class="band dash-top">
-  <div class="shell">
-    <h2 class="t-h2 reveal" data-t="seeH2">실제로는 이렇게 동작합니다</h2>
-    <p class="t-lede reveal" style="margin-top:18px;" data-t="seeLede">Claude Code 세션 안에서 ABAP 소스를 읽고, 리뷰하고, 활성화하는 과정 전체가 한 화면에서 끝납니다.</p>
+<!-- ===================== IMPACT =====================
 
-    <figure class="figure reveal" style="margin-inline:0;">
-      <!-- TODO Replace this slot with a real capture, 1600x1000 or wider,
-           of /sc4sap:program-to-spec running in Claude Code. Drop the file at
-           sc4_redesign/assets/capture-program-to-spec.png and swap this div
-           for: <img src="assets/capture-program-to-spec.png" alt="..." /> -->
-      <div class="figure-slot">
-        <i class="ph ph-image-square" aria-hidden="true"></i>
-        <span data-t="seeSlot">제품 캡처가 들어갈 자리</span>
-        <code>1600 x 1000 · assets/capture-program-to-spec.png</code>
+     A cumulative-effort chart turned on its side: time runs DOWN, effort
+     runs RIGHT. Two things fall out of that rotation that a conventional
+     left-to-right chart cannot show as plainly.
+
+     The slope of each line is that team's burn rate, so once SC4SAP has
+     finished its scope in week 2 its line goes vertical — spending nothing
+     further — while the baseline keeps sliding right for six more weeks.
+     And a tall narrow plot is the one shape this page does not already
+     have: every band above it is a horizontal row of columns.
+
+     Every number here is derived from the per-task table in the side rail,
+     never asserted on its own. The last table row barely moves on purpose:
+     handover and UAT are organisational, not something a plugin compresses,
+     and admitting that is what makes the rest of the column credible.
+     ===================================================== -->
+<section id="impact" class="band dash-top">
+  <!-- The deck runs off the right and bottom edges the way the original
+       component intends, so the section clips it rather than letting it
+       land on top of whatever comes next. -->
+  <div class="shell cswap" data-cardswap>
+    <div class="cs-copy">
+      <h2 class="t-h2 reveal" data-t="impactH2">압도적 성능과 효율을 경험하세요</h2>
+      <p class="t-lede reveal" style="margin-top:18px;" data-t="impactLede">여러 세션으로 다중 병렬 작업이 가능합니다</p>
+    </div>
+
+    <!-- Ported from the React Bits CardSwap component. Nothing was
+         installed: this project has no build step and no npm, so the swap
+         timeline and the 3D slot maths were rewritten against the Web
+         Animations API and GSAP's easing is evaluated from its own formula.
+
+         Four cards, twelve capabilities. A card is refilled from the next
+         entry while it is at the bottom of its drop and out of sight, so
+         the deck cycles the whole index without ever growing past four
+         elements. The text comes from the same strings the capability
+         accordion uses, in all three languages.
+
+         Empty on purpose: script fills them. The no-JS fallback in
+         layout.css unstacks whatever is here rather than leaving a pile. -->
+    <!-- Reveals with the copy beside it, on the page's own shared observer
+         rather than a second mechanism of its own. -->
+    <div class="cs-stage reveal" style="--reveal-delay:260ms">
+      <div class="cs-deck" data-cs-deck role="group" data-t-aria="impactDeckAria" aria-label="기능 12가지가 카드 4장에 차례로 나타납니다">
+        <article class="cs-card" data-cs-card>
+          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
+          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
+        </article>
+        <article class="cs-card" data-cs-card>
+          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
+          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
+        </article>
+        <article class="cs-card" data-cs-card>
+          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
+          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
+        </article>
+        <article class="cs-card" data-cs-card>
+          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
+          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
+        </article>
       </div>
-    </figure>
-    <figcaption class="figure-cap reveal" data-t-html="seeCap"></figcaption>
+    </div>
   </div>
 </section>
 
 <!-- ===================== START ===================== -->
 <section id="start" class="band band-sunk dash-top">
   <div class="shell">
-    <h2 class="t-h2 reveal" data-t="startH2">시작하는 데 세 번이면 충분합니다</h2>
+    <div class="flow-head">
+      <span class="flow-eyebrow reveal">GETTING STARTED</span>
+      <h2 class="t-h2 reveal" data-t="startH2">시작하는 데 세 단계면 충분합니다</h2>
+      <p class="t-lede reveal" data-t="startLede">설치부터 첫 작업까지, 별도 서버를 세우거나 설정 파일을 만질 일은 없습니다. Claude Code 안에서 그대로 이어집니다</p>
+    </div>
 
     <div class="flow reveal">
       <div class="move">
+        <span class="move-n" aria-hidden="true">01</span>
         <h3 data-t="startInstallH">설치</h3>
-        <p data-t="startInstallP">Claude Code에 커스텀 마켓플레이스를 추가하고 플러그인을 설치합니다.</p>
+        <p data-t="startInstallP">Claude Code에 커스텀 마켓플레이스를 추가하고 플러그인을 설치합니다</p>
         <code class="cmd">/plugin install sc4sap</code>
       </div>
       <div class="move">
+        <span class="move-n" aria-hidden="true">02</span>
         <h3 data-t="startSetupH">연결</h3>
-        <p data-t="startSetupP">SAP 버전과 업종, 국가를 한 번 답하면 MCP 서버와 권한 훅까지 등록됩니다.</p>
+        <p data-t="startSetupP">SAP 버전과 업종, 국가를 한 번 답하면 MCP 서버와 권한 훅까지 등록됩니다</p>
         <code class="cmd">/sc4sap:setup</code>
       </div>
       <div class="move">
+        <span class="move-n" aria-hidden="true">03</span>
         <h3 data-t="startBuildH">작업</h3>
-        <p data-t="startBuildP">역공학, 코드 리뷰, 프로그램 생성을 25개 에이전트가 나눠 처리합니다.</p>
+        <p data-t="startBuildP">역공학, 코드 리뷰, 프로그램 생성을 25개 에이전트가 나눠 처리합니다</p>
         <code class="cmd">/sc4sap:team</code>
       </div>
     </div>
@@ -262,38 +316,28 @@
       <h2 class="t-h2" data-t="capH2">기능 12가지</h2>
       <span class="index-count" data-t="capCount">전체 12개</span>
     </div>
-    <p class="t-lede reveal" style="margin-top:16px;" data-t="capLede">각 항목을 열면 실제 명령어와 산출물, 동작 방식을 확인할 수 있습니다.</p>
+    <p class="t-lede reveal" style="margin-top:16px;" data-t="capLede">각 항목을 열면 실제 명령어와 산출물, 동작 방식을 확인할 수 있습니다</p>
 
     <div class="index reveal" data-index></div>
   </div>
 </section>
 
-<!-- ===================== SAFETY ===================== -->
-<section id="safety" class="band band-sunk dash-top">
+<!-- ===================== CONTRIBUTORS =====================
+     Set to the right, against the mark on the left. Every other section on
+     the page reads from the left edge; this one is an aside to the product
+     argument rather than part of it, and turning it round is what says so
+     before a word is read. -->
+<section id="contribute" class="band band-sunk dash-top">
   <div class="shell">
-    <h2 class="t-h2 reveal" data-t="safeH2">운영 데이터는 밖으로 나가지 않습니다</h2>
-
-    <div class="safety-grid">
-      <div class="reveal">
-        <p class="t-lede" data-t="safeLede">SAP 운영계에 AI를 붙일 때 가장 먼저 검토되는 항목입니다. SC4SAP는 이를 문서가 아니라 훅으로 강제합니다.</p>
-        <ul class="safety-points">
-          <li><i class="ph ph-shield-check" aria-hidden="true"></i><span data-t-html="safe1"></span></li>
-          <li><i class="ph ph-shield-check" aria-hidden="true"></i><span data-t-html="safe2"></span></li>
-          <li><i class="ph ph-shield-check" aria-hidden="true"></i><span data-t-html="safe3"></span></li>
-          <li><i class="ph ph-shield-check" aria-hidden="true"></i><span data-t-html="safe4"></span></li>
-        </ul>
+    <div class="contrib">
+      <div class="contrib-mark reveal" aria-hidden="true">
+        <img class="mark-light" src="favicon/mark_b.png" alt="" width="512" height="512" decoding="async" loading="lazy" />
+        <img class="mark-dark" src="favicon/mark_iv.png" alt="" width="512" height="512" decoding="async" loading="lazy" />
       </div>
 
-      <div class="transcript reveal">
-        <div class="transcript-head" data-t="safeTr">블록리스트 훅 · 설치 시 스모크 테스트</div>
-<pre><code><span class="l-in">GetTableContents(BNKA)</span>
-<span class="l-dim">hook</span>  PreToolUse · sc4sap-blocklist
-<span class="l-dim">match</span> BNKA in { BNKA, PA0008, PA0009, BSEG, LFBK }
-<span class="l-deny">deny</span>  permissionDecision: deny
-
-<span class="l-in">GetTableContents(BNKA) acknowledge_risk="yes"</span>
-<span class="l-dim">gate</span>  explicit affirmative recognised
-<span class="l-ok">allow</span> per call · per table · per session</code></pre>
+      <div class="contrib-body">
+        <h2 class="t-h2 reveal" data-t="contribH2">Welcome Contributors!</h2>
+        <p class="t-lede reveal" data-t-html="contribLede">프로젝트에 관심이 있거나 기여하고 싶은 분이 계시다면<br class="br-wide">아래 Connect 연락처로 문의해주세요</p>
       </div>
     </div>
   </div>
@@ -308,7 +352,7 @@
   <div class="shell cta-grid">
     <div>
       <h2 class="t-h2" data-t="ctaH2">지금 설치하면 바로 씁니다</h2>
-      <p data-t="ctaP">Claude Code에 커스텀 마켓플레이스로 추가하면 별도 서버나 계정 없이 곧바로 사용할 수 있습니다.</p>
+      <p data-t="ctaP">Claude Code에 커스텀 마켓플레이스로 추가하면 별도 서버나 계정 없이 곧바로 사용할 수 있습니다</p>
     </div>
 
     <div class="install">
@@ -334,7 +378,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <span class="brand-text"><b>Super-Claude</b> for SAP</span>
-        <p class="t-body" data-t="footTagline">Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다.</p>
+        <p class="t-body" data-t="footTagline">Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다</p>
       </div>
 
       <div>
@@ -370,11 +414,16 @@
 </footer>
 
 <!-- Twemoji renders the country flag pairs consistently on Windows and Linux -->
-<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous" defer></script>
 <script src="js/strings.js" defer></script>
 <script src="js/panels.ko.js" defer></script>
 <script src="js/i18n.en.js" defer></script>
 <script src="js/i18n.ja.js" defer></script>
 <script src="js/app.js" defer></script>
+<!-- Async, and last. Deferred scripts run in document order, so sitting at
+     the head of the list this made app.js wait on a third-party CDN before
+     the page could set itself up at all. It is optional decoration for the
+     emoji inside the capability panels, every use of it is already guarded,
+     and nothing waits on it. -->
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous" async></script>
 </body>
 </html>

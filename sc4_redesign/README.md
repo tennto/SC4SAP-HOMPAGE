@@ -65,7 +65,7 @@ python -m http.server 8080
 | Hero `#top` | 비대칭 스플릿 | 가치 제안 + 설치 명령어 |
 | Facts | 헤어라인 4열 | 플랫폼 3 · MCP 도구 150+ · 에이전트 25 · 스킬 17 (카운트업) |
 | Why `#why` | 2열 대조 | 범용 AI 대비 무엇이 달라지는가 |
-| See it `#see-it` | 프레임드 피겨 | 실제 화면 (이미지 필요, 아래 참조) |
+| Impact `#impact` | 좌 카피 + 우 카드 덱 | React Bits CardSwap 무의존 이식. 명령 4개의 산출물이 자동으로 넘어감 (레퍼런스 `example1.PNG`) |
 | Start `#start` | 3분할 플로우 | install / setup / team |
 | Capabilities `#capabilities` | 번호 인덱스 | 01-12, 열면 상세 패널 |
 | Safety `#safety` | 스플릿 + 트랜스크립트 | 데이터 보호 (네비 링크는 제거, 섹션은 유지) |
@@ -218,17 +218,23 @@ viewport   열 영역   shift   비율
 ## 아직 필요한 것
 
 **실제 제품 캡처가 없습니다.** 기존 `assets/thumb.png` 는 구 SAP 블루
-그라디언트라 새 팔레트와 충돌해 쓰지 않았습니다. `#see-it` 섹션에 명시적인
-플레이스홀더 슬롯을 두었습니다.
+그라디언트라 새 팔레트와 충돌해 쓰지 않았습니다. 원래 캡처 자리였던 See it
+섹션은 Impact 차트로 대체했으므로, 지금 페이지에는 제품 화면이 한 장도
+없습니다. 캡처가 생기면 놓을 자리를 새로 정해야 합니다.
 
-넣어 주시면 바로 반영됩니다:
-
-1. `assets/capture-program-to-spec.png` - 1600x1000 이상.
-   Claude Code 에서 `/sc4sap:program-to-spec` 이 도는 화면
-   → `index.html` 의 `.figure-slot` div 를 `<img>` 로 교체 (해당 위치에 TODO 주석 있음)
+1. (선택) `assets/capture-program-to-spec.png` - 1600x1000 이상.
+   Claude Code 에서 `/sc4sap:program-to-spec` 이 도는 화면.
+   구 `.figure` / `.figure-slot` CSS 는 지웠으니 커밋 `91a98c7` 에서 되살리거나
+   새로 짜야 합니다
 2. (선택) 히어로 우측에 놓을 두 번째 캡처. 지금은 설치 패널이 그 자리를 채우고 있어
    없어도 성립합니다
 3. (선택) 새 팔레트로 다시 만든 OG 썸네일 1200x630
+
+**Impact 섹션의 숫자는 실측이 아닙니다.** `app.js` 의 `SW_RATIO`(4 = 8주 대 2주)와
+`SW_CONC`(25 = 동시 에이전트 수)가 원본이고, 두 레인의 타일 스케줄과 카운터가
+전부 거기서 나옵니다. 근거였던 작업별 산식 표는 사장님 요청으로 제거했고 산식은
+`NEXT.md` 에 남겨뒀습니다. 전제와 "실측이 아님" 고지는 `impactLede` 가 지고
+있으므로, 그 문장을 지우면 페이지가 계산값을 실측처럼 주장하게 됩니다.
 
 ## 검증
 

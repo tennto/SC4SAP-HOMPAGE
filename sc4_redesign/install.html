@@ -12,10 +12,13 @@
 <meta property="og:image" content="https://sc4sap.dev/assets/thumb.png?v=2" />
 <meta name="twitter:card" content="summary_large_image" />
 
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
-<link rel="icon" type="image/png" sizes="96x96" href="../assets/favicon-96.png" />
-<link rel="icon" href="../favicon.ico" sizes="any" />
-<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+<link rel="icon" type="image/svg+xml" href="favicon/sc4_charcoal_rounded.svg" />
+<link rel="icon" type="image/png" sizes="512x512" href="favicon/sc4_charcoal_512_rounded.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/sc4_charcoal_32_rounded.png" />
+<link rel="icon" href="favicon/favicon.ico" sizes="any" />
+<!-- Square on purpose: iOS masks the home screen icon itself, and a
+     pre-rounded one comes out cut twice. -->
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/sc4_charcoal_512.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -86,7 +89,7 @@
 <header class="page-head">
   <div class="shell">
     <h1 class="t-display" data-t="insTitle">설치 가이드</h1>
-    <p class="t-lede" data-t="insLede">Claude Code 세션 안에서 마켓플레이스를 추가하고, 설정 위저드를 한 번 돌리면 끝납니다.</p>
+    <p class="t-lede" data-t="insLede">Claude Code 세션 안에서 마켓플레이스를 추가하고, 설정 위저드를 한 번 돌리면 끝납니다</p>
     <div class="head-links">
       <a class="btn btn-ghost" href="index.html">
         <i class="ph ph-arrow-left" aria-hidden="true"></i>
@@ -134,14 +137,14 @@
 
     <p class="note reveal">
       <i class="ph ph-warning-circle" aria-hidden="true"></i>
-      <span data-t="insInstallNote">sc4sap 은 아직 공식 마켓플레이스에 등록되어 있지 않습니다.</span>
+      <span data-t="insInstallNote">sc4sap 은 아직 공식 마켓플레이스에 등록되어 있지 않습니다</span>
     </p>
 
     <div class="opts">
       <div class="opt primary reveal">
         <span class="opt-tag" data-t="insOptAK">권장</span>
         <h3 class="t-h3" data-t="insOptAH">커스텀 마켓플레이스로 추가</h3>
-        <p data-t="insOptAP">Claude Code 세션 안에서 두 줄을 차례로 실행합니다.</p>
+        <p data-t="insOptAP">Claude Code 세션 안에서 두 줄을 차례로 실행합니다</p>
 
         <div class="cmd-block">
 <pre><code>/plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
@@ -189,7 +192,7 @@ npm install &amp;&amp; npm run build</code></pre>
 <section class="band band-sunk dash-top">
   <div class="shell">
     <h2 class="t-h2 reveal" data-t="insSetupH">설정 위저드</h2>
-    <p class="t-lede reveal" style="margin-top:16px;" data-t="insSetupP">위저드는 한 번에 한 질문만 합니다.</p>
+    <p class="t-lede reveal" style="margin-top:16px;" data-t="insSetupP">위저드는 한 번에 한 질문만 합니다</p>
 
     <div class="cmd-block reveal" style="max-width:420px;">
 <pre><code>/sc4sap:setup</code></pre>
@@ -293,7 +296,7 @@ npm install &amp;&amp; npm run build</code></pre>
       </div>
 
       <div class="reveal">
-        <p class="t-lede" data-t="insProfileP">한 Claude Code 세션에서 여러 SAP 연결을 다룹니다.</p>
+        <p class="t-lede" data-t="insProfileP">한 Claude Code 세션에서 여러 SAP 연결을 다룹니다</p>
         <ul class="plain-list" style="margin-top:22px;">
           <li><i class="ph ph-lock-key" aria-hidden="true"></i><span data-t-html="insTier1"></span></li>
           <li><i class="ph ph-prohibit" aria-hidden="true"></i><span data-t-html="insTier2"></span></li>
@@ -308,7 +311,7 @@ npm install &amp;&amp; npm run build</code></pre>
 <section class="band band-sunk dash-top">
   <div class="shell">
     <h2 class="t-h2 reveal" data-t="insDefenseH">3중 방어</h2>
-    <p class="t-lede reveal" style="margin-top:16px;" data-t="insDefenseP">운영계에 붙이기 전에 가장 먼저 검토되는 부분입니다.</p>
+    <p class="t-lede reveal" style="margin-top:16px;" data-t="insDefenseP">운영계에 붙이기 전에 가장 먼저 검토되는 부분입니다</p>
 
     <div class="layers reveal">
       <div class="layer">
@@ -390,7 +393,7 @@ npm install &amp;&amp; npm run build</code></pre>
     <div class="foot-grid">
       <div class="foot-brand">
         <span class="brand-text"><b>Super-Claude</b> for SAP</span>
-        <p class="t-body" data-t="footTagline">Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다.</p>
+        <p class="t-body" data-t="footTagline">Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다</p>
       </div>
 
       <div>

@@ -14,9 +14,9 @@ window.SC4_STRINGS = (function () {
   'use strict';
 
   var ko = {
-    ackDefault: '위 키워드 중 하나를 눌러 게이트 동작을 확인하세요.',
-    ackPass: '<b>PASS</b> 명시적 긍정 키워드 "<b>{kw}</b>" 인식. GetTableContents(BNKA) 허용 (호출 · 테이블 · 세션 단위).',
-    ackDeny: '<b>DENY</b> 모호한 명령 "<b>{kw}</b>" 은(는) acknowledge_risk 로 인정되지 않습니다. 명시적 키워드로 다시 요청하세요.',
+    ackDefault: '위 키워드 중 하나를 눌러 게이트 동작을 확인하세요',
+    ackPass: '<span class="ack-verdict pass">PASS</span> 명시적 긍정 키워드 "<b>{kw}</b>" 인식. GetTableContents(BNKA) 허용 (호출 · 테이블 · 세션 단위)',
+    ackDeny: '<span class="ack-verdict deny">DENY</span> 모호한 명령 "<b>{kw}</b>" 은(는) acknowledge_risk 로 인정되지 않습니다. 명시적 키워드로 다시 요청하세요',
     navCapabilities: '기능',
     navInstall: '설치 가이드',
     navContact: '연락처',
@@ -56,35 +56,30 @@ window.SC4_STRINGS = (function () {
     whyAfter3: '14개 업종과 16개 국가 레퍼런스를 <b>필수로 로드</b>합니다',
     whyAfter4: 'PII · 급여 · 뱅킹 테이블은 <b>4중 방어</b>로 차단합니다',
 
-    seeH2: '실제로는 이렇게 동작합니다',
-    seeLede: 'Claude Code 세션 안에서 ABAP 소스를 읽고, 리뷰하고, 활성화하는 과정 전체가 한 화면에서 끝납니다.',
-    seeSlot: '제품 캡처가 들어갈 자리',
-    seeCap: '캡처: Claude Code에서 <code>/sc4sap:program-to-spec</code> 실행 결과',
+    impactH2: '압도적 성능과 효율을 경험하세요',
+    impactLede: '여러 세션으로 다중 병렬 작업이 가능합니다',
+    impactDeckAria: '기능 12가지가 카드 4장에 차례로 나타납니다',
 
     startH2: '시작하는 데 세 단계면 충분합니다',
+    startLede: '설치부터 첫 작업까지, 별도 서버를 세우거나 설정 파일을 만질 일은 없습니다. Claude Code 안에서 그대로 이어집니다',
     startInstallH: '설치',
-    startInstallP: 'Claude Code에 커스텀 마켓플레이스를 추가하고 플러그인을 설치합니다.',
+    startInstallP: 'Claude Code에 커스텀 마켓플레이스를 추가하고 플러그인을 설치합니다',
     startSetupH: '연결',
-    startSetupP: 'SAP 버전과 업종, 국가를 한 번 답하면 MCP 서버와 권한 훅까지 등록됩니다.',
+    startSetupP: 'SAP 버전과 업종, 국가를 한 번 답하면 MCP 서버와 권한 훅까지 등록됩니다',
     startBuildH: '작업',
-    startBuildP: '역공학, 코드 리뷰, 프로그램 생성을 25개 에이전트가 나눠 처리합니다.',
+    startBuildP: '역공학, 코드 리뷰, 프로그램 생성을 25개 에이전트가 나눠 처리합니다',
 
     capH2: '기능 12가지',
     capCount: '전체 12개',
-    capLede: '각 항목을 열면 실제 명령어와 산출물, 동작 방식을 확인할 수 있습니다.',
+    capLede: '각 항목을 열면 실제 명령어와 산출물, 동작 방식을 확인할 수 있습니다',
 
-    safeH2: '운영 데이터는 밖으로 나가지 않습니다',
-    safeLede: 'SAP 운영계에 AI를 붙일 때 가장 먼저 검토되는 항목입니다. SC4SAP는 이를 문서가 아니라 훅으로 강제합니다.',
-    safe1: '<b>에이전트 지시문</b>에서 민감 카테고리를 거부하고 대안을 제시합니다',
-    safe2: '<b>블록리스트 훅</b>이 BNKA 같은 민감 테이블 조회를 <code>permissionDecision: deny</code>로 차단합니다',
-    safe3: '<b>acknowledge_risk 규칙</b>은 명시적 긍정 키워드만 인정하며, 호출 · 테이블 · 세션 단위로 각각 요구됩니다',
-    safe4: '<b>설치 단계의 스모크 테스트</b>로 훅이 실제로 막는지 그 자리에서 검증합니다',
-    safeTr: '블록리스트 훅 · 설치 시 스모크 테스트',
+    contribH2: 'Welcome Contributors!',
+    contribLede: '프로젝트에 관심이 있거나 기여하고 싶은 분이 계시다면<br class="br-wide">아래 Connect 연락처로 문의해주세요',
 
     ctaH2: '지금 설치하면 바로 쓸 수 있습니다',
-    ctaP: 'Claude Code에 커스텀 마켓플레이스로 추가하면 별도 서버나 계정 없이 곧바로 사용할 수 있습니다.',
+    ctaP: 'Claude Code에 커스텀 마켓플레이스로 추가하면 별도 서버나 계정 없이 곧바로 사용할 수 있습니다',
 
-    footTagline: 'Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다.',
+    footTagline: 'Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다',
     footContact: '연락처',
     footProject: '프로젝트',
     footMeta: '© Super-Claude for SAP · MIT 라이선스',
@@ -105,9 +100,9 @@ window.SC4_STRINGS = (function () {
   };
 
   var en = {
-    ackDefault: 'Press one of the keywords above to see how the gate behaves.',
-    ackPass: '<b>PASS</b> explicit affirmative keyword "<b>{kw}</b>" recognized. GetTableContents(BNKA) allowed, per call, per table, per session.',
-    ackDeny: '<b>DENY</b> the ambiguous command "<b>{kw}</b>" is not accepted as acknowledge_risk. Ask again with an explicit keyword.',
+    ackDefault: 'Press one of the keywords above to see how the gate behaves',
+    ackPass: '<span class="ack-verdict pass">PASS</span> explicit affirmative keyword "<b>{kw}</b>" recognized. GetTableContents(BNKA) allowed, per call, per table, per session',
+    ackDeny: '<span class="ack-verdict deny">DENY</span> the ambiguous command "<b>{kw}</b>" is not accepted as acknowledge_risk. Ask again with an explicit keyword',
     navCapabilities: 'Capabilities',
     navInstall: 'Install guide',
     navContact: 'Contact',
@@ -147,35 +142,30 @@ window.SC4_STRINGS = (function () {
     whyAfter3: 'References for 14 industries and 16 countries load as <b>mandatory context</b>',
     whyAfter4: 'PII, payroll, and banking tables are blocked by <b>four layers of defense</b>',
 
-    seeH2: 'What it actually looks like',
-    seeLede: 'Reading ABAP source, reviewing it, and activating the result all happen in one Claude Code session.',
-    seeSlot: 'Product capture goes here',
-    seeCap: 'Capture: <code>/sc4sap:program-to-spec</code> running in Claude Code',
+    impactH2: 'Performance and efficiency, on another level',
+    impactLede: 'Run several sessions at once, each working in parallel',
+    impactDeckAria: 'Twelve capabilities, dealt four at a time',
 
     startH2: 'Three moves to get running',
+    startLede: 'From install to first run there is no server to stand up and no config file to edit. It all continues inside Claude Code',
     startInstallH: 'Install',
-    startInstallP: 'Add the custom marketplace to Claude Code and install the plugin.',
+    startInstallP: 'Add the custom marketplace to Claude Code and install the plugin',
     startSetupH: 'Connect',
-    startSetupP: 'Answer once for SAP version, industry, and country. The MCP server and permission hooks register themselves.',
+    startSetupP: 'Answer once for SAP version, industry, and country. The MCP server and permission hooks register themselves',
     startBuildH: 'Work',
-    startBuildP: 'Reverse engineering, code review, and program generation split across 25 agents.',
+    startBuildP: 'Reverse engineering, code review, and program generation split across 25 agents',
 
     capH2: 'Twelve capabilities',
     capCount: '12 entries',
-    capLede: 'Open any entry for the real commands, the output it produces, and how it works.',
+    capLede: 'Open any entry for the real commands, the output it produces, and how it works',
 
-    safeH2: 'Production data stays where it is',
-    safeLede: 'This is the first thing reviewed when AI is attached to a live SAP system. SC4SAP enforces it with a hook, not a policy document.',
-    safe1: 'The <b>agent instructions</b> refuse sensitive categories and offer an alternative',
-    safe2: 'A <b>blocklist hook</b> stops reads on tables like BNKA with <code>permissionDecision: deny</code>',
-    safe3: 'The <b>acknowledge_risk rule</b> accepts explicit affirmative keywords only, and asks again per call, per table, and per session',
-    safe4: 'A <b>smoke test during setup</b> proves on the spot that the hook actually blocks',
-    safeTr: 'Blocklist hook · smoke test at setup',
+    contribH2: 'Welcome Contributors!',
+    contribLede: 'If the project interests you or you would like to contribute,<br class="br-wide">please get in touch through the Connect details below',
 
     ctaH2: 'Install it and start in one command',
-    ctaP: 'Add it to Claude Code as a custom marketplace. No separate server, no extra account.',
+    ctaP: 'Add it to Claude Code as a custom marketplace. No separate server, no extra account',
 
-    footTagline: 'An open-source plugin that turns Claude Code into a full-stack SAP development assistant.',
+    footTagline: 'An open-source plugin that turns Claude Code into a full-stack SAP development assistant',
     footContact: 'Contact',
     footProject: 'Project',
     footMeta: '© Super-Claude for SAP · MIT licensed',
@@ -196,9 +186,9 @@ window.SC4_STRINGS = (function () {
   };
 
   var ja = {
-    ackDefault: '上のキーワードのいずれかを押して、ゲートの動作を確認してください。',
-    ackPass: '<b>PASS</b> 明示的な肯定キーワード「<b>{kw}</b>」を認識。GetTableContents(BNKA) を許可（呼び出し単位・テーブル単位・セッション単位）。',
-    ackDeny: '<b>DENY</b> 曖昧な命令「<b>{kw}</b>」は acknowledge_risk として認められません。明示的なキーワードで再度リクエストしてください。',
+    ackDefault: '上のキーワードのいずれかを押して、ゲートの動作を確認してください',
+    ackPass: '<span class="ack-verdict pass">PASS</span> 明示的な肯定キーワード「<b>{kw}</b>」を認識。GetTableContents(BNKA) を許可（呼び出し単位・テーブル単位・セッション単位）',
+    ackDeny: '<span class="ack-verdict deny">DENY</span> 曖昧な命令「<b>{kw}</b>」は acknowledge_risk として認められません。明示的なキーワードで再度リクエストしてください',
     navCapabilities: '機能',
     navInstall: 'インストールガイド',
     navContact: '連絡先',
@@ -238,35 +228,30 @@ window.SC4_STRINGS = (function () {
     whyAfter3: '14 業種と 16 カ国のリファレンスを <b>必須で読み込みます</b>',
     whyAfter4: 'PII · 給与 · 銀行テーブルは <b>4 層の防御</b>で遮断します',
 
-    seeH2: '実際の動作',
-    seeLede: 'ABAP ソースの読み取り、レビュー、有効化までが Claude Code のセッション内で完結します。',
-    seeSlot: '製品キャプチャの配置場所',
-    seeCap: 'キャプチャ: Claude Code での <code>/sc4sap:program-to-spec</code> 実行',
+    impactH2: '圧倒的な性能と効率を体験してください',
+    impactLede: '複数のセッションで並列作業ができます',
+    impactDeckAria: '12 の機能がカード 4 枚に順に現れます',
 
     startH2: '始めるまで 3 ステップ',
+    startLede: 'インストールから最初の作業まで、別途サーバーを立てたり設定ファイルを触る必要はありません。Claude Code の中でそのまま続きます',
     startInstallH: 'インストール',
-    startInstallP: 'Claude Code にカスタムマーケットプレイスを追加してプラグインを導入します。',
+    startInstallP: 'Claude Code にカスタムマーケットプレイスを追加してプラグインを導入します',
     startSetupH: '接続',
-    startSetupP: 'SAP バージョン、業種、国に一度答えるだけで MCP サーバーと権限フックまで登録されます。',
+    startSetupP: 'SAP バージョン、業種、国に一度答えるだけで MCP サーバーと権限フックまで登録されます',
     startBuildH: '作業',
-    startBuildP: 'リバースエンジニアリング、コードレビュー、プログラム生成を 25 のエージェントが分担します。',
+    startBuildP: 'リバースエンジニアリング、コードレビュー、プログラム生成を 25 のエージェントが分担します',
 
     capH2: '12 の機能',
     capCount: '全 12 件',
-    capLede: '各項目を開くと、実際のコマンド、生成物、動作の仕組みを確認できます。',
+    capLede: '各項目を開くと、実際のコマンド、生成物、動作の仕組みを確認できます',
 
-    safeH2: '本番データは外に出ません',
-    safeLede: '稼働中の SAP に AI をつなぐとき最初に確認される項目です。SC4SAP はこれを文書ではなくフックで強制します。',
-    safe1: '<b>エージェント指示</b>が機微カテゴリを拒否し、代替案を提示します',
-    safe2: '<b>ブロックリストフック</b>が BNKA などの機微テーブル参照を <code>permissionDecision: deny</code> で遮断します',
-    safe3: '<b>acknowledge_risk ルール</b>は明示的な肯定キーワードのみを認め、呼び出し単位・テーブル単位・セッション単位で個別に要求します',
-    safe4: '<b>導入時のスモークテスト</b>でフックが実際に遮断するかをその場で検証します',
-    safeTr: 'ブロックリストフック · 導入時スモークテスト',
+    contribH2: 'Welcome Contributors!',
+    contribLede: 'プロジェクトにご関心のある方、貢献をお考えの方は、<br class="br-wide">下の Connect の連絡先までお問い合わせください',
 
     ctaH2: 'インストールすればすぐに使えます',
-    ctaP: 'Claude Code にカスタムマーケットプレイスとして追加するだけ。別サーバーも追加アカウントも不要です。',
+    ctaP: 'Claude Code にカスタムマーケットプレイスとして追加するだけ。別サーバーも追加アカウントも不要です',
 
-    footTagline: 'Claude Code を SAP フルスタック開発アシスタントに変えるオープンソースプラグインです。',
+    footTagline: 'Claude Code を SAP フルスタック開発アシスタントに変えるオープンソースプラグインです',
     footContact: '連絡先',
     footProject: 'プロジェクト',
     footMeta: '© Super-Claude for SAP · MIT ライセンス',
@@ -294,5 +279,167 @@ window.SC4_STRINGS = (function () {
     'Formatted Auto Program Maker'
   ];
 
-  return { ko: ko, en: en, ja: ja, titles: TITLES };
+  /* One transcript per capability, in index order, rendered into the card
+     deck. Command surface only, so these stay as they are in all three
+     languages, the same rule TITLES follows. Illustrative sample output:
+     object names and counts stand for a run, they are not measurements.
+
+     `$` lines are the slash commands the docs actually name; `>` lines are
+     plain requests, because those capabilities have no command of their
+     own and inventing one would be a lie in a monospaced font.
+
+     Written long on purpose. The card is a window onto a working session,
+     and a window with four lines in it and the rest empty reads as a
+     placeholder rather than as a session. */
+  var TERMINALS = [
+    '<span class="prompt">$</span> <span class="cmd">/sc4sap:setup</span><br>' +
+    '  detect   <span class="dim">Claude Code · plugin sc4sap</span><br>' +
+    '  ask      <span class="dim">release · industry · country</span><br>' +
+    '<br>' +
+    '  <span class="ok">OK</span>  mcp-abap-adt       <span class="dim">registered</span><br>' +
+    '  <span class="ok">OK</span>  adt endpoint       <span class="dim">/sap/bc/adt</span><br>' +
+    '  <span class="ok">OK</span>  permission hook    <span class="dim">pre-tool-use</span><br>' +
+    '  <span class="ok">OK</span>  blocklist          <span class="dim">PII · payroll · banking</span><br>' +
+    '  <span class="ok">OK</span>  profiles           <span class="dim">DEV · QAS · PRD</span><br>' +
+    '<br>' +
+    '  tools    <span class="dim">150+ available</span><br>' +
+    '  next     <span class="dim">/sc4sap:team</span>',
+
+    '<span class="prompt">$</span> <span class="cmd">/sc4sap:team</span><br>' +
+    '  spawn    <span class="dim">Core 10 · BC 1 · Module 14</span><br>' +
+    '<br>' +
+    '  abap-architect       <span class="y">running</span>  <span class="dim">structure</span><br>' +
+    '  abap-developer       <span class="y">running</span>  <span class="dim">ZMM0010</span><br>' +
+    '  mm-consultant        <span class="y">running</span>  <span class="dim">MARA · MARC</span><br>' +
+    '  sd-consultant        <span class="y">running</span>  <span class="dim">pricing</span><br>' +
+    '  security-reviewer    <span class="y">running</span>  <span class="dim">authority-check</span><br>' +
+    '  performance-analyst  <span class="y">running</span>  <span class="dim">SELECT paths</span><br>' +
+    '  basis-admin          <span class="dim">queued   transport</span><br>' +
+    '<br>' +
+    '  <span class="dim">one session · one context · no handover</span>',
+
+    '<span class="prompt">$</span> <span class="cmd">/sc4sap:program-to-spec ZMM0010</span><br>' +
+    '  read     <span class="dim">ZMM0010 + 3 includes · 2140 lines</span><br>' +
+    '  trace    <span class="dim">Dynpro 9000 · 12 PAI modules</span><br>' +
+    '<br>' +
+    '  <span class="ok">OK</span>  1  overview<br>' +
+    '  <span class="ok">OK</span>  2  screen flow<br>' +
+    '  <span class="ok">OK</span>  3  table I/O          <span class="dim">MARA · MARC · MSEG</span><br>' +
+    '  <span class="ok">OK</span>  4  exception handling <span class="dim">12 paths</span><br>' +
+    '  <span class="ok">OK</span>  5  authorisations     <span class="dim">M_MATE_WRK</span><br>' +
+    '  <span class="ok">OK</span>  6  performance notes<br>' +
+    '<br>' +
+    '  write    <span class="dim">functional spec · technical spec</span>',
+
+    '<span class="prompt">$</span> <span class="cmd">/sc4sap:analyze-code ZSD0042</span><br>' +
+    '  scan     <span class="dim">Clean ABAP · performance · security</span><br>' +
+    '<br>' +
+    '  <span class="y">HIGH</span>    authority-check missing   <span class="dim">l.318</span><br>' +
+    '  <span class="y">HIGH</span>    SELECT inside LOOP        <span class="dim">l.442</span><br>' +
+    '  <span class="y">HIGH</span>    dynamic WHERE unescaped   <span class="dim">l.507</span><br>' +
+    '  <span class="dim">MEDIUM  SELECT * on wide table     l.129</span><br>' +
+    '  <span class="dim">MEDIUM  nested LOOP over itab      l.233</span><br>' +
+    '  <span class="dim">LOW     naming · magic numbers     l.61</span><br>' +
+    '<br>' +
+    '  order    <span class="dim">fixes come back worst first</span>',
+
+    '<span class="prompt">&gt;</span> <span class="cmd">compare ZPP0050 and ZPP0083</span><br>' +
+    '  read     <span class="dim">2 programs · 10 dimensions</span><br>' +
+    '<br>' +
+    '  selection screen   <span class="y">clone</span>     <span class="dim">identical</span><br>' +
+    '  core logic         <span class="y">clone</span>     <span class="dim">renamed vars</span><br>' +
+    '  table access       <span class="y">clone</span><br>' +
+    '  exception handling <span class="ok">diverged</span>  <span class="dim">newer in 0083</span><br>' +
+    '  output / ALV       <span class="ok">diverged</span><br>' +
+    '  authorisations     <span class="ok">diverged</span>  <span class="dim">0050 has none</span><br>' +
+    '<br>' +
+    '  verdict  <span class="dim">one fork, not two programs</span>',
+
+    '<span class="prompt">&gt;</span> <span class="cmd">read the ST22 dump on ZFI0018</span><br>' +
+    '  fetch    <span class="dim">ST22 · last 24h</span><br>' +
+    '<br>' +
+    '  dump     <span class="y">CONVT_NO_NUMBER</span><br>' +
+    '  program  <span class="dim">ZFI0018</span><br>' +
+    '  line     <span class="dim">442</span><br>' +
+    '  source   <span class="dim">MOVE lv_text TO lv_amount</span><br>' +
+    '  cause    <span class="dim">non-numeric value in an amount field</span><br>' +
+    '  upstream <span class="dim">interface ZIF_BANK · field BETRG</span><br>' +
+    '<br>' +
+    '  also     <span class="dim">SM02 · Gateway log · profiler read</span>',
+
+    '<span class="prompt">&gt;</span> <span class="cmd">check ZMM0117 against this system</span><br>' +
+    '  probe    <span class="dim">release · industry · country</span><br>' +
+    '<br>' +
+    '  release   <span class="dim">S/4HANA 2023 On-Premise</span><br>' +
+    '  industry  <span class="dim">Automotive</span><br>' +
+    '  country   <span class="dim">KR</span><br>' +
+    '<br>' +
+    '  <span class="y">!</span>  MATNR 18 → 40 chars      <span class="dim">extend</span><br>' +
+    '  <span class="y">!</span>  MARD read → MATDOC        <span class="dim">rewrite</span><br>' +
+    '  <span class="ok">OK</span> e-Tax invoice fields present<br>' +
+    '  <span class="ok">OK</span> authorisation object valid',
+
+    '<span class="prompt">$</span> <span class="cmd">/sc4sap:analyze-cbo-obj</span><br>' +
+    '  scan     <span class="dim">Z inventory · reports · classes · FMs</span><br>' +
+    '<br>' +
+    '  <span class="ok">reuse</span>    ZMM0117   <span class="dim">same function, as is</span><br>' +
+    '  <span class="ok">reuse</span>    ZCL_MM_STOCK <span class="dim">method get_batch</span><br>' +
+    '  <span class="y">partial</span>  ZMM0182   <span class="dim">selection logic only</span><br>' +
+    '  <span class="y">partial</span>  ZMM0203   <span class="dim">ALV layout only</span><br>' +
+    '  <span class="dim">new      nothing covers the posting step</span><br>' +
+    '<br>' +
+    '  saved    <span class="dim">two objects not written again</span><br>' +
+    '  next     <span class="dim">/sc4sap:create-program</span>',
+
+    '<span class="prompt">&gt;</span> <span class="cmd">Retail. build the promotion pricing report</span><br>' +
+    '  load     <span class="dim">14 industry references</span><br>' +
+    '  active   <span class="ok">Retail</span><br>' +
+    '<br>' +
+    '  pricing    <span class="dim">KONV · KONP · KONH</span><br>' +
+    '  promotion  <span class="dim">WAKH · WAKP</span><br>' +
+    '  site       <span class="dim">WRF1 · T001W</span><br>' +
+    '  listing    <span class="dim">WLK1</span><br>' +
+    '<br>' +
+    '  <span class="dim">Auto · Pharma · Banking · Steel · Utilities</span><br>' +
+    '  <span class="dim">and nine more, loaded before anything is written</span>',
+
+    '<span class="prompt">&gt;</span> <span class="cmd">add the KR statutory report</span><br>' +
+    '  load     <span class="dim">16 country packs</span><br>' +
+    '  active   <span class="ok">KR</span><br>' +
+    '<br>' +
+    '  e-Tax invoice   <span class="dim">NTS · real-time issue</span><br>' +
+    '  withholding     <span class="dim">income · resident tax</span><br>' +
+    '  bank file       <span class="dim">firm banking format</span><br>' +
+    '  VAT return      <span class="dim">quarterly</span><br>' +
+    '  business place  <span class="dim">J_1BBRANCH</span><br>' +
+    '<br>' +
+    '  <span class="dim">the rules load with the country, not after review</span>',
+
+    '<span class="prompt">&gt;</span> <span class="cmd">which modules are live here</span><br>' +
+    '  probe    <span class="dim">TSTC · config · document flow</span><br>' +
+    '<br>' +
+    '  active   <span class="ok">MM · PS · SD · CO · FI</span><br>' +
+    '<br>' +
+    '  MM + PS   <span class="dim">→  WBS settlement on the reservation</span><br>' +
+    '  SD + CO   <span class="dim">→  CO-PA characteristics on the billing doc</span><br>' +
+    '  FI + CO   <span class="dim">→  real-time integration</span><br>' +
+    '<br>' +
+    '  <span class="dim">the combination changes the design, so it is read</span><br>' +
+    '  <span class="dim">before the design is proposed</span>',
+
+    '<span class="prompt">$</span> <span class="cmd">/sc4sap:create-program ZMM0250</span><br>' +
+    '  plan     <span class="dim">from the spec, against this system</span><br>' +
+    '<br>' +
+    '  <span class="ok">OK</span>  main + include      <span class="dim">TOP · F01 · O01 · I01</span><br>' +
+    '  <span class="ok">OK</span>  selection screen    <span class="dim">blocks · variants</span><br>' +
+    '  <span class="ok">OK</span>  ALV                 <span class="dim">field catalog · layout</span><br>' +
+    '  <span class="ok">OK</span>  Dynpro 9000         <span class="dim">PBO · PAI</span><br>' +
+    '  <span class="ok">OK</span>  GUI status / title<br>' +
+    '  <span class="ok">OK</span>  text elements       <span class="dim">no hard-coded strings</span><br>' +
+    '  <span class="ok">OK</span>  ABAP Unit           <span class="dim">6 tests</span><br>' +
+    '<br>' +
+    '  activate <span class="dim">syntax clean · transport assigned</span>'
+  ];
+
+  return { ko: ko, en: en, ja: ja, titles: TITLES, terminals: TERMINALS };
 })();

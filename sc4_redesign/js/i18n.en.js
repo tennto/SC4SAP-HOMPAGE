@@ -12,35 +12,36 @@ window.SC4_PANELS_EN = (function () {
     '01': { html: `<div class="capd capd-01">
       ${head('01','🔧','Auto MCP Install','/sc4sap:setup')}
       <p class="capd-lede">
-        Setting up a SAP development environment - installing the MCP server, separating credentials, registering permission hooks, building the SPRO cache - can swallow half a day. SC4SAP breaks this process down into one answer per question and<br/><b>finishes it inside the setup wizard</b>
+        Setting up a SAP development environment - installing the MCP server, separating credentials, registering permission hooks, building the SPRO cache - can swallow half a day. SC4SAP breaks this process down into one answer per question and <b>finishes it inside the setup wizard</b>
       </p>
 
       <div class="setup-wrap">
         <ul class="check-list">
           <li>
             <span class="check">1</span>
-            <div><b>Automatic MCP server install</b> - clones, builds, and registers <code>abap-mcp-adt-powerup</code>.
-            No need to hand-edit <code>claude_desktop_config.json</code></div>
+            <div><b>Automatic MCP server install</b> - clones, builds, and registers <code>abap-mcp-adt-powerup</code>
+            <span class="check-note">No need to hand-edit <code>claude_desktop_config.json</code></span></div>
           </li>
           <li>
             <span class="check">2</span>
             <div><b>Auto-generated .sc4sap/sap.env</b> - asks for URL, client, account, and auth method one line at a time and saves them
-            <br/>Password masking + <code>sap.env.bak</code> backup</div>
+            <span class="check-note">Password masking plus a <code>sap.env.bak</code> backup</span></div>
           </li>
           <li>
             <span class="check">3</span>
             <div><b>Version · industry · country sync</b> - records SAP version, ABAP release, industry, and country
-            into <code>.sc4sap/config.json</code> <br/>so every agent shares the same context</div>
+            into <code>.sc4sap/config.json</code>
+            <span class="check-note">So every agent shares the same context</span></div>
           </li>
           <li>
             <span class="check">4</span>
             <div><b>Data-extraction blocklist hook registration</b> - verifies that
-            <br/><code>permissionDecision: deny</code> works correctly via a BNKA smoke test</div>
+            <code>permissionDecision: deny</code> works correctly via a BNKA smoke test</div>
           </li>
         </ul>
 
         <div class="terminal" aria-hidden="true">
-          <div class="terminal-bar"><span></span><span></span><span></span></div>
+          <div class="terminal-bar"><span class="terminal-tab">/sc4sap:setup</span></div>
           <div class="terminal-body">
 <span class="prompt">$</span> <span class="cmd">/sc4sap:setup</span><br/>
 <span class="dim">→ SAP system: </span><span class="y">S4 / ECC ?</span> <span class="ok">S4</span><br/>
@@ -50,7 +51,7 @@ window.SC4_PANELS_EN = (function () {
 <span class="dim">→ Testing SAP connection…</span> <span class="ok">✓ GetSession OK</span><br/>
 <span class="dim">→ Registering blocklist hook…</span> <span class="ok">✓ deny(BNKA) confirmed</span><br/>
 <br/>
-<span class="y">setup complete.</span> <span class="dim">ready to code.</span>
+<span class="y">setup complete</span> <span class="dim">ready to run</span>
           </div>
         </div>
       </div>
@@ -62,8 +63,7 @@ window.SC4_PANELS_EN = (function () {
 
     '02': { html: `<div class="capd capd-02">
       ${head('02','🧠','Specialist Agents','25 agents · role-specialized collaboration')}
-      <p class="capd-lede">A single prompt doesn't make every decision. Analysis, design, implementation, review, and debugging are delegated to <b>role-specialized agents</b>, and module-specific business judgment is escalated again to a consultant
-      <br/>It's the exact opposite of one generalist handling the same SAP task - each agent answers only within its own field, and the path to inventing answers from "plausible-sounding SAP knowledge" is structurally closed off</p>
+      <p class="capd-lede">Analysis, design, implementation, review, and debugging are delegated to <b>role-specialized agents</b>.<br class="br-wide"/>Each agent answers only within its own field, and the path to inventing answers from "plausible-sounding SAP knowledge" is structurally closed off</p>
 
       <div class="agent-heads">
         <div class="agent-head">
@@ -173,7 +173,7 @@ window.SC4_PANELS_EN = (function () {
             </div>
           </li>
           <li class="warn">
-            <span class="capd-xlsx-no">⚠</span>
+            <span class="capd-xlsx-no"><i class="ph ph-warning" aria-hidden="true"></i></span>
             <div>
               <h6>Warnings</h6>
               <p>Unparseable · risky patterns · unresolved items</p>
@@ -191,77 +191,55 @@ window.SC4_PANELS_EN = (function () {
       <br/>The security category detects OWASP patterns like SQL Injection, missing AUTHORITY-CHECK, and dynamic code execution through static analysis
       <br/>and the performance category attaches concrete patch code that refactors nested LOOP/SELECT into sorted/hashed table look-ups</p>
 
-      <!-- 4 review categories - chevron-stitched infographic with SAP-brand gradient
-           (deep blue → sap blue → sap cyan → sap yellow) -->
-      <svg class="capd-info4-svg" viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" aria-label="Analyze Code 4 review categories" role="img">
-        <defs>
-          <linearGradient id="info4_g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0B4FA8"/><stop offset="100%" stop-color="#003A8F"/></linearGradient>
-          <linearGradient id="info4_g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0070F2"/><stop offset="100%" stop-color="#0058C4"/></linearGradient>
-          <linearGradient id="info4_g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#33B6FF"/><stop offset="100%" stop-color="#0FAAFF"/></linearGradient>
-          <linearGradient id="info4_g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFD13E"/><stop offset="100%" stop-color="#FFC700"/></linearGradient>
-          <filter id="info4_shadow" x="-5%" y="-5%" width="110%" height="125%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2.5"/>
-            <feOffset dx="0" dy="2" result="ofb"/>
-            <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
-            <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- White card backgrounds (4 separate panels with light shadow) -->
-        <g filter="url(#info4_shadow)" class="info4-bg">
-          <rect x="6"   y="100" width="178" height="115" rx="12"/>
-          <rect x="194" y="100" width="178" height="115" rx="12"/>
-          <rect x="382" y="100" width="178" height="115" rx="12"/>
-          <rect x="570" y="100" width="178" height="115" rx="12"/>
-        </g>
-
-        <!-- Top chevron sections - Panel 1: rounded left + tip right -->
-        <path d="M 18 5 L 184 5 L 200 50 L 184 95 L 18 95 Q 6 95 6 83 L 6 17 Q 6 5 18 5 Z" fill="url(#info4_g1)"/>
-        <!-- Panel 2: notch left + tip right -->
-        <path d="M 194 5 L 372 5 L 388 50 L 372 95 L 194 95 L 210 50 Z" fill="url(#info4_g2)"/>
-        <!-- Panel 3: notch left + tip right -->
-        <path d="M 382 5 L 560 5 L 576 50 L 560 95 L 382 95 L 398 50 Z" fill="url(#info4_g3)"/>
-        <!-- Panel 4: notch left + rounded right -->
-        <path d="M 570 5 L 736 5 Q 748 5 748 17 L 748 83 Q 748 95 736 95 L 570 95 L 586 50 Z" fill="url(#info4_g4)"/>
-
-        <!-- Icons in chevron tops - vertical center y=38 (chevron mid = 50, icon group sits slightly above to share center with title below) -->
-        <text x="95"  y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🧼</text>
-        <text x="290" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🚀</text>
-        <text x="478" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🛡️</text>
-        <text x="660" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">✨</text>
-
-        <!-- Titles - y=68 with middle baseline → icon (38) + title (68) form a centered pair around y=53, visually balanced inside chevron -->
-        <text x="95"  y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">CLEAN ABAP</text>
-        <text x="290" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">PERFORMANCE</text>
-        <text x="478" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">SECURITY</text>
-        <text x="666" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-d">MODERNIZATION</text>
-
-        <!-- Body text - 3 lines centered both axes inside the white card (y 100→215, center y=157.5).
-             Lines at y=137 / 157 / 177 with dominant-baseline=middle = visual centers there. font 13 (was 11). -->
-        <g class="info4-bd">
-          <text x="95"  y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">Naming · SRP</text>
-          <text x="95"  y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">Magic numbers · globals</text>
-          <text x="95"  y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">OOP / Proc. consistency</text>
-
-          <text x="283" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SELECT · indexes</text>
-          <text x="283" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">Nested LOOP · INTO TABLE</text>
-          <text x="283" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">sorted / hashed usage</text>
-
-          <text x="471" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SQL Injection</text>
-          <text x="471" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">Missing AUTHORITY-CHECK</text>
-          <text x="471" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">Dynamic code sanitize</text>
-
-          <text x="659" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">VALUE / REDUCE / COND</text>
-          <text x="659" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">FILTER · lambdas</text>
-          <text x="659" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">Adopting new syntax</text>
-        </g>
-      </svg>
+      <!-- The four review categories. Plain markup on the same hairline grid
+           the other panels use: the previous design drew this as a fixed
+           760x220 chevron with brand gradients, drop shadows, emoji for
+           icons, and text sized in viewBox units that grew and shrank with
+           the container instead of holding a reading size. -->
+      <div class="capd-review">
+        <div class="capd-review-cat">
+          <i class="ph ph-broom" aria-hidden="true"></i>
+          <h6>CLEAN ABAP</h6>
+          <ul>
+            <li>Naming · SRP</li>
+            <li>Magic numbers · globals</li>
+            <li>OOP / Proc. consistency</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-gauge" aria-hidden="true"></i>
+          <h6>PERFORMANCE</h6>
+          <ul>
+            <li>SELECT · indexes</li>
+            <li>Nested LOOP · INTO TABLE</li>
+            <li>sorted / hashed usage</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-lock-key" aria-hidden="true"></i>
+          <h6>SECURITY</h6>
+          <ul>
+            <li>SQL Injection</li>
+            <li>Missing AUTHORITY-CHECK</li>
+            <li>Dynamic code sanitize</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-arrow-circle-up" aria-hidden="true"></i>
+          <h6>MODERNIZATION</h6>
+          <ul>
+            <li>VALUE / REDUCE / COND</li>
+            <li>FILTER · lambdas</li>
+            <li>Adopting new syntax</li>
+          </ul>
+        </div>
+      </div>
 
       <!-- Sample severity findings - top 3 issues from a typical legacy report -->
       <div class="capd-sev">
-        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><span class="capd-sev-text"><b>Possible SQL Injection</b> - user input is concatenated directly into a dynamic WHERE clause (line 412). Replace <code>WHERE (lv_where)</code> with escaped binding</span></div>
-        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><span class="capd-sev-text"><b>Missing AUTHORITY-CHECK</b> - output after a <code>BUKRS</code>-based query without permission verification (line 78). A check on the <code>F_BKPF_BUK</code> authorization object must be added</span></div>
-        <div class="capd-sev-row"><span class="capd-sev-tag maj">MAJOR</span><span class="capd-sev-text"><b>SELECT … ENDSELECT loop</b> - switching to <code>INTO TABLE</code> + <code>LOOP AT</code> is expected to yield roughly <b>70% performance improvement</b></span></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><div class="capd-sev-body"><b>Possible SQL Injection</b><span class="capd-sev-text">user input is concatenated directly into a dynamic WHERE clause (line 412). Replace <code>WHERE (lv_where)</code> with escaped binding</span></div></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><div class="capd-sev-body"><b>Missing AUTHORITY-CHECK</b><span class="capd-sev-text">output after a <code>BUKRS</code>-based query without permission verification (line 78). A check on the <code>F_BKPF_BUK</code> authorization object must be added</span></div></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag maj">MAJOR</span><div class="capd-sev-body"><b>SELECT … ENDSELECT loop</b><span class="capd-sev-text">switching to <code>INTO TABLE</code> + <code>LOOP AT</code> is expected to yield roughly <b>70% performance improvement</b></span></div></div>
       </div>
     </div>` },
 
@@ -333,7 +311,7 @@ window.SC4_PANELS_EN = (function () {
 
     '06': { html: `<div class="capd capd-06">
       ${head('06','🩺','Maintenance Diagnosis','/sc4sap:analyze-symptom')}
-      <p class="capd-lede">Give it just a dump ID and the first-pass analysis - down to SAP Note candidates - finishes inside Claude.</p>
+      <p class="capd-lede">Give it just a dump ID and the first-pass analysis - down to SAP Note candidates - finishes inside Claude</p>
       <p class="capd-desc">It pulls ST22 · SM02 · /IWFND/ERROR_LOG · the SAT profiler directly through MCP tools and analyzes them. Work is auto-delegated to <code>sap-debugger</code> / <code>sap-bc-consultant</code>, so it extends safely even into unfamiliar territory
       <br/>Rather than just printing a stack trace, it integrates the <b>call chain · variable dump · memory state</b> to propose a hypothesis and returns follow-up actions (apply Note · fix code · add authorization) as choices
       <br/>Even a dump you've never seen, right after an operational handover, can finish first-pass analysis and be passed to the BC team as a precise question</p>
@@ -346,12 +324,12 @@ window.SC4_PANELS_EN = (function () {
       </div>
 
       <div class="capd-chips">
-        <span class="chip2">🔥 ST22 Runtime Dumps</span>
-        <span class="chip2">📢 SM02 System Msgs</span>
-        <span class="chip2">🌐 /IWFND/ERROR_LOG</span>
-        <span class="chip2">⏱️ SAT Profiler</span>
-        <span class="chip2">🔓 SU53 Auth Check</span>
-        <span class="chip2">🚧 SM12 Lock Entries</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-bug" aria-hidden="true"></i>ST22 Runtime Dumps</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-megaphone" aria-hidden="true"></i>SM02 System Msgs</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-globe" aria-hidden="true"></i>/IWFND/ERROR_LOG</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-timer" aria-hidden="true"></i>SAT Profiler</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-key" aria-hidden="true"></i>SU53 Auth Check</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-lock-simple" aria-hidden="true"></i>SM12 Lock Entries</span>
       </div>
     </div>` },
 
@@ -419,19 +397,19 @@ window.SC4_PANELS_EN = (function () {
       <div class="profile-row">
         <div class="profile strict">
           <span class="name">strict</span>
-          <p>PII + credentials + HR + transactional finance + audit logs + workflow. <b>Default</b>.</p>
+          <p>PII + credentials + HR + transactional finance + audit logs + workflow. <b>Default</b></p>
         </div>
         <div class="profile standard">
           <span class="name">standard</span>
-          <p>PII + credentials + HR + transactional finance. Default for typical projects.</p>
+          <p>PII + credentials + HR + transactional finance. Default for typical projects</p>
         </div>
         <div class="profile minimal">
           <span class="name">minimal</span>
-          <p>PII + credentials + HR + Tax. Business-table queries allowed.</p>
+          <p>PII + credentials + HR + Tax. Business-table queries allowed</p>
         </div>
         <div class="profile custom">
           <span class="name">custom</span>
-          <p>A user-defined list in <code>.sc4sap/blocklist-custom.txt</code>.</p>
+          <p>A user-defined list in <code>.sc4sap/blocklist-custom.txt</code></p>
         </div>
       </div>
 
@@ -440,7 +418,7 @@ window.SC4_PANELS_EN = (function () {
         <h4><code>acknowledge_risk</code> - explicit approval per-call · per-table · per-session</h4>
         <p>
           To access a sensitive table via <code>GetTableContents</code> / <code>GetSqlQuery</code>,
-          the user must grant permission with an <b>explicit affirmative keyword</b>.
+          the user must grant permission with an <b>explicit affirmative keyword</b>
         </p>
         <p>
           Accepted expressions:
@@ -465,24 +443,27 @@ window.SC4_PANELS_EN = (function () {
       </div>
 
       <div class="ack-demo">
-        <h5>▶ Try the gate - click a keyword</h5>
+        <h5 class="ack-head"><i class="ph ph-cursor-click" aria-hidden="true"></i>Try the gate - click a keyword</h5>
         <div class="ack-buttons">
           <button class="ack-btn" data-kw="yes">yes</button>
-          <button class="ack-btn" data-kw="승인">승인</button>
-          <button class="ack-btn" data-kw="authorize">authorize</button>
-          <button class="ack-btn" data-kw="approve">approve</button>
           <button class="ack-btn" data-kw="뽑아봐">뽑아봐</button>
-          <button class="ack-btn" data-kw="try it">try it</button>
+          <button class="ack-btn" data-kw="authorize">authorize</button>
           <button class="ack-btn" data-kw="my mistake">my mistake</button>
           <button class="ack-btn" data-kw="해봐">해봐</button>
+          <button class="ack-btn" data-kw="승인">승인</button>
+          <button class="ack-btn" data-kw="approve">approve</button>
+          <button class="ack-btn" data-kw="try it">try it</button>
         </div>
-        <div class="ack-output" aria-live="polite">→ Click one of the keywords above to see how the gate behaves.</div>
+        <div class="ack-window">
+          <div class="terminal-bar"><span class="terminal-tab">acknowledge_risk</span></div>
+          <div class="ack-output" aria-live="polite">→ Click one of the keywords above to see how the gate behaves</div>
+        </div>
       </div>
     </div>` },
 
     '08': { html: `<div class="capd capd-08">
       ${head('08','🗃️','Reusability · CBO Reuse','/sc4sap:analyze-cbo-obj')}
-      <p class="capd-lede">So the AI doesn't rebuild Z objects that already exist.</p>
+      <p class="capd-lede">So the AI doesn't rebuild Z objects that already exist</p>
       <p class="capd-desc">
         The longer a SAP system has been in use, the more hundreds of <code>ZCL_*</code> · <code>ZFM_*</code> · <code>Z*_DE</code> · custom structures and table types pile up. Hand development to an AI without knowing these assets, and
         <br/><b>building yet another Z object with the same function</b> keeps repeating - SC4SAP blocks this problem at the front of the pipeline
@@ -526,8 +507,8 @@ window.SC4_PANELS_EN = (function () {
       </div>
 
       <div class="callout rx-callout">
-        <b>"Do we need to build a new CBO" is always the last question.</b>
-        sc4sap includes user-exits · substitution/validation · BAdI implementations · APPEND structures in the inventory, structurally blocking the brownfield <b>"duplicate Z" accident</b>.
+        <b>"Do we need to build a new CBO" is always the last question</b>
+        sc4sap includes user-exits · substitution/validation · BAdI implementations · APPEND structures in the inventory, structurally blocking the brownfield <b>"duplicate Z" accident</b>
       </div>
     </div>` },
 
@@ -608,26 +589,26 @@ window.SC4_PANELS_EN = (function () {
 
     '11': { html: `<div class="capd capd-11">
       ${head('11','🎯','Active-Module Awareness')}
-      <p class="capd-lede">It swaps which standard objects it uses based on the module mix.</p>
+      <p class="capd-lede">It swaps which standard objects it uses based on the module mix</p>
       <p class="capd-desc">Even the same "cost analysis" differs: on a <b>MM + PS</b> project it goes by WBS, on <b>SD + CO</b> by CO-PA segment
       <br/>Using the activeModules list in <code>config.json</code>, the agent auto-selects the <b>Standard</b> objects and <b>BAPIs</b> for each combination and flags cross-touchpoints
       <br/>When <b>FI + TR</b> is active, it designs the path all the way from payment proposal → cash management → House Bank transfer; with <b>QM + PP</b> it carries the flow so in-process inspection lots are auto-created at each production-order step</p>
       <div class="capd-combos">
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>MM</span><span>+</span><span>PS</span><span class="arrow">⇒</span><span class="out">WBS cost</span></div>
-          <p>Costs aggregated directly to WBS elements. Attributed to the project via the <code>PS_PSP_PNR</code> key on <code>BANFN</code> · <code>EBELN</code>.</p>
+          <p>Costs aggregated directly to WBS elements. Attributed to the project via the <code>PS_PSP_PNR</code> key on <code>BANFN</code> · <code>EBELN</code></p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>SD</span><span>+</span><span>CO</span><span class="arrow">⇒</span><span class="out">CO-PA</span></div>
-          <p>Documents posted by segment/channel on an order · billing basis. Quantities and amounts decomposed into <code>CE1</code> / <code>CE4</code>.</p>
+          <p>Documents posted by segment/channel on an order · billing basis. Quantities and amounts decomposed into <code>CE1</code> / <code>CE4</code></p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>FI</span><span>+</span><span>TR</span><span class="arrow">⇒</span><span class="out">Funds · House Bank</span></div>
-          <p>Payment proposal → TR cash management → House Bank transfer. Auto-recognizes the <code>FEBAN</code> · <code>FF7A</code> linkage path.</p>
+          <p>Payment proposal → TR cash management → House Bank transfer. Auto-recognizes the <code>FEBAN</code> · <code>FF7A</code> linkage path</p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>QM</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">Inspection lot</span></div>
-          <p>In-process inspection lots created at each production-order step. Auto-branches at incoming-inspection · final-inspection points.</p>
+          <p>In-process inspection lots created at each production-order step. Auto-branches at incoming-inspection · final-inspection points</p>
         </div>
       </div>
     </div>` },

@@ -90,6 +90,15 @@ html[lang="ko"] .t-h3 { word-break: keep-all; }
    breakpoint it wraps like any other paragraph. */
 .t-lede.is-oneline { max-width: none; }
 
+/* A break that only exists where there is room for it. Composing a line by
+   hand is fine on a wide measure; below it the paragraph has already
+   wrapped on its own, and a second forced break there just leaves a stub.
+   Lives here rather than with the panels because the sections use it too. */
+.br-wide { display: none; }
+@media (min-width: 760px) {
+  .br-wide { display: inline; }
+}
+
 .t-body { color: var(--ink-2); max-width: 66ch; }
 .t-sm   { font-size: var(--fs-sm); color: var(--ink-2); }
 .t-meta {
@@ -301,8 +310,20 @@ code, kbd, samp, pre {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* No-JS safety: nothing stays invisible if the observer never runs. */
-.no-js .reveal { opacity: 1; transform: none; }
+/* No-JS safety: nothing stays invisible if the observer never runs.
+
+   Keyed to html.no-js, never body.no-js. The head strips the class off
+   html before the first paint, while body keeps it until the last line of
+   app.js. Written as a bare .no-js this rule held every reveal fully
+   opaque for the whole load, so anything already on screen when that line
+   ran went from opaque straight to opaque: the observer fires in the same
+   frame, the browser never computes the transparent state, and a
+   transition with no starting value simply does not happen. That is why
+   reveals silently skipped their fade on a refresh partway down the page.
+
+   The case this guards against, a browser with no IntersectionObserver at
+   all, is handled in app.js instead, where it can be detected properly. */
+html.no-js .reveal { opacity: 1; transform: none; }
 
 .sr-only {
   position: absolute;

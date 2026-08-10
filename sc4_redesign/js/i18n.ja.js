@@ -13,35 +13,36 @@ window.SC4_PANELS_JA = (function () {
       ${head('01','🔧','Auto MCP Install','/sc4sap:setup')}
       <p class="capd-lede">
         SAP開発環境を整えようとすると、MCPサーバーのインストール・認証情報の分離・権限フックの登録・SPROキャッシュの生成まで、
-        半日が消えてしまいます。SC4SAPはこのプロセスを「質問1つにつき1つの回答」へと分解し、<br/><b>セットアップウィザードの中で完結させます</b>
+        半日が消えてしまいます。SC4SAPはこのプロセスを「質問1つにつき1つの回答」へと分解し、<b>セットアップウィザードの中で完結させます</b>
       </p>
 
       <div class="setup-wrap">
         <ul class="check-list">
           <li>
             <span class="check">1</span>
-            <div><b>MCPサーバーの自動インストール</b> - <code>abap-mcp-adt-powerup</code>をクローン・ビルド・登録します。
-            <code>claude_desktop_config.json</code>を直接編集する必要はありません</div>
+            <div><b>MCPサーバーの自動インストール</b> - <code>abap-mcp-adt-powerup</code>をクローン・ビルド・登録します
+            <span class="check-note"><code>claude_desktop_config.json</code>を直接編集する必要はありません</span></div>
           </li>
           <li>
             <span class="check">2</span>
             <div><b>.sc4sap/sap.env の自動生成</b> - URL・クライアント・アカウント・認証方式を一行ずつ尋ねて保存します
-            <br/>パスワードはマスキングし、<code>sap.env.bak</code>へバックアップします</div>
+            <span class="check-note">パスワードはマスキングし、<code>sap.env.bak</code>へバックアップします</span></div>
           </li>
           <li>
             <span class="check">3</span>
             <div><b>バージョン・業種・国の同期</b> - SAPバージョン・ABAPリリース・業種・国を
-            <code>.sc4sap/config.json</code>に記録 <br/>すべてのエージェントが同じコンテキストを共有します</div>
+            <code>.sc4sap/config.json</code>に記録します
+            <span class="check-note">すべてのエージェントが同じコンテキストを共有します</span></div>
           </li>
           <li>
             <span class="check">4</span>
             <div><b>データ抽出ブロックリストフックの登録</b> - BNKAスモークテストで
-            <br/><code>permissionDecision: deny</code>が正常に動作するか検証します</div>
+            <code>permissionDecision: deny</code>が正常に動作するか検証します</div>
           </li>
         </ul>
 
         <div class="terminal" aria-hidden="true">
-          <div class="terminal-bar"><span></span><span></span><span></span></div>
+          <div class="terminal-bar"><span class="terminal-tab">/sc4sap:setup</span></div>
           <div class="terminal-body">
 <span class="prompt">$</span> <span class="cmd">/sc4sap:setup</span><br/>
 <span class="dim">→ SAPシステム: </span><span class="y">S4 / ECC ?</span> <span class="ok">S4</span><br/>
@@ -51,7 +52,7 @@ window.SC4_PANELS_JA = (function () {
 <span class="dim">→ SAP接続テスト…</span> <span class="ok">✓ GetSession OK</span><br/>
 <span class="dim">→ ブロックリストフックを登録中…</span> <span class="ok">✓ deny(BNKA) 確認</span><br/>
 <br/>
-<span class="y">setup complete.</span> <span class="dim">ready to code.</span>
+<span class="y">setup complete</span> <span class="dim">ready to run</span>
           </div>
         </div>
       </div>
@@ -64,8 +65,7 @@ window.SC4_PANELS_JA = (function () {
 
     '02': { html: `<div class="capd capd-02">
       ${head('02','🧠','Specialist Agents','25 agents · 役割別の専門協働')}
-      <p class="capd-lede">1つのプロンプトがすべての判断を下すわけではありません。分析・設計・実装・レビュー・デバッグが<b>役割別の専門エージェント</b>に委任され、モジュール別の業務判断はコンサルタントへとさらにエスカレーションされます
-      <br/>同じSAP作業を1人のgeneralistが処理していたパターンとは正反対です - 各自が自分の分野だけで答え、「それらしいSAP知識」で答えをでっち上げる経路そのものが構造的に塞がれています</p>
+      <p class="capd-lede">分析・設計・実装・レビュー・デバッグが<b>役割別の専門エージェント</b>に委任されます。<br class="br-wide"/>各自が自分の分野だけで答え、「それらしいSAP知識」で答えをでっち上げる経路そのものが構造的に塞がれています</p>
 
       <div class="agent-heads">
         <div class="agent-head">
@@ -175,7 +175,7 @@ window.SC4_PANELS_JA = (function () {
             </div>
           </li>
           <li class="warn">
-            <span class="capd-xlsx-no">⚠</span>
+            <span class="capd-xlsx-no"><i class="ph ph-warning" aria-hidden="true"></i></span>
             <div>
               <h6>Warnings</h6>
               <p>パース不可 · 危険パターン · 未解決項目</p>
@@ -193,77 +193,55 @@ window.SC4_PANELS_JA = (function () {
       <br/>セキュリティカテゴリは、SQL Injection・AUTHORITY-CHECK漏れ・動的コード実行といったOWASPパターンを静的解析で検出し
       <br/>性能カテゴリは、ネストしたLOOP・SELECTをsorted/hashed tableのlook-upへとリファクタリングする具体的なパッチコードまで添付します</p>
 
-      <!-- 4 review categories - chevron-stitched infographic with SAP-brand gradient
-           (deep blue → sap blue → sap cyan → sap yellow) -->
-      <svg class="capd-info4-svg" viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" aria-label="Analyze Code 4 review categories" role="img">
-        <defs>
-          <linearGradient id="info4_g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0B4FA8"/><stop offset="100%" stop-color="#003A8F"/></linearGradient>
-          <linearGradient id="info4_g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0070F2"/><stop offset="100%" stop-color="#0058C4"/></linearGradient>
-          <linearGradient id="info4_g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#33B6FF"/><stop offset="100%" stop-color="#0FAAFF"/></linearGradient>
-          <linearGradient id="info4_g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFD13E"/><stop offset="100%" stop-color="#FFC700"/></linearGradient>
-          <filter id="info4_shadow" x="-5%" y="-5%" width="110%" height="125%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2.5"/>
-            <feOffset dx="0" dy="2" result="ofb"/>
-            <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
-            <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- White card backgrounds (4 separate panels with light shadow) -->
-        <g filter="url(#info4_shadow)" class="info4-bg">
-          <rect x="6"   y="100" width="178" height="115" rx="12"/>
-          <rect x="194" y="100" width="178" height="115" rx="12"/>
-          <rect x="382" y="100" width="178" height="115" rx="12"/>
-          <rect x="570" y="100" width="178" height="115" rx="12"/>
-        </g>
-
-        <!-- Top chevron sections - Panel 1: rounded left + tip right -->
-        <path d="M 18 5 L 184 5 L 200 50 L 184 95 L 18 95 Q 6 95 6 83 L 6 17 Q 6 5 18 5 Z" fill="url(#info4_g1)"/>
-        <!-- Panel 2: notch left + tip right -->
-        <path d="M 194 5 L 372 5 L 388 50 L 372 95 L 194 95 L 210 50 Z" fill="url(#info4_g2)"/>
-        <!-- Panel 3: notch left + tip right -->
-        <path d="M 382 5 L 560 5 L 576 50 L 560 95 L 382 95 L 398 50 Z" fill="url(#info4_g3)"/>
-        <!-- Panel 4: notch left + rounded right -->
-        <path d="M 570 5 L 736 5 Q 748 5 748 17 L 748 83 Q 748 95 736 95 L 570 95 L 586 50 Z" fill="url(#info4_g4)"/>
-
-        <!-- Icons in chevron tops - vertical center y=38 (chevron mid = 50, icon group sits slightly above to share center with title below) -->
-        <text x="95"  y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🧼</text>
-        <text x="290" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🚀</text>
-        <text x="478" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">🛡️</text>
-        <text x="660" y="38" text-anchor="middle" font-size="24" dominant-baseline="middle">✨</text>
-
-        <!-- Titles - y=68 with middle baseline → icon (38) + title (68) form a centered pair around y=53, visually balanced inside chevron -->
-        <text x="95"  y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">CLEAN ABAP</text>
-        <text x="290" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">PERFORMANCE</text>
-        <text x="478" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-w">SECURITY</text>
-        <text x="666" y="68" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="800" letter-spacing="2" class="info4-tt-d">MODERNIZATION</text>
-
-        <!-- Body text - 3 lines centered both axes inside the white card (y 100→215, center y=157.5).
-             Lines at y=137 / 157 / 177 with dominant-baseline=middle = visual centers there. font 13 (was 11). -->
-        <g class="info4-bd">
-          <text x="95"  y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">命名 · 単一責任</text>
-          <text x="95"  y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">マジックナンバー · 大域変数</text>
-          <text x="95"  y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">OOP / Proceduralの一貫性</text>
-
-          <text x="283" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SELECT · インデックス</text>
-          <text x="283" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">ネストLOOP · INTO TABLE</text>
-          <text x="283" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">sorted / hashedの使用</text>
-
-          <text x="471" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">SQL Injection</text>
-          <text x="471" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">AUTHORITY-CHECK漏れ</text>
-          <text x="471" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">動的コードのsanitize</text>
-
-          <text x="659" y="137" text-anchor="middle" dominant-baseline="middle" font-size="13">VALUE / REDUCE / COND</text>
-          <text x="659" y="157" text-anchor="middle" dominant-baseline="middle" font-size="13">FILTER · ラムダ式</text>
-          <text x="659" y="177" text-anchor="middle" dominant-baseline="middle" font-size="13">新syntaxの導入</text>
-        </g>
-      </svg>
+      <!-- The four review categories. Plain markup on the same hairline grid
+           the other panels use: the previous design drew this as a fixed
+           760x220 chevron with brand gradients, drop shadows, emoji for
+           icons, and text sized in viewBox units that grew and shrank with
+           the container instead of holding a reading size. -->
+      <div class="capd-review">
+        <div class="capd-review-cat">
+          <i class="ph ph-broom" aria-hidden="true"></i>
+          <h6>CLEAN ABAP</h6>
+          <ul>
+            <li>命名 · 単一責任</li>
+            <li>マジックナンバー · 大域変数</li>
+            <li>OOP / Proceduralの一貫性</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-gauge" aria-hidden="true"></i>
+          <h6>PERFORMANCE</h6>
+          <ul>
+            <li>SELECT · インデックス</li>
+            <li>ネストLOOP · INTO TABLE</li>
+            <li>sorted / hashedの使用</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-lock-key" aria-hidden="true"></i>
+          <h6>SECURITY</h6>
+          <ul>
+            <li>SQL Injection</li>
+            <li>AUTHORITY-CHECK漏れ</li>
+            <li>動的コードのsanitize</li>
+          </ul>
+        </div>
+        <div class="capd-review-cat">
+          <i class="ph ph-arrow-circle-up" aria-hidden="true"></i>
+          <h6>MODERNIZATION</h6>
+          <ul>
+            <li>VALUE / REDUCE / COND</li>
+            <li>FILTER · ラムダ式</li>
+            <li>新syntaxの導入</li>
+          </ul>
+        </div>
+      </div>
 
       <!-- Sample severity findings - top 3 issues from a typical legacy report -->
       <div class="capd-sev">
-        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><span class="capd-sev-text"><b>SQL Injectionの可能性</b> - 動的WHERE句にユーザー入力が直接結合されています (line 412)。<code>WHERE (lv_where)</code> → escaped bindingへ置換</span></div>
-        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><span class="capd-sev-text"><b>AUTHORITY-CHECK漏れ</b> - <code>BUKRS</code>ベースの照会後、権限検証なしで出力しています (line 78)。<code>F_BKPF_BUK</code>権限オブジェクトのチェック追加が必要です</span></div>
-        <div class="capd-sev-row"><span class="capd-sev-tag maj">MAJOR</span><span class="capd-sev-text"><b>SELECT … ENDSELECTループ</b> - <code>INTO TABLE</code> + <code>LOOP AT</code>へ変更すると約<b>70%の性能改善</b>が見込まれます</span></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><div class="capd-sev-body"><b>SQL Injectionの可能性</b><span class="capd-sev-text">動的WHERE句にユーザー入力が直接結合されています (line 412)。<code>WHERE (lv_where)</code> → escaped bindingへ置換</span></div></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag crit">CRITICAL</span><div class="capd-sev-body"><b>AUTHORITY-CHECK漏れ</b><span class="capd-sev-text"><code>BUKRS</code>ベースの照会後、権限検証なしで出力しています (line 78)。<code>F_BKPF_BUK</code>権限オブジェクトのチェック追加が必要です</span></div></div>
+        <div class="capd-sev-row"><span class="capd-sev-tag maj">MAJOR</span><div class="capd-sev-body"><b>SELECT … ENDSELECTループ</b><span class="capd-sev-text"><code>INTO TABLE</code> + <code>LOOP AT</code>へ変更すると約<b>70%の性能改善</b>が見込まれます</span></div></div>
       </div>
     </div>` },
 
@@ -335,7 +313,7 @@ window.SC4_PANELS_JA = (function () {
 
     '06': { html: `<div class="capd capd-06">
       ${head('06','🩺','Maintenance Diagnosis','/sc4sap:analyze-symptom')}
-      <p class="capd-lede">ダンプIDを渡すだけでSAP Note候補まで、Claudeの中で一次分析を完了。</p>
+      <p class="capd-lede">ダンプIDを渡すだけでSAP Note候補まで、Claudeの中で一次分析を完了</p>
       <p class="capd-desc">ST22 · SM02 · /IWFND/ERROR_LOG · SATプロファイラをMCPツールで直接引き寄せて分析します。<code>sap-debugger</code> / <code>sap-bc-consultant</code>へ自動委任され、未知の領域まで安全に拡張します
       <br/>単なるスタックトレースの出力ではなく、<b>呼び出しチェーン・変数ダンプ・メモリ状態</b>を統合して仮説を提示し、後続アクション（Note適用・コード修正・権限追加）を選択肢として返します
       <br/>運用引き継ぎ直後に初めて見るダンプでも、一次分析を終えてBCチームへ的確な質問として引き渡せます</p>
@@ -348,12 +326,12 @@ window.SC4_PANELS_JA = (function () {
       </div>
 
       <div class="capd-chips">
-        <span class="chip2">🔥 ST22 Runtime Dumps</span>
-        <span class="chip2">📢 SM02 System Msgs</span>
-        <span class="chip2">🌐 /IWFND/ERROR_LOG</span>
-        <span class="chip2">⏱️ SAT Profiler</span>
-        <span class="chip2">🔓 SU53 Auth Check</span>
-        <span class="chip2">🚧 SM12 Lock Entries</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-bug" aria-hidden="true"></i>ST22 Runtime Dumps</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-megaphone" aria-hidden="true"></i>SM02 System Msgs</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-globe" aria-hidden="true"></i>/IWFND/ERROR_LOG</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-timer" aria-hidden="true"></i>SAT Profiler</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-key" aria-hidden="true"></i>SU53 Auth Check</span>
+        <span class="chip2"><svg class="chip-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="2" pathLength="100" /></svg><i class="ph ph-lock-simple" aria-hidden="true"></i>SM12 Lock Entries</span>
       </div>
     </div>` },
 
@@ -422,19 +400,19 @@ window.SC4_PANELS_JA = (function () {
       <div class="profile-row">
         <div class="profile strict">
           <span class="name">strict</span>
-          <p>PII + クレデンシャル + HR + 取引財務 + 監査ログ + ワークフロー。<b>デフォルト</b>。</p>
+          <p>PII + クレデンシャル + HR + 取引財務 + 監査ログ + ワークフロー。<b>デフォルト</b></p>
         </div>
         <div class="profile standard">
           <span class="name">standard</span>
-          <p>PII + クレデンシャル + HR + 取引財務。一般プロジェクトのデフォルト。</p>
+          <p>PII + クレデンシャル + HR + 取引財務。一般プロジェクトのデフォルト</p>
         </div>
         <div class="profile minimal">
           <span class="name">minimal</span>
-          <p>PII + クレデンシャル + HR + Tax。業務テーブルの照会は許可。</p>
+          <p>PII + クレデンシャル + HR + Tax。業務テーブルの照会は許可</p>
         </div>
         <div class="profile custom">
           <span class="name">custom</span>
-          <p><code>.sc4sap/blocklist-custom.txt</code>にユーザー指定リスト。</p>
+          <p><code>.sc4sap/blocklist-custom.txt</code>にユーザー指定リスト</p>
         </div>
       </div>
 
@@ -443,7 +421,7 @@ window.SC4_PANELS_JA = (function () {
         <h4><code>acknowledge_risk</code> - per-call · per-table · per-session の明示的な承認</h4>
         <p>
           <code>GetTableContents</code> / <code>GetSqlQuery</code>で機密テーブルにアクセスするには、
-          ユーザーが<b>明示的な肯定キーワード</b>で許可する必要があります。
+          ユーザーが<b>明示的な肯定キーワード</b>で許可する必要があります
         </p>
         <p>
           認められる表現:
@@ -462,30 +440,33 @@ window.SC4_PANELS_JA = (function () {
           <span class="bad">해봐</span>
         </p>
         <p style="margin-top:14px;">
-          承認は<b>呼び出し単位・テーブル単位・セッション単位でのみ有効</b>であり、次のリクエストへは引き継がれません。
-          <b>「AIが誤って機密テーブルを抽出する経路」そのものをなくすこと</b>が設計目標です。
+          承認は<b>呼び出し単位・テーブル単位・セッション単位でのみ有効</b>であり、次のリクエストへは引き継がれません
+          <b>「AIが誤って機密テーブルを抽出する経路」そのものをなくすこと</b>が設計目標です
         </p>
       </div>
 
       <div class="ack-demo">
-        <h5>▶ ゲート体験 - キーワードをクリックしてみてください</h5>
+        <h5 class="ack-head"><i class="ph ph-cursor-click" aria-hidden="true"></i>ゲート体験 - キーワードをクリックしてみてください</h5>
         <div class="ack-buttons">
           <button class="ack-btn" data-kw="yes">yes</button>
-          <button class="ack-btn" data-kw="승인">승인</button>
-          <button class="ack-btn" data-kw="authorize">authorize</button>
-          <button class="ack-btn" data-kw="approve">approve</button>
           <button class="ack-btn" data-kw="뽑아봐">뽑아봐</button>
-          <button class="ack-btn" data-kw="try it">try it</button>
+          <button class="ack-btn" data-kw="authorize">authorize</button>
           <button class="ack-btn" data-kw="my mistake">my mistake</button>
           <button class="ack-btn" data-kw="해봐">해봐</button>
+          <button class="ack-btn" data-kw="승인">승인</button>
+          <button class="ack-btn" data-kw="approve">approve</button>
+          <button class="ack-btn" data-kw="try it">try it</button>
         </div>
-        <div class="ack-output" aria-live="polite">→ 上記のキーワードのいずれかをクリックして、ゲートの動作を確認してください。</div>
+        <div class="ack-window">
+          <div class="terminal-bar"><span class="terminal-tab">acknowledge_risk</span></div>
+          <div class="ack-output" aria-live="polite">→ 上記のキーワードのいずれかをクリックして、ゲートの動作を確認してください</div>
+        </div>
       </div>
     </div>` },
 
     '08': { html: `<div class="capd capd-08">
       ${head('08','🗃️','Reusability · CBO Reuse','/sc4sap:analyze-cbo-obj')}
-      <p class="capd-lede">すでにあるZオブジェクトを、AIが作り直さないように。</p>
+      <p class="capd-lede">すでにあるZオブジェクトを、AIが作り直さないように</p>
       <p class="capd-desc">
         何年も使い込んできたSAPシステムほど、<code>ZCL_*</code> · <code>ZFM_*</code> · <code>Z*_DE</code> · カスタム構造体・テーブルタイプが
         数百個と積み重なっています。この資産を知らないままAIに開発を任せると
@@ -530,8 +511,8 @@ window.SC4_PANELS_JA = (function () {
       </div>
 
       <div class="callout rx-callout">
-        <b>「新しいCBOを作るべきか」は、常に最後の質問です。</b>
-        sc4sapはuser-exit · 置換/検証 · BAdI実装 · APPEND構造体までインベントリに含め、ブラウンフィールドの<b>「重複Z」事故</b>を構造的に遮断します。
+        <b>「新しいCBOを作るべきか」は、常に最後の質問です</b>
+        sc4sapはuser-exit · 置換/検証 · BAdI実装 · APPEND構造体までインベントリに含め、ブラウンフィールドの<b>「重複Z」事故</b>を構造的に遮断します
       </div>
     </div>` },
 
@@ -612,26 +593,26 @@ window.SC4_PANELS_JA = (function () {
 
     '11': { html: `<div class="capd capd-11">
       ${head('11','🎯','Active-Module Awareness')}
-      <p class="capd-lede">モジュールの組み合わせに応じて、標準オブジェクトを使い分けます。</p>
+      <p class="capd-lede">モジュールの組み合わせに応じて、標準オブジェクトを使い分けます</p>
       <p class="capd-desc">同じ「原価分析」でも、プロジェクトが<b>MM + PS</b>ならWBS基準、<b>SD + CO</b>ならCO-PAセグメント基準へと変わります
       <br/><code>config.json</code>のactiveModulesリストを根拠に、エージェントが組み合わせ別の<b>Standard</b>オブジェクトと<b>BAPI</b>を自動選択し、交差接点をフラグします
       <br/><b>FI + TR</b>が有効化されると、支払提案 → 資金管理 → House Bank振替までの経路が設計され、<b>QM + PP</b>なら製造オーダーの段階別にin-process検査lotが自動生成されるよう流れを組み立てます</p>
       <div class="capd-combos">
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>MM</span><span>+</span><span>PS</span><span class="arrow">⇒</span><span class="out">WBSコスト</span></div>
-          <p>WBS要素にコストを直接集計。<code>BANFN</code> · <code>EBELN</code>の<code>PS_PSP_PNR</code>キーでプロジェクトに帰属させます。</p>
+          <p>WBS要素にコストを直接集計。<code>BANFN</code> · <code>EBELN</code>の<code>PS_PSP_PNR</code>キーでプロジェクトに帰属させます</p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>SD</span><span>+</span><span>CO</span><span class="arrow">⇒</span><span class="out">CO-PA</span></div>
-          <p>受注 · 請求基準のセグメントチャネルで伝票を転記。数量・金額を<code>CE1</code> / <code>CE4</code>へ分解します。</p>
+          <p>受注 · 請求基準のセグメントチャネルで伝票を転記。数量・金額を<code>CE1</code> / <code>CE4</code>へ分解します</p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>FI</span><span>+</span><span>TR</span><span class="arrow">⇒</span><span class="out">資金・ハウスバンク</span></div>
-          <p>支払提案 → TR資金管理 → House Bank振替。<code>FEBAN</code> · <code>FF7A</code>の連携経路を自動認識します。</p>
+          <p>支払提案 → TR資金管理 → House Bank振替。<code>FEBAN</code> · <code>FF7A</code>の連携経路を自動認識します</p>
         </div>
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>QM</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">検査lot</span></div>
-          <p>製造オーダーの段階別にin-process検査lotを生成。受入検査・最終検査の時点を自動で分岐します。</p>
+          <p>製造オーダーの段階別にin-process検査lotを生成。受入検査・最終検査の時点を自動で分岐します</p>
         </div>
       </div>
     </div>` },
