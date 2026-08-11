@@ -120,8 +120,9 @@ window.SC4_PANELS_JA = (function () {
       ${head('03','🔍','Program Analyze','/sc4sap:program-to-spec')}
       <p class="capd-lede">レガシーABAPを機能/技術仕様書へ - <b>リバースエンジニアリングを分単位で</b></p>
       <p class="capd-desc">3,000行のレポートでも、Selection screenの画像・ALVカラムレイアウト・Process flowchart・CBO/Enhancementの依存関係まで自動で抽出します
-      <br/>Audience / Format / Depth / Languageの<b>4軸Socratic質問</b>で深さを調整し、「すべてを文書化する」という罠を回避します
-      <br/>運用引き継ぎ・監査対応・システム移行直前のレガシー整理 - 人が逐一コードを読みながら作成していた仕様書を分単位に圧縮し、Excel/Markdownの2フォーマットで同時に出力します</p>
+      <br/>Audience / Format / Depth / Languageの<b>4軸Socratic質問</b>で深さを調整し、「すべてを文書化する」という罠を回避します</p>
+
+      <p class="capd-desc">運用引き継ぎ・監査対応・システム移行直前のレガシー整理 - 人が逐一コードを読みながら作成していた仕様書を分単位に圧縮し、Excel/Markdownの2フォーマットで同時に出力します</p>
 
       <!-- Pipeline flow: 4 steps with auto-arrows -->
       <div class="capd-flow">
@@ -189,8 +190,9 @@ window.SC4_PANELS_JA = (function () {
       ${head('04','🧪','Analyze Code','/sc4sap:analyze-code')}
       <p class="capd-lede">Clean ABAP · 性能 · セキュリティ · 現代化 - <b>severity-rankedな静的レビュー</b></p>
       <p class="capd-desc">プロジェクトの<code>ABAP_RELEASE</code> / SAP versionコンテキストを反映し、<b>適用可能なパターンのみ</b>を推奨します
-      <br/>OOP / Proceduralのパラダイムを自動で認識し、Where-usedグラフで影響度まで併せて提示します。行番号・呼び出し経路・即座に適用できるfix snippetを1つのまとまりとして返します
-      <br/>セキュリティカテゴリは、SQL Injection・AUTHORITY-CHECK漏れ・動的コード実行といったOWASPパターンを静的解析で検出し
+      <br/>OOP / Proceduralのパラダイムを自動で認識し、Where-usedグラフで影響度まで併せて提示します。行番号・呼び出し経路・即座に適用できるfix snippetを1つのまとまりとして返します</p>
+
+      <p class="capd-desc">セキュリティカテゴリは、SQL Injection・AUTHORITY-CHECK漏れ・動的コード実行といったOWASPパターンを静的解析で検出し
       <br/>性能カテゴリは、ネストしたLOOP・SELECTをsorted/hashed tableのlook-upへとリファクタリングする具体的なパッチコードまで添付します</p>
 
       <!-- The four review categories. Plain markup on the same hairline grid
@@ -314,8 +316,9 @@ window.SC4_PANELS_JA = (function () {
     '06': { html: `<div class="capd capd-06">
       ${head('06','🩺','Maintenance Diagnosis','/sc4sap:analyze-symptom')}
       <p class="capd-lede">ダンプIDを渡すだけでSAP Note候補まで、Claudeの中で一次分析を完了</p>
-      <p class="capd-desc">ST22 · SM02 · /IWFND/ERROR_LOG · SATプロファイラをMCPツールで直接引き寄せて分析します。<code>sap-debugger</code> / <code>sap-bc-consultant</code>へ自動委任され、未知の領域まで安全に拡張します
-      <br/>単なるスタックトレースの出力ではなく、<b>呼び出しチェーン・変数ダンプ・メモリ状態</b>を統合して仮説を提示し、後続アクション（Note適用・コード修正・権限追加）を選択肢として返します
+      <p class="capd-desc">ST22 · SM02 · /IWFND/ERROR_LOG · SATプロファイラをMCPツールで直接引き寄せて分析します。<code>sap-debugger</code> / <code>sap-bc-consultant</code>へ自動委任され、未知の領域まで安全に拡張します</p>
+
+      <p class="capd-desc">単なるスタックトレースの出力ではなく、<b>呼び出しチェーン・変数ダンプ・メモリ状態</b>を統合して仮説を提示し、後続アクション（Note適用・コード修正・権限追加）を選択肢として返します
       <br/>運用引き継ぎ直後に初めて見るダンプでも、一次分析を終えてBCチームへ的確な質問として引き渡せます</p>
 
       <div class="capd-flow">
@@ -473,40 +476,48 @@ window.SC4_PANELS_JA = (function () {
         <br/><b>同じ機能のZオブジェクトをまた作る</b>ことが繰り返されますが、SC4SAPはこの問題をパイプラインの前段で遮断します
       </p>
 
-      <div class="reuse-cross">
-        <div class="rx-card rx-top">
-          <div class="rx-icon">🧷</div>
-          <code>CMOD</code>
-          <h5>User Exits</h5>
-          <p>Enhancement Project · FM Exit · Screen Exit</p>
+      <div class="reuse-flow">
+        <div class="rx-lanes">
+          <div class="rx-card">
+            <div class="rx-icon">🧷</div>
+            <code>CMOD</code>
+            <h5>User Exits</h5>
+            <p>Enhancement Project · FM Exit · Screen Exit</p>
+          </div>
+          <div class="rx-card">
+            <div class="rx-icon">⚖️</div>
+            <code>GGB1 · GGB2</code>
+            <h5>Substitution / Validation</h5>
+            <p>財務・物流の置換・検証ルール</p>
+          </div>
+          <div class="rx-card">
+            <div class="rx-icon">🔌</div>
+            <code>BAdI</code>
+            <h5>Business Add-In</h5>
+            <p>Classic / Kernel / Enhancement Spot<br/>実装クラス</p>
+          </div>
+          <div class="rx-card">
+            <div class="rx-icon">➕</div>
+            <code>APPEND</code>
+            <h5>Structure Append</h5>
+            <p>標準テーブル・構造体のCI/ZZフィールド + BAPI <code>EXTENSION</code></p>
+          </div>
         </div>
-        <div class="rx-card rx-left">
-          <div class="rx-icon">⚖️</div>
-          <code>GGB1 · GGB2</code>
-          <h5>Substitution / Validation</h5>
-          <p>財務・物流の置換・検証ルール</p>
-        </div>
-        <div class="rx-hub">
-          <span class="rx-hub-eyebrow">REUSE FIRST</span>
-          <h4>すでにある資産を<br/>先に提案します</h4>
-          <code class="rx-hub-cmd">/sc4sap:analyze-cbo-obj</code>
-          <ul class="rx-hub-bullets">
-            <li><b>create-program</b>がプラン段階でインベントリをロード</li>
-            <li>すべての<code>Create*</code>呼び出しは<b>再利用ゲート</b>の通過が必須</li>
-            <li>1回スキャン → 数週間にわたり同じインベントリを共有</li>
-          </ul>
-        </div>
-        <div class="rx-card rx-right">
-          <div class="rx-icon">🔌</div>
-          <code>BAdI</code>
-          <h5>Business Add-In</h5>
-          <p>Classic / Kernel / Enhancement Spot<br/>実装クラス</p>
-        </div>
-        <div class="rx-card rx-bot">
-          <div class="rx-icon">➕</div>
-          <code>APPEND</code>
-          <h5>Structure Append</h5>
-          <p>標準テーブル・構造体のCI/ZZフィールド + BAPI <code>EXTENSION</code></p>
+        <svg class="rx-flow" aria-hidden="true">
+          <path /><path /><path /><path />
+        </svg>
+        <div class="rx-gate">
+          <svg class="chip-edge" data-edge-radius="10" data-edge-period="12" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" /></svg>
+          <div class="rx-gate-body">
+            <span class="rx-hub-eyebrow">REUSE FIRST</span>
+            <h4>すでにある資産を<br/>先に提案します</h4>
+            <code class="rx-hub-cmd">/sc4sap:analyze-cbo-obj</code>
+            <ul class="rx-hub-bullets">
+              <li><b>create-program</b>がプラン段階でインベントリをロード</li>
+              <li>すべての<code>Create*</code>呼び出しは再利用ゲートの通過が必須</li>
+              <li>1回スキャン → 数週間にわたり同じインベントリを共有</li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -518,68 +529,132 @@ window.SC4_PANELS_JA = (function () {
 
     '09': { html: `<div class="capd capd-09">
       ${head('09','🏭','Industry Context')}
-      <p class="capd-lede">14業種に対する<b>ビジネスコンテキストがエージェントの中に搭載</b>されます</p>
+      <p class="capd-lede">14業種に対する<b>汎用ビジネスコンテキストがエージェントの中に搭載</b>されます</p>
       <p class="capd-desc">リテールのArticleと、ファッションのStyle × Color × Sizeでは、マスターデータの構造そのものが異なります
-      <br/>自動車のJIT/JISスケジューリング、製薬のGMP · Serialization、鉄鋼のCharacteristic Inventory · Coil · Heatトラッキングのように、同じERPの上で異なる業務ルールが動いています
-      <br/><code>config.json</code>のindustry値に応じて、Analyst · Critic · Plannerが該当業種のリファレンスを<b>mandatory</b>としてロードした上で作業を開始し
-      <br/>各ファイルはBusiness Characteristics / Key Processes / Master Data / Pitfallsの4セクションに整理され、モジュールコンサルタントと自動で相互検証されます
-      <br/><b>「リテールプロジェクトに自動車式のBOMを持ち込む」事故が、構造的かつ根本的に遮断</b>されます</p>
-      <div class="capd-marquee" data-speed="42" aria-label="14 industries marquee">
-        <div class="capd-marquee-track">
-          <span class="chip2">🛒 Retail <em>Article·POS</em></span>
-          <span class="chip2">👗 Fashion <em>Style×Color×Size</em></span>
-          <span class="chip2">💄 Cosmetics <em>Batch·Shelf</em></span>
-          <span class="chip2">🛞 Tire <em>OE/RE·Mold</em></span>
-          <span class="chip2">🚗 Automotive <em>JIT/JIS·PPAP</em></span>
-          <span class="chip2">💊 Pharma <em>GMP·Serial</em></span>
-          <span class="chip2">🍱 F&amp;B <em>Catch Wt·FEFO</em></span>
-          <span class="chip2">⚗️ Chemical <em>Process·DG</em></span>
-          <span class="chip2">💻 Electronics <em>VC/AVC·RMA</em></span>
-          <span class="chip2">🏗️ Construction <em>POC·Sub</em></span>
-          <span class="chip2">🏭 Steel <em>Coil·Heat</em></span>
-          <span class="chip2">⚡ Utilities <em>IS-U·FI-CA</em></span>
-          <span class="chip2">🏦 Banking <em>FS-CD·BP</em></span>
-          <span class="chip2">🏛️ Public <em>Funds·Grants</em></span>
-        </div>
-      </div>
+      <br/>自動車のJIT/JISスケジューリング、製薬のGMP · Serialization、鉄鋼のCharacteristic Inventory · Coil · Heatトラッキングのように、同じERPの上で異なる業務ルールが動いています</p>
+
+      <p class="capd-desc"><code>config.json</code>のindustry値に応じて、Analyst · Critic · Plannerが該当業種のリファレンスを<b>mandatory</b>としてロードした上で作業を開始し
+      <br/>各ファイルはBusiness Characteristics / Key Processes / Master Data / Pitfallsの4セクションに整理され、モジュールコンサルタントと自動で相互検証されます</p>
+
+      <p class="capd-desc"><b>「リテールプロジェクトに自動車式のBOMを持ち込む」事故が、構造的かつ根本的に遮断</b>されます</p>
+      <ul class="capd-grid" aria-label="14 industries">
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-shopping-cart" aria-hidden="true"></i>
+          <b>Retail</b>
+          <em>Article·POS</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-dress" aria-hidden="true"></i>
+          <b>Fashion</b>
+          <em>Style×Color×Size</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-flower" aria-hidden="true"></i>
+          <b>Cosmetics</b>
+          <em>Batch·Shelf</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-tire" aria-hidden="true"></i>
+          <b>Tire</b>
+          <em>OE/RE·Mold</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-car" aria-hidden="true"></i>
+          <b>Automotive</b>
+          <em>JIT/JIS·PPAP</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-pill" aria-hidden="true"></i>
+          <b>Pharma</b>
+          <em>GMP·Serial</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-bowl-food" aria-hidden="true"></i>
+          <b>F&amp;B</b>
+          <em>Catch Wt·FEFO</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-flask" aria-hidden="true"></i>
+          <b>Chemical</b>
+          <em>Process·DG</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-cpu" aria-hidden="true"></i>
+          <b>Electronics</b>
+          <em>VC/AVC·RMA</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-crane-tower" aria-hidden="true"></i>
+          <b>Construction</b>
+          <em>POC·Sub</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-factory" aria-hidden="true"></i>
+          <b>Steel</b>
+          <em>Coil·Heat</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-lightning" aria-hidden="true"></i>
+          <b>Utilities</b>
+          <em>IS-U·FI-CA</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-coins" aria-hidden="true"></i>
+          <b>Banking</b>
+          <em>FS-CD·BP</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-buildings" aria-hidden="true"></i>
+          <b>Public</b>
+          <em>Funds·Grants</em>
+        </li>
+      </ul>
     </div>` },
 
     '10': { html: `<div class="capd capd-10">
       ${head('10','🌏','Country / Localization')}
       <p class="capd-lede">韓国では税金計算書、イタリアではSDI FatturaPA、メキシコではCFDI - 同じFI伝票でも、出力様式と法定要件は国ごとに完全に異なります</p>
       <p class="capd-desc">出力様式だけでなく、<b>e-Invoicingの義務適用時期</b>、<b>銀行通信プロトコル</b>、<b>税務申告の周期</b>、<b>データ保存期間</b>まで、ある国の会計フローをそのまま別の国へ移せる部分はほとんどありません
-      <br/>SC4SAPは16カ国のリファレンスを<b>Tax · e-Invoicing · Banking · Statutory Reporting</b>の4つの基準点に整理しておき
-      <br/><code>config.json</code>のcountry値に応じて、Analyst · Critic · Plannerが該当ファイルを<b>mandatory</b>としてロードした上で作業を開始します
+      <br/>SC4SAPは16カ国のリファレンスを<b>Tax · e-Invoicing · Banking · Statutory Reporting</b>の4つの基準点に整理しておきます</p>
+
+      <p class="capd-desc"><code>config.json</code>のcountry値に応じて、Analyst · Critic · Plannerが該当ファイルを<b>mandatory</b>としてロードした上で作業を開始します
       <br/>その後のマルチカントリーロールアウトでは、<b>インターカンパニー · EU域内VAT · 移転価格</b>といった交差接点を自動でフラグし、単一コードベースの上で国別の分岐を一度に追跡できるよう支援します</p>
-      <div class="capd-carousel" data-speed="2400" aria-label="16 countries step-snap carousel">
-        <div class="capd-carousel-track">
-          <div class="capd-flag" data-name="Korea"      data-detail="電子税金計算書(NTS) · 事業者登録番号 · 住民番号 PII"><span class="em">🇰🇷</span><span class="nm">KR</span><span class="tx">NTS · 住民番号</span></div>
-          <div class="capd-flag" data-name="Japan"      data-detail="Qualified Invoice · Zengin · 法人番号"><span class="em">🇯🇵</span><span class="nm">JP</span><span class="tx">Qualified Inv</span></div>
-          <div class="capd-flag" data-name="China"      data-detail="Golden Tax · e-fapiao · SAFE FX"><span class="em">🇨🇳</span><span class="nm">CN</span><span class="tx">Golden Tax</span></div>
-          <div class="capd-flag" data-name="USA"        data-detail="Sales &amp; Use Tax · EIN · 1099 · ACH · Nexus"><span class="em">🇺🇸</span><span class="nm">US</span><span class="tx">Sales · ACH</span></div>
-          <div class="capd-flag" data-name="Germany"    data-detail="USt · ELSTER · XRechnung/ZUGFeRD · SEPA"><span class="em">🇩🇪</span><span class="nm">DE</span><span class="tx">XRechnung</span></div>
-          <div class="capd-flag" data-name="UK"         data-detail="VAT + MTD · BACS/FPS/CHAPS · GB vs XI"><span class="em">🇬🇧</span><span class="nm">UK</span><span class="tx">VAT MTD</span></div>
-          <div class="capd-flag" data-name="France"     data-detail="TVA · FEC · Factur-X 2026"><span class="em">🇫🇷</span><span class="nm">FR</span><span class="tx">FEC · Factur-X</span></div>
-          <div class="capd-flag" data-name="Italy"      data-detail="IVA · FatturaPA/SDI · Split Payment"><span class="em">🇮🇹</span><span class="nm">IT</span><span class="tx">FatturaPA</span></div>
-          <div class="capd-flag" data-name="Spain"      data-detail="IVA · SII リアルタイム報告 · TicketBAI"><span class="em">🇪🇸</span><span class="nm">ES</span><span class="tx">SII · TicketBAI</span></div>
-          <div class="capd-flag" data-name="Netherlands" data-detail="BTW · Peppol · XAF · G-rekening"><span class="em">🇳🇱</span><span class="nm">NL</span><span class="tx">Peppol · XAF</span></div>
-          <div class="capd-flag" data-name="Brazil"     data-detail="NF-e · SPED · CFOP · ICMS/IPI/PIS/COFINS"><span class="em">🇧🇷</span><span class="nm">BR</span><span class="tx">NF-e · SPED</span></div>
-          <div class="capd-flag" data-name="Mexico"     data-detail="CFDI 4.0 · SAT · Complementos · SPEI"><span class="em">🇲🇽</span><span class="nm">MX</span><span class="tx">CFDI 4.0</span></div>
-          <div class="capd-flag" data-name="India"      data-detail="GST · IRN e-invoice · e-Way Bill · TDS"><span class="em">🇮🇳</span><span class="nm">IN</span><span class="tx">GST · IRN</span></div>
-          <div class="capd-flag" data-name="Australia"  data-detail="GST · ABN · STP Phase 2 · BAS"><span class="em">🇦🇺</span><span class="nm">AU</span><span class="tx">STP · BAS</span></div>
-          <div class="capd-flag" data-name="Singapore"  data-detail="GST · UEN · InvoiceNow(Peppol) · PayNow"><span class="em">🇸🇬</span><span class="nm">SG</span><span class="tx">InvoiceNow</span></div>
-          <div class="capd-flag" data-name="EU Common"  data-detail="VIES · INTRASTAT · ESL · OSS/IOSS · SEPA · GDPR"><span class="em">🇪🇺</span><span class="nm">EU</span><span class="tx">VIES · OSS</span></div>
-        </div>
+      <div class="capd-globe" data-globe>
+        <canvas class="globe-face" data-globe-canvas></canvas>
+        <ul class="globe-places" data-globe-places>
+          <li data-lat="37.57" data-lon="126.98" data-code="KR"><b>KR</b><span><em>Korea</em><i>電子税金計算書(NTS) · 事業者登録番号 · 住民番号 PII</i></span></li>
+          <li data-lat="35.68" data-lon="139.69" data-code="JP"><b>JP</b><span><em>Japan</em><i>Qualified Invoice · Zengin · 法人番号</i></span></li>
+          <li data-lat="39.9" data-lon="116.41" data-code="CN"><b>CN</b><span><em>China</em><i>Golden Tax · e-fapiao · SAFE FX</i></span></li>
+          <li data-lat="38.91" data-lon="-77.04" data-code="US"><b>US</b><span><em>USA</em><i>Sales &amp; Use Tax · EIN · 1099 · ACH · Nexus</i></span></li>
+          <li data-lat="52.52" data-lon="13.4" data-code="DE"><b>DE</b><span><em>Germany</em><i>USt · ELSTER · XRechnung/ZUGFeRD · SEPA</i></span></li>
+          <li data-lat="51.51" data-lon="-0.13" data-code="UK"><b>UK</b><span><em>UK</em><i>VAT + MTD · BACS/FPS/CHAPS · GB vs XI</i></span></li>
+          <li data-lat="48.86" data-lon="2.35" data-code="FR"><b>FR</b><span><em>France</em><i>TVA · FEC · Factur-X 2026</i></span></li>
+          <li data-lat="41.9" data-lon="12.5" data-code="IT"><b>IT</b><span><em>Italy</em><i>IVA · FatturaPA/SDI · Split Payment</i></span></li>
+          <li data-lat="40.42" data-lon="-3.7" data-code="ES"><b>ES</b><span><em>Spain</em><i>IVA · SII リアルタイム報告 · TicketBAI</i></span></li>
+          <li data-lat="52.37" data-lon="4.9" data-code="NL"><b>NL</b><span><em>Netherlands</em><i>BTW · Peppol · XAF · G-rekening</i></span></li>
+          <li data-lat="-15.79" data-lon="-47.88" data-code="BR"><b>BR</b><span><em>Brazil</em><i>NF-e · SPED · CFOP · ICMS/IPI/PIS/COFINS</i></span></li>
+          <li data-lat="19.43" data-lon="-99.13" data-code="MX"><b>MX</b><span><em>Mexico</em><i>CFDI 4.0 · SAT · Complementos · SPEI</i></span></li>
+          <li data-lat="28.61" data-lon="77.21" data-code="IN"><b>IN</b><span><em>India</em><i>GST · IRN e-invoice · e-Way Bill · TDS</i></span></li>
+          <li data-lat="-35.28" data-lon="149.13" data-code="AU"><b>AU</b><span><em>Australia</em><i>GST · ABN · STP Phase 2 · BAS</i></span></li>
+          <li data-lat="1.35" data-lon="103.82" data-code="SG"><b>SG</b><span><em>Singapore</em><i>GST · UEN · InvoiceNow(Peppol) · PayNow</i></span></li>
+          <li data-lat="50.85" data-lon="4.35" data-code="EU"><b>EU</b><span><em>EU Common</em><i>VIES · INTRASTAT · ESL · OSS/IOSS · SEPA · GDPR</i></span></li>
+        </ul>
       </div>
 
-      <div class="capd-active-country" data-active-country aria-live="polite">
-        <span class="ac-flag" data-ac-flag>🇰🇷</span>
-        <div class="ac-meta">
-          <span class="ac-eyebrow">Now highlighted</span>
-          <h4 class="ac-name" data-ac-name>Korea</h4>
-          <p class="ac-detail" data-ac-detail>電子税金計算書(NTS) · 事業者登録番号 · 住民番号 PII</p>
-        </div>
-      </div>
 
       <div class="mechanism-note">
         <b>動作の仕組み</b>
@@ -595,8 +670,9 @@ window.SC4_PANELS_JA = (function () {
       ${head('11','🎯','Active-Module Awareness')}
       <p class="capd-lede">モジュールの組み合わせに応じて、標準オブジェクトを使い分けます</p>
       <p class="capd-desc">同じ「原価分析」でも、プロジェクトが<b>MM + PS</b>ならWBS基準、<b>SD + CO</b>ならCO-PAセグメント基準へと変わります
-      <br/><code>config.json</code>のactiveModulesリストを根拠に、エージェントが組み合わせ別の<b>Standard</b>オブジェクトと<b>BAPI</b>を自動選択し、交差接点をフラグします
-      <br/><b>FI + TR</b>が有効化されると、支払提案 → 資金管理 → House Bank振替までの経路が設計され、<b>QM + PP</b>なら製造オーダーの段階別にin-process検査lotが自動生成されるよう流れを組み立てます</p>
+      <br/><code>config.json</code>のactiveModulesリストを根拠に、エージェントが組み合わせ別の<b>Standard</b>オブジェクトと<b>BAPI</b>を自動選択し、交差接点をフラグします</p>
+
+      <p class="capd-desc"><b>FI + TR</b>が有効化されると、支払提案 → 資金管理 → House Bank振替までの経路が設計され、<b>QM + PP</b>なら製造オーダーの段階別にin-process検査lotが自動生成されるよう流れを組み立てます</p>
       <div class="capd-combos">
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>MM</span><span>+</span><span>PS</span><span class="arrow">⇒</span><span class="out">WBSコスト</span></div>
@@ -613,6 +689,14 @@ window.SC4_PANELS_JA = (function () {
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>QM</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">検査lot</span></div>
           <p>製造オーダーの段階別にin-process検査lotを生成。受入検査・最終検査の時点を自動で分岐します</p>
+        </div>
+        <div class="capd-combo">
+          <div class="capd-combo-eq"><span>MM</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">所要量 · 調達</span></div>
+          <p>MRP実行が購買依頼と計画オーダーに分岐。<code>EBAN</code> · <code>PLAF</code>を調達タイプとリードタイム基準で自動配分します</p>
+        </div>
+        <div class="capd-combo">
+          <div class="capd-combo-eq"><span>CO</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">製造原価差異</span></div>
+          <p>生産オーダーの実績を目標原価と突き合わせて差異を分解。<code>AUFK</code> · <code>COSS</code>で数量 · 価格 · 操業度差異を算出します</p>
         </div>
       </div>
     </div>` },

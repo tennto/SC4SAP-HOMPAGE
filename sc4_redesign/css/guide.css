@@ -115,6 +115,20 @@
 
 /* ---------- Copyable command block ---------- */
 
+/* The box is a gutter for one or two lines of shell, so it is sized like
+   one. It arrived padded like a hero panel: the wizard's block holds a
+   thirteen-character command and was coming out at nearly three times the
+   height of its own text, and none of that was the code.
+
+   Two things were doing it. The page-wide .copy-btn is padded for a call
+   to action and stood 40px tall beside a 24px line, setting the floor on
+   its own; and the leading was 1.85, which is double-spaced for mono. The
+   button gets a size that suits a gutter here, and the block gets the
+   padding of one.
+
+   The coarse-pointer rule that lifts every button to a 44px tap target is
+   deliberately not touched. A finger needs that whatever the box looks
+   like, and a taller box on a phone is the right trade. */
 .cmd-block {
   position: relative;
   margin-top: 14px;
@@ -124,22 +138,35 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 14px 14px 16px;
+  padding: 8px 12px 8px 14px;
+  /* It can never be pushed wider than the column it was handed. */
+  min-width: 0;
+  max-width: 100%;
 }
 .cmd-block pre {
-  margin: 0;
+  /* auto on the block axis, which is what centres a single line.
+
+     The button is the taller of the two — 29px against a 23px line — so
+     with align-items: flex-start the code sat at the top of the box with
+     all the slack under it, and read as off-centre because it was. An
+     auto margin absorbs whatever cross-axis space is going, so one line
+     centres against the button; and when the code is the taller item
+     there is no space to absorb and this does nothing, which is what
+     keeps the button at the top of a multi-line block. */
+  margin: auto 0;
   flex: 1;
   min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
   font-size: var(--fs-sm);
-  line-height: 1.85;
+  line-height: 1.65;
   color: var(--ink);
   scrollbar-width: thin;
   scrollbar-color: var(--rule-strong) transparent;
 }
 .cmd-block pre::-webkit-scrollbar { height: 6px; }
 .cmd-block pre::-webkit-scrollbar-thumb { background: var(--rule-strong); border-radius: 3px; }
-.cmd-block .copy-btn { margin-top: 1px; }
+.cmd-block .copy-btn { padding: 5px 10px; }
 
 /* ---------- Numbered spine (wizard) ---------- */
 
@@ -341,4 +368,101 @@
 @media (prefers-reduced-motion: reduce) {
   .reading a { transition: none; }
   .reading a:hover { transform: none; }
+}
+
+/* ============================================================
+   Tablet and phone
+
+   Everything above collapses its two-column rows at 700px and was left
+   at that. What it did not account for is that the widest thing on this
+   page is not a row — it is a shell command, and those do not wrap. The
+   page never scrolled sideways only because body carries overflow-x:
+   hidden, which does not fix an overflow, it hides it. What you saw was
+   the clipping.
+   ============================================================ */
+
+/* The overflow in #install-steps, and it is not the copy button.
+
+   A grid item's automatic minimum size is its MIN-CONTENT, not zero. Most
+   of the grids on this page declare minmax(0, 1fr) and are safe because
+   of it; .opts, .spine and .layers declare no columns at all, so their
+   single implicit track is `auto` and its floor is whatever the widest
+   unbreakable thing inside happens to be. Inside .opts that is
+
+     /plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
+
+   which has no break opportunity after the scheme. The track grew to fit
+   it, the card grew with the track, and the whole thing sailed off the
+   right of the screen — on desktop as well, just not far enough to
+   notice until the window came in.
+
+   The <pre> inside is already a scroll container and contributes nothing
+   to that floor. It was never the problem: the floor was being set one
+   level up, where nothing had said it could be smaller. */
+.opts,
+.spine,
+.layers { grid-template-columns: minmax(0, 1fr); }
+
+/* And the same guarantee on the boxes themselves, so a card can never be
+   pushed wider than the column it was given. */
+.opt,
+.step,
+.layer,
+.tree { min-width: 0; max-width: 100%; }
+
+/* Long tokens that CAN break, allowed to. Prose breaks only where it has
+   to; a command is allowed to break anywhere, because a command that
+   runs off the edge is worse than one with a turned line. */
+.spec dd, .step p, .layer p, .opt > p, .plain-list li, .note { overflow-wrap: break-word; }
+.ref dt, .ref dd code, .spec dd code { overflow-wrap: anywhere; }
+
+/* The one range nothing was written for. Between 700 and 900 the rows
+   have collapsed but the page is still being given desktop measure, so
+   the reading grid keeps two narrow columns and the tree keeps two.
+   Neither has the width for it. */
+@media (max-width: 900px) {
+  .reading { grid-template-columns: 1fr; }
+  .step p { max-width: none; }
+}
+
+/* Below this the command block stops trying to sit the copy button
+   beside the code.
+
+   The arithmetic is what makes this necessary rather than tidy: at 320px
+   the shell leaves 280, the option card leaves 240, the block's own
+   padding leaves 210, and the button and its gap take 97 of that. Fifty
+   characters of command were being shown through 113 pixels of scrolling
+   window. Stacked, the same command gets the full 210 and the button
+   keeps its full tap target underneath. */
+@media (max-width: 640px) {
+  /* The button loses its label rather than its place.
+
+     Stacking it under the code was the first answer and it was the wrong
+     one: it bought the code the full width and paid for it by making
+     every box two rows tall, which on the wizard's one-line command is
+     most of a phone screen for thirteen characters. Icon-only keeps the
+     single row AND gives the code back most of the width the label was
+     taking — the icon is around 30px where the labelled button was 85.
+
+     The button still says what it is: the aria-label was always on it,
+     because the label beside the icon was never the accessible name. */
+  .cmd-block { gap: 8px; padding: 8px 10px 8px 12px; }
+  .cmd-block .copy-btn { padding: 6px; }
+  .cmd-block .copy-btn [data-copy-label] { display: none; }
+
+  /* Reclaimed from the card so the code has more room to begin with. */
+  .opt { padding: 18px 16px; }
+  .layer { padding: 18px 16px; }
+  .note { padding: 14px 15px; gap: 10px; }
+  .head-links .btn { flex: 1 1 auto; justify-content: center; }
+}
+
+/* The narrowest phones. The head buttons stop sharing a row rather than
+   being squeezed to two words apiece, and the page header stops holding
+   desktop leading above the fold. */
+@media (max-width: 400px) {
+  .head-links { flex-direction: column; align-items: stretch; }
+  .head-links .btn { flex: none; }
+  .step { padding: 20px 0; }
+  .spec > div, .ref > div { padding-inline: 0; }
 }

@@ -118,8 +118,9 @@ window.SC4_PANELS_EN = (function () {
       ${head('03','🔍','Program Analyze','/sc4sap:program-to-spec')}
       <p class="capd-lede">Turn legacy ABAP into a functional/technical spec - <b>reverse-engineering by the minute</b></p>
       <p class="capd-desc">Even a 3,000-line report has its selection-screen image, ALV column layout, process flowchart, and CBO/Enhancement dependencies extracted automatically
-      <br/><b>4-axis Socratic questions</b> across Audience / Format / Depth / Language tune the depth and dodge the "document everything" trap
-      <br/>Operational handover · audit response · legacy cleanup right before a system migration - the spec a person used to write by reading code line by line is compressed into minutes and produced in both Excel and Markdown formats at once</p>
+      <br/><b>4-axis Socratic questions</b> across Audience / Format / Depth / Language tune the depth and dodge the "document everything" trap</p>
+
+      <p class="capd-desc">Operational handover · audit response · legacy cleanup right before a system migration - the spec a person used to write by reading code line by line is compressed into minutes and produced in both Excel and Markdown formats at once</p>
 
       <!-- Pipeline flow: 4 steps with auto-arrows -->
       <div class="capd-flow">
@@ -187,8 +188,9 @@ window.SC4_PANELS_EN = (function () {
       ${head('04','🧪','Analyze Code','/sc4sap:analyze-code')}
       <p class="capd-lede">Clean ABAP · performance · security · modernization - <b>severity-ranked static review</b></p>
       <p class="capd-desc">It reflects the project's <code>ABAP_RELEASE</code> / SAP version context and recommends <b>only the patterns that actually apply</b>
-      <br/>It auto-detects the OOP / Procedural paradigm and presents impact via a Where-used graph. Line numbers, call paths, and ready-to-apply fix snippets all come back as one bundle
-      <br/>The security category detects OWASP patterns like SQL Injection, missing AUTHORITY-CHECK, and dynamic code execution through static analysis
+      <br/>It auto-detects the OOP / Procedural paradigm and presents impact via a Where-used graph. Line numbers, call paths, and ready-to-apply fix snippets all come back as one bundle</p>
+
+      <p class="capd-desc">The security category detects OWASP patterns like SQL Injection, missing AUTHORITY-CHECK, and dynamic code execution through static analysis
       <br/>and the performance category attaches concrete patch code that refactors nested LOOP/SELECT into sorted/hashed table look-ups</p>
 
       <!-- The four review categories. Plain markup on the same hairline grid
@@ -312,8 +314,9 @@ window.SC4_PANELS_EN = (function () {
     '06': { html: `<div class="capd capd-06">
       ${head('06','🩺','Maintenance Diagnosis','/sc4sap:analyze-symptom')}
       <p class="capd-lede">Give it just a dump ID and the first-pass analysis - down to SAP Note candidates - finishes inside Claude</p>
-      <p class="capd-desc">It pulls ST22 · SM02 · /IWFND/ERROR_LOG · the SAT profiler directly through MCP tools and analyzes them. Work is auto-delegated to <code>sap-debugger</code> / <code>sap-bc-consultant</code>, so it extends safely even into unfamiliar territory
-      <br/>Rather than just printing a stack trace, it integrates the <b>call chain · variable dump · memory state</b> to propose a hypothesis and returns follow-up actions (apply Note · fix code · add authorization) as choices
+      <p class="capd-desc">It pulls ST22 · SM02 · /IWFND/ERROR_LOG · the SAT profiler directly through MCP tools and analyzes them. Work is auto-delegated to <code>sap-debugger</code> / <code>sap-bc-consultant</code>, so it extends safely even into unfamiliar territory</p>
+
+      <p class="capd-desc">Rather than just printing a stack trace, it integrates the <b>call chain · variable dump · memory state</b> to propose a hypothesis and returns follow-up actions (apply Note · fix code · add authorization) as choices
       <br/>Even a dump you've never seen, right after an operational handover, can finish first-pass analysis and be passed to the BC team as a precise question</p>
 
       <div class="capd-flow">
@@ -469,40 +472,48 @@ window.SC4_PANELS_EN = (function () {
         <br/><b>building yet another Z object with the same function</b> keeps repeating - SC4SAP blocks this problem at the front of the pipeline
       </p>
 
-      <div class="reuse-cross">
-        <div class="rx-card rx-top">
-          <div class="rx-icon">🧷</div>
-          <code>CMOD</code>
-          <h5>User Exits</h5>
-          <p>Enhancement Project · FM Exit · Screen Exit</p>
+      <div class="reuse-flow">
+        <div class="rx-lanes">
+          <div class="rx-card">
+            <div class="rx-icon">🧷</div>
+            <code>CMOD</code>
+            <h5>User Exits</h5>
+            <p>Enhancement Project · FM Exit · Screen Exit</p>
+          </div>
+          <div class="rx-card">
+            <div class="rx-icon">⚖️</div>
+            <code>GGB1 · GGB2</code>
+            <h5>Substitution / Validation</h5>
+            <p>Finance/logistics substitution·validation rules</p>
+          </div>
+          <div class="rx-card">
+            <div class="rx-icon">🔌</div>
+            <code>BAdI</code>
+            <h5>Business Add-In</h5>
+            <p>Classic / Kernel / Enhancement Spot<br/>implementation classes</p>
+          </div>
+          <div class="rx-card">
+            <div class="rx-icon">➕</div>
+            <code>APPEND</code>
+            <h5>Structure Append</h5>
+            <p>CI/ZZ fields on standard tables·structures + BAPI <code>EXTENSION</code></p>
+          </div>
         </div>
-        <div class="rx-card rx-left">
-          <div class="rx-icon">⚖️</div>
-          <code>GGB1 · GGB2</code>
-          <h5>Substitution / Validation</h5>
-          <p>Finance/logistics substitution·validation rules</p>
-        </div>
-        <div class="rx-hub">
-          <span class="rx-hub-eyebrow">REUSE FIRST</span>
-          <h4>Proposes the assets<br/>you already have first</h4>
-          <code class="rx-hub-cmd">/sc4sap:analyze-cbo-obj</code>
-          <ul class="rx-hub-bullets">
-            <li><b>create-program</b> loads the inventory at the plan stage</li>
-            <li>Every <code>Create*</code> call must pass the <b>reuse gate</b></li>
-            <li>Scan once → share the same inventory for weeks</li>
-          </ul>
-        </div>
-        <div class="rx-card rx-right">
-          <div class="rx-icon">🔌</div>
-          <code>BAdI</code>
-          <h5>Business Add-In</h5>
-          <p>Classic / Kernel / Enhancement Spot<br/>implementation classes</p>
-        </div>
-        <div class="rx-card rx-bot">
-          <div class="rx-icon">➕</div>
-          <code>APPEND</code>
-          <h5>Structure Append</h5>
-          <p>CI/ZZ fields on standard tables·structures + BAPI <code>EXTENSION</code></p>
+        <svg class="rx-flow" aria-hidden="true">
+          <path /><path /><path /><path />
+        </svg>
+        <div class="rx-gate">
+          <svg class="chip-edge" data-edge-radius="10" data-edge-period="12" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" /></svg>
+          <div class="rx-gate-body">
+            <span class="rx-hub-eyebrow">REUSE FIRST</span>
+            <h4>Proposes the assets<br/>you already have first</h4>
+            <code class="rx-hub-cmd">/sc4sap:analyze-cbo-obj</code>
+            <ul class="rx-hub-bullets">
+              <li><b>create-program</b> loads the inventory at the plan stage</li>
+              <li>Every <code>Create*</code> call must pass the reuse gate</li>
+              <li>Scan once → share the same inventory for weeks</li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -514,68 +525,132 @@ window.SC4_PANELS_EN = (function () {
 
     '09': { html: `<div class="capd capd-09">
       ${head('09','🏭','Industry Context')}
-      <p class="capd-lede"><b>Business context for 14 industries is built into the agents</b></p>
+      <p class="capd-lede"><b>General-purpose business context for 14 industries is built into the agents</b></p>
       <p class="capd-desc">Retail's Article and fashion's Style × Color × Size differ in their very master-data structure
-      <br/>Automotive JIT/JIS scheduling, pharma GMP · Serialization, steel Characteristic Inventory · Coil · Heat tracking - different business rules run on the same ERP
-      <br/>Based on the industry value in <code>config.json</code>, Analyst · Critic · Planner load the matching industry reference as <b>mandatory</b> before starting work
-      <br/>and each file is organized into 4 sections - Business Characteristics / Key Processes / Master Data / Pitfalls - and cross-validated automatically with the module consultant
-      <br/><b>The accident of "pushing automotive-style BOM onto a retail project" is structurally and fundamentally blocked</b></p>
-      <div class="capd-marquee" data-speed="42" aria-label="14 industries marquee">
-        <div class="capd-marquee-track">
-          <span class="chip2">🛒 Retail <em>Article·POS</em></span>
-          <span class="chip2">👗 Fashion <em>Style×Color×Size</em></span>
-          <span class="chip2">💄 Cosmetics <em>Batch·Shelf</em></span>
-          <span class="chip2">🛞 Tire <em>OE/RE·Mold</em></span>
-          <span class="chip2">🚗 Automotive <em>JIT/JIS·PPAP</em></span>
-          <span class="chip2">💊 Pharma <em>GMP·Serial</em></span>
-          <span class="chip2">🍱 F&amp;B <em>Catch Wt·FEFO</em></span>
-          <span class="chip2">⚗️ Chemical <em>Process·DG</em></span>
-          <span class="chip2">💻 Electronics <em>VC/AVC·RMA</em></span>
-          <span class="chip2">🏗️ Construction <em>POC·Sub</em></span>
-          <span class="chip2">🏭 Steel <em>Coil·Heat</em></span>
-          <span class="chip2">⚡ Utilities <em>IS-U·FI-CA</em></span>
-          <span class="chip2">🏦 Banking <em>FS-CD·BP</em></span>
-          <span class="chip2">🏛️ Public <em>Funds·Grants</em></span>
-        </div>
-      </div>
+      <br/>Automotive JIT/JIS scheduling, pharma GMP · Serialization, steel Characteristic Inventory · Coil · Heat tracking - different business rules run on the same ERP</p>
+
+      <p class="capd-desc">Based on the industry value in <code>config.json</code>, Analyst · Critic · Planner load the matching industry reference as <b>mandatory</b> before starting work
+      <br/>and each file is organized into 4 sections - Business Characteristics / Key Processes / Master Data / Pitfalls - and cross-validated automatically with the module consultant</p>
+
+      <p class="capd-desc"><b>The accident of "pushing automotive-style BOM onto a retail project" is structurally and fundamentally blocked</b></p>
+      <ul class="capd-grid" aria-label="14 industries">
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-shopping-cart" aria-hidden="true"></i>
+          <b>Retail</b>
+          <em>Article·POS</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-dress" aria-hidden="true"></i>
+          <b>Fashion</b>
+          <em>Style×Color×Size</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-flower" aria-hidden="true"></i>
+          <b>Cosmetics</b>
+          <em>Batch·Shelf</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-tire" aria-hidden="true"></i>
+          <b>Tire</b>
+          <em>OE/RE·Mold</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-car" aria-hidden="true"></i>
+          <b>Automotive</b>
+          <em>JIT/JIS·PPAP</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-pill" aria-hidden="true"></i>
+          <b>Pharma</b>
+          <em>GMP·Serial</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-bowl-food" aria-hidden="true"></i>
+          <b>F&amp;B</b>
+          <em>Catch Wt·FEFO</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-flask" aria-hidden="true"></i>
+          <b>Chemical</b>
+          <em>Process·DG</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-cpu" aria-hidden="true"></i>
+          <b>Electronics</b>
+          <em>VC/AVC·RMA</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-crane-tower" aria-hidden="true"></i>
+          <b>Construction</b>
+          <em>POC·Sub</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-factory" aria-hidden="true"></i>
+          <b>Steel</b>
+          <em>Coil·Heat</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-lightning" aria-hidden="true"></i>
+          <b>Utilities</b>
+          <em>IS-U·FI-CA</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-coins" aria-hidden="true"></i>
+          <b>Banking</b>
+          <em>FS-CD·BP</em>
+        </li>
+        <li class="ind">
+          <svg class="chip-edge" data-edge-radius="10" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0.5" y="0.5" width="99" height="99" rx="10" pathLength="100" /></svg>
+          <i class="ph ph-buildings" aria-hidden="true"></i>
+          <b>Public</b>
+          <em>Funds·Grants</em>
+        </li>
+      </ul>
     </div>` },
 
     '10': { html: `<div class="capd capd-10">
       ${head('10','🌏','Country / Localization')}
       <p class="capd-lede">In Korea a tax invoice, in Italy SDI FatturaPA, in Mexico CFDI - even the same FI document has completely different output formats and legal requirements from country to country</p>
       <p class="capd-desc">Beyond output format, the <b>e-Invoicing mandate effective dates</b>, <b>bank communication protocols</b>, <b>tax filing cycles</b>, and <b>data retention periods</b> mean almost none of one country's accounting flow can be moved to another country as-is
-      <br/>SC4SAP organizes 16 country references around the 4 reference points of <b>Tax · e-Invoicing · Banking · Statutory Reporting</b>
-      <br/>and based on the country value in <code>config.json</code>, Analyst · Critic · Planner load the relevant file as <b>mandatory</b> before starting work
+      <br/>SC4SAP organizes 16 country references around the 4 reference points of <b>Tax · e-Invoicing · Banking · Statutory Reporting</b></p>
+
+      <p class="capd-desc">Based on the country value in <code>config.json</code>, Analyst · Critic · Planner load the relevant file as <b>mandatory</b> before starting work
       <br/>In multi-country rollouts it then automatically flags cross-touchpoints like <b>intercompany · intra-EU VAT · transfer pricing</b>, helping you track per-country branching on a single codebase all at once</p>
-      <div class="capd-carousel" data-speed="2400" aria-label="16 countries step-snap carousel">
-        <div class="capd-carousel-track">
-          <div class="capd-flag" data-name="Korea"      data-detail="e-Tax Invoice (NTS) · Business Registration Number · resident registration number PII"><span class="em">🇰🇷</span><span class="nm">KR</span><span class="tx">NTS · RRN</span></div>
-          <div class="capd-flag" data-name="Japan"      data-detail="Qualified Invoice · Zengin · Corporate Number"><span class="em">🇯🇵</span><span class="nm">JP</span><span class="tx">Qualified Inv</span></div>
-          <div class="capd-flag" data-name="China"      data-detail="Golden Tax · e-fapiao · SAFE FX"><span class="em">🇨🇳</span><span class="nm">CN</span><span class="tx">Golden Tax</span></div>
-          <div class="capd-flag" data-name="USA"        data-detail="Sales &amp; Use Tax · EIN · 1099 · ACH · Nexus"><span class="em">🇺🇸</span><span class="nm">US</span><span class="tx">Sales · ACH</span></div>
-          <div class="capd-flag" data-name="Germany"    data-detail="USt · ELSTER · XRechnung/ZUGFeRD · SEPA"><span class="em">🇩🇪</span><span class="nm">DE</span><span class="tx">XRechnung</span></div>
-          <div class="capd-flag" data-name="UK"         data-detail="VAT + MTD · BACS/FPS/CHAPS · GB vs XI"><span class="em">🇬🇧</span><span class="nm">UK</span><span class="tx">VAT MTD</span></div>
-          <div class="capd-flag" data-name="France"     data-detail="TVA · FEC · Factur-X 2026"><span class="em">🇫🇷</span><span class="nm">FR</span><span class="tx">FEC · Factur-X</span></div>
-          <div class="capd-flag" data-name="Italy"      data-detail="IVA · FatturaPA/SDI · Split Payment"><span class="em">🇮🇹</span><span class="nm">IT</span><span class="tx">FatturaPA</span></div>
-          <div class="capd-flag" data-name="Spain"      data-detail="IVA · SII real-time reporting · TicketBAI"><span class="em">🇪🇸</span><span class="nm">ES</span><span class="tx">SII · TicketBAI</span></div>
-          <div class="capd-flag" data-name="Netherlands" data-detail="BTW · Peppol · XAF · G-rekening"><span class="em">🇳🇱</span><span class="nm">NL</span><span class="tx">Peppol · XAF</span></div>
-          <div class="capd-flag" data-name="Brazil"     data-detail="NF-e · SPED · CFOP · ICMS/IPI/PIS/COFINS"><span class="em">🇧🇷</span><span class="nm">BR</span><span class="tx">NF-e · SPED</span></div>
-          <div class="capd-flag" data-name="Mexico"     data-detail="CFDI 4.0 · SAT · Complementos · SPEI"><span class="em">🇲🇽</span><span class="nm">MX</span><span class="tx">CFDI 4.0</span></div>
-          <div class="capd-flag" data-name="India"      data-detail="GST · IRN e-invoice · e-Way Bill · TDS"><span class="em">🇮🇳</span><span class="nm">IN</span><span class="tx">GST · IRN</span></div>
-          <div class="capd-flag" data-name="Australia"  data-detail="GST · ABN · STP Phase 2 · BAS"><span class="em">🇦🇺</span><span class="nm">AU</span><span class="tx">STP · BAS</span></div>
-          <div class="capd-flag" data-name="Singapore"  data-detail="GST · UEN · InvoiceNow(Peppol) · PayNow"><span class="em">🇸🇬</span><span class="nm">SG</span><span class="tx">InvoiceNow</span></div>
-          <div class="capd-flag" data-name="EU Common"  data-detail="VIES · INTRASTAT · ESL · OSS/IOSS · SEPA · GDPR"><span class="em">🇪🇺</span><span class="nm">EU</span><span class="tx">VIES · OSS</span></div>
-        </div>
+      <div class="capd-globe" data-globe>
+        <canvas class="globe-face" data-globe-canvas></canvas>
+        <ul class="globe-places" data-globe-places>
+          <li data-lat="37.57" data-lon="126.98" data-code="KR"><b>KR</b><span><em>Korea</em><i>e-Tax Invoice (NTS) · Business Registration Number · resident registration number PII</i></span></li>
+          <li data-lat="35.68" data-lon="139.69" data-code="JP"><b>JP</b><span><em>Japan</em><i>Qualified Invoice · Zengin · Corporate Number</i></span></li>
+          <li data-lat="39.9" data-lon="116.41" data-code="CN"><b>CN</b><span><em>China</em><i>Golden Tax · e-fapiao · SAFE FX</i></span></li>
+          <li data-lat="38.91" data-lon="-77.04" data-code="US"><b>US</b><span><em>USA</em><i>Sales &amp; Use Tax · EIN · 1099 · ACH · Nexus</i></span></li>
+          <li data-lat="52.52" data-lon="13.4" data-code="DE"><b>DE</b><span><em>Germany</em><i>USt · ELSTER · XRechnung/ZUGFeRD · SEPA</i></span></li>
+          <li data-lat="51.51" data-lon="-0.13" data-code="UK"><b>UK</b><span><em>UK</em><i>VAT + MTD · BACS/FPS/CHAPS · GB vs XI</i></span></li>
+          <li data-lat="48.86" data-lon="2.35" data-code="FR"><b>FR</b><span><em>France</em><i>TVA · FEC · Factur-X 2026</i></span></li>
+          <li data-lat="41.9" data-lon="12.5" data-code="IT"><b>IT</b><span><em>Italy</em><i>IVA · FatturaPA/SDI · Split Payment</i></span></li>
+          <li data-lat="40.42" data-lon="-3.7" data-code="ES"><b>ES</b><span><em>Spain</em><i>IVA · SII real-time reporting · TicketBAI</i></span></li>
+          <li data-lat="52.37" data-lon="4.9" data-code="NL"><b>NL</b><span><em>Netherlands</em><i>BTW · Peppol · XAF · G-rekening</i></span></li>
+          <li data-lat="-15.79" data-lon="-47.88" data-code="BR"><b>BR</b><span><em>Brazil</em><i>NF-e · SPED · CFOP · ICMS/IPI/PIS/COFINS</i></span></li>
+          <li data-lat="19.43" data-lon="-99.13" data-code="MX"><b>MX</b><span><em>Mexico</em><i>CFDI 4.0 · SAT · Complementos · SPEI</i></span></li>
+          <li data-lat="28.61" data-lon="77.21" data-code="IN"><b>IN</b><span><em>India</em><i>GST · IRN e-invoice · e-Way Bill · TDS</i></span></li>
+          <li data-lat="-35.28" data-lon="149.13" data-code="AU"><b>AU</b><span><em>Australia</em><i>GST · ABN · STP Phase 2 · BAS</i></span></li>
+          <li data-lat="1.35" data-lon="103.82" data-code="SG"><b>SG</b><span><em>Singapore</em><i>GST · UEN · InvoiceNow(Peppol) · PayNow</i></span></li>
+          <li data-lat="50.85" data-lon="4.35" data-code="EU"><b>EU</b><span><em>EU Common</em><i>VIES · INTRASTAT · ESL · OSS/IOSS · SEPA · GDPR</i></span></li>
+        </ul>
       </div>
 
-      <div class="capd-active-country" data-active-country aria-live="polite">
-        <span class="ac-flag" data-ac-flag>🇰🇷</span>
-        <div class="ac-meta">
-          <span class="ac-eyebrow">Now highlighted</span>
-          <h4 class="ac-name" data-ac-name>Korea</h4>
-          <p class="ac-detail" data-ac-detail>e-Tax Invoice (NTS) · Business Registration Number · resident registration number PII</p>
-        </div>
-      </div>
 
       <div class="mechanism-note">
         <b>How it works</b>
@@ -591,8 +666,9 @@ window.SC4_PANELS_EN = (function () {
       ${head('11','🎯','Active-Module Awareness')}
       <p class="capd-lede">It swaps which standard objects it uses based on the module mix</p>
       <p class="capd-desc">Even the same "cost analysis" differs: on a <b>MM + PS</b> project it goes by WBS, on <b>SD + CO</b> by CO-PA segment
-      <br/>Using the activeModules list in <code>config.json</code>, the agent auto-selects the <b>Standard</b> objects and <b>BAPIs</b> for each combination and flags cross-touchpoints
-      <br/>When <b>FI + TR</b> is active, it designs the path all the way from payment proposal → cash management → House Bank transfer; with <b>QM + PP</b> it carries the flow so in-process inspection lots are auto-created at each production-order step</p>
+      <br/>Using the activeModules list in <code>config.json</code>, the agent auto-selects the <b>Standard</b> objects and <b>BAPIs</b> for each combination and flags cross-touchpoints</p>
+
+      <p class="capd-desc">When <b>FI + TR</b> is active, it designs the path all the way from payment proposal → cash management → House Bank transfer; with <b>QM + PP</b> it carries the flow so in-process inspection lots are auto-created at each production-order step</p>
       <div class="capd-combos">
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>MM</span><span>+</span><span>PS</span><span class="arrow">⇒</span><span class="out">WBS cost</span></div>
@@ -609,6 +685,14 @@ window.SC4_PANELS_EN = (function () {
         <div class="capd-combo">
           <div class="capd-combo-eq"><span>QM</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">Inspection lot</span></div>
           <p>In-process inspection lots created at each production-order step. Auto-branches at incoming-inspection · final-inspection points</p>
+        </div>
+        <div class="capd-combo">
+          <div class="capd-combo-eq"><span>MM</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">Demand · procurement</span></div>
+          <p>MRP splits demand into purchase requisitions and planned orders, routing <code>EBAN</code> · <code>PLAF</code> by procurement type and lead time</p>
+        </div>
+        <div class="capd-combo">
+          <div class="capd-combo-eq"><span>CO</span><span>+</span><span>PP</span><span class="arrow">⇒</span><span class="out">Production variance</span></div>
+          <p>Production-order actuals are set against target cost, with <code>AUFK</code> · <code>COSS</code> breaking out quantity, price, and volume variance</p>
         </div>
       </div>
     </div>` },

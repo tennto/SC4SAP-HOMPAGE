@@ -74,10 +74,8 @@ window.SC4_STRINGS = (function () {
     capLede: '각 항목을 열면 실제 명령어와 산출물, 동작 방식을 확인할 수 있습니다',
 
     contribH2: 'Welcome Contributors!',
-    contribLede: '프로젝트에 관심이 있거나 기여하고 싶은 분이 계시다면<br class="br-wide">아래 Connect 연락처로 문의해주세요',
+    contribLede: '프로젝트에 관심이 있거나 기여하고 싶은 분이 계시다면<br>아래 Connect 연락처로 문의해주세요',
 
-    ctaH2: '지금 설치하면 바로 쓸 수 있습니다',
-    ctaP: 'Claude Code에 커스텀 마켓플레이스로 추가하면 별도 서버나 계정 없이 곧바로 사용할 수 있습니다',
 
     footTagline: 'Claude Code를 SAP 풀스택 개발 어시스턴트로 전환하는 오픈소스 플러그인입니다',
     footContact: '연락처',
@@ -160,10 +158,8 @@ window.SC4_STRINGS = (function () {
     capLede: 'Open any entry for the real commands, the output it produces, and how it works',
 
     contribH2: 'Welcome Contributors!',
-    contribLede: 'If the project interests you or you would like to contribute,<br class="br-wide">please get in touch through the Connect details below',
+    contribLede: 'If the project interests you or you would like to contribute,<br>please get in touch through the Connect details below',
 
-    ctaH2: 'Install it and start in one command',
-    ctaP: 'Add it to Claude Code as a custom marketplace. No separate server, no extra account',
 
     footTagline: 'An open-source plugin that turns Claude Code into a full-stack SAP development assistant',
     footContact: 'Contact',
@@ -246,10 +242,8 @@ window.SC4_STRINGS = (function () {
     capLede: '各項目を開くと、実際のコマンド、生成物、動作の仕組みを確認できます',
 
     contribH2: 'Welcome Contributors!',
-    contribLede: 'プロジェクトにご関心のある方、貢献をお考えの方は、<br class="br-wide">下の Connect の連絡先までお問い合わせください',
+    contribLede: 'プロジェクトにご関心のある方、貢献をお考えの方は、<br>下の Connect の連絡先までお問い合わせください',
 
-    ctaH2: 'インストールすればすぐに使えます',
-    ctaP: 'Claude Code にカスタムマーケットプレイスとして追加するだけ。別サーバーも追加アカウントも不要です',
 
     footTagline: 'Claude Code を SAP フルスタック開発アシスタントに変えるオープンソースプラグインです',
     footContact: '連絡先',

@@ -87,8 +87,18 @@
   color: var(--ink-2);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 700ms var(--ease);
+  transition: color 700ms var(--ease), opacity 220ms var(--ease);
 }
+
+/* The nav links change with the language too, and used to be the one
+   thing on the page that swapped without a fade — every section's copy
+   lives in a .shell and cross fades there, but the bar does not.
+
+   Only the links. The three language buttons are inside .nav-links as
+   well, and fading the control you just pressed is exactly the blink the
+   .shell rule was written to avoid; > a leaves them alone. The 220ms
+   matches the shell so the bar and the page turn over together. */
+body.lang-swap .nav-links > a { opacity: 0; }
 .nav-links a::before {
   content: "";
   position: absolute;
@@ -107,6 +117,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .nav-links a, .nav-links a::before { transition-duration: 1ms; }
+  body.lang-swap .nav-links > a { opacity: 1; }
 }
 
 .nav-sep {
@@ -1500,20 +1511,38 @@ html.no-js .cs-card {
   background-color: color-mix(in srgb, var(--accent) 13%, var(--paper));
 }
 .cta .shell { position: relative; z-index: 1; }
-.cta h2 { max-width: 20ch; }
-.cta p {
-  color: var(--ink-2);
-  margin-top: 14px;
-  max-width: 52ch;
-  font-size: var(--fs-lede);
+/* ---------- Closing line (#install) ----------
+   One sentence on a band that carries nothing else, so it is set as a
+   strip rather than as a section: well under half the page's standard
+   block padding, enough to hold the line and its air and no more. */
+
+.evo { text-align: center; }
+.cta.band { padding-block: clamp(26px, 3vw, 44px); }
+
+.evo-line {
+  margin-inline: auto;
+  max-width: none;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  /* One line at every width, which is what the vw term is for and why
+     there is no breakpoint here at all: the type is a fraction of the
+     viewport, so the sentence takes the same share of the screen on a
+     phone as it does on a desktop and never has to wrap.
+
+     Where 4.1vw comes from. The line is 38 characters, which in this face
+     at this tracking measures about 19em. The gutter either side is
+     itself proportional (5vw between its floor and its cap), so the width
+     left for the line stays near 87% of the viewport across the range —
+     19em must fit that, giving 0.87 / 19 ≈ 0.046. 4.1 keeps a margin
+     under it for the fact that 19em is an estimate of a proportional
+     face rather than a measurement.
+
+     The cap takes over at about 660px and holds the line at a heading
+     size from there up. If the sentence is ever made longer, this is the
+     number that has to come down with it. */
+  font-size: min(4.1vw, 1.85rem);
 }
-.cta-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
-  gap: clamp(32px, 5vw, 64px);
-  align-items: center;
-}
-@media (max-width: 900px) { .cta-grid { grid-template-columns: 1fr; gap: 32px; } }
 
 /* ---------- Dot field (light theme only) ----------
    There is no resting field. The dots exist only where the pointer is,
@@ -1575,7 +1604,6 @@ html.no-js .cs-card {
   color: var(--accent-ink);
 }
 [data-theme="dark"] .cta h2 { color: var(--accent-ink); }
-[data-theme="dark"] .cta p { color: color-mix(in srgb, var(--accent-ink) 88%, transparent); }
 [data-theme="dark"] .cta-dots { display: none; }
 
 /* Touch has no hover to follow, and reduced motion should not get a patch

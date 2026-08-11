@@ -100,9 +100,9 @@ html:lang(ja) .capd-lede { max-width: 56rem; }
 /* ---------- Shared surface for every boxed group ---------- */
 
 .setup-wrap, .agent-heads, .modules-cloud, .rules-list, .capd-flow,
-.capd-xlsx, .capd-sev, .fit-wrap, .reuse-cross, .capd-combos,
+.capd-xlsx, .capd-sev, .fit-wrap, .capd-combos,
 .dev-flow, .defense-table, .ack-demo, .cmp-stage,
-.capd-marquee, .capd-carousel, .capd-active-country, .callout,
+.callout,
 .tagline-strong, .mechanism-note, .hard-rule, .profile {
   margin-block: 32px;
 }
@@ -761,43 +761,193 @@ html:lang(ja) .capd-lede { max-width: 56rem; }
   background: var(--accent);
 }
 
-/* ---------- Reuse cross (#08) ---------- */
+/* ---------- Reuse funnel (#08) ----------
+   Four mechanisms feeding one gate. The first version of this was five
+   rectangles on a plus-shaped grid, which said the four sit AROUND the
+   middle but never that they FEED it; the second was overlapping circles,
+   which said it but needed a square the width of the panel to hold any
+   text, so the figure ended up larger than the argument.
 
-.reuse-cross {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  align-items: stretch;
+   This says it in the one direction the claim actually runs. The four sit
+   in a row, a dashed line leaves the bottom of each, the four converge on
+   a single point, and the gate is what they arrive at. Reading order and
+   argument order are the same line down the page.
+
+   The connector is not authored here. An earlier pass wrote the four
+   curves into the markup against a 0-100 box stretched to fit, which
+   meant their start points were four constants that only held for one
+   gutter width — and, worse, that a dash was a different length on every
+   part of every curve. The script draws them instead, into a viewBox
+   fitted to the band's real pixel box, reading the tiles for their
+   centres. See fitFlowBands in app.js.
+
+   What that buys, besides correct dashes: the gutter below is now free.
+   Change it, change the column count, and the curves still leave from the
+   middle of each tile. */
+
+.reuse-flow {
+  --rx-lane-gap: 2%;
+
+  /* 7px of ink, 5px of air, everywhere in this figure. Both halves have to
+     add up to --rx-period, which is one lap of the march and the unit the
+     gate's outline is normalised to.
+
+     THE UNITS ARE NOT DECORATION. stroke-dashoffset wants a length, and
+     calc() cannot promote a bare number into one: written as `12`, the
+     `calc(var(--rx-period) * -1)` in the keyframe below computes to the
+     number -12, the declaration is dropped as invalid, and the whole
+     animation silently does nothing — which is exactly what it did. With
+     a viewBox fitted 1:1 to the pixel box, 1px is 1 user unit anyway, so
+     the unit costs nothing and buys a declaration that parses. */
+  --rx-dash: 7px 5px;
+  --rx-period: 12px;
+  --dash-lap: 2.6s;
+
+  /* One ink for the whole figure. The curves take it directly and the
+     gate hands it to the shared .chip-edge rule as --dash-ink, so there
+     is no second place for the two to disagree about a colour. */
+  --rx-ink: var(--accent);
+  --rx-curve-weight: 1.15;
+
+  /* The paragraph above runs the full width and the figure reads as one
+     object under it, so the shared 32px left them looking joined. */
+  margin-block: 60px 32px;
 }
-@media (max-width: 860px) { .reuse-cross { grid-template-columns: 1fr; } }
 
-.rx-card, .rx-hub {
+.rx-lanes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--rx-lane-gap);
+}
+
+.rx-card {
   border: 1px solid var(--rule);
   border-radius: var(--r-md);
   background: var(--sheet);
-  padding: 18px 16px;
+  padding: 16px 15px;
   display: grid;
   align-content: start;
   gap: 5px;
 }
-.rx-card code { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--accent-text); }
-.rx-card p { font-size: var(--fs-xs); color: var(--ink-3); line-height: 1.62; }
 
-.rx-hub {
-  background: var(--accent-soft);
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
-  grid-row: span 2;
-  gap: 10px;
-}
-.rx-top   { grid-column: 2; grid-row: 1; }
-.rx-hub   { grid-column: 2; grid-row: 2; }
-.rx-left  { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
-.rx-right { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
-.rx-bot   { grid-column: 2; grid-row: 3; }
+/* Four of these across the panel, so they carry the smallest type in the
+   figure: they are labels on a diagram, not a passage to read, and at
+   full body size they were four columns of paragraph competing with the
+   gate underneath. --ink-3 at 11.5px still clears AA on this paper. */
+.rx-card h5 { font-size: 0.8rem; line-height: 1.32; }
+.rx-card p { font-size: 0.72rem; color: var(--ink-3); line-height: 1.58; }
+.rx-icon { font-size: 18px; line-height: 1; }
 
-@media (max-width: 860px) {
-  .rx-card, .rx-hub { grid-column: 1 !important; grid-row: auto !important; }
+/* The transaction code is a tag, not a row. It inherits the panel's inline
+   <code> pill, and as a grid item that pill stretched to the full column —
+   a filled bar the width of the tile, which read as a header band rather
+   than as the short label it is. justify-self stops the stretch; the rest
+   trims the pill down to the size of the two or three characters in it. */
+.rx-card > code {
+  justify-self: start;
+  font-size: 0.68rem;
+  padding: 0.08em 0.42em;
+  letter-spacing: 0.01em;
 }
+
+/* The band between the row and the gate. preserveAspectRatio="none" lets
+   the viewBox stretch to whatever width the panel is, so the four lines
+   always leave their column's centre and always land on the same point,
+   however wide the figure gets. What stretching costs is the angle, which
+   is the one property here that carries no meaning — and the hairline is
+   held at 1px by non-scaling-stroke regardless.
+
+   The lines are curves rather than straight runs. A straight diagonal
+   leaves a tile from a corner of nowhere and arrives at the gate as a
+   spoke; the S-curve leaves each tile going straight DOWN out of its
+   underside, flattens across, and drops into the gate going straight down
+   again. Both ends read as "out of here" and "into there" rather than as
+   a line drawn between two dots, which is what the sketch was showing.
+
+   That comes from where the two control points sit: the first directly
+   below the start, the second directly above the finish. Nothing else in
+   the path is a free choice. */
+.rx-flow {
+  display: block;
+  width: 100%;
+  height: clamp(46px, 5vw, 78px);
+  overflow: visible;
+}
+
+/* One dash spec for the whole figure: the four feeds and the gate's own
+   outline take these same numbers, and because both are drawn in a
+   viewBox the script fitted to their real pixel box, the same numbers are
+   the same length on screen. That is the only way the two can march at
+   one size and one speed — normalised path lengths would make 7 mean
+   something different on a 400px curve and on a 2,400px perimeter. */
+.rx-flow path,
+.rx-gate > .chip-edge rect {
+  stroke: var(--rx-ink);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: var(--rx-dash);
+  animation: rx-march var(--dash-lap) linear infinite;
+}
+
+/* One optical correction, and the only number in this figure that is not
+   derived from something.
+
+   The gate's outline is four straight runs; a straight hairline lands on
+   one row of pixels and comes out at full strength. The feeds are curves,
+   and a curve is spread across two rows for most of its length, so the
+   same ink at the same width renders lighter — the two read as different
+   colours when nothing about them differs. Weighting the curves up closes
+   the gap. It is a correction for how they are drawn, not a change to
+   what they are, which is why it lives here alone and not in --rx-dash.
+
+   If they end up looking heavier than the box instead, this is the one
+   value to lower. 1 turns the correction off. */
+.rx-flow path { stroke-width: var(--rx-curve-weight); }
+@keyframes rx-march {
+  from { stroke-dashoffset: 0; }
+  /* Exactly one period a lap, so the pattern lands back on itself. */
+  to   { stroke-dashoffset: calc(var(--rx-period) * -1); }
+}
+
+.rx-flow path { fill: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* The shared .chip-edge rule is the weaker selector, so it would not
+     have reached the gate's outline on its own. */
+  .rx-flow path,
+  .rx-gate > .chip-edge rect { animation: none; }
+}
+
+/* The gate. No border of its own — the marching rectangle is its edge, and
+   a solid hairline under a dashed one is the same boundary drawn twice.
+   The outline is the same .chip-edge the #06 labels and the #09 tiles use,
+   fitted to its real box by the script so the corner radius stays a
+   radius on a shape this much wider than it is tall. */
+.rx-gate {
+  /* The shared .chip-edge rule paints stroke: var(--dash-ink), and it is
+     the earlier, weaker selector — the rule above overrides it. This is
+     here so the outline is still amber for the one frame before that
+     rule's custom properties resolve, and so nothing downstream of
+     .chip-edge is left reading an undefined ink and falling back to
+     black. */
+  --dash-ink: var(--rx-ink);
+
+  position: relative;
+  border-radius: var(--r-lg);
+  /* Was the amber tint. The dashed outline is already the accent and it
+     runs the whole way round, so a filled amber inside it made the block
+     the loudest thing on the panel — louder than the four tiles that are
+     supposed to feed it. Part of the white sheet instead: it still reads
+     as a raised pane on the ivory, and the colour is left to the edge. */
+  background: color-mix(in srgb, var(--sheet) 62%, transparent);
+  padding: 24px 26px;
+}
+
+/* data-edge-period on the markup tells the script to normalise this one
+   outline to whole 12px periods rather than to 100, which is what puts it
+   in the same units as the curves above. The number there and --rx-period
+   here have to agree, and the suite checks that they do. */
+.rx-gate-body { display: grid; justify-items: start; gap: 9px; }
 
 .rx-hub-eyebrow {
   font-family: var(--font-mono);
@@ -805,15 +955,23 @@ html:lang(ja) .capd-lede { max-width: 56rem; }
   letter-spacing: 0.14em;
   color: var(--accent-text);
 }
-.rx-hub h4 { color: var(--ink); }
+.rx-gate h4 { color: var(--ink); line-height: 1.3; }
 .rx-hub-cmd {
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
   color: var(--accent-text);
-  justify-self: start;
 }
-.rx-hub-bullets { display: grid; gap: 8px; margin-top: 4px; }
+/* The gate is the widest block in the figure and the bullets are its only
+   list, so they run across it rather than down one edge of it. */
+.rx-hub-bullets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 22px;
+  margin-top: 4px;
+  width: 100%;
+}
 .rx-hub-bullets li { font-size: var(--fs-xs); line-height: 1.6; color: var(--ink-2); }
+
 .rx-callout {
   margin-top: 18px;
   font-size: var(--fs-sm);
@@ -821,41 +979,430 @@ html:lang(ja) .capd-lede { max-width: 56rem; }
   line-height: 1.7;
 }
 
+/* The opening sentence is the conclusion of the whole panel and the rest
+   is the evidence for it, so it gets its own line rather than running
+   into the paragraph as a bold lead-in. Only the first: the emphasis
+   later in the sentence is mid-clause and has to stay inline.
+
+   Done here rather than with a <br/> in the markup because it is a
+   decision about how this block is set, not about what it says — and a
+   hard break would sit in three language files and break in whichever
+   one the sentence wrapped differently. */
+.rx-callout > b:first-child {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Four tiles across stop holding their text before the panel does, and
+   two rows of two cannot converge on one point — the connector assumes a
+   single row. So the band goes and the figure becomes the list it always
+   was underneath, in the same order. */
+@media (max-width: 900px) {
+  .rx-lanes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .rx-flow { display: none; }
+  .rx-gate { margin-top: 12px; }
+  .rx-hub-bullets { grid-template-columns: 1fr; }
+}
+@media (max-width: 540px) {
+  .rx-lanes { grid-template-columns: 1fr; }
+}
+
 /* ---------- Industry and country references (#09, #10) ----------
-   The previous design scrolled these past the reader in a marquee and a
-   step-snap carousel. Fourteen industries and sixteen countries are the
-   evidence for "your context is already loaded", so they are laid out
-   flat and all at once instead of animating. */
+   Both are laid out flat and all at once: they are lists to be scanned for
+   your own line of business, and a moving list cannot be scanned.
 
-.capd-marquee-track {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  width: auto;
-}
+   The fourteen industries get a field of squares rather than a row of
+   labels, because a square is the one shape that says "one of a set" —
+   every tile the same size, so no industry looks more supported than
+   another. Seven across by two down happens to be the only pair of whole
+   rows fourteen allows.
 
-.capd-carousel-track {
+   The motion moved into the field instead. One tile at a time lights up:
+   marching dashes round its edge, the amber, and a small step forward.
+   That reads as the agent picking a context out of the set, which is what
+   the paragraph above it claims, rather than as decoration passing by.
+   The script picks which, the stylesheet says what lighting up looks
+   like. */
+
+.capd-grid {
+  /* Seven across is the shape; the tile sizes itself from the column, so
+     the field holds together at any width without a fixed tile anywhere. */
+  --ind-cols: 7;
+  /* How far a lit tile steps forward, as a ratio of itself. */
+  --ind-lift: 1.055;
+
+  /* The page's own --ease is an expo-out: nearly all of its travel in the
+     first fifth, then a long crawl. That is the right curve for something
+     answering a click, and the wrong one for a light coming up by itself —
+     it arrives with a snap nobody asked for. This one is symmetric and
+     eased at both ends, so the tile comes up and goes back down at the
+     same unhurried rate. */
+  --ind-ease: cubic-bezier(0.45, 0, 0.55, 1);
+  --ind-fade: 900ms;
+
+  /* Consumed by the shared .chip-edge rules further up: the same marching
+     hairline the #06 labels draw, at the radius of these squares. */
+  --dash-lap: 2.6s;
+  /* Full strength, not a share of it: the lit tile has dropped its fill,
+     so these dashes are drawn straight onto the ivory with nothing behind
+     them to lift them. This is the "fills, marks, rules, and graphics"
+     use the accent is reserved for — no reading depends on seeing them. */
+  --dash-ink: var(--accent);
+
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
-  gap: 8px;
-  width: auto;
+  grid-template-columns: repeat(var(--ind-cols), minmax(0, 1fr));
+  gap: clamp(8px, 0.9vw, 14px);
+  /* The paragraph above ends in a full-width block of text, so the shared
+     32px read as tighter than it measured against a field of squares. */
+  margin-block: 62px 32px;
+  list-style: none;
+  padding: 0;
 }
 
-.capd-flag {
+/* Fourteen only divides into whole rows at seven and at two, so every
+   narrower count leaves a short last row. Four and three keep the tile
+   big enough to read the qualifier; two would be a column, not a field. */
+@media (max-width: 900px) { .capd-grid { --ind-cols: 5; } }
+@media (max-width: 680px) { .capd-grid { --ind-cols: 4; } }
+@media (max-width: 460px) { .capd-grid { --ind-cols: 3; } }
+
+.ind {
+  /* How much of the white sheet a resting tile keeps. Below a full sheet
+     so the field sits back and one tile can come forward out of it; the
+     transparency is in the box, not in the element, because fading the
+     whole tile would take the type with it — see the note at .is-lit. */
+  --ind-rest-fill: 52%;
+
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 6px;
+  border: 1px solid color-mix(in srgb, var(--rule) 68%, transparent);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--sheet) var(--ind-rest-fill), transparent);
+  text-align: center;
+  /* Slow on the way in and out both — this is a light coming up, not a
+     hover response, and it has no click behind it to feel prompt about. */
+  transition: transform var(--ind-fade) var(--ind-ease),
+              border-color var(--ind-fade) var(--ind-ease),
+              background-color var(--ind-fade) var(--ind-ease);
+}
+
+.ind i {
+  font-size: clamp(18px, 1.6vw, 23px);
+  line-height: 1;
+  color: var(--ink-3);
+  transition: color var(--ind-fade) var(--ind-ease);
+}
+.ind b {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.25;
+  transition: color var(--ind-fade) var(--ind-ease);
+  /* The longest name is "Construction" and the narrowest tile is a third
+     of a phone; letting it break is better than letting it overflow. */
+  overflow-wrap: anywhere;
+}
+.ind em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+
+/* The lit tile drops its box entirely. The solid edge and the marching
+   one would otherwise draw the same boundary twice, a hairline apart, and
+   the dashes are the more interesting of the two — so the box dissolves
+   as they arrive and comes back as they leave. What is left is the
+   content, the amber, and a moving outline standing where the box was.
+
+   The border goes with it, not just the fill: leaving a solid 1px behind
+   the dashes is the doubled boundary this was meant to avoid.
+
+   z-index so the step forward goes over its neighbours rather than under
+   whichever comes next in source order.
+
+   Note on the fade: this is transparency in the BOX, never opacity on the
+   element. The qualifier line is --ink-3, which is 4.6:1 on this ivory to
+   begin with; putting the tile itself at 72% would composite it down to
+   3.0:1, under AA for text that small. Fading the surface leaves every
+   line of type at full strength. */
+.ind.is-lit {
+  transform: scale(var(--ind-lift));
+  border-color: transparent;
+  background: transparent;
+  z-index: 1;
+}
+.ind.is-lit i,
+.ind.is-lit b { color: var(--accent-text); }
+
+/* The dashes are drawn on every tile and shown on one. Running them only
+   while lit would start each turn from a standstill; leaving them running
+   underneath means the hairline is already in motion when it appears. */
+.capd-grid .chip-edge {
+  opacity: 0;
+  transition: opacity var(--ind-fade) var(--ind-ease);
+}
+.capd-grid .is-lit .chip-edge { opacity: 1; }
+
+/* Nothing lights up and nothing steps forward. The field is still a field
+   of fourteen, which is the whole of what it has to say; the picking-out
+   was the part that needed motion to read, and it does not survive being
+   frozen, so it goes rather than being faked. */
+@media (prefers-reduced-motion: reduce) {
+  .ind, .ind i, .ind b, .capd-grid .chip-edge { transition: none; }
+  .ind.is-lit { transform: none; }
+  .capd-grid .chip-edge { display: none; }
+}
+
+/* ---------- The country globe (#10) ----------
+   A square block holding a canvas, the sixteen places as real markup, and
+   one tooltip. The canvas is the picture; the list is what the picture
+   means, and it stays in the document rather than living inside the
+   drawing — a canvas is one opaque image to a screen reader, and sixteen
+   country references that can only be found by hovering a dot are sixteen
+   country references that some readers do not have.
+
+   So the list is here, offscreen but real: read in order by assistive
+   tech, and read by the script for the marker coordinates and the tooltip
+   text at the same time. One source, three uses, and it comes translated
+   because it sits in the language files with everything else. */
+
+.capd-globe {
+  /* The two colours the canvas paints with. They are declared here rather
+     than in the script so the globe follows the theme like everything
+     else does; the script reads them back and re-reads them when
+     data-theme changes. */
+  --globe-dot: var(--ink-3);
+  --globe-mark: var(--accent);
+
+  /* The disc the globe sits on, back to the shape it had when it went in.
+
+     Worth recording what was learned in between, because it constrains
+     anyone raising these numbers later: the pale half of this is made of
+     --sheet, which is pure white, and it sits on --paper, which is
+     #F6F3EC. Four percent apart. That half is therefore close to
+     invisible on the ivory at any strength, and what is actually seen in
+     light is --globe-halo-edge, the amber ring at 88%. In dark the sheet
+     is nine steps above the ground and does the lifting instead. */
+  --globe-halo: color-mix(in srgb, var(--sheet) 58%, transparent);
+  --globe-halo-edge: color-mix(in srgb, var(--accent) 10%, transparent);
+
+  position: relative;
+  width: min(100%, 430px);
+  aspect-ratio: 1;
+  margin: 40px auto 32px;
+  cursor: grab;
+  touch-action: none;
+}
+
+/* closest-side, so 100% of the gradient is half the block rather than the
+   distance to a corner — which puts 88% just inside the sphere's rim, the
+   same 0.92 of the half-size the renderer draws to. */
+.capd-globe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle closest-side at 50% 50%,
+    var(--globe-halo) 0%,
+    color-mix(in srgb, var(--globe-halo) 55%, transparent) 64%,
+    var(--globe-halo-edge) 88%,
+    transparent 94%);
+}
+
+/* The ink is what makes the globe read on the near black: --ink-3 sits at
+   4.6:1 on that ground and --ink-2 at 8.4:1, and the second is what a
+   field of one-pixel dots needs to hold together as a sphere. */
+[data-theme="dark"] .capd-globe {
+  --globe-dot: var(--ink-2);
+  --globe-halo: color-mix(in srgb, var(--sheet) 94%, transparent);
+  --globe-halo-edge: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.globe-face {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* grab lives on the wrapper, which is what the drag listens on: the
+   labels sit over the canvas and a drag begun on one is still a drag.
+   touch-action goes with it, or a touch drag scrolls the page instead. */
+.capd-globe[data-dragging] { cursor: grabbing; }
+
+/* The labels sit over the canvas as real markup. The list itself takes no
+   pointer — the globe underneath has to stay grabbable between labels —
+   and each label takes it back.
+
+   Open state is a data attribute, not :hover. The script has to know which
+   label is open too, because it holds the globe still while one is: a
+   card that drifts out from under the cursor while you are reading it is
+   the thing this whole panel exists to avoid. One attribute set in one
+   place means the stylesheet and the rotation can never disagree about
+   what is open. */
+.globe-places {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+/* The pill. One line, always: it is a marker on a map and it must not
+   move or change size when its card opens, or the thing it is pointing at
+   moves too. */
+.globe-places li {
+  position: absolute;              /* left/top written per frame, in % */
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  display: block;
+  padding: 2px 7px;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sheet) 92%, transparent);
+  box-shadow: var(--lift-1);
+  pointer-events: auto;
+  cursor: inherit;
+  white-space: nowrap;
+  /* opacity is written inline every frame, and without a transition on it
+     the moment a label loses its place is a jump from 1 to 0 — the "it
+     just vanished" of a label being crowded out. Transitioning a value
+     that is rewritten each frame is a smoothing filter on it: the fade at
+     the rim still tracks, and the hand-offs between labels cross-fade. */
+  transition: opacity 260ms linear,
+              border-color 200ms var(--ease),
+              background-color 200ms var(--ease);
+}
+.globe-places li[data-open] {
+  z-index: 3;                      /* over its neighbours while open */
+  border-color: color-mix(in srgb, var(--accent) 66%, transparent);
+  background: var(--sheet);
+}
+
+.globe-places li > b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--accent-text);
+}
+
+/* The card is taken out of flow, and that is the whole fix for the pills
+   coming out tall and lozenge-shaped.
+
+   It used to be a second grid column that collapsed to 0fr. A zero-width
+   column clips what is in it horizontally but the content still sets the
+   row's HEIGHT, so every pill was as tall as its own two-or-three-line
+   detail even while showing none of it. Positioned absolutely it
+   contributes nothing to the pill's box at any time, open or shut.
+
+   opacity rather than display or visibility, so the country's name and
+   its requirements stay in the accessibility tree whether or not anyone
+   is pointing at them. */
+.globe-places li > span {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
   gap: 2px;
-  padding: 12px 14px;
+  width: max-content;
+  max-width: 14rem;
+  padding: 8px 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: var(--r-md);
+  background: var(--sheet);
+  box-shadow: var(--lift-2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity 200ms var(--ease);
+}
+.globe-places li[data-side="right"] > span { left: calc(100% + 7px); }
+.globe-places li[data-side="left"]  > span { right: calc(100% + 7px); }
+.globe-places li[data-open] > span { opacity: 1; }
+
+/* A grouped pill: several places that landed on the same few pixels. Its
+   card lists all of them, so the rows need separating from each other in
+   a way a single card's two lines do not. */
+.globe-places li[data-group] > span { gap: 9px; }
+.globe-places li[data-group] > span > div { display: grid; gap: 2px; }
+
+.globe-places li > span > em,
+.globe-places li > span > div > em {
+  font-style: normal;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink);
+}
+.globe-places li > span > i,
+.globe-places li > span > div > i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  line-height: 1.55;
+  color: var(--ink-2);
   white-space: normal;
 }
-.capd-flag .em img { width: 18px; height: 18px; }
-.capd-flag .nm { font-weight: 600; color: var(--ink); font-family: var(--font-sans); font-size: var(--fs-sm); }
-.capd-flag .tx { font-size: var(--fs-xs); color: var(--ink-3); line-height: 1.55; }
 
-/* The "now highlighted" readout existed to name whichever country the
-   carousel had centred. With all sixteen on screen it has nothing left
-   to say, so it is dropped rather than restyled. */
-.capd-active-country { display: none; }
+/* Round the back, or crowded out by a nearer one. The script writes the
+   opacity — an inline style, which beats anything here — so this rule
+   only has to stop a label nobody can see from catching the pointer. */
+.globe-places li[data-off] { pointer-events: none; }
+.globe-places li[data-off] > span { opacity: 0; }
+
+/* Mid-drag the labels get out of the way: a drag that crosses one should
+   not open it on the way past. */
+.capd-globe[data-dragging] .globe-places li { pointer-events: none; }
+
+/* Where there is no hover to open a card with, and no room to open one
+   beside a pill, it opens in the middle of the globe instead.
+
+   Shrinking the anchored card was the other way to stop it running off a
+   phone, and it does not work: a label out near the rim of a 290px globe
+   has under a hundred pixels beside it, and "NF-e · SPED · CFOP ·
+   ICMS/IPI/PIS/COFINS" is not going to read in that at any size worth
+   setting. The middle is the one place on the block that is always clear,
+   and the globe is held still while a card is open anyway, so there is
+   nothing there to cover.
+
+   The card is a child of its own label, so it cannot find the middle by
+   itself — the script measures the way back and leaves it in --to-mid-*.
+   Both branches of data-side are restated here because those selectors
+   are the more specific ones. */
+@media (hover: none), (max-width: 560px) {
+  .globe-places li > span,
+  .globe-places li[data-side="left"] > span,
+  .globe-places li[data-side="right"] > span {
+    left: 50%;
+    right: auto;
+    top: 50%;
+    width: min(17rem, 76vw);
+    max-width: none;
+    padding: 10px 13px;
+    transform: translate(calc(-50% + var(--to-mid-x, 0px)),
+                         calc(-50% + var(--to-mid-y, 0px)));
+  }
+  /* Bigger than the desktop card: it is being read at arm's length on a
+     phone rather than glanced at under a cursor. */
+  .globe-places li > span > i,
+  .globe-places li > span > div > i { font-size: 0.72rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .globe-places li,
+  .globe-places li > span { transition: none; }
+}
 
 /* ---------- Module combos (#11) ---------- */
 
@@ -909,6 +1456,49 @@ html:lang(ja) .capd-lede { max-width: 56rem; }
   font-size: var(--fs-sm);
   color: var(--ink-2);
   line-height: 1.62;
+}
+
+/* Two columns and three children, so the paragraph was being auto-placed
+   into row two of the FIRST column — the label's column. That column is
+   sized `auto`, so it came out as wide as whichever paragraph the step
+   happened to carry, and the four labels ended up four different widths
+   with their headings starting in four different places. Both the
+   heading and the paragraph belong beside the label, not under it. */
+.dev-step > h4,
+.dev-step > p { grid-column: 2; }
+
+/* And the label itself is pinned to the width of "PHASE 3" — seven
+   characters of the mono face — so the column is identical whatever the
+   text says, in any of the three languages. */
+.dev-flow .dev-pill {
+  min-width: 7ch;
+  justify-content: center;
+}
+
+/* A step is a caption on a diagram, not a passage: a notch under the
+   panel's body size, with the paragraph a notch under that again. */
+.dev-step > h4 { font-size: 0.88rem; }
+.dev-step > p { font-size: 0.78rem; line-height: 1.66; }
+
+/* On a phone the label and the text stop sharing a line.
+
+   Seven characters of mono plus a gap is around ninety pixels, and taking
+   that off a 320px screen leaves the heading a column too narrow to set
+   anything in — "Parallel Include creation + batch activation" comes out
+   as five words on five lines and the step is taller than it is wide.
+   Below this the label sits on its own row and the text gets the full
+   width, at a size that suits the width it now has. */
+@media (max-width: 600px) {
+  .dev-step {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    align-items: start;
+  }
+  .dev-flow .dev-pill { justify-self: start; }
+  .dev-step > h4,
+  .dev-step > p { grid-column: 1; }
+  .dev-step > h4 { font-size: 0.8rem; margin-bottom: 0; }
+  .dev-step > p { font-size: 0.72rem; }
 }
 .dev-result {
   border-left: 2px solid var(--accent);

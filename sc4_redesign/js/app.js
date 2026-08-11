@@ -404,6 +404,12 @@
 
     // Replayed on every open, not just the first render.
     typeTerminals(inner);
+    // The globe's frame loop ends itself when its row is closed, rather
+    // than turning a canvas over inside a collapsed panel, so re-opening
+    // has to hand it back.
+    inner.querySelectorAll('[data-globe]').forEach(function (g) {
+      if (g._globeStart) g._globeStart();
+    });
 
     if (scroll) scrollRowUnderNav(entry);
   }
@@ -589,14 +595,63 @@
         if (!box.width || !box.height) return;
         var rect = svg.querySelector('rect');
         if (!rect) return;
-        svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+
+        /* Round the box before drawing into it, and this is not tidiness.
+
+           getBoundingClientRect returns fractions — 161.797 tall is
+           ordinary. Fed to the viewBox raw, the top edge of the rectangle
+           lands at one subpixel offset and the bottom edge lands at a
+           different one, so the rasteriser draws one of them across a
+           single row of pixels and smears the other across two. The result
+           is an outline whose bottom looks thinner and paler than its top,
+           at the same stroke width and the same colour.
+
+           An integer height cannot do that: both edges end up at the same
+           subpixel phase, so both are drawn the same way, crisp or soft
+           together. Same argument for width, left and right. The cost is
+           under a pixel of stretch across the whole box, which
+           non-scaling-stroke keeps off the hairline anyway. */
+        var boxW = Math.round(box.width);
+        var boxH = Math.round(box.height);
+
+        svg.setAttribute('viewBox', '0 0 ' + boxW + ' ' + boxH);
         // Inset by half the stroke so the whole hairline sits inside the
         // label rather than straddling its edge.
         rect.setAttribute('x', 0.5);
         rect.setAttribute('y', 0.5);
-        rect.setAttribute('width', Math.max(0, box.width - 1));
-        rect.setAttribute('height', Math.max(0, box.height - 1));
-        rect.setAttribute('rx', CHIP_RADIUS);
+        rect.setAttribute('width', Math.max(0, boxW - 1));
+        rect.setAttribute('height', Math.max(0, boxH - 1));
+        // The industry squares round harder than the #06 labels do, and the
+        // radius has to match the CSS one or the outline cuts its corners.
+        var r = parseFloat(svg.dataset.edgeRadius) || CHIP_RADIUS;
+        rect.setAttribute('rx', r);
+
+        /* Two ways to run the dashes round an outline, and they answer
+           different questions.
+
+           Leaving pathLength at 100 makes the dash a SHARE of the
+           perimeter, so the rhythm looks identical on labels of different
+           widths — right for the #06 row and the #09 field, where a dozen
+           outlines sit side by side and should match each other.
+
+           The #08 gate has no such neighbours. What it has to match is the
+           four curves feeding into it, which are drawn in real pixels, so
+           its dash has to be a real length too. data-edge-period says so,
+           in px. pathLength is then set to the nearest whole number of
+           those periods rather than to the raw perimeter: within a
+           fraction of a percent it is still 1 unit = 1 pixel, and the
+           pattern closes exactly where it started instead of leaving one
+           short dash at the corner it began on. */
+        var period = parseFloat(svg.dataset.edgePeriod);
+        if (period > 0) {
+          var w = Math.max(0, boxW - 1);
+          var h = Math.max(0, boxH - 1);
+          var rr = Math.min(r, w / 2, h / 2);
+          // Four straight runs, minus the corners, plus one whole circle.
+          var perimeter = 2 * (w + h) - 8 * rr + 2 * Math.PI * rr;
+          var laps = Math.max(1, Math.round(perimeter / period));
+          rect.setAttribute('pathLength', laps * period);
+        }
       });
     }
 
@@ -607,9 +662,755 @@
     }
   }
 
+  /* ----------------------------------------------------------
+     The four feeds into the reuse gate are drawn at real size
+
+     These curves used to be authored in the markup against a 0-100 box
+     stretched to fit with preserveAspectRatio="none". That put the ends
+     in the right places, but it scaled x by roughly ten and y by less
+     than one, so a dash came out long where the curve ran flat and short
+     where it dived — and none of them matched the gate below, whose own
+     outline was normalised to a perimeter six times longer. Asking for
+     one dash size across the figure is asking for one coordinate system.
+
+     So the viewBox is the band's real pixel box, which makes a user unit
+     a pixel, and the curves are rebuilt from where the tiles actually
+     are. Reading the tiles rather than computing their centres from the
+     column count also means the gutter can be anything it likes.
+
+     Each curve puts both control points at the same height: the first
+     directly under its tile, the second directly over the gate. That is
+     what makes it leave straight down and arrive straight down, which is
+     the shape being asked for — everything else about the curve follows.
+     ---------------------------------------------------------- */
+
+  var FLOW_BEND = 0.58;   // where the curve flattens, as a share of the band
+
+  function fitFlowBands(scope) {
+    scope.querySelectorAll('.reuse-flow').forEach(function (fig) {
+      var svg = fig.querySelector('.rx-flow');
+      var lanes = fig.querySelector('.rx-lanes');
+      if (!svg || !lanes) return;
+
+      var paths = [].slice.call(svg.querySelectorAll('path'));
+      if (!paths.length) return;
+
+      function fit() {
+        var band = svg.getBoundingClientRect();
+        var tiles = [].slice.call(lanes.children);
+        // Nothing to draw between: the band is hidden at narrow widths,
+        // and the panel may not have been laid out yet.
+        if (!band.width || !band.height || tiles.length !== paths.length) return;
+
+        // Whole units, for the same reason the outlines round: a fractional
+        // viewBox puts the two ends of a curve at different subpixel
+        // offsets and the rasteriser weights them differently.
+        var bandW = Math.round(band.width);
+        var bandH = Math.round(band.height);
+
+        svg.setAttribute('viewBox', '0 0 ' + bandW + ' ' + bandH);
+
+        var endX = bandW / 2;
+        var endY = bandH;
+        var bend = bandH * FLOW_BEND;
+
+        tiles.forEach(function (tile, i) {
+          var box = tile.getBoundingClientRect();
+          var x = box.left - band.left + box.width / 2;
+          paths[i].setAttribute('d',
+            'M ' + x + ' 0 ' +
+            'C ' + x + ' ' + bend + ', ' + endX + ' ' + bend + ', ' + endX + ' ' + endY);
+        });
+      }
+
+      fit();
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(fit);
+        ro.observe(svg);
+        ro.observe(lanes);
+      }
+    });
+  }
+
+  /* ==========================================================
+     The country globe (#10)
+
+     Sixteen country references, drawn as a globe you can spin rather than
+     as sixteen tiles. The tiles said "here is a list"; a globe says "this
+     is the world, and these sixteen places on it are covered", which is
+     the sentence the paragraph above it is already making.
+
+     Nothing is fetched and nothing is imported. The land is a one-degree
+     bitmask baked into globe.data.js, the projection is nine lines of
+     trigonometry, and it draws on a 2D canvas — so it runs without WebGL,
+     without a CDN, and on hardware that would fall back to a blank box
+     under the library this was modelled on.
+
+     How it is drawn, since none of it is obvious from the code alone:
+
+       · points are laid out by the Fibonacci sphere, which is the cheapest
+         way to get an even scatter over a sphere — no crowding at the
+         poles the way a lat/long grid gives
+       · each point is kept only if its cell in the mask is land, so the
+         continents come out of the sampling rather than being drawn
+       · every frame each point is spun about the vertical axis by the
+         current heading, tilted, and dropped to 2D; the ones facing away
+         are skipped rather than drawn dim, so there is no back face
+         showing through
+       · the surviving points are bucketed by depth and each bucket is
+         filled in one path, which is six fills a frame instead of five
+         thousand — the difference between this being free and this being
+         the reason the page stutters
+     ========================================================== */
+
+  var GLOBE_POINTS = 15000;   // candidates before the land mask thins them
+  var GLOBE_SPIN = 0.0007;    // radians a frame, left to itself: ~2.5 min a turn
+  var GLOBE_TILT = -0.32;     // radians, so the north is turned toward us
+  var GLOBE_DEPTH_STEPS = 6;  // depth buckets, and so fills per frame
+
+  /* Weight.
+
+     The globe used to take the pointer's movement straight into its
+     heading, which made it weightless: a flick threw it half a turn and it
+     arrived the same frame you moved. A world ought to take a moment to
+     come round.
+
+     So the pointer no longer moves the globe. It moves a TARGET, and the
+     globe eases toward that target a fraction at a time, which is what
+     puts the lag between your hand and the sphere. Two numbers set the
+     feel and they do different jobs: DRAG is how far a pixel of pointer
+     asks for, EASE is how quickly the globe agrees to it. Lower either to
+     make it heavier. A constant target speed still settles at that same
+     speed, so the idle spin is unaffected by the easing. */
+  var GLOBE_DRAG = 0.0030;    // radians asked for per px of pointer — was 0.006
+  var GLOBE_DRAG_Y = 0.0022;  // the tilt takes even less, it has less room
+  var GLOBE_EASE = 0.11;      // share of the remaining gap closed per frame
+  var GLOBE_GLIDE = 0.92;     // how a throw runs down after release
+
+  /* Room a label needs to itself, measured as an ellipse rather than a
+     circle because a pill is far wider than it is tall: two of them side
+     by side need real distance, two stacked need very little. A circle big
+     enough to stop the first case was throwing away labels that would have
+     sat happily above one another — which is most of Europe. */
+  var GLOBE_LABEL_GAP_X = 26;
+  var GLOBE_LABEL_GAP_Y = 17;
+
+  // How far a finger may slide and still count as a tap rather than a drag.
+  var GLOBE_TAP_SLOP = 8;
+
+  /* How far inside the silhouette a label gives up. Depth is the cosine of
+     the angle from the viewer, so 0 is the rim exactly: a label there is
+     half off the edge of the sphere and pointing at nothing you can see. */
+  var GLOBE_LABEL_EDGE = 0.16;
+  var GLOBE_LABEL_FADE = 0.16;
+
+  /* Hysteresis, which is the whole answer to labels flickering.
+
+     Deciding what to show from scratch every frame means the decision can
+     change every frame, and near any threshold it does: two labels a
+     hair apart in depth trade the near-side spot back and forth as the
+     globe turns, and one sitting exactly a gap away from another blinks.
+     What you see is labels swapping and vanishing for no reason you can
+     point at.
+
+     So a label that is already showing is judged more kindly than one that
+     is not. It ranks as if it were slightly nearer than it is, and it
+     needs less clearance to keep its place than a newcomer needs to take
+     it. Both margins are one-way, so a decision has to be beaten properly
+     before it flips — never merely tied. */
+  var GLOBE_LABEL_HOLD = 0.07;   // depth head start for a label already up
+  var GLOBE_LABEL_KEEP = 0.74;   // share of the gap it needs to stay up
+
+  var landBits = null;
+  function landAt(lat, lon) {
+    var L = window.SC4_LAND;
+    if (!L) return true;                    // no mask: draw the whole sphere
+    if (!landBits) {
+      var raw = atob(L.bits);
+      landBits = new Uint8Array(raw.length);
+      for (var i = 0; i < raw.length; i++) landBits[i] = raw.charCodeAt(i);
+    }
+    var row = Math.floor(90 - lat);
+    var col = Math.floor(lon + 180);
+    if (row < 0) row = 0; else if (row >= L.rows) row = L.rows - 1;
+    if (col < 0) col = 0; else if (col >= L.cols) col = L.cols - 1;
+    var bit = row * L.cols + col;
+    return !!(landBits[bit >> 3] & (128 >> (bit & 7)));
+  }
+
+  /* An even scatter over the sphere: walk the golden angle round the
+     vertical while stepping evenly through the sine of the latitude. */
+  function spherePoints(n) {
+    var pts = [];
+    var golden = Math.PI * (3 - Math.sqrt(5));
+    for (var i = 0; i < n; i++) {
+      var y = 1 - (i / (n - 1)) * 2;
+      var r = Math.sqrt(Math.max(0, 1 - y * y));
+      var a = golden * i;
+      var x = Math.cos(a) * r;
+      var z = Math.sin(a) * r;
+      var lat = Math.asin(y) * 180 / Math.PI;
+      var lon = Math.atan2(z, x) * 180 / Math.PI;
+      if (landAt(lat, lon)) pts.push(x, y, z);
+    }
+    return new Float32Array(pts);
+  }
+
+  function latLonToXYZ(lat, lon) {
+    var p = lat * Math.PI / 180;
+    var t = lon * Math.PI / 180;
+    return [Math.cos(p) * Math.cos(t), Math.sin(p), Math.cos(p) * Math.sin(t)];
+  }
+
+  var globeGeometry = null;   // one scatter, shared by every globe on the page
+
+  function initGlobes(scope) {
+    scope.querySelectorAll('[data-globe]').forEach(function (root) {
+      if (root.dataset.globeReady) return;
+      root.dataset.globeReady = '1';
+
+      var canvas = root.querySelector('[data-globe-canvas]');
+      var list = root.querySelector('[data-globe-places]');
+      if (!canvas || !list) return;
+
+      var ctx = canvas.getContext && canvas.getContext('2d');
+      if (!ctx) return;                     // no 2D context: the list stays
+
+      if (!globeGeometry) globeGeometry = spherePoints(GLOBE_POINTS);
+      var pts = globeGeometry;
+
+      var places = [].slice.call(list.children).map(function (li) {
+        var v = latLonToXYZ(parseFloat(li.dataset.lat), parseFloat(li.dataset.lon));
+        // `on` is last frame's answer, which is what the hysteresis reads.
+        return { el: li, x: v[0], y: v[1], z: v[2], sx: 0, sy: 0, depth: -1, on: false };
+      });
+
+      /* The palette is read from the stylesheet rather than written here,
+         so the globe follows the theme toggle instead of holding its own
+         copy of two colours that would then have to be kept in step. */
+      var ink = '#6E685D', accent = '#D17D00';
+      function readTheme() {
+        var cs = getComputedStyle(root);
+        ink = (cs.getPropertyValue('--globe-dot') || '').trim() || ink;
+        accent = (cs.getPropertyValue('--globe-mark') || '').trim() || accent;
+      }
+      readTheme();
+      new MutationObserver(readTheme).observe(document.documentElement,
+        { attributes: true, attributeFilter: ['data-theme'] });
+
+      // What is drawn, and what it is heading toward. The gap between the
+      // two pairs is the weight.
+      var heading = 0, tilt = GLOBE_TILT;
+      var wantHeading = 0, wantTilt = GLOBE_TILT;
+      var glide = 0;
+      var dragging = false, lastX = 0, lastY = 0;
+      var openLabel = null;
+      var W = 0, H = 0, R = 0, cx = 0, cy = 0, dpr = 1, dot = 1.6;
+
+      /* Opening a label stops the world.
+
+         The card is text to be read, and the pill it hangs off is pinned
+         to a country: leave the globe turning and the thing you are
+         reading slides out from under the pointer, which drops the card,
+         which starts the globe again. That loop is the flicker.
+
+         So the same act that opens a card holds the drift, and letting go
+         hands it back. It is the target that is held rather than the
+         globe frozen mid-frame, so it settles to a stop over the easing
+         instead of stopping dead, and picks the drift back up from wherever
+         it came to rest.
+
+         data-open rather than :hover, because the stylesheet and the
+         rotation have to agree on which label is open and there can only
+         be one answer. */
+      function openLabelFor(m) {
+        if (dragging || m.el.dataset.off) return;
+        if (openLabel && openLabel !== m) delete openLabel.el.dataset.open;
+        openLabel = m;
+        m.el.dataset.open = '1';
+      }
+      function closeLabel() {
+        if (!openLabel) return;
+        delete openLabel.el.dataset.open;
+        openLabel = null;
+      }
+
+      /* A pointer that hovers opens on the way in and closes on the way
+         out. A finger cannot hover, so it gets the other half of this
+         further down: a tap opens, and a tap anywhere else closes.
+
+         The two have to be kept apart. Touch also fires enter and leave —
+         enter as the finger lands, leave as it lifts — so left unguarded a
+         tap would open the card and shut it again in the same gesture, and
+         nothing would ever stay open on a phone. */
+      places.forEach(function (m) {
+        m.el.addEventListener('pointerenter', function (e) {
+          if (e.pointerType === 'touch') return;
+          openLabelFor(m);
+        });
+        m.el.addEventListener('pointerleave', function (e) {
+          if (e.pointerType === 'touch') return;
+          if (openLabel === m) closeLabel();
+        });
+      });
+
+      function measure() {
+        var box = canvas.getBoundingClientRect();
+        if (!box.width || !box.height) return false;
+        dpr = Math.min(2, window.devicePixelRatio || 1);
+        W = Math.round(box.width); H = Math.round(box.height);
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        R = Math.min(W, H) / 2 * 0.92;
+        cx = W / 2; cy = H / 2;
+        // The dot grows with the globe so the texture reads the same at
+        // any size instead of turning to grit when the panel is wide.
+        dot = Math.max(1, R / 150);
+        return true;
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        var cosH = Math.cos(heading), sinH = Math.sin(heading);
+        var cosT = Math.cos(tilt), sinT = Math.sin(tilt);
+
+        // Depth buckets: one path each, one fill each.
+        var buckets = [];
+        for (var b = 0; b < GLOBE_DEPTH_STEPS; b++) buckets.push([]);
+
+        for (var i = 0; i < pts.length; i += 3) {
+          var x = pts[i], y = pts[i + 1], z = pts[i + 2];
+          var rx = x * cosH + z * sinH;          // spin about the vertical
+          var rz = -x * sinH + z * cosH;
+          var ry = y * cosT - rz * sinT;         // then tilt toward us
+          var rzz = y * sinT + rz * cosT;
+          if (rzz <= 0.02) continue;             // facing away
+          var k = Math.min(GLOBE_DEPTH_STEPS - 1, (rzz * GLOBE_DEPTH_STEPS) | 0);
+          buckets[k].push(cx + rx * R, cy - ry * R);
+        }
+
+        for (var d = 0; d < GLOBE_DEPTH_STEPS; d++) {
+          var pt = buckets[d];
+          if (!pt.length) continue;
+          // Nearer dots read stronger, which is the only cue a flat
+          // scatter has that it is wrapped round something.
+          ctx.globalAlpha = 0.26 + 0.74 * ((d + 0.5) / GLOBE_DEPTH_STEPS);
+          ctx.fillStyle = ink;
+          ctx.beginPath();
+          for (var p = 0; p < pt.length; p += 2) {
+            ctx.rect(pt[p] - dot / 2, pt[p + 1] - dot / 2, dot, dot);
+          }
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        /* Where the sixteen places are, so the labels can be put there.
+           Nothing is painted for them: the label IS the marker, sitting on
+           its own coordinates. A dot under a pill is the same point marked
+           twice, and the one you cannot read is the one that goes. */
+        places.forEach(function (m) {
+          var rx = m.x * cosH + m.z * sinH;
+          var rz = -m.x * sinH + m.z * cosH;
+          var ry = m.y * cosT - rz * sinT;
+          m.depth = m.y * sinT + rz * cosT;
+          m.sx = cx + rx * R;
+          m.sy = cy - ry * R;
+        });
+
+        placeLabels();
+      }
+
+      /* The labels are DOM, so they are text: translated with the rest of
+         the panel, selectable, reachable by keyboard, and expanded on
+         hover by the stylesheet rather than by a hit test against a
+         canvas. All the script owes them is a position and a fade.
+
+         Sixteen places do not fit sixteen labels. Seven of them are inside
+         Europe, which at globe scale is a coin, so the nearest label to
+         the viewer keeps its spot and any label that would land on top of
+         one already placed stands down until the globe turns. Nearest
+         wins, so what you see is always the front of the pile.
+
+         Two things this got wrong the first time, both worth naming.
+
+         A label being hidden used to return early, leaving its last
+         position AND its last inline opacity behind. Inline styles beat
+         the stylesheet, so the rule meant to hide it never applied and it
+         hung at the rim like an afterimage. Everything is written every
+         frame now, hidden or not: position so it fades back in where it
+         belongs rather than jumping, opacity so there is exactly one thing
+         deciding whether it can be seen.
+
+         And it faded out at the silhouette, where a label is half off the
+         edge of the sphere and pointing at nothing. It now goes while it
+         is still on the face. */
+      /* Grouping, which is the answer to the part of this that no amount
+         of spacing could fix.
+
+         Paris, Brussels and Amsterdam are five to thirteen pixels apart on
+         a globe this size, and a label is twenty-six pixels wide. Hiding
+         whichever lost meant three of the sixteen country references were
+         never on screen at all, at any setting — measured over a full
+         rotation, France, the Netherlands and the EU entry came out at
+         flat zero. There is no arrangement of two-and-a-bit labels in
+         five pixels, so they stop competing for the spot and share it: the
+         nearest keeps its place, the ones it covers join it, and the pill
+         says how many. Opening it lists every one of them.
+
+         The group's pill is built here rather than authored, because which
+         places fall together depends on where the globe is pointing. The
+         sixteen list items are still the content — they stay in the
+         document, and in the accessibility tree, whether or not their own
+         pill has a place that frame. */
+      var groupEls = [];
+
+      function groupEl(i) {
+        if (groupEls[i]) return groupEls[i];
+        var el = document.createElement('li');
+        el.dataset.group = '1';
+        // Decoration: the sixteen real entries already say all of this.
+        el.setAttribute('aria-hidden', 'true');
+        el.innerHTML = '<b></b><span></span>';
+        var g = { el: el, members: [], sx: 0, sy: 0, isGroup: true };
+        el.addEventListener('pointerenter', function (e) {
+          if (e.pointerType === 'touch') return;
+          openLabelFor(g);
+        });
+        el.addEventListener('pointerleave', function (e) {
+          if (e.pointerType === 'touch') return;
+          if (openLabel === g) closeLabel();
+        });
+        list.appendChild(el);
+        groupEls[i] = g;
+        return g;
+      }
+
+      function fillGroup(g) {
+        var b = g.el.firstChild, span = g.el.lastChild;
+        var lead = g.members[0];
+        b.textContent = lead.el.dataset.code + ' +' + (g.members.length - 1);
+        span.textContent = '';
+        g.members.forEach(function (m) {
+          var row = document.createElement('div');
+          var em = document.createElement('em');
+          var i = document.createElement('i');
+          em.textContent = m.el.querySelector('em').textContent;
+          i.textContent = m.el.querySelector('i').textContent;
+          row.appendChild(em);
+          row.appendChild(i);
+          span.appendChild(row);
+        });
+      }
+
+      function placeLabels() {
+        var shown = [];
+        var groups = [];
+
+        // Ranked nearest first, with a head start to whatever is already
+        // up, and the label being read ahead of everything.
+        var order = places.slice().sort(function (a, b) {
+          return rank(b) - rank(a);
+        });
+        function rank(m) {
+          if (openLabel === m) return 9;
+          return m.depth + (m.on ? GLOBE_LABEL_HOLD : 0);
+        }
+
+        order.forEach(function (m) {
+          var el = m.el;
+
+          // Follows the globe whether or not it can be seen.
+          el.style.left = (m.sx / W * 100) + '%';
+          el.style.top = (m.sy / H * 100) + '%';
+
+          // A card being read is never taken away mid-sentence.
+          var held = openLabel === m;
+          var slack = m.on ? GLOBE_LABEL_KEEP : 1;
+          var edge = GLOBE_LABEL_EDGE * (m.on ? GLOBE_LABEL_KEEP : 1);
+
+          if (!held && m.depth <= edge) { m.on = false; hide(m); return; }
+
+          var covering = null;
+          if (!held) {
+            var gx = GLOBE_LABEL_GAP_X * slack, gy = GLOBE_LABEL_GAP_Y * slack;
+            for (var i = 0; i < shown.length; i++) {
+              var dx = (shown[i].sx - m.sx) / gx, dy = (shown[i].sy - m.sy) / gy;
+              if (dx * dx + dy * dy < 1) { covering = shown[i]; break; }
+            }
+          }
+
+          if (covering) {
+            // Not dropped: folded into whoever is standing here.
+            (covering.with || (covering.with = [covering])).push(m);
+            m.on = false;
+            hide(m);
+            return;
+          }
+
+          m.on = true;
+          m.with = null;
+          shown.push(m);
+          show(m, el);
+        });
+
+        // Anywhere two or more fell together, the pill becomes the group's.
+        shown.forEach(function (m) {
+          if (!m.with) return;
+          var g = groupEl(groups.length);
+          groups.push(g);
+          g.members = m.with;
+          g.sx = m.sx; g.sy = m.sy; g.depth = m.depth;
+          fillGroup(g);
+          hide(m);
+          show(g, g.el);
+        });
+
+        // Whatever the pool is not using this frame.
+        for (var k = groups.length; k < groupEls.length; k++) {
+          if (openLabel === groupEls[k]) closeLabel();
+          hide(groupEls[k]);
+        }
+
+        /* hide and show move the DOM only. Whether a place won its spot
+           is recorded above, in m.on, and must not be undone here — a
+           label that won and was then folded into a group still holds its
+           head start for next frame, or the group would come apart and
+           re-form on alternate frames. */
+        function hide(m) {
+          m.el.dataset.off = '1';
+          m.el.style.opacity = '0';
+          // A label that goes round the back while open would otherwise
+          // hold the globe still forever, from behind it.
+          if (openLabel === m) closeLabel();
+        }
+
+        function show(m, el) {
+          delete el.dataset.off;
+          el.style.left = (m.sx / W * 100) + '%';
+          el.style.top = (m.sy / H * 100) + '%';
+          // Which way the card opens, so it never runs off the block.
+          el.dataset.side = m.sx > W * 0.56 ? 'left' : 'right';
+          /* And how far it is from here back to the middle of the globe.
+             Narrow screens open the card there instead of beside the pill
+             — beside is not an option when a label near the rim has under
+             a hundred pixels to its right — and the card is a child of its
+             own label, so the only way it can find the centre is to be
+             told where the centre is from where it stands. */
+          el.style.setProperty('--to-mid-x', (W / 2 - m.sx).toFixed(1) + 'px');
+          el.style.setProperty('--to-mid-y', (H / 2 - m.sy).toFixed(1) + 'px');
+          // Eased in over the band just inside the edge rather than popping.
+          el.style.opacity =
+            Math.min(1, (m.depth - GLOBE_LABEL_EDGE) / GLOBE_LABEL_FADE).toFixed(3);
+        }
+      }
+
+      var running = false;
+      function frame() {
+        if (!canvas.isConnected) { running = false; return; }
+        var row = root.closest('.entry');
+        if (row && row.dataset.open !== 'true') { running = false; return; }
+
+        if (!W && !measure()) { requestAnimationFrame(frame); return; }
+
+        // The pointer only ever moves the target. Left alone, the target
+        // either runs down the last throw or drifts on by itself.
+        if (!dragging && !openLabel) {
+          if (Math.abs(glide) > 0.00002) {
+            wantHeading += glide;
+            glide *= GLOBE_GLIDE;
+          } else if (!prefersReduced()) {
+            wantHeading += GLOBE_SPIN;
+          }
+        }
+
+        // And the globe closes a fraction of the remaining gap each frame,
+        // which is the whole of the weight.
+        heading += (wantHeading - heading) * GLOBE_EASE;
+        tilt += (wantTilt - tilt) * GLOBE_EASE;
+
+        draw();
+        requestAnimationFrame(frame);
+      }
+      function start() {
+        if (running) return;
+        running = true;
+        requestAnimationFrame(frame);
+      }
+
+      /* On the wrapper rather than the canvas, because the labels sit over
+         the canvas and a drag that began on one of them is still a drag —
+         catching only the canvas made the globe stick whenever you happened
+         to grab it by a country. */
+      /* Every press starts as a drag and may turn out to have been a tap.
+         It cannot be decided on the way down — the same gesture begins a
+         spin and begins a tap — so the press records where it landed and
+         how far it has travelled, and the release reads that back. */
+      var pressedOn = null, travelled = 0;
+
+      root.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        lastX = e.clientX; lastY = e.clientY;
+        glide = 0;
+        travelled = 0;
+        pressedOn = e.target && e.target.closest ? e.target.closest('li') : null;
+        // Labels stop taking the pointer for the duration, so a drag that
+        // crosses one does not open it on the way past.
+        root.dataset.dragging = '1';
+        if (root.setPointerCapture) { try { root.setPointerCapture(e.pointerId); } catch (err) { /* unsupported */ } }
+        start();
+      });
+      root.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - lastX, dy = e.clientY - lastY;
+        lastX = e.clientX; lastY = e.clientY;
+
+        travelled += Math.abs(dx) + Math.abs(dy);
+        // Past the slop it is unambiguously a drag, and a card left open
+        // under the finger is only in the way of it.
+        if (travelled > GLOBE_TAP_SLOP) closeLabel();
+
+        wantHeading += dx * GLOBE_DRAG;
+        // Clamped so the globe cannot be rolled past its own pole.
+        wantTilt = Math.max(-1.2, Math.min(1.2, wantTilt + dy * GLOBE_DRAG_Y));
+        // The last push is what carries on after release.
+        glide = dx * GLOBE_DRAG;
+        start();
+      });
+      function release(e) {
+        if (!dragging) return;
+        dragging = false;
+        delete root.dataset.dragging;
+        if (root.releasePointerCapture && e && e.pointerId !== undefined) {
+          try { root.releasePointerCapture(e.pointerId); } catch (err) { /* gone */ }
+        }
+
+        /* It was a tap. On a label, that is the touch equivalent of
+           hovering it — and tapping the open one again is how you put it
+           away. Anywhere else on the globe closes whatever was open,
+           which is the only way a finger has of saying "done reading". */
+        if (travelled <= GLOBE_TAP_SLOP) {
+          var m = pressedOn && !pressedOn.dataset.off ? byEl(pressedOn) : null;
+          if (!m || openLabel === m) closeLabel();
+          else openLabelFor(m);
+        }
+        pressedOn = null;
+
+        start();
+      }
+      function byEl(el) {
+        for (var i = 0; i < places.length; i++) if (places[i].el === el) return places[i];
+        for (var g = 0; g < groupEls.length; g++) if (groupEls[g].el === el) return groupEls[g];
+        return null;
+      }
+      root.addEventListener('pointerup', release);
+      root.addEventListener('pointercancel', release);
+
+      /* And a tap that lands somewhere else on the page closes it too. A
+         card held open by a finger that has since gone elsewhere would
+         otherwise sit there holding the globe still indefinitely.
+
+         Guarded on isConnected rather than removed: a language switch
+         throws this whole panel away, and the listener that outlives it
+         must not keep the old one alive. */
+      document.addEventListener('pointerdown', function (e) {
+        if (!root.isConnected) return;
+        if (!openLabel) return;
+        if (root.contains(e.target)) return;
+        closeLabel();
+        start();
+      });
+
+      if (window.ResizeObserver) {
+        new ResizeObserver(function () { measure(); start(); }).observe(canvas);
+      }
+
+      // Opening the row is what starts it; closing it lets the loop end.
+      root._globeStart = start;
+      start();
+    });
+  }
+
+  /* ----------------------------------------------------------
+     One industry at a time comes up out of the field
+
+     Which one is random, but not drawn at random: pure random leaves some
+     tiles dark for a minute at a stretch while others repeat twice in ten
+     seconds, and a viewer watching for their own industry is exactly the
+     one who would notice. So it deals from a shuffled bag of all fourteen
+     and only reshuffles once the bag is empty, which gives every tile its
+     turn inside each round while the order stays unguessable. The seam
+     between two bags is the one place a repeat can happen back to back,
+     so the new bag rotates if its first card is the one just shown.
+
+     The field is inside a collapsed accordion row most of the time. Rather
+     than run the cycle into a hidden panel, a closed row just parks the
+     loop and it resumes on the next open, and a field that has been thrown
+     away by a language switch ends the loop for good instead of leaving a
+     timer running against a detached node.
+     ---------------------------------------------------------- */
+
+  /* The stylesheet fades a tile in and out over --ind-fade (900ms), so the
+     hold has to be long enough to contain both ends and still leave the
+     tile sitting there lit for a moment in between — otherwise the light
+     is all travel and never arrives. The dark beat likewise has to outlast
+     the fade down, or the next tile starts rising while the last one is
+     still on its way back. */
+  var LIT_MS = 3400;    // one tile stays up: ~900 up, ~1600 held, ~900 down
+  var DARK_MS = 1000;   // and the field is even again before the next
+  var FIRST_MS = 700;   // the panel has finished opening by now
+  var PARK_MS = 500;    // how often a closed row looks to see if it reopened
+
+  function initIndustryGrid(scope) {
+    scope.querySelectorAll('.capd-grid').forEach(function (grid) {
+      if (grid.dataset.litReady) return;
+      grid.dataset.litReady = '1';
+
+      var tiles = [].slice.call(grid.querySelectorAll('.ind'));
+      if (tiles.length < 2 || prefersReduced()) return;
+
+      var bag = [];
+      var last = -1;
+
+      function refill() {
+        bag = tiles.map(function (_, i) { return i; });
+        for (var i = bag.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var swap = bag[i]; bag[i] = bag[j]; bag[j] = swap;
+        }
+        if (bag[0] === last) bag.push(bag.shift());
+      }
+
+      function isOpen() {
+        var row = grid.closest('.entry');
+        return !row || row.dataset.open === 'true';
+      }
+
+      function step() {
+        if (!grid.isConnected) return;          // replaced by a language switch
+        if (!isOpen()) { setTimeout(step, PARK_MS); return; }
+
+        if (!bag.length) refill();
+        var tile = tiles[last = bag.shift()];
+        tile.classList.add('is-lit');
+        setTimeout(function () {
+          tile.classList.remove('is-lit');
+          setTimeout(step, DARK_MS);
+        }, LIT_MS);
+      }
+
+      refill();
+      setTimeout(step, FIRST_MS);
+    });
+  }
+
   function initPanel(scope) {
     initAckDemo(scope);
     fitChipEdges(scope);
+    fitFlowBands(scope);
+    initGlobes(scope);
+    initIndustryGrid(scope);
     if (window.twemoji) {
       try { window.twemoji.parse(scope, { folder: 'svg', ext: '.svg' }); } catch (e) { /* optional */ }
     }
