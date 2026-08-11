@@ -1,104 +1,142 @@
 /* ============================================================
-   tokens.css — Design tokens (light default + dark override)
-   Brand colors (SAP blue/yellow) stay constant across themes.
+   tokens.css — Dossier design system
+
+   One accent (deep indigo). One radius family (4 / 6 / 10, all
+   "near-square document"). One theme at a time, light or dark,
+   never mixed per section.
+
+   Light  = ivory paper, white sheet, charcoal ink.
+   Dark   = warm near-black, same paper metaphor after hours.
    ============================================================ */
+
 :root {
   color-scheme: light;
 
-  /* Brand (fixed — both themes) */
-  --sap-blue: #0070F2;
-  --sap-cyan: #0FAAFF;
-  --sap-yellow: #FFC700;
+  /* ---- Surfaces ---- */
+  --paper:       #F6F3EC;   /* page canvas — ivory */
+  --paper-sunk:  #EEEAE0;   /* recessed band, one step down from paper */
+  --sheet:       #FFFFFF;   /* raised sheet — the only elevated surface */
 
-  /* Semantic tokens — light theme */
-  --sap-blue-deep: #003A8F;
-  --sap-blue-soft: #E6F2FF;
-  --sap-yellow-soft: #FFF6D6;
+  /* ---- Ink ---- */
+  --ink:    #1C1A17;        /* headlines, primary body */
+  --ink-2:  #55504A;        /* secondary body            6.9:1 on paper */
+  --ink-3:  #6E685D;        /* captions, meta            4.6:1 on paper */
 
-  --ink:   #0B1B33;
-  --ink-2: #3A4A63;
-  --ink-3: #6B7A90;
-  --line:  #E4E9F1;
-  --bg:    #F7F9FC;
-  --white: #FFFFFF;           /* "surface" — card / panel background */
-  --ok:    #0E8F62;
+  /* ---- Rules ---- */
+  --rule:        #E0DACE;   /* hairline between rows */
+  --rule-strong: #CBC3B2;   /* section boundary */
 
-  --danger: #9E1B1B;
-  --danger-soft: #FFE5E5;
+  /* ---- Accent (the only one on this page) ----
+     Swap these five values to recolour the whole page.
+     Previous navy set, kept here for a one-step revert:
+       --accent #2A3D6B · --accent-text #2A3D6B · --accent-hi #3B5391
+       --accent-soft #E7EBF4 · --accent-ink #FFFFFF
 
-  /* Non-flipping tokens — primary CTA & footer stay visually consistent */
-  --btn-primary-bg:   #0B1B33;
-  --btn-primary-text: #FFFFFF;
-  --footer-bg:        #0B1B33;
-  --footer-text:      #C7D2E3;
-  --footer-muted:     #9AB0D0;
-  --footer-fade:      #6E83A5;
+     Amber sits at 2.85:1 on this ivory, which is under AA for text and
+     under 3:1 for meaningful icons, so the vivid value is reserved for
+     fills, marks, rules, and graphics, and text takes the darkened cut
+     of the same hue at 5.6:1. Navy needed no such split because it
+     already cleared 9.5:1. */
+  --accent:      #D17D00;   /* fills, marks, borders, graphics */
+  --accent-text: #8F5300;   /* text and icons on light   5.6:1 */
+  --accent-hi:   #E08E14;   /* hover / lighter step */
+  --accent-soft: #FBF0DE;   /* tinted fill */
+  --accent-ink:  #201A10;   /* text on the accent fill   5.7:1 */
 
-  /* Tints/overlays used by nav, etc. */
-  --nav-bg: rgba(255, 255, 255, 0.85);
+  /* ---- Semantic ---- */
+  --ok:     #1F6B4B;
+  --warn:   #8A5A12;
+  --danger: #8E2A22;
 
-  /* Geometry */
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --radius-sm: 10px;
+  /* ---- Geometry: one family, near-square ---- */
+  --r-sm: 4px;              /* chips, code, buttons, inputs */
+  --r-md: 6px;              /* cards, sheets */
+  --r-lg: 10px;             /* large panels */
 
-  /* Elevation */
-  --shadow-sm: 0 1px 2px rgba(11,27,51,.04), 0 2px 8px rgba(11,27,51,.04);
-  --shadow-md: 0 4px 16px rgba(11,27,51,.06), 0 10px 32px rgba(11,27,51,.06);
+  /* ---- Elevation: tinted to the paper hue, never pure black ---- */
+  --lift-1: 0 1px 2px rgba(60, 48, 28, .05);
+  --lift-2: 0 2px 4px rgba(60, 48, 28, .05), 0 8px 24px rgba(60, 48, 28, .06);
+  --lift-3: 0 4px 8px rgba(60, 48, 28, .06), 0 18px 48px rgba(60, 48, 28, .09);
 
-  /* Pastel tint + accent cycle (cap-grid cards etc.) */
-  --t-blue:   #E4F0FF;
-  --t-violet: #ECEAFF;
-  --t-mint:   #DCF6EB;
-  --t-amber:  #FFF3C9;
-  --a-blue:   #0070F2;
-  --a-violet: #6B5AE0;
-  --a-mint:   #0E8F62;
-  --a-amber:  #A87E00;
+  /* ---- Type ----
+     IBM Plex was drawn for engineering and enterprise documentation, which
+     is exactly the register this page needs, and it ships matching Korean
+     and Japanese cuts. One family carries all three languages instead of
+     a Latin face bolted onto Noto fallbacks. */
+  --font-sans: 'IBM Plex Sans', 'IBM Plex Sans KR', 'IBM Plex Sans JP', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Mono', monospace;
+
+  /* Headlines only. Schibsted Grotesk was drawn for newspaper and news
+     product headlines: narrow apertures, tight fit, real weight at large
+     sizes, which is exactly what Plex Sans lacks in display. It carries no
+     CJK, so Korean and Japanese glyphs fall through to the Plex cuts and
+     the two faces meet inside the same headline. */
+  --font-display: 'Schibsted Grotesk', 'IBM Plex Sans KR', 'IBM Plex Sans JP', var(--font-sans);
+
+  /* 4.25rem overflowed the hero column in every language, not just CJK:
+     "Your whole SAP stack," needs ~714px at that size against a 650px
+     column, so the headline dropped to three lines. 3.4rem fits all three
+     scripts on two lines with room to spare. */
+  --fs-display: clamp(2.2rem, 1.45rem + 2.7vw, 3.4rem);
+  --fs-h2:      clamp(1.7rem, 1.25rem + 1.9vw, 2.6rem);
+  --fs-h3:      clamp(1.15rem, 1.02rem + 0.55vw, 1.5rem);
+  --fs-lede:    clamp(1.02rem, 0.96rem + 0.35vw, 1.22rem);
+  --fs-body:    1rem;
+  --fs-sm:      0.875rem;
+  --fs-xs:      0.785rem;
+
+  /* ---- Rhythm ---- */
+  --shell:      1240px;     /* max content width */
+  --gutter:     clamp(20px, 5vw, 64px);
+  --band:       clamp(72px, 9vw, 132px);   /* vertical section padding */
+
+  /* ---- Motion (MOTION_INTENSITY 4) ---- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 140ms;
+  --t-base: 260ms;
+  --t-slow: 620ms;
 }
 
-/* ---------- Dark theme ---------- */
+/* ---------- Dark: same paper metaphor, warm near-black ---------- */
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --sap-blue-deep: #6FC0FF;    /* flipped for readability on dark */
-  --sap-blue-soft: #152E55;
-  --sap-yellow-soft: #362B14;
+  --paper:       #171613;
+  --paper-sunk:  #100F0D;
+  --sheet:       #201E1A;
 
-  --ink:   #E9EFF7;            /* primary text */
-  --ink-2: #ACB8CD;
-  --ink-3: #7A8FAD;
-  --line:  #263450;
-  --bg:    #101C31;            /* page alt bg — one step lighter */
-  --white: #172742;            /* card / surface bg */
-  --ok:    #4ED7A0;
+  --ink:    #EFEADF;
+  --ink-2:  #B4AEA1;
+  --ink-3:  #8B8479;
 
-  --danger:      #FF7C7C;
-  --danger-soft: #401C1C;
+  --rule:        #322F29;
+  --rule-strong: #4A453C;
 
-  /* Primary CTA inverts — light surface with dark text on dark bg */
-  --btn-primary-bg:   #FFFFFF;
-  --btn-primary-text: #0B1B33;
+  /* On the warm near-black the amber lightens to 9:1, so fill and text
+     can share one value here. Previous navy set: #9FB3DF · #BCCAEA ·
+     #21283A · #101422. */
+  --accent:      #E8A93C;
+  --accent-text: #E8A93C;
+  --accent-hi:   #F2BC5C;
+  --accent-soft: #33270F;
+  --accent-ink:  #1C1508;
 
-  /* Footer keeps inherent dark (slightly deeper than page) */
-  --footer-bg:    #0A1526;
-  --footer-text:  #ACB8CD;
-  --footer-muted: #7A8FAD;
-  --footer-fade:  #56647F;
+  --ok:     #64C79B;
+  --warn:   #DCA94A;
+  --danger: #E58A80;
 
-  --nav-bg: rgba(23, 39, 66, 0.82);
-
-  /* Softer shadows on dark (lower ambient light) */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.40), 0 10px 32px rgba(0,0,0,.30);
-
-  /* Pastel tint + accent cycle — deep-tinted for dark surfaces */
-  --t-blue:   #152E55;
-  --t-violet: #29234C;
-  --t-mint:   #143A2C;
-  --t-amber:  #3B3115;
-  --a-blue:   #5EB2FF;
-  --a-violet: #A79BFF;
-  --a-mint:   #4ED7A0;
-  --a-amber:  #FFD54D;
+  --lift-1: 0 1px 2px rgba(0, 0, 0, .40);
+  --lift-2: 0 2px 4px rgba(0, 0, 0, .38), 0 8px 24px rgba(0, 0, 0, .34);
+  --lift-3: 0 4px 8px rgba(0, 0, 0, .42), 0 18px 48px rgba(0, 0, 0, .44);
 }
+
+/* Japanese needs the JP cut ahead of the KR cut so shared CJK glyphs are
+   not rendered in Korean styling. */
+html[lang="ja"] {
+  --font-sans: 'IBM Plex Sans', 'IBM Plex Sans JP', 'IBM Plex Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Schibsted Grotesk', 'IBM Plex Sans JP', 'IBM Plex Sans KR', var(--font-sans);
+}
+
+/* One display scale now covers all three scripts, so there is no
+   per-language override here. Korean and Japanese still get
+   `word-break: keep-all` and `text-wrap: balance` in base.css. */
