@@ -303,7 +303,7 @@ body.lang-swap .nav-links > a { opacity: 0; }
 @media (max-width: 900px) { .nav-foot { display: flex; } }
 
 /* ============================================================
-   HERO — asymmetric split, content left, install panel right
+   HERO — headline left, ambient ground right
    ============================================================ */
 
 .hero {
@@ -316,7 +316,7 @@ body.lang-swap .nav-links > a { opacity: 0; }
 
 /* ---------- Ambient ground ----------
    A drafting grid drifting behind the headline, and a slow accent wash
-   breathing under the install panel. Both are transform-only on
+   breathing on the right where the panel used to sit. Both are transform-only on
    oversized layers, so nothing repaints per frame, and both sit at
    opacities where they register as paper texture rather than as
    decoration competing with the type. */
@@ -468,18 +468,17 @@ body.lang-swap .nav-links > a { opacity: 0; }
   .hero-enter { opacity: 1; transform: none; animation: none; }
 }
 
-/* The headline needs the room more than the install panel does: the panel
-   only has to hold one short command and a repo path. */
+/* One column. The copy takes the left share of the shell and the ambient
+   ground owns the rest; the share is a ratio of the shell, not a width. */
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-  gap: clamp(32px, 5vw, 72px);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
 }
+.hero-copy { max-width: clamp(34rem, 62%, 46rem); }
 
 @media (max-width: 900px) {
   .hero { padding-top: calc(68px + 48px); padding-bottom: 64px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+  .hero-copy { max-width: 100%; }
 }
 
 /* The copy carries its own line breaks, so no ch cap here: the ch unit
@@ -493,77 +492,57 @@ body.lang-swap .nav-links > a { opacity: 0; }
 }
 .hero .t-lede { margin-top: 22px; max-width: 46ch; }
 
-/* --- install command panel: a real control, not a simulated window --- */
+/* --- actions: the GitHub button, then the repo facts as quiet text --- */
 
-.install {
-  background: var(--sheet);
-  border: 1px solid var(--rule);
-  border-radius: var(--r-md);
-  box-shadow: var(--lift-2);
-  overflow: hidden;
-}
-
-.install-head {
+.hero-actions {
+  margin-top: 22px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--rule);
-  background: color-mix(in srgb, var(--paper) 55%, var(--sheet));
+  gap: 10px 18px;
+  flex-wrap: wrap;
 }
 
-.install-cmd {
-  display: flex;
+/* Star count and licence are facts, not controls: mono meta text beside
+   the button, separated by a hairline dot, no border and no fill. The
+   star count is a link because the number is worth a click; the licence
+   is a link because MIT is the one word people go and check. */
+.repo-meta {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 18px 16px;
-}
-.install-cmd code {
-  flex: 1;
+  gap: 10px;
   min-width: 0;
-  font-size: clamp(0.9rem, 0.82rem + 0.4vw, 1.05rem);
-  font-weight: 500;
-  color: var(--ink);
-  overflow-x: auto;
+}
+.repo-meta a,
+.repo-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-decoration: none;
   white-space: nowrap;
-  /* A thin visible track, not a hidden one. Hiding the scrollbar on a
-     horizontally scrolling box leaves mouse users with no way to reach
-     the overflow. */
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule-strong) transparent;
-  padding-bottom: 2px;
+  transition: color 700ms var(--ease);
 }
-.install-cmd code::-webkit-scrollbar { height: 6px; }
-.install-cmd code::-webkit-scrollbar-track { background: transparent; }
-.install-cmd code::-webkit-scrollbar-thumb {
+/* The star link is hidden until the count arrives; the display above
+   would otherwise beat the UA's [hidden] rule. */
+.repo-meta a[hidden] { display: none; }
+.repo-meta i { font-size: 14px; }
+.repo-meta a:hover { color: var(--accent-text); }
+/* The hairline dot between the two facts. */
+.repo-meta a + a::before,
+.repo-meta a + span::before,
+.repo-meta span + a::before {
+  content: "";
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
   background: var(--rule-strong);
-  border-radius: 3px;
+  margin-right: 5px;
 }
-
-/* The command types itself out once. It is the same gesture the visitor
-   is about to make, and it puts the caret exactly where their attention
-   should land. */
-.caret {
-  display: inline-block;
-  width: 0.5em;
-  height: 1.05em;
-  margin-left: 1px;
-  vertical-align: text-bottom;
-  background: var(--accent);
-  animation: caret-blink 1.1s steps(1) infinite;
-}
-.install-cmd.typing .caret { animation: none; }   /* solid while typing */
-
-@keyframes caret-blink {
-  0%, 45%   { opacity: 1; }
-  50%, 95%  { opacity: 0; }
-  100%      { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .caret { display: none; }
-}
+/* Retired: the copy button and the typed command. .copy-btn is still used
+   on install.html and lives on below. */
 
 .copy-btn {
   appearance: none;
@@ -590,45 +569,6 @@ body.lang-swap .nav-links > a { opacity: 0; }
 .copy-btn.done .ph-copy  { display: none; }
 .copy-btn.done .ph-check { display: inline; }
 
-.install-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 16px;
-  min-width: 0;
-  background-image: repeating-linear-gradient(to right, var(--rule) 0 5px, transparent 5px 11px);
-  background-size: 100% 1px;
-  background-repeat: no-repeat;
-  background-position: left top;
-}
-
-/* The repo path is 38 monospaced characters in a column that narrowed
-   when the headline took more room. Sized to stay on one line, with an
-   ellipsis as the last resort on very narrow viewports. */
-.install-foot .t-meta {
-  font-size: 11px;
-  letter-spacing: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-}
-
-.stars {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-  color: var(--ink-3);
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  transition: color var(--t-fast) var(--ease);
-}
-.stars:hover { color: var(--ink); }
-
-.hero-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
 
 /* ============================================================
    FACT STRIP — platform support, hairline-separated, no dots
@@ -1508,7 +1448,15 @@ html.no-js .cs-card {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background-color: color-mix(in srgb, var(--accent) 13%, var(--paper));
+  /* The band is a photograph: assets/line_b.png is drawn at 1920 × 125,
+     the band's own size at its tallest, so `cover` only ever crops the
+     sides on narrower screens and never scales the picture up. Same
+     picture in both themes. */
+  background-color: #2A2320;
+  background-image: url("../assets/line_b.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .cta .shell { position: relative; z-index: 1; }
 /* ---------- Closing line (#install) ----------
@@ -1516,101 +1464,115 @@ html.no-js .cs-card {
    strip rather than as a section: well under half the page's standard
    block padding, enough to hold the line and its air and no more. */
 
-.evo { text-align: center; }
+/* Line and button as one centred group, the button just to the right of
+   the line. On narrow screens they stack and stay centred. */
+.evo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px 40px;
+  flex-wrap: wrap;
+  text-align: center;
+}
 .cta.band { padding-block: clamp(26px, 3vw, 44px); }
 
+/* Glass: the picture shows through a blurred, lightly frosted pane. The
+   fill is white at low alpha so it reads on both the dark edges and the
+   bright flare, and the edge is a white hairline rather than a colour. */
+.btn-glass {
+  flex: none;
+  border-radius: 999px;
+  padding-inline: 20px;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.18);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #FFFFFF;
+}
+.btn-glass i { font-size: 16px; }
+
+/* ---------- Shine ----------
+   A narrow diagonal band of light crosses the pane once on hover, left to
+   right, like a reflection sliding over glass. It is a pseudo-element
+   moved by transform only, so nothing repaints, and it lives outside the
+   button's box until the pointer arrives. The band is soft-edged and
+   short so it reads as a glint, not as a wipe. */
+.btn-glass {
+  position: relative;
+  overflow: hidden;
+}
+.btn-glass::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  bottom: -40%;
+  left: 0;
+  width: 55%;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0)    0%,
+    rgba(255, 255, 255, 0.35) 45%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0.35) 55%,
+    rgba(255, 255, 255, 0)    100%
+  );
+  transform: translateX(-160%) skewX(-12deg);
+  opacity: 0;
+}
+.btn-glass:hover::after,
+.btn-glass:focus-visible::after {
+  animation: glass-shine 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+@keyframes glass-shine {
+  0%   { transform: translateX(-160%) skewX(-12deg); opacity: 0; }
+  12%  { opacity: 1; }
+  100% { transform: translateX(290%)  skewX(-12deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-glass::after { display: none; }
+}
+
 .evo-line {
-  margin-inline: auto;
+  margin: 0;
   max-width: none;
   line-height: 1.2;
   white-space: nowrap;
+  /* White in both themes: the ground is the picture, not the paper. The
+     flare in the middle of the picture comes close to white, so the line
+     carries a faint shadow to keep its edge there. */
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 18px rgba(0, 0, 0, 0.25);
 
   /* One line at every width, which is what the vw term is for and why
      there is no breakpoint here at all: the type is a fraction of the
      viewport, so the sentence takes the same share of the screen on a
      phone as it does on a desktop and never has to wrap.
 
-     Where 4.1vw comes from. The line is 38 characters, which in this face
-     at this tracking measures about 19em. The gutter either side is
-     itself proportional (5vw between its floor and its cap), so the width
-     left for the line stays near 87% of the viewport across the range —
-     19em must fit that, giving 0.87 / 19 ≈ 0.046. 4.1 keeps a margin
-     under it for the fact that 19em is an estimate of a proportional
-     face rather than a measurement.
+     Where 4.1vw comes from. The previous line was 38 characters, which
+     in this face at this tracking measured about 19em. The gutter either
+     side is itself proportional (5vw between its floor and its cap), so
+     the width left for the line stays near 87% of the viewport across the
+     range — 19em must fit that, giving 0.87 / 19 ≈ 0.046. 4.1 keeps a
+     margin under it. The current line is 32 characters, so it has room
+     to spare; if the sentence is ever made longer than 38, this is the
+     number that has to come down with it.
 
      The cap takes over at about 660px and holds the line at a heading
-     size from there up. If the sentence is ever made longer, this is the
-     number that has to come down with it. */
-  font-size: min(4.1vw, 1.85rem);
+     size from there up. */
+  /* Dropped from 1.85rem: the line is a strip caption now, not the
+     section's only content, and it shares the strip with a button. */
+  font-size: min(3.4vw, 1.35rem);
 }
 
-/* ---------- Dot field (light theme only) ----------
-   There is no resting field. The dots exist only where the pointer is,
-   so the band is clean until you move over it and the light seems to
-   reveal a texture that was already there.
-
-   The patch is a fixed 448px window moved by transform. The dot layer
-   inside it is counter-translated by exactly the same amount, which pins
-   its background origin to the container origin: the dots stay fixed to
-   the band and the light travels across them, rather than the whole sheet
-   of dots dragging along with the cursor. Nothing repaints per frame,
-   both layers move on transform alone. */
-
-.cta-dots {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  contain: layout paint;
-}
-
-.cd-spot {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 448px;
-  height: 448px;
-  margin: -224px 0 0 -224px;   /* centres the window on the pointer */
-  overflow: hidden;
-  opacity: 0;
-  transform: translate3d(var(--dx, 0px), var(--dy, 0px), 0);
-  transition: opacity 420ms var(--ease);
-  -webkit-mask-image: radial-gradient(circle closest-side, #000 8%, rgba(0, 0, 0, 0.5) 46%, transparent 100%);
-  mask-image: radial-gradient(circle closest-side, #000 8%, rgba(0, 0, 0, 0.5) 46%, transparent 100%);
-}
-.cta-dots.lit .cd-spot { opacity: 1; }
-
-.cd-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 2600px;
-  height: 1400px;
-  background-image: radial-gradient(currentColor 1px, transparent 1.6px);
-  background-size: 14px 14px;
-  color: var(--accent-text);
-  opacity: 0.42;
-  /* +224 cancels the window's own centring margin, so the pattern sits on
-     the container origin and stays put while the window travels over it. */
-  transform: translate3d(calc(224px - var(--dx, 0px)), calc(224px - var(--dy, 0px)), 0);
-}
-
-/* Dark keeps the original solid band: on the warm near-black the amber
-   reads as a lit surface rather than as a shout, and a dot field on top
-   of it would only muddy the one place the page asks for an action. */
-[data-theme="dark"] .cta {
-  background-color: var(--accent);
-  color: var(--accent-ink);
-}
-[data-theme="dark"] .cta h2 { color: var(--accent-ink); }
-[data-theme="dark"] .cta-dots { display: none; }
-
-/* Touch has no hover to follow, and reduced motion should not get a patch
-   chasing the cursor. app.js also refuses to bind in both cases. */
-@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .cd-spot { display: none; }
-}
+[data-theme="dark"] .cta h2 { color: #FFFFFF; }
 
 /* ============================================================
    FOOTER

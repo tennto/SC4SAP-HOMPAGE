@@ -100,7 +100,7 @@
   </div>
 
   <div class="shell hero-grid">
-    <div>
+    <div class="hero-copy">
       <h1 class="t-display hero-title" data-hero-title data-t-html="heroTitle">SAP 시스템 전체를<br><em>Claude Code</em> 안에서</h1>
       <p class="t-lede hero-enter" style="--enter-delay:420ms" data-t="heroLede">ECC부터 S/4HANA Cloud까지, ABAP을 직접 읽고 쓰고 활성화하는 MCP 기반 도구 150여 개</p>
       <div class="hero-actions hero-enter" style="--enter-delay:540ms">
@@ -108,28 +108,14 @@
           <i class="ph ph-github-logo" aria-hidden="true"></i>
           <span data-t="ghBtn">GitHub</span>
         </a>
-      </div>
-    </div>
-
-    <div class="install hero-enter" style="--enter-delay:640ms">
-      <div class="install-head">
-        <span class="t-meta" data-t="installLabel">Claude Code</span>
-        <span class="t-meta" data-t="installNote">오픈소스 · MIT</span>
-      </div>
-      <div class="install-cmd" data-cmd="/plugin install sc4sap" data-type-cmd>
-        <code aria-label="/plugin install sc4sap">/plugin install sc4sap</code>
-        <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="설치 명령어 복사">
-          <i class="ph ph-copy" aria-hidden="true"></i>
-          <i class="ph ph-check" aria-hidden="true"></i>
-          <span data-copy-label data-t="copy">복사</span>
-        </button>
-      </div>
-      <div class="install-foot">
-        <span class="t-meta">github.com/babamba2/superclaude-for-sap</span>
-        <a class="stars" hidden href="https://github.com/babamba2/superclaude-for-sap"
-           target="_blank" rel="noopener" data-t-aria="ariaStars" aria-label="GitHub 저장소 스타 수">
-          <i class="ph ph-star" aria-hidden="true"></i><span data-stars></span>
-        </a>
+        <span class="repo-meta">
+          <a class="stars" hidden href="https://github.com/babamba2/superclaude-for-sap/stargazers"
+             target="_blank" rel="noopener" data-t-aria="ariaStars" aria-label="GitHub 저장소 스타 수">
+            <i class="ph ph-star" aria-hidden="true"></i><span data-stars></span>
+          </a>
+          <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/LICENSE"
+             target="_blank" rel="noopener"><span data-t="installNote">오픈소스 · MIT</span></a>
+        </span>
       </div>
     </div>
   </div>
@@ -345,10 +331,6 @@
 
 <!-- ===================== CTA ===================== -->
 <section id="install" class="band cta">
-  <div class="cta-dots" data-cta-dots aria-hidden="true">
-    <span class="cd-spot"><span class="cd-fill"></span></span>
-  </div>
-
   <!-- One line, centred, and nothing else on the band.
 
        English in every language on purpose, the way "Welcome
@@ -356,12 +338,19 @@
        to be read, and translating it would leave three different rhythms
        for the same beat. -->
   <div class="shell evo">
-    <h2 class="t-display evo-line">Evolution, Across Your Whole Enterprise</h2>
+    <h2 class="t-display evo-line">SC4SAP, A Leap to the Next Level</h2>
+    <!-- Same-origin file, so the download attribute is honoured and the
+         browser saves it under the given name instead of navigating. -->
+    <a class="btn btn-glass" href="assets/sc4sap_next_update_preview_document.pdf"
+       download="SC4SAP_Preview.pdf" type="application/pdf">
+      <i class="ph ph-download-simple" aria-hidden="true"></i>
+      <span>Preview</span>
+    </a>
   </div>
 </section>
 
 <!-- ===================== FOOTER ===================== -->
-<footer id="contact" class="foot dash-top">
+<footer id="contact" class="foot">
   <div class="shell">
     <div class="foot-grid">
       <div class="foot-brand">

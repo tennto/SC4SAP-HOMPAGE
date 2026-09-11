@@ -149,41 +149,6 @@
       .join('');
   }
 
-  /* ==========================================================
-     Install command types itself out, once
-     ========================================================== */
-
-  function typeCommand() {
-    var host = document.querySelector('[data-type-cmd]');
-    if (!host) return;
-    var code = host.querySelector('code');
-    if (!code) return;
-
-    var full = code.textContent.trim();
-    code.setAttribute('aria-label', full);
-
-    if (prefersReduced()) return;   // leave the command fully typed
-
-    var typed = document.createElement('span');
-    var caret = document.createElement('span');
-    caret.className = 'caret';
-    caret.setAttribute('aria-hidden', 'true');
-
-    code.textContent = '';
-    code.append(typed, caret);
-    host.classList.add('typing');
-
-    var i = 0;
-    var START = 900;        // let the headline land first
-    var STEP = 42;
-
-    setTimeout(function tick() {
-      typed.textContent = full.slice(0, ++i);
-      if (i < full.length) setTimeout(tick, STEP);
-      else host.classList.remove('typing');   // caret starts blinking
-    }, START);
-  }
-
   /* Switching language cross fades the copy instead of swapping it under
      the reader. The segmented control updates on the click itself, so the
      UI answers immediately while the text takes its 420ms. */
@@ -260,7 +225,7 @@
          out character by character, so its DOM text is unreliable mid
          animation; the declared data-cmd is the source of truth. */
       var holder = btn.closest('[data-cmd]');
-      var block = btn.closest('.install-cmd, .cmd-block');
+      var block = btn.closest('.cmd-block');
       var codeEl = block && block.querySelector('code');
       var CMD = (holder && holder.getAttribute('data-cmd'))
         || (codeEl && codeEl.textContent.trim())
@@ -1642,41 +1607,6 @@
   }
 
   /* ==========================================================
-     CTA dot field follows the pointer
-     ========================================================== */
-
-  (function initCtaDots() {
-    var host = document.querySelector('[data-cta-dots]');
-    if (!host) return;
-
-    var band = host.parentElement;
-    // Nothing to follow without a real pointer, and a patch chasing the
-    // cursor is exactly what reduced motion is asking us not to do.
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    if (prefersReduced()) return;
-
-    var x = 0, y = 0, queued = false;
-
-    band.addEventListener('pointermove', function (e) {
-      var r = band.getBoundingClientRect();
-      x = e.clientX - r.left;
-      y = e.clientY - r.top;
-      // One style write per frame; the properties it sets feed transforms
-      // only, so the browser composites rather than repaints.
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(function () {
-        queued = false;
-        host.style.setProperty('--dx', x + 'px');
-        host.style.setProperty('--dy', y + 'px');
-      });
-    });
-
-    band.addEventListener('pointerenter', function () { host.classList.add('lit'); });
-    band.addEventListener('pointerleave', function () { host.classList.remove('lit'); });
-  })();
-
-  /* ==========================================================
      Why section — rows arrive in left/right pairs, top down
      ========================================================== */
 
@@ -2023,5 +1953,4 @@
   document.body.classList.remove('no-js');
   applyLang();
   settleLangThumb();
-  typeCommand();   // once on load; the command is the same in every language
 })();
