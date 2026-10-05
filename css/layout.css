@@ -468,13 +468,23 @@ body.lang-swap .nav-links > a { opacity: 0; }
   .hero-enter { opacity: 1; transform: none; animation: none; }
 }
 
-/* One column. The copy takes the left share of the shell and the ambient
-   ground owns the rest; the share is a ratio of the shell, not a width. */
+/* One column, centred. The copy sits in the middle of the shell and every
+   line of it is centred on the same axis.
+
+   --hero-type scales the whole block's type at once: headline, lede,
+   button, and the repo meta. 1 is the page's standard scale. */
+.hero {
+  --hero-type: 0.86;
+}
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
 }
-.hero-copy { max-width: clamp(34rem, 62%, 46rem); }
+.hero-copy {
+  max-width: clamp(34rem, 72%, 52rem);
+  text-align: center;
+}
 
 @media (max-width: 900px) {
   .hero { padding-top: calc(68px + 48px); padding-bottom: 64px; }
@@ -483,14 +493,22 @@ body.lang-swap .nav-links > a { opacity: 0; }
 
 /* The copy carries its own line breaks, so no ch cap here: the ch unit
    is derived from the Latin zero and badly under-measures full-width CJK. */
-.hero h1 { max-width: 100%; }
+.hero h1 {
+  max-width: 100%;
+  font-size: calc(var(--fs-display) * var(--hero-type));
+}
 .hero h1 em {
   font-style: italic;
   font-weight: 600;
   color: var(--accent-text);
   line-height: 1.1;
 }
-.hero .t-lede { margin-top: 22px; max-width: 46ch; }
+.hero .t-lede {
+  margin-top: 20px;
+  margin-inline: auto;
+  max-width: 46ch;
+  font-size: calc(var(--fs-lede) * (var(--hero-type) + 0.06));
+}
 
 /* --- actions: the GitHub button, then the repo facts as quiet text --- */
 
@@ -498,9 +516,13 @@ body.lang-swap .nav-links > a { opacity: 0; }
   margin-top: 22px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px 18px;
   flex-wrap: wrap;
 }
+.hero-actions .btn { font-size: calc(var(--fs-sm) * (var(--hero-type) + 0.08)); }
+.hero .repo-meta a,
+.hero .repo-meta span { font-size: calc(var(--fs-xs) * (var(--hero-type) + 0.08)); }
 
 /* Star count and licence are facts, not controls: mono meta text beside
    the button, separated by a hairline dot, no border and no fill. The
@@ -879,274 +901,89 @@ body.lang-swap .nav-links > a { opacity: 0; }
 }
 
 /* ============================================================
-   IMPACT — the card deck
+   IMPACT — copy on the left, the demo reel on the right
 
-   Ported from the React Bits CardSwap component, in the arrangement it
-   was drawn for: the copy holds the left, the deck is anchored to the
-   bottom right and runs off both edges. The overhang is the picture, not
-   a defect to tidy away. The section clips it so nothing lands on what
-   comes next, and the right-hand side simply leaves the screen.
+   The reel is the motion/ demos played one after another in a frame.
+   Each demo paints its own ground, so the stage only carries the frame
+   around it: the radius, the hairline, and the lift. The demos' own
+   frame shadows are switched off from the script so there is one edge,
+   not two.
 
-   The 3D slotting and the skew are the original's. The surface is not:
-   black cards with white hairlines belong to the component's own demo,
-   and this page is ivory paper with one amber.
-
-   Four cards carry twelve capabilities. Each card has a title bar, which
-   is the row that stays legible on the ones behind it; that stepped run
-   of names is what makes the stack read as a deck rather than as one card
-   with a shadow.
+   Tunables:
+     --impact-pad   vertical padding, as a multiple of the page's band
+     --demo-fade    the crossfade between two demos
    ============================================================ */
 
 #impact {
-  height: 540px;
-  padding-block: 0;
-  overflow: hidden;
+  --impact-pad: 1.1;
+  --demo-fade: 1100ms;
+  --copy-share: 0.54fr;   /* copy column against the reel's 1fr; below ~0.5 the heading breaks to three lines */
+  --demo-bleed: 0.58;     /* share of the right margin the reel runs into */
+  padding-block: calc(var(--band) * var(--impact-pad));
+  overflow-x: clip;
 }
 
-.cswap {
-  /* Deliberately wider than it is tall and wider than the column it sits
-     in: the right-hand side of the card is meant to be off the screen. */
-  --cs-w: clamp(560px, 78vw, 1180px);
-  /* Tall enough that the skew cannot lift a corner back into view. A
-     skewed card's left edge rises by half its width times tan(skew), so
-     the bottom-left corner sits well above the bottom-centre; anything
-     shorter puts that corner inside the band, where it reads as a
-     cut-off box rather than as a card leaving the screen.
-
-     Fluid, like the width. Holding the height still while the width
-     tracked the viewport made the card squatter and squatter as the
-     window narrowed, and the fan on top of it stopped fitting. */
-  --cs-h: clamp(380px, 38vw, 500px);
-  height: 100%;
+.demo-split {
   display: grid;
-  gap: clamp(24px, 3vw, 40px);
+  gap: clamp(28px, 4vw, 56px);
   align-items: center;
 }
 
-@media (min-width: 1000px) {
-  .cswap { grid-template-columns: minmax(0, 0.74fr) minmax(0, 1fr); }
+/* Two columns only where the reel still gets its full layout. The demos
+   switch to a tall portrait cut below 640px of their own width, so the
+   right column has to clear that before the split is worth having. */
+@media (min-width: 1180px) {
+  .demo-split { grid-template-columns: minmax(0, var(--copy-share)) minmax(0, 1fr); }
+  /* The reel runs past the shell's right edge into the margin beside it,
+     by a share of whatever margin the window has, so it grows and shifts
+     right together on wide screens and barely moves on narrow ones. */
+  .demo-stage {
+    margin-right: calc(-1 * var(--demo-bleed) * (var(--gutter) + max(0px, (100vw - var(--shell)) / 2)));
+  }
 }
 
-.cs-copy .t-lede { max-width: 32ch; }
+.demo-copy .t-lede { max-width: 32ch; }
 
-/* ---------- The deck ---------- */
+/* Opacity only on the shared reveal: the frames are measured from inside,
+   and a sliding ancestor would hand them a moving box. */
+.demo-stage.reveal { transform: none; transition-duration: 900ms; }
 
-.cs-stage {
+/* One fixed shape for every demo, so nothing on the page moves when the
+   demo changes. The demos run 1200 × 620 to 1200 × 660; three of the five
+   are 1200 × 640, so that is the shape, and they fit it exactly. Script
+   scales the other two to cover it (reel cover()), which trims about 1.5%
+   of their outer margin instead of leaving a band of empty ground.
+   Below 640px of width the demos switch to their portrait cuts, and
+   script switches the reel with them. */
+.demo-reel {
   position: relative;
-  height: 100%;
-}
-
-/* It arrives with the copy, a beat behind it, and takes longer over it:
-   the deck is the largest thing in the band and a 620ms entrance on that
-   much surface reads as a flick rather than as an arrival.
-
-   Opacity only. The shared reveal also slides its target up 18px, and a
-   transform on the ancestor of a preserve-3d context makes the browser
-   build and then throw away a compositing layer around the deck, which
-   snapped the cards a fraction as it resolved. */
-.cs-stage.reveal { transform: none; transition-duration: 900ms; }
-
-/* Anchored by its LEFT edge, not its right. The component anchors bottom
-   right because its container is exactly as wide as the card; here the
-   card is deliberately wider than the column it sits in, and pinning the
-   right edge would drag the whole thing back across the copy. Pinning the
-   left edge instead means the card starts where the column starts and the
-   extra width is spent going off the screen, which is the picture.
-
-   preserve-3d here, and no z-index anywhere: the browser sorts the cards
-   by their own depth and keeps sorting as that depth animates. Flipping
-   z-index on a timer instead meant a stacking-context change per card per
-   swap, each repainting the whole deck. */
-.cs-deck {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: var(--cs-w);
-  height: var(--cs-h);
-  transform: translate(4%, 30%);
-  transform-origin: bottom left;
-  perspective: 1100px;
-  transform-style: preserve-3d;
-  /* Nothing in here is interactive, and its box covers most of the band.
-     Left hit-testable it swallowed hovers, clicks and text selection over
-     half a section, and it used to stop itself whenever a cursor happened
-     to be resting on it. */
+  display: grid;
+  aspect-ratio: 1200 / 640;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--paper-sunk);
+  box-shadow: var(--lift-3);
+  /* Nothing in the reel is interactive. */
   pointer-events: none;
 }
+.demo-reel.is-compact { aspect-ratio: 480 / 640; }
 
-.cs-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--cs-w);
-  height: var(--cs-h);
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  border: 1px solid var(--rule-strong);
-  border-radius: var(--r-lg);
-  background: var(--sheet);
-  box-shadow: var(--lift-2);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: transform;
-  /* Placed by script; this is also the resting state without it. */
-  transform: translate(-50%, -50%) skewY(4deg);
+.demo-frame {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: transparent;
+  opacity: 0;
+  transition: opacity var(--demo-fade) var(--ease);
 }
-
-/* The one row that stays visible on the cards underneath. Set exactly as
-   the fact strip's keys are, so the two rows of small mono labels on this
-   page read as the same kind of thing. */
-.cs-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  padding: 9px 18px;
-  border-bottom: 1px solid var(--rule);
-  border-radius: var(--r-lg) var(--r-lg) 0 0;
-  background: var(--paper);
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  white-space: nowrap;
-  overflow: hidden;
-}
-.cs-bar i { font-size: 15px; color: var(--accent-text); flex: none; }
-.cs-bar b { font-weight: 500; flex: none; }
-.cs-bar span { overflow: hidden; text-overflow: ellipsis; }
-
-/* A sample session, held still. The deck already moves; a transcript
-   typing itself inside a card that is sliding would be two animations
-   competing for the same glance. */
-.cs-body { display: grid; align-content: start; }
-
-/* .terminal-body carries the mono face and the prompt / cmd / ok / dim
-   colours the capability panels already use. Only the metrics change:
-   this one fills a card rather than sitting in a panel. */
-.cs-term {
-  padding: clamp(16px, 1.9vw, 24px) clamp(20px, 2.4vw, 30px);
-  font-size: var(--fs-sm);
-  line-height: 1.85;
-  overflow: hidden;
-  /* The card runs off the screen; the transcript must not. */
-  max-width: 78ch;
-}
-
-/* Narrow screens: one column, and the deck hangs off the bottom of what
-   is left rather than off a column that no longer exists.
-
-   The rows are declared. Leaving them implicit and centring the content
-   was the bug: the copy and a full-height stage together came to more
-   than the band, and centring an overflow pushes half of it out of the
-   top, which lifted the deck straight over the headline. With `auto` then
-   `1fr` the copy takes what it needs and the stage takes exactly the rest,
-   so nothing overflows and nothing can ride up. */
-@media (max-width: 999px) {
-  #impact { height: 552px; padding-block: 0; }
-  .cswap {
-    /* Always wider than the window, so the card leaves the screen here
-       too. Clamped to a fixed 720 it stopped short of the edge between
-       about 720 and 999, where it read as a card floating in the middle
-       rather than as a deck coming in from outside. */
-    --cs-w: max(480px, 106vw);
-    --cs-h: 340px;
-    grid-template-rows: auto minmax(0, 1fr);
-    align-items: stretch;
-    align-content: stretch;
-    gap: clamp(16px, 3vw, 26px);
-    /* Room above the heading. The band grows by the same amount rather
-       than taking it out of the deck. */
-    padding-block: clamp(44px, 7vw, 64px) 0;
-  }
-  .cs-stage { height: auto; }
-  .cs-deck {
-    left: 0;
-    /* Pushed further down than on desktop, because the band is shorter
-       here and the fan on top of the card has to clear the copy, and
-       further right, so the card runs off the edge rather than sitting
-       inside the column. */
-    transform: translate(9%, 38%);
-    transform-origin: bottom left;
-  }
-}
-
-/* Below tablet the band tapers with the window rather than holding one
-   height: 440 at 720 down to 420 at the narrowest, on the straight line
-   between them. */
-@media (max-width: 720px) {
-  #impact { height: clamp(420px, 398px + 5.8vw, 440px); }
-  .cswap {
-    --cs-h: 300px;
-    padding-block: clamp(34px, 6vw, 48px) 0;
-    gap: clamp(12px, 2.5vw, 20px);
-  }
-  /* Lower again. The band is shorter here, and the fan still has to clear
-     the copy above it. */
-  .cs-deck { transform: translate(9%, 60%); }
-  .cs-term { font-size: var(--fs-xs); line-height: 1.9; }
-  .cs-bar { padding: 7px 14px; }
-}
-
-@media (max-width: 560px) {
-  .cswap { --cs-h: 274px; }
-}
-
-/* Until script has measured the card and dealt the slots, all four sit
-   exactly on top of one another, which is a picture of nothing. Scripts
-   are deferred, so on a slow load that pile can paint first.
-
-   Hidden with `visibility`, and deliberately not with opacity. Opacity
-   below 1 is a grouping property: applied to the element that carries
-   transform-style: preserve-3d it forces that context to flatten. Fading
-   the deck therefore rendered every card flat and wrong for the length of
-   the fade and snapped them into their real depth at the end, which is
-   both why the fade looked broken and why the deck jumped. The fade lives
-   on .cs-stage, one level up, where it composites the finished result
-   instead of collapsing it. */
-.cswap:not(.ready) .cs-deck { visibility: hidden; }
-
-/* No script at all is a different case: the deck cannot be built, so the
-   cards fall back to a plain run of sheets and the band gives up its fixed
-   height to hold them.
-
-   Keyed to html.no-js, never body.no-js. The head strips the class off
-   html before the first paint; body keeps it until the last line of
-   app.js. Written as a bare .no-js this whole fallback therefore stayed
-   live through the entire load: the band rendered at auto height with the
-   deck laid out statically, initCardSwap measured a card that was still
-   `width: auto` and dealt the fan from the wrong numbers, and then the
-   class dropped, the geometry changed under it, and the ResizeObserver
-   put it right a moment later. That was the jump on every refresh. */
-html.no-js #impact {
-  height: auto;
-  padding-block: var(--band);
-  overflow: visible;
-}
-html.no-js .cs-stage { height: auto; }
-html.no-js .cs-deck {
-  position: static;
-  width: auto;
-  height: auto;
-  display: grid;
-  gap: 14px;
-  opacity: 1;
-  transform: none;
-  perspective: none;
-  transform-style: flat;
-  pointer-events: auto;
-}
-html.no-js .cs-card {
-  position: static;
-  width: auto;
-  height: auto;
-  transform: none;
-  box-shadow: var(--lift-1);
-}
+.demo-frame[hidden] { display: none; }
+.demo-frame.is-on { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .cs-deck { transition: none; }
+  .demo-frame { transition: none; }
 }
 
 /* ============================================================
@@ -1434,145 +1271,6 @@ html.no-js .cs-card {
     gap: 24px;
   }
 }
-
-/* ============================================================
-   CTA BAND — full bleed, one focus
-   ============================================================ */
-
-/* A wash, not a slab. Full-strength amber across a full-bleed band was
-   the loudest thing on a page whose whole argument is restraint, and it
-   forced its own pinned palette on everything inside it. At 13% over the
-   paper the band still reads as the moment to act, and the page's own ink
-   works on it unchanged (14.7:1 for the headline). */
-.cta {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  /* The band is a photograph: assets/line_b.png is drawn at 1920 × 125,
-     the band's own size at its tallest, so `cover` only ever crops the
-     sides on narrower screens and never scales the picture up. Same
-     picture in both themes. */
-  background-color: #2A2320;
-  background-image: url("../assets/line_b.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.cta .shell { position: relative; z-index: 1; }
-/* ---------- Closing line (#install) ----------
-   One sentence on a band that carries nothing else, so it is set as a
-   strip rather than as a section: well under half the page's standard
-   block padding, enough to hold the line and its air and no more. */
-
-/* Line and button as one centred group, the button just to the right of
-   the line. On narrow screens they stack and stay centred. */
-.evo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px 40px;
-  flex-wrap: wrap;
-  text-align: center;
-}
-.cta.band { padding-block: clamp(26px, 3vw, 44px); }
-
-/* Glass: the picture shows through a blurred, lightly frosted pane. The
-   fill is white at low alpha so it reads on both the dark edges and the
-   bright flare, and the edge is a white hairline rather than a colour. */
-.btn-glass {
-  flex: none;
-  border-radius: 999px;
-  padding-inline: 20px;
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.38);
-  backdrop-filter: blur(10px) saturate(140%);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.18);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-}
-.btn-glass:hover {
-  background: rgba(255, 255, 255, 0.26);
-  border-color: rgba(255, 255, 255, 0.6);
-  color: #FFFFFF;
-}
-.btn-glass i { font-size: 16px; }
-
-/* ---------- Shine ----------
-   A narrow diagonal band of light crosses the pane once on hover, left to
-   right, like a reflection sliding over glass. It is a pseudo-element
-   moved by transform only, so nothing repaints, and it lives outside the
-   button's box until the pointer arrives. The band is soft-edged and
-   short so it reads as a glint, not as a wipe. */
-.btn-glass {
-  position: relative;
-  overflow: hidden;
-}
-.btn-glass::after {
-  content: "";
-  position: absolute;
-  top: -40%;
-  bottom: -40%;
-  left: 0;
-  width: 55%;
-  pointer-events: none;
-  background: linear-gradient(
-    105deg,
-    rgba(255, 255, 255, 0)    0%,
-    rgba(255, 255, 255, 0.35) 45%,
-    rgba(255, 255, 255, 0.75) 50%,
-    rgba(255, 255, 255, 0.35) 55%,
-    rgba(255, 255, 255, 0)    100%
-  );
-  transform: translateX(-160%) skewX(-12deg);
-  opacity: 0;
-}
-.btn-glass:hover::after,
-.btn-glass:focus-visible::after {
-  animation: glass-shine 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-}
-@keyframes glass-shine {
-  0%   { transform: translateX(-160%) skewX(-12deg); opacity: 0; }
-  12%  { opacity: 1; }
-  100% { transform: translateX(290%)  skewX(-12deg); opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .btn-glass::after { display: none; }
-}
-
-.evo-line {
-  margin: 0;
-  max-width: none;
-  line-height: 1.2;
-  white-space: nowrap;
-  /* White in both themes: the ground is the picture, not the paper. The
-     flare in the middle of the picture comes close to white, so the line
-     carries a faint shadow to keep its edge there. */
-  color: #FFFFFF;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 18px rgba(0, 0, 0, 0.25);
-
-  /* One line at every width, which is what the vw term is for and why
-     there is no breakpoint here at all: the type is a fraction of the
-     viewport, so the sentence takes the same share of the screen on a
-     phone as it does on a desktop and never has to wrap.
-
-     Where 4.1vw comes from. The previous line was 38 characters, which
-     in this face at this tracking measured about 19em. The gutter either
-     side is itself proportional (5vw between its floor and its cap), so
-     the width left for the line stays near 87% of the viewport across the
-     range — 19em must fit that, giving 0.87 / 19 ≈ 0.046. 4.1 keeps a
-     margin under it. The current line is 32 characters, so it has room
-     to spare; if the sentence is ever made longer than 38, this is the
-     number that has to come down with it.
-
-     The cap takes over at about 660px and holds the line at a heading
-     size from there up. */
-  /* Dropped from 1.85rem: the line is a strip caption now, not the
-     section's only content, and it shares the strip with a button. */
-  font-size: min(3.4vw, 1.35rem);
-}
-
-[data-theme="dark"] .cta h2 { color: #FFFFFF; }
 
 /* ============================================================
    FOOTER

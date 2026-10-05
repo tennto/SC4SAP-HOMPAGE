@@ -216,48 +216,23 @@
      and admitting that is what makes the rest of the column credible.
      ===================================================== -->
 <section id="impact" class="band dash-top">
-  <!-- The deck runs off the right and bottom edges the way the original
-       component intends, so the section clips it rather than letting it
-       land on top of whatever comes next. -->
-  <div class="shell cswap" data-cardswap>
-    <div class="cs-copy">
+  <div class="shell demo-split">
+    <div class="demo-copy">
       <h2 class="t-h2 reveal" data-t="impactH2">압도적 성능과 효율을 경험하세요</h2>
-      <p class="t-lede reveal" style="margin-top:18px;" data-t="impactLede">여러 세션으로 다중 병렬 작업이 가능합니다</p>
+      <p class="t-lede reveal" style="margin-top:18px;" data-t="impactLede">웹, 모바일, CLI 환경 어디서든지</p>
     </div>
 
-    <!-- Ported from the React Bits CardSwap component. Nothing was
-         installed: this project has no build step and no npm, so the swap
-         timeline and the 3D slot maths were rewritten against the Web
-         Animations API and GSAP's easing is evaluated from its own formula.
-
-         Four cards, twelve capabilities. A card is refilled from the next
-         entry while it is at the bottom of its drop and out of sight, so
-         the deck cycles the whole index without ever growing past four
-         elements. The text comes from the same strings the capability
-         accordion uses, in all three languages.
-
-         Empty on purpose: script fills them. The no-JS fallback in
-         layout.css unstacks whatever is here rather than leaving a pile. -->
-    <!-- Reveals with the copy beside it, on the page's own shared observer
-         rather than a second mechanism of its own. -->
-    <div class="cs-stage reveal" style="--reveal-delay:260ms">
-      <div class="cs-deck" data-cs-deck role="group" data-t-aria="impactDeckAria" aria-label="기능 12가지가 카드 4장에 차례로 나타납니다">
-        <article class="cs-card" data-cs-card>
-          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
-          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
-        </article>
-        <article class="cs-card" data-cs-card>
-          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
-          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
-        </article>
-        <article class="cs-card" data-cs-card>
-          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
-          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
-        </article>
-        <article class="cs-card" data-cs-card>
-          <p class="cs-bar"><i aria-hidden="true"></i><b></b><span></span></p>
-          <div class="cs-body"><div class="terminal-body cs-term"></div></div>
-        </article>
+    <!-- The demos in motion/, played in turn: intro, chat, spec, MCP, setup,
+         then intro again. Each file is a self-contained page with its own
+         loop, so each runs in a frame and the script here only decides
+         which one is on screen. Two frames take turns: one plays while the
+         other waits, hidden, with the next demo already loaded, and the
+         swap is a crossfade between them. Empty on purpose: script fills
+         them, in the variant that matches the page's theme. -->
+    <div class="demo-stage reveal" style="--reveal-delay:260ms">
+      <div class="demo-reel" data-demo-stage>
+        <iframe class="demo-frame" data-demo-frame tabindex="-1" title="" hidden></iframe>
+        <iframe class="demo-frame" data-demo-frame tabindex="-1" title="" hidden></iframe>
       </div>
     </div>
   </div>
@@ -326,26 +301,6 @@
         <p class="t-lede reveal" data-t-html="contribLede">프로젝트에 관심이 있거나 기여하고 싶은 분이 계시다면<br>아래 Connect 연락처로 문의해주세요</p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ===================== CTA ===================== -->
-<section id="install" class="band cta">
-  <!-- One line, centred, and nothing else on the band.
-
-       English in every language on purpose, the way "Welcome
-       Contributors!" above it is: it is a slogan rather than a sentence
-       to be read, and translating it would leave three different rhythms
-       for the same beat. -->
-  <div class="shell evo">
-    <h2 class="t-display evo-line">SC4SAP, A Leap to the Next Level</h2>
-    <!-- Same-origin file, so the download attribute is honoured and the
-         browser saves it under the given name instead of navigating. -->
-    <a class="btn btn-glass" href="assets/sc4sap_next_update_preview_document.pdf"
-       download="SC4SAP_Preview.pdf" type="application/pdf">
-      <i class="ph ph-download-simple" aria-hidden="true"></i>
-      <span>Preview</span>
-    </a>
   </div>
 </section>
 

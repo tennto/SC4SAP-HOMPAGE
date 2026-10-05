@@ -93,7 +93,6 @@
 
     moveLangThumb();
     splitHeadline();
-    if (csRefresh) csRefresh();
     renderIndex();
   }
 
@@ -853,7 +852,7 @@
       /* The palette is read from the stylesheet rather than written here,
          so the globe follows the theme toggle instead of holding its own
          copy of two colours that would then have to be kept in step. */
-      var ink = '#6E685D', accent = '#D17D00';
+      var ink = '#676C74', accent = '#2F3540';
       function readTheme() {
         var cs = getComputedStyle(root);
         ink = (cs.getPropertyValue('--globe-dot') || '').trim() || ink;
@@ -1633,317 +1632,265 @@
   })();
 
   /* ==========================================================
-     Impact — the card stack
+     Impact — the demo reel
 
-     Ported from the React Bits CardSwap component. Nothing was installed:
-     this project has no build step and no npm, so the swap timeline and
-     the 3D slot maths were rewritten against the Web Animations API and
-     GSAP's easing is evaluated from its own formula below.
+     The motion/ demos, one after another: intro, chat, spec, MCP, setup,
+     and round again. Each file is a finished page with its own loop, so
+     each runs in a frame and this decides which one is on screen.
 
-     The timeline is the original's. The front card drops, the rest are
-     promoted forward one slot on a stagger, and a beat later the dropped
-     card is sent to the back of the stack, which is why it reads as one
-     object moving through a queue rather than four things fading.
+     Every demo marks the end of a pass by putting `is-fading` on its
+     root, which is the cue to move on. Two frames take turns: the one on
+     screen plays, the other holds the next demo, loaded and not started.
 
-     The arrangement is the original's too: copy on the left, the deck
-     anchored to the bottom right corner and hanging outside it. The one
-     addition is a brake. A stack that turns itself every five seconds
-     with prose on it is unreadable to anyone who reads slowly, so it
-     pauses on hover and on focus, holds still under reduced motion, and
-     does not run at all while it is off screen.
+     Left alone, a demo stops and rewinds to its first frame whenever it
+     scrolls out of view, and switching between its light and dark files
+     would do the same. Neither is wanted: the reel keeps playing off
+     screen, and a theme switch must not rewind it. So each demo is loaded
+     with its IntersectionObserver replaced ahead of its own script (see
+     reelHook): it starts when the reel says so and never stops itself.
+     The theme is switched by the demo's own `data-theme` attribute, which
+     is all that separates each light file from its dark one, so a switch
+     recolours the demo mid-play instead of reloading it.
+
+     The stage holds one shape for every demo (1200 × 640, the shape most
+     of them already have), so nothing below it moves when the demo
+     changes. A demo of another shape is scaled to cover it and centred,
+     so it loses a sliver of its outer margin rather than showing a band
+     of empty ground.
      ========================================================== */
 
-  /* The component ships two easing configs. The elastic one overshoots and
-     settles by design, and at this size that reads as a stutter rather
-     than as spring, so this takes its other preset: power1.inOut with the
-     shorter durations and earlier promote that go with it. */
-  var CS = {
-    /* cardDistance / verticalDistance, as fractions of the rendered card
-       rather than in pixels. The card is sized against the viewport, so a
-       fixed 62px step is a different-looking fan at every window width:
-       generous at 1400, crowded at 1000. Measured and rebuilt on resize. */
-    distX: 0.053,              // of the card's width
-    distY: 0.115,              // of the card's HEIGHT, not its width: the card
-                               // is far wider than it is tall on a phone, and a
-                               // step taken from the width threw the fan up over
-                               // the copy there
-    skew: 4,                   // skewAmount, eased back from the original 6
-    drop: 1.12,                // the original's y: '+=500', as a fraction of card height
-    /* Stretched from the preset's 800. At 800 the whole swap was over in
-       about 1.5s of a 2.5s turn, so the deck spent nearly a second dead
-       still between moves and read as stopping rather than resting. At
-       1100 the motion runs almost to the next turn. */
-    durDrop: 1100,
-    durMove: 1100,
-    durReturn: 1100,
-    promoteOverlap: 0.45,
-    returnDelay: 0.2,
-    stagger: 150,
-    every: 2500,               // delay
-    /* A beat before the first swap. Firing it the instant the deck is seen
-       meant the front card was already leaving before the reader's eye had
-       landed on it, which reads as a glitch on every refresh; waiting a
-       whole turn instead reads as broken. This is long enough to take the
-       deck in, short enough that it is clearly alive. */
-    lead: 1100
-  };
-
-  /* Twelve capabilities through four cards. The titles and the summaries
-     are the ones the capability accordion already uses, so this deck
-     cannot drift out of step with the section it advertises. */
-  var CS_ICONS = [
-    'ph-plugs', 'ph-users-three', 'ph-file-text', 'ph-list-checks',
-    'ph-git-diff', 'ph-stethoscope', 'ph-puzzle-piece', 'ph-arrows-clockwise',
-    'ph-buildings', 'ph-globe-hemisphere-west', 'ph-squares-four', 'ph-code-block'
+  /* chat_b is an older cut that only knows dark; chat_w carries both
+     themes with identical dark values, so it serves both here and can be
+     switched live like the others. */
+  /* `shape` is each demo's own aspect ratio (width / height) as its file
+     declares it: the wide cut, then the portrait cut it switches to below
+     640px of its own width. */
+  var REEL = [
+    { light: 'motion/intro_w.html', dark: 'motion/intro_b.html', title: 'Super-Claude for SAP 소개', shape: [1200 / 640, 480 / 640] },
+    { light: 'motion/chat_w.html',  dark: 'motion/chat_w.html',  title: 'SAP AI 포탈 채팅 데모',     shape: [1200 / 640, 480 / 560] },
+    { light: 'motion/spec_w.html',  dark: 'motion/spec_b.html',  title: '프로그램 명세서 생성 데모', shape: [1200 / 620, 480 / 660] },
+    { light: 'motion/mcp_w.html',   dark: 'motion/mcp_b.html',   title: 'MCP 모니터 데모',           shape: [1200 / 640, 480 / 700] },
+    { light: 'motion/set_h.html',   dark: 'motion/set_b.html',   title: '설정 데모',                 shape: [1200 / 660, 480 / 720] }
   ];
+  var REEL_COMPACT = 640;   // the demos' own portrait breakpoint
 
-  /* GSAP's power1.inOut, which is quadratic in and out. Evaluating it here
-     rather than shipping a library is why this section has no dependency. */
-  function csPower1(t) {
-    if (t <= 0) return 0;
-    if (t >= 1) return 1;
-    return t < 0.5 ? 2 * t * t : 1 - 2 * (1 - t) * (1 - t);
-  }
-
-  /* Baked into a CSS linear() so the browser runs the curve itself. A
-     segment can start partway along and still be normalised to its own
-     endpoint, which is how the clipped drop below stays faithful. */
-  function csEase(from, to, steps) {
-    var end = csPower1(to);
-    var pts = [];
-    for (var i = 0; i <= steps; i++) {
-      pts.push((csPower1(from + (to - from) * (i / steps)) / end).toFixed(4));
-    }
-    return 'linear(' + pts.join(',') + ')';
-  }
-
-  var CS_SUPPORTS_LINEAR = window.CSS && CSS.supports &&
-    CSS.supports('transition-timing-function', 'linear(0, 1)');
-  var CS_FALLBACK = 'cubic-bezier(0.45, 0, 0.55, 1)';   // the same curve, near enough
-
-  var csPromoteAt = CS.durDrop * (1 - CS.promoteOverlap);            // 440ms
-  var csReturnAt  = csPromoteAt + CS.durMove * CS.returnDelay;       // 600ms
-  var csDropFrac  = csReturnAt / CS.durDrop;                         // 0.75
-  var csFrontDur  = csReturnAt + CS.durReturn;                       // 1400ms
-
-  var CS_EASE      = CS_SUPPORTS_LINEAR ? csEase(0, 1, 64) : CS_FALLBACK;
-  var CS_EASE_DROP = CS_SUPPORTS_LINEAR ? csEase(0, csDropFrac, 48) : CS_FALLBACK;
-
-  var csRefresh = null;   // set once the deck exists, so a language switch reaches it
-
-  (function initCardSwap() {
-    var deck = document.querySelector('[data-cs-deck]');
-    if (!deck) return;
-
-    var cards = [].slice.call(deck.querySelectorAll('[data-cs-card]'));
-    var n = cards.length;
-    if (n < 2) return;
-
-    /* 02 through 12. The first entry is the installer, which is the one
-       thing on the list that is not a capability so much as a prerequisite,
-       and it opened the deck on the least interesting card it had. */
-    var FIRST = 1;
-    var total = S.titles.length - FIRST;
-    var shows = cards.map(function (_, i) { return FIRST + (i % total); });
-    var next = FIRST + (n % total);
-
-    function fill(el, k) {
-      var id = String(k + 1).padStart(2, '0');
-      el.querySelector('.cs-bar i').className = 'ph ' + CS_ICONS[k % CS_ICONS.length];
-      el.querySelector('.cs-bar b').textContent = id;
-      el.querySelector('.cs-bar span').textContent = S.titles[k];
-      el.querySelector('.cs-term').innerHTML = S.terminals[k];
-    }
-
-    csRefresh = function () {
-      cards.forEach(function (el, i) { fill(el, shows[i]); });
+  /* Runs inside each demo before anything else does. Serialised into the
+     frame, so it must not reach outside itself. */
+  function reelHook() {
+    var W = window, started = false, ios = [];
+    W.IntersectionObserver = function (cb) {
+      this.observe = function (el) {
+        ios.push(function () { cb([{ isIntersecting: true, intersectionRatio: 1, target: el }]); });
+      };
+      this.unobserve = this.disconnect = function () {};
+      this.takeRecords = function () { return []; };
     };
 
-    /* The steps are read off the card as it actually rendered, so the fan
-       keeps its shape at any window width. */
-    var geo = { dx: 62, dy: 62, drop: 560 };
-    function measure() {
-      var box = deck.getBoundingClientRect();
-      var w = box.width || 1180;
-      var h = box.height || 500;
-      geo.dx = w * CS.distX;
-      geo.dy = h * CS.distY;
-      geo.drop = h * CS.drop;
+    W.__reel = {
+      start: function () {
+        if (started) return;
+        started = true;
+        ios.forEach(function (f) { f(); });
+      }
+    };
+  }
+
+  /* House style for the frame: the preview page's padding goes, the demo
+     sits centred in the full height of the frame, and the demo's own frame
+     goes, since the stage draws the one edge. The page ground is set to
+     the demo's own ground from script (paint), so a demo shorter than the
+     stage shows no band above or below it.
+     `.demo-out` holds a finished demo blank while the next fades in over
+     it; left alone it would loop back to its first frame mid-crossfade. */
+  var REEL_ROOTS = '.kx, .sapd, .spx, .mcx, .stx';
+  var REEL_CSS =
+    'html, body { margin: 0 !important; padding: 0 !important; height: 100% !important;' +
+    ' min-height: 0 !important; overflow: hidden !important; }' +
+    'body { display: flex !important; align-items: center !important; justify-content: center !important;' +
+    ' background: transparent; }' +
+    '.preview-wrap { flex: none !important; }' +
+    '.preview-wrap { width: 100%; max-width: none !important; }' +
+    '.pv-bar { display: none !important; }' +
+    REEL_ROOTS + ' { box-shadow: none !important; border-radius: 0 !important; }' +
+    'html.demo-out .kx-stage, html.demo-out .spx-stage, html.demo-out .mcx-stage,' +
+    ' html.demo-out .stx-stage, html.demo-out .sapd-main' +
+    ' { opacity: 0 !important; transition: opacity .45s !important; }';
+  var REEL_HEAD = '<script>(' + reelHook.toString() + ')();<\/script><style>' + REEL_CSS + '</style>';
+
+  (function initReel() {
+    var stage = document.querySelector('[data-demo-stage]');
+    if (!stage || !window.fetch) return;
+    var frames = [].slice.call(stage.querySelectorAll('[data-demo-frame]'));
+    if (frames.length < 2) return;
+
+    function theme() { return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+    function fadeMs() {
+      var v = parseFloat(getComputedStyle(stage).getPropertyValue('--demo-fade'));
+      return isNaN(v) ? 1100 : v;
     }
 
-    /* The original's slots: each card back in the stack steps right, up,
-       and further away, so the title bars fan out and stay legible. */
-    function slot(i) {
-      return { x: i * geo.dx, y: -i * geo.dy, z: -i * geo.dx * 1.5 };
-    }
-    function tr(s, dy) {
-      return 'translate(calc(-50% + ' + s.x + 'px), calc(-50% + ' + (s.y + (dy || 0)) + 'px))' +
-             ' translateZ(' + s.z + 'px) skewY(' + CS.skew + 'deg)';
+    var front = null;            // the frame on screen
+    var current = -1;            // index into REEL of what it shows
+    var busy = false;            // a crossfade is running
+    var html = {};               // fetched demo pages, by path
+
+    function win(f) { try { return f.contentWindow && f.contentWindow.__reel; } catch (e) { return null; } }
+    function demoRoot(f) {
+      try { return f.contentDocument && f.contentDocument.querySelector(REEL_ROOTS); }
+      catch (e) { return null; }
     }
 
-    var order = cards.map(function (_, i) { return i; });
-    var at = [];
-    var live = cards.map(function () { return null; });
-    var timer = null;
+    /* The light and dark files differ only in this attribute. The frame's
+       ground follows the demo's, so the space around a shorter demo is
+       the demo's own colour. */
+    function paint(f) {
+      var r = demoRoot(f);
+      if (!r) return;
+      if (theme() === 'light') r.setAttribute('data-theme', 'light');
+      else r.removeAttribute('data-theme');
+      try {
+        f.contentDocument.body.style.background = f.contentWindow.getComputedStyle(r).backgroundColor;
+      } catch (e) { /* gone */ }
+    }
 
-    /* No z-index anywhere. The deck is a preserve-3d context, so the
-       browser sorts the cards by their own depth and keeps sorting as that
-       depth animates. Flipping z-index on a timer instead meant four
-       stacking-context changes per swap, each repainting the whole deck,
-       and that was the hitch. */
-    function place() {
-      order.forEach(function (idx, i) {
-        if (live[idx]) { try { live[idx].cancel(); } catch (e) { /* already gone */ } }
-        live[idx] = null;
-        cards[idx].style.transform = at[idx] = tr(slot(i));
+    function page(src) {
+      if (html[src]) return Promise.resolve(html[src]);
+      return fetch(src).then(function (r) { return r.text(); }).then(function (t) {
+        html[src] = t.replace(/<head[^>]*>/i, function (m) { return m + REEL_HEAD; });
+        return html[src];
       });
     }
 
-    /* fill: 'both', not 'backwards'. With backwards the animation stops
-       applying the instant it ends and the element falls back to its
-       inline style; the two are the same transform written two ways, and
-       the browser resolving them differently by a fraction of a pixel is
-       the single frame that jumps right at the end of the slide. Holding
-       the final value means there is no handover at all. The previous
-       animation on that card is cancelled first, so held values cannot
-       pile up. */
-    /* The final transform is written first, every time. Everything below
-       is the movement between two states the element would have reached
-       anyway, so a browser without the Web Animations API lands on the
-       right layout with no motion rather than throwing here and taking
-       the rest of the page's initialisation down with it. */
-    var CAN_ANIMATE = typeof Element !== 'undefined' && !!Element.prototype.animate;
-
-    function run(idx, el, frames, dur, delay) {
-      el.style.transform = frames[frames.length - 1].transform;
-      if (prefersReduced() || !CAN_ANIMATE) return;
-      if (live[idx]) { try { live[idx].cancel(); } catch (e) { /* already gone */ } }
-      live[idx] = el.animate(frames, { duration: dur, delay: delay, easing: 'linear', fill: 'both' });
-    }
-
-    function swap() {
-      var front = order[0];
-      var rest = order.slice(1);
-      var elF = cards[front];
-      var back = tr(slot(n - 1));
-
-      /* One animation for the front card, not two meeting mid-flight. The
-         original retargets the drop partway through; here that handover is
-         a keyframe at the same instant, with the drop's endpoint read off
-         the same curve, so there is no frame where two animations both
-         claim the element. */
-      run(front, elF, [
-        { transform: at[front], easing: CS_EASE_DROP, offset: 0 },
-        { transform: tr(slot(0), geo.drop * csPower1(csDropFrac)), easing: CS_EASE, offset: csReturnAt / csFrontDur },
-        { transform: back, offset: 1 }
-      ], csFrontDur, 0);
-      at[front] = back;
-
-      rest.forEach(function (idx, i) {
-        var to = tr(slot(i));
-        run(idx, cards[idx], [{ transform: at[idx], easing: CS_EASE }, { transform: to }],
-          CS.durMove, csPromoteAt + i * CS.stagger);
-        at[idx] = to;
+    /* Load REEL[i] into frame f, ready but not started. A frame already
+       holding that demo is reused as it is. */
+    function load(f, i) {
+      if (f.dataset.index === String(i) && f.dataset.ready === '1') return Promise.resolve(f);
+      var token = String(Math.random());
+      f.dataset.index = String(i);
+      f.dataset.ready = '0';
+      f.dataset.token = token;
+      f.title = REEL[i].title;
+      return page(REEL[i][theme()]).then(function (doc) {
+        return new Promise(function (res) {
+          f.onload = function () {
+            if (f.dataset.token !== token) return;   // superseded by a later load
+            f.dataset.ready = '1';
+            paint(f);
+            watch(f);
+            res(f);
+          };
+          f.srcdoc = doc;
+        });
       });
-
-      /* Refilled at the bottom of its drop, where the section has clipped
-         it, so the next capability is already on the card before it climbs
-         back into the stack. */
-      setTimeout(function () {
-        shows[front] = next;
-        next = FIRST + ((next - FIRST + 1) % total);
-        fill(elF, shows[front]);
-      }, prefersReduced() ? 0 : csReturnAt);
-
-      order = rest.concat(front);
     }
 
-    /* The first swap runs the moment the deck is seen, as the original
-       does, rather than after a full interval of nothing. Waiting 2.5s
-       before anything moves reads as a deck that is broken, not resting.
-       Only the first time: coming back from a hover must not jump. */
-    var kicked = false;
-    var lead = null;
-
-    function start() {
-      if (timer || lead || prefersReduced()) return;
-      if (kicked) { timer = setInterval(swap, CS.every); return; }
-      kicked = true;
-      lead = setTimeout(function () {
-        lead = null;
-        swap();
-        timer = setInterval(swap, CS.every);
-      }, CS.lead);
+    /* The end of a pass, seen from outside. */
+    function watch(f) {
+      var r = demoRoot(f);
+      if (!r || !window.MutationObserver) return;
+      new MutationObserver(function () {
+        if (f !== front || busy) return;
+        if (r.classList.contains('is-fading')) next();
+      }).observe(r, { attributes: true, attributeFilter: ['class'] });
     }
 
-    function stop() {
-      clearInterval(timer);
-      timer = null;
-      /* Interrupted during the lead-in, the deck has not moved yet, so the
-         beat is owed again rather than skipped. */
-      if (lead) { clearTimeout(lead); lead = null; kicked = false; }
+    /* Cover the frame. The demo sizes itself from its width, so a shorter
+       demo is given a little more width than the frame, until its height
+       matches, and the overflow is split off both sides; a taller one keeps
+       the frame's width and its overflow is split off top and bottom.
+       The ratio comes from REEL rather than from measuring the demo: a demo
+       switches between its wide and portrait cuts a frame after its width
+       changes, so a measurement taken now can belong to the wrong cut.
+       Widening must also never carry a portrait demo past its breakpoint,
+       or it would flip back to the wide cut inside a portrait frame. */
+    /* Covering is only worth it while the trim is a sliver of margin. A
+       demo far off the frame's shape (the portrait chat, MCP and setup
+       cuts) would lose real content, so past REEL_MAX_TRIM a side it is
+       fitted whole instead, and the rest of the frame shows its own
+       ground colour, which reads as more of the demo, not as a gap. */
+    var REEL_MAX_TRIM = 0.025;
+    function cover(f) {
+      if (f.hidden) return;
+      var r = demoRoot(f), item = REEL[+f.dataset.index];
+      if (!r || !item) return;
+      var W = f.clientWidth, H = f.clientHeight;
+      if (!W || !H) return;
+      var compact = W < REEL_COMPACT;
+      var ratio = item.shape[compact ? 1 : 0];
+      var fitH = H * ratio;          // the width at which the demo is exactly H tall
+      var w;
+      if (fitH > W) {
+        // Shorter than the frame: covering means widening and trimming the sides.
+        w = (fitH - W) / fitH / 2 > REEL_MAX_TRIM ? W : fitH;
+      } else {
+        // Taller than the frame: covering means trimming top and bottom.
+        var h = W / ratio;
+        w = (h - H) / h / 2 > REEL_MAX_TRIM ? fitH : W;
+      }
+      if (compact) w = Math.min(w, REEL_COMPACT - 1);
+      r.parentElement.style.width = w + 'px';
     }
 
-    /* There is deliberately no hover brake. The deck is wider than the
-       window and hangs off the bottom, so its box covers most of the band:
-       a reader whose cursor simply happened to be resting there, without
-       moving at all, stopped it dead and nothing on screen explained why.
-       pointerleave never fired either, because the pointer never left. The
-       deck is set pointer-events: none in the stylesheet so it cannot
-       swallow a hover, a click, or a text selection over half a section it
-       has nothing interactive in.
-
-       Reduced motion still stops it outright, and it does not run off
-       screen. If a visible pause control is wanted, that is the honest
-       place to put one, not an invisible trap the size of a section. */
-
-    csRefresh();
-    measure();
-    place();
-
-    /* Placed first, shown second, and two frames apart. The cards start
-       life piled exactly on top of one another, and the deck is held
-       transparent until it is a deck. One frame commits the placement,
-       the next paints it while still invisible; only then is it faded up.
-       Adding the class before placing left a window in which that pile
-       could be painted and then resolve, which is the jump on refresh. */
-    var host = deck.closest('.cswap');
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () { host.classList.add('ready'); });
-    });
-
-    /* The fan is measured off the rendered card, so a resize has to redo
-       both. Snapping straight to the new slots rather than animating is
-       correct: a window being dragged is not a transition. */
-    if (window.ResizeObserver) {
-      var settle = null;
-      new ResizeObserver(function () {
-        clearTimeout(settle);
-        settle = setTimeout(function () {
-          var dx = geo.dx;
-          measure();
-          /* place() cancels whatever is in flight, so it must not run for
-             a resize that changed nothing. A scrollbar appearing used to
-             be enough to abort a swap halfway and leave the deck sitting
-             there. */
-          if (Math.abs(geo.dx - dx) > 0.5) place();
-        }, 160);
-      }).observe(deck);
-    }
-
-    /* threshold 0, not 0.25. The deck is taller than the band that holds
-       it and hangs out of the bottom, so its own box is only ever partly
-       on screen; at a quarter it switched itself off while the section was
-       still perfectly readable, which is the deck stopping for no reason
-       anyone could see. Any part visible is enough to keep it running. */
-    new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        /* Fully off screen it holds still: an interval running behind the
-           fold is work nobody asked for. */
-        if (e.isIntersecting) start();
-        else stop();
+    function other(f) { return f === frames[0] ? frames[1] : frames[0]; }
+    function frame2() {
+      return new Promise(function (res) {
+        requestAnimationFrame(function () { requestAnimationFrame(res); });
       });
-    }, { threshold: 0 }).observe(deck);
+    }
+
+    /* Bring REEL[i] up in the back frame and fade the front one out. */
+    function show(i) {
+      busy = true;
+      var out = front;
+      var back = out ? other(out) : frames[0];
+
+      return load(back, i).then(function () {
+        if (out) {
+          try { out.contentDocument.documentElement.classList.add('demo-out'); } catch (e) { /* gone */ }
+        }
+        back.hidden = false;
+        cover(back);
+        // One frame for display to take, one for the demo to size itself.
+        return frame2();
+      }).then(function () {
+        front = back;
+        current = i;
+        var w = win(back);
+        if (w) w.start();
+        back.classList.add('is-on');
+        if (out) out.classList.remove('is-on');
+        return new Promise(function (res) { setTimeout(res, prefersReduced() ? 0 : fadeMs()); });
+      }).then(function () {
+        if (out) out.hidden = true;
+        busy = false;
+        // The next demo waits, loaded and not started, in the frame just vacated.
+        load(out || other(front), (current + 1) % REEL.length);
+      });
+    }
+
+    function next() { show((current + 1) % REEL.length); }
+
+    /* Below 640px of their own width the demos switch to a portrait cut,
+       and the stage switches shape with them. */
+    function fit() {
+      stage.classList.toggle('is-compact', stage.clientWidth < REEL_COMPACT);
+      frames.forEach(cover);
+    }
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(stage);
+    else window.addEventListener('resize', fit);
+
+    new MutationObserver(function () { frames.forEach(paint); })
+      .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
+    /* Started when the section first nears the screen, then left running:
+       scrolling away does not stop it. */
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries.some(function (e) { return e.isIntersecting; })) return;
+      io.disconnect();
+      show(0);
+    }, { rootMargin: '0px 0px 40% 0px' });
+    io.observe(stage);
   })();
 
   /* ==========================================================

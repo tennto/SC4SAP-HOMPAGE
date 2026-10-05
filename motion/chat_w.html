@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAP AI 포탈 히어로 데모 모션: 납기 지연 구매오더</title>
+
+<!-- 미리보기 페이지용 스타일. 랜딩페이지에 붙일 때는 필요 없습니다. -->
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center;
+         padding: 48px 24px; box-sizing: border-box; background: #0c0d10; transition: background .3s; }
+  body.pv-light { background: #ffffff; }
+  .preview-wrap { width: 100%; max-width: 1120px; }
+  .pv-bar { display: flex; gap: 6px; margin-bottom: 16px; font: 13px/1 -apple-system, "Malgun Gothic", sans-serif; }
+  .pv-bar button { padding: 8px 14px; border-radius: 8px; border: 1px solid #8884; background: none;
+                   color: #888c91; font: inherit; cursor: pointer; }
+  .pv-bar button[aria-pressed="true"] { background: #888c91; border-color: #888c91; color: #fff; }
+</style>
+
+
+<!-- ================================================================
+     여기부터 복사: (1) 폰트 링크  (2) <style>  (3) #sap-demo  (4) <script>
+     ================================================================ -->
+
+<!-- (1) Pretendard. 이미 사이트에서 쓰고 있다면 이 줄은 빼도 됩니다. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
+<!-- (2) 스타일. 모든 클래스가 sapd- 로 시작해서 기존 CSS와 충돌하지 않습니다. -->
+<style>
+.sapd {
+  /* 색상: 실제 포탈 화면에서 추출 */
+  --bg: #111317;
+  --panel: #171a1f;
+  --raised: #252a31;
+  --line: #2b2f36;
+  --line-strong: #383b40;
+  --ink: #e6e9ee;
+  --ink-2: #bdbfc4;
+  --muted: #888c91;
+  --dim: #63666c;
+  --bad: #f2786d;
+  --good: #56d39a;
+  --bad-rgb: 242, 120, 109;
+  --good-rgb: 86, 211, 154;
+  --bubble: #252a31;
+  --well: #0d0f12;
+  --composer-line: #30343a;
+  --focus-line: #4b5058;
+  --send-off: #25282d;
+  --send-off-ink: #4a4e55;
+  --faint: #4a4e55;
+  --spin: #3f444c;
+  --hair: rgba(255, 255, 255, .045);
+  --track: rgba(255, 255, 255, .06);
+  --frame: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 80px -24px rgba(0, 0, 0, .7);
+  --cursor-fill: #ffffff;
+  --cursor-line: #111317;
+  --cursor-shadow: rgba(0, 0, 0, .5);
+
+  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --ease: cubic-bezier(.22, .8, .24, 1);
+
+  /* 레이아웃 좌표 (스테이지 기준 px) */
+  --colw: 760px;
+  --greet-y: 258px;
+  --cy-home: 330px;
+  --cy-chat: 530px;
+  --thread-top: 36px;
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1200 / 640;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--bg);
+  box-shadow: var(--frame);
+  font-family: var(--font);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  pointer-events: none;
+  visibility: hidden;
+}
+.sapd.is-ready { visibility: visible; }
+
+/* 라이트 테마: <div class="sapd" data-theme="light">. 속성을 빼면 다크입니다. */
+.sapd[data-theme="light"] {
+  --bg: #f5f6f8;
+  --panel: #ffffff;
+  --raised: #eceef2;
+  --line: #e2e4e8;
+  --line-strong: #d6d8dd;
+  --ink: #2f3540;
+  --ink-2: #4a4f59;
+  --muted: #70747c;
+  --dim: #989aa0;
+  --bad: #d9483f;
+  --good: #1a9460;
+  --bad-rgb: 217, 72, 63;
+  --good-rgb: 26, 148, 96;
+  --bubble: #e6e8ed;
+  --well: #ffffff;
+  --composer-line: #cdd0d3;
+  --focus-line: #8d9096;
+  --send-off: #eceef2;
+  --send-off-ink: #b4b8bf;
+  --faint: #b4b8bf;
+  --spin: #d5d8dd;
+  --hair: rgba(47, 53, 64, .07);
+  --track: rgba(47, 53, 64, .08);
+  --frame: 0 0 0 1px rgba(47, 53, 64, .1), 0 30px 70px -30px rgba(47, 53, 64, .28);
+  --cursor-fill: #2f3540;
+  --cursor-line: #ffffff;
+  --cursor-shadow: rgba(47, 53, 64, .3);
+}
+.sapd *, .sapd *::before, .sapd *::after { box-sizing: border-box; }
+
+/* 좁은 화면: 사이드바를 빼고 채팅만 크게 */
+.sapd.is-compact {
+  aspect-ratio: 480 / 560;
+  --colw: 436px;
+  --greet-y: 190px;
+  --cy-home: 252px;
+  --cy-chat: 454px;
+  --thread-top: 22px;
+}
+
+.sapd-stage {
+  position: absolute; top: 0; left: 0;
+  width: 1200px; height: 640px;
+  display: flex;
+  transform-origin: 0 0;
+  transform: scale(var(--s, 1));
+  font-size: 14px; line-height: 1.5;
+}
+.sapd.is-compact .sapd-stage { width: 480px; height: 560px; }
+.sapd-sprite { position: absolute; width: 0; height: 0; }
+.sapd-i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor;
+          stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- 사이드바 ---------- */
+.sapd-side {
+  width: 232px; flex: none; padding: 10px 9px;
+  background: var(--panel); border-right: 1px solid var(--line-strong);
+}
+.sapd.is-compact .sapd-side { display: none; }
+.sapd-new {
+  height: 36px; padding: 0 12px; display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line-strong); border-radius: 9px;
+  font-size: 13px; font-weight: 600;
+}
+.sapd-sec {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 24px 4px 0; font-size: 11.5px; font-weight: 600; color: var(--muted);
+}
+.sapd-sec span { display: flex; align-items: center; gap: 10px; font-weight: 400; }
+.sapd-sec .sapd-i { width: 14px; height: 14px; }
+.sapd-day { margin: 18px 4px 5px; font-size: 10.5px; color: var(--dim); }
+.sapd-sec + .sapd-day { margin-top: 14px; }
+.sapd-item {
+  height: 30px; padding: 0 10px; display: flex; align-items: center; gap: 9px;
+  border-radius: 7px; font-size: 13px; color: var(--ink-2); white-space: nowrap;
+}
+.sapd-item .sapd-i { width: 14px; height: 14px; color: var(--muted); }
+.sapd-item.is-active { background: var(--raised); color: var(--ink); font-weight: 500; }
+.sapd-title { transition: opacity .25s; }
+.sapd-title.is-swap { opacity: 0; }
+
+/* ---------- 메인 ---------- */
+.sapd-main { position: relative; flex: 1; min-width: 0; transition: opacity .45s; }
+.sapd.is-fading .sapd-main { opacity: 0; }
+.sapd-col { position: absolute; left: 50%; width: var(--colw); margin-left: calc(var(--colw) / -2); }
+
+.sapd-greet {
+  top: var(--greet-y); margin-top: 0; margin-bottom: 0; text-align: center;
+  font-size: 27px; font-weight: 500; letter-spacing: -.02em;
+  transition: opacity .4s, transform .6s var(--ease);
+}
+.sapd.is-chat .sapd-greet { opacity: 0; transform: translateY(-16px); }
+
+/* 입력창 */
+.sapd-composer {
+  top: 0; height: 86px;
+  transform: translateY(var(--cy-home));
+  background: var(--panel); border: 1px solid var(--composer-line); border-radius: 14px;
+  transition: transform .75s var(--ease), border-color .2s;
+}
+.sapd.is-chat .sapd-composer { transform: translateY(var(--cy-chat)); }
+.sapd.is-focus .sapd-composer { border-color: var(--focus-line); }
+.sapd-input { padding: 15px 18px 0; font-size: 15px; white-space: nowrap; }
+.sapd-ph { color: var(--dim); }
+.sapd.has-text .sapd-ph { display: none; }
+.sapd-caret {
+  display: none; width: 1.5px; height: 17px; margin: 0 1px -3px;
+  background: var(--ink); animation: sapd-blink 1s steps(1) infinite;
+}
+.sapd.is-focus .sapd-caret { display: inline-block; }
+.sapd-bar {
+  position: absolute; left: 16px; right: 12px; bottom: 11px;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 12.5px; color: var(--muted);
+}
+.sapd-model { display: flex; align-items: center; gap: 8px; }
+.sapd-model .sapd-i { width: 13px; height: 13px; }
+.sapd-send {
+  margin-left: auto; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--send-off); color: var(--send-off-ink);
+  transition: background .25s, color .25s, transform .14s;
+}
+.sapd-send .sapd-i { stroke-width: 1.8; }
+.sapd.has-text .sapd-send { background: var(--ink); color: var(--bg); }
+.sapd-send.is-press { transform: scale(.88); }
+
+/* 대화 */
+.sapd-thread { top: 0; padding-top: var(--thread-top); display: flex; flex-direction: column; }
+.sapd-rv { opacity: 0; transform: translateY(8px);
+           transition: opacity .45s var(--ease), transform .45s var(--ease); }
+.sapd-rv.is-in { opacity: 1; transform: none; }
+
+.sapd-user {
+  align-self: flex-end; max-width: 84%; padding: 9px 15px;
+  background: var(--bubble); border-radius: 16px 16px 4px 16px; font-size: 15px;
+}
+.sapd-ai { margin-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+
+/* SAP 조회 단계 */
+.sapd-tool { border: 1px solid var(--line); border-radius: 10px; }
+.sapd-tool-head {
+  height: 38px; padding: 0 12px; display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--ink-2);
+}
+.sapd-sys {
+  margin-left: auto; display: flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+}
+.sapd-sys i { width: 6px; height: 6px; border-radius: 50%; background: var(--good);
+              animation: sapd-pulse 2s ease-out infinite; }
+.sapd-tool-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .45s var(--ease); }
+.sapd-tool-body.is-collapsed { grid-template-rows: 0fr; }
+.sapd-tool-body ul { margin: 0; padding: 0 12px; list-style: none; overflow: hidden; }
+.sapd-tool-body li {
+  height: 0; opacity: 0; overflow: hidden;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--muted);
+  transition: height .35s var(--ease), opacity .35s, margin .35s var(--ease);
+}
+.sapd-tool-body li.is-in { height: 27px; opacity: 1; }
+.sapd-tool-body li.is-in:last-child { margin-bottom: 9px; }
+.sapd-tool-body code { font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+
+.sapd-ico { position: relative; width: 13px; height: 13px; flex: none; border-radius: 50%; }
+.sapd-ico[data-state="run"] {
+  border: 1.5px solid var(--spin); border-top-color: var(--ink-2);
+  animation: sapd-spin .7s linear infinite;
+}
+.sapd-ico[data-state="done"]::after {
+  content: ""; position: absolute; left: 4px; top: 1px; width: 5px; height: 9px;
+  border: solid var(--good); border-width: 0 1.6px 1.6px 0; transform: rotate(45deg);
+}
+
+/* 답변 */
+.sapd-answer { margin: 0; min-height: 25px; font-size: 15px; line-height: 1.65; }
+.sapd-answer strong { font-weight: 600; }
+.sapd-answer code {
+  padding: 1px 6px; border-radius: 5px; background: var(--raised);
+  font-family: var(--mono); font-size: 12.5px;
+}
+
+/* 조회 결과 표 */
+.sapd-table { border: 1px solid var(--line); border-radius: 10px; background: var(--well); overflow: hidden; }
+.sapd-tr {
+  display: grid; grid-template-columns: 126px 1fr 1.3fr 82px 178px;
+  align-items: center; column-gap: 14px; height: 36px; padding: 0 14px;
+  font-size: 13px; color: var(--ink-2); white-space: nowrap;
+}
+.sapd.is-compact .sapd-tr { grid-template-columns: 88px 1fr 46px 112px; column-gap: 10px; height: 32px; padding: 0 12px; }
+.sapd.is-compact .sapd-c-item { display: none; }
+.sapd-th { border-bottom: 1px solid var(--line); font-size: 11.5px; color: var(--muted); }
+.sapd-row {
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .4s var(--ease), transform .4s var(--ease);
+}
+.sapd-row.is-in { opacity: 1; transform: none; }
+.sapd-row + .sapd-row { box-shadow: inset 0 1px 0 var(--hair); }
+.sapd-po { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
+.sapd-date { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.sapd-c-item { color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
+.sapd-delay { display: flex; align-items: center; gap: 10px; }
+.sapd-delay span { flex: 1; height: 4px; border-radius: 2px; background: var(--track); overflow: hidden; }
+.sapd-delay i {
+  display: block; width: 0; height: 100%; border-radius: 2px; background: var(--bad);
+  transition: width .9s var(--ease) .1s;
+}
+.sapd-row.is-in .sapd-delay i { width: var(--w); }
+.sapd-delay b {
+  width: 34px; flex: none; text-align: right;
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--bad);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 마우스 커서 */
+.sapd-cursor {
+  position: absolute; top: 0; left: 0; z-index: 5; width: 20px; height: 20px;
+  opacity: 0; transition: transform .7s var(--ease), opacity .3s;
+}
+.sapd-cursor.is-on { opacity: 1; }
+.sapd.is-compact .sapd-cursor { display: none; }
+.sapd-cursor svg { display: block; width: 20px; height: 20px; filter: drop-shadow(0 2px 3px var(--cursor-shadow)); }
+.sapd-cursor path { fill: var(--cursor-fill); stroke: var(--cursor-line); }
+.sapd-cursor::after {
+  content: ""; position: absolute; left: -9px; top: -10px; width: 24px; height: 24px;
+  border-radius: 50%; border: 1.5px solid var(--ink); opacity: 0;
+}
+.sapd-cursor.is-click::after { animation: sapd-click .45s ease-out; }
+
+.sapd.is-resetting, .sapd.is-resetting * { transition: none !important; }
+
+@keyframes sapd-blink { 50% { opacity: 0; } }
+@keyframes sapd-spin { to { transform: rotate(360deg); } }
+@keyframes sapd-pulse { 0% { box-shadow: 0 0 0 0 rgba(var(--good-rgb), .45); } 70%, 100% { box-shadow: 0 0 0 6px rgba(var(--good-rgb), 0); } }
+@keyframes sapd-click { 0% { opacity: .7; transform: scale(.3); } 100% { opacity: 0; transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sapd, .sapd * { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+
+<body>
+<div class="preview-wrap">
+
+<!-- 미리보기 전용 테마 전환 버튼. 복사하지 않아도 됩니다. -->
+<div class="pv-bar">
+  <button type="button" data-pv="light" aria-pressed="true">라이트</button>
+  <button type="button" data-pv="dark" aria-pressed="false">다크</button>
+</div>
+<script>
+  document.body.classList.add('pv-light');
+  document.querySelector('.pv-bar').addEventListener('click', function (e) {
+    var t = e.target.getAttribute('data-pv'); if (!t) return;
+    var demo = document.getElementById('sap-demo');
+    t === 'light' ? demo.setAttribute('data-theme', 'light') : demo.removeAttribute('data-theme');
+    document.body.classList.toggle('pv-light', t === 'light');
+    [].forEach.call(this.children, function (b) { b.setAttribute('aria-pressed', b === e.target); });
+  });
+</script>
+
+<!-- (3) 마크업. 히어로 섹션에서 데모가 들어갈 자리에 넣으세요. 부모 너비에 맞춰 자동으로 축소됩니다. -->
+<div class="sapd" id="sap-demo" data-theme="light" role="img"
+     aria-label="SAP AI 포탈 데모: 납기 지연된 구매오더를 물으면 연결된 SAP 시스템을 조회해 지연 일수 순으로 정리한 표를 보여줍니다.">
+  <div class="sapd-stage" aria-hidden="true">
+
+    <svg class="sapd-sprite">
+      <symbol id="sapd-plus" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></symbol>
+      <symbol id="sapd-plus-circle" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.3"/><path d="M8 5.3v5.4M5.3 8h5.4"/></symbol>
+      <symbol id="sapd-sliders" viewBox="0 0 16 16"><path d="M2 5h6.5M12 5h2M2 11h2M7.5 11H14"/><circle cx="10.2" cy="5" r="1.6"/><circle cx="5.8" cy="11" r="1.6"/></symbol>
+      <symbol id="sapd-chat" viewBox="0 0 16 16"><path d="M8 2.5c3.2 0 5.5 2.1 5.5 4.9s-2.3 4.9-5.5 4.9c-.6 0-1.2-.1-1.7-.2l-2.9 1.4.6-2.5C3 10.1 2.5 8.8 2.5 7.4 2.5 4.6 4.8 2.5 8 2.5Z"/></symbol>
+      <symbol id="sapd-bolt" viewBox="0 0 16 16"><path d="M9 1.8 3.5 9H8l-1 5.2L12.5 7H8l1-5.2Z"/></symbol>
+      <symbol id="sapd-chev" viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></symbol>
+      <symbol id="sapd-up" viewBox="0 0 16 16"><path d="M8 13V3.5M3.8 7.6 8 3.4l4.2 4.2"/></symbol>
+    </svg>
+
+    <aside class="sapd-side">
+      <div class="sapd-new"><svg class="sapd-i"><use href="#sapd-plus-circle"/></svg>새 채팅</div>
+      <div class="sapd-sec">프로젝트 <svg class="sapd-i"><use href="#sapd-plus"/></svg></div>
+      <div class="sapd-sec">최근 <span><svg class="sapd-i"><use href="#sapd-sliders"/></svg>모두 보기</span></div>
+      <div class="sapd-day">오늘</div>
+      <div class="sapd-item is-active"><svg class="sapd-i"><use href="#sapd-chat"/></svg><span class="sapd-title">새 대화</span></div>
+      <div class="sapd-day">지난 7일</div>
+      <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-chat"/></svg>Object type: Program</div>
+      <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-bolt"/></svg>Analyze Code · ZMMR00020</div>
+      <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-bolt"/></svg>Ask a Consultant</div>
+      <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-chat"/></svg>이번 달 입고 현황</div>
+    </aside>
+
+    <div class="sapd-main">
+      <p class="sapd-col sapd-greet">반가워요, Sihun님!</p>
+
+      <div class="sapd-col sapd-thread">
+        <div class="sapd-user sapd-rv"></div>
+        <div class="sapd-ai">
+          <div class="sapd-tool sapd-rv">
+            <div class="sapd-tool-head">
+              <span class="sapd-ico" data-state="run"></span>
+              <span class="sapd-tool-label"></span>
+              <span class="sapd-sys"><i></i><span class="sapd-sys-name"></span></span>
+            </div>
+            <div class="sapd-tool-body"><ul></ul></div>
+          </div>
+          <p class="sapd-answer"></p>
+          <div class="sapd-table sapd-rv">
+            <div class="sapd-tr sapd-th">
+              <span>구매오더</span><span>공급업체</span><span class="sapd-c-item">품목</span><span>납기일</span><span>지연</span>
+            </div>
+            <div class="sapd-tbody"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sapd-col sapd-composer">
+        <div class="sapd-input"><span class="sapd-typed"></span><i class="sapd-caret"></i><span class="sapd-ph">SAP 시스템에 대해 무엇이든 물어보세요...</span></div>
+        <div class="sapd-bar">
+          <svg class="sapd-i"><use href="#sapd-plus"/></svg>
+          <span class="sapd-model">Haiku <svg class="sapd-i"><use href="#sapd-chev"/></svg></span>
+          <span class="sapd-send"><svg class="sapd-i"><use href="#sapd-up"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sapd-cursor"><svg viewBox="0 0 20 20"><path d="M3 2l13.2 6.4-5.7 1.7-1.9 5.7L3 2z" fill="#fff" stroke="#111317" stroke-width="1" stroke-linejoin="round"/></svg></div>
+  </div>
+</div>
+
+</div>
+
+<!-- (4) 스크립트. </body> 바로 앞에 넣으세요. 의존성 없습니다. -->
+<script>
+(function () {
+  var root = document.getElementById('sap-demo');
+  if (!root) return;
+
+  /* ---------- 여기만 고치면 시나리오가 바뀝니다 ---------- */
+  var CONFIG = {
+    prompt: '납기 지연된 구매오더 보여줘',
+    chatTitle: '납기 지연 구매오더',
+    system: 'S4P/100',                       // 연결된 시스템 ID/클라이언트
+    toolRunning: 'SAP 시스템 조회 중',
+    toolDone: 'SAP 시스템에서 3개 항목 확인',
+    steps: [
+      { text: '구매오더 납품일정 조회', ref: 'EKKO, EKET' },
+      { text: '입고 이력 대조', ref: 'EKBE' },
+      { text: '공급업체 정보 조회', ref: 'LFA1' }
+    ],
+    // strong: true 는 굵게, code: true 는 인라인 코드로 표시
+    answer: [
+      { t: '납기일이 지났는데 아직 입고되지 않은 구매오더가 ' }, { t: '5건', strong: true },
+      { t: ' 있어요. 지연이 긴 순서로 정리했습니다.' }
+    ],
+    // days: 납기일에서 지난 일수. 납기일 날짜는 방문한 날 기준으로 자동 계산됩니다.
+    rows: [
+      { po: '4500018274', vendor: '한성정밀',   item: '베어링 하우징',   days: 12 },
+      { po: '4500018311', vendor: '대원케미칼', item: '에폭시 수지 20kg', days: 9 },
+      { po: '4500018352', vendor: '세림전자',   item: '컨트롤 보드',     days: 6 },
+      { po: '4500018407', vendor: '동아패키징', item: '수출용 박스',     days: 3 },
+      { po: '4500018433', vendor: '우진스틸',   item: '냉연강판 1.2T',   days: 2 }
+    ],
+    holdMs: 1500                              // 마지막 화면 유지 시간
+  };
+  /* ------------------------------------------------------ */
+
+  var $ = function (s) { return root.querySelector(s); };
+  var stage = $('.sapd-stage'), typed = $('.sapd-typed'), send = $('.sapd-send'),
+      cursor = $('.sapd-cursor'), title = $('.sapd-title'), user = $('.sapd-user'),
+      tool = $('.sapd-tool'), toolIco = $('.sapd-tool-head .sapd-ico'),
+      toolLabel = $('.sapd-tool-label'), toolBody = $('.sapd-tool-body'), list = $('.sapd-tool-body ul'),
+      answer = $('.sapd-answer'), table = $('.sapd-table'), tbody = $('.sapd-tbody');
+
+  var HOME_TITLE = title.textContent;
+  var scale = 1, token = 0, running = false, CANCEL = {};
+  var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+
+  $('.sapd-sys-name').textContent = CONFIG.system;
+  list.innerHTML = CONFIG.steps.map(function (s) {
+    return '<li class="sapd-step"><span class="sapd-ico" data-state="run"></span>' +
+           esc(s.text) + ' <code>' + esc(s.ref) + '</code></li>';
+  }).join('');
+  var steps = [].slice.call(list.children);
+
+  var maxDays = Math.max.apply(null, CONFIG.rows.map(function (r) { return r.days; }));
+  function due(days) {
+    var d = new Date(); d.setDate(d.getDate() - days);
+    return ('0' + (d.getMonth() + 1)).slice(-2) + '.' + ('0' + d.getDate()).slice(-2);
+  }
+  tbody.innerHTML = CONFIG.rows.map(function (r) {
+    return '<div class="sapd-tr sapd-row">' +
+      '<span class="sapd-po">' + esc(r.po) + '</span>' +
+      '<span>' + esc(r.vendor) + '</span>' +
+      '<span class="sapd-c-item">' + esc(r.item) + '</span>' +
+      '<span class="sapd-date">' + due(r.days) + '</span>' +
+      '<span class="sapd-delay"><span><i style="--w:' + Math.round(r.days / maxDays * 100) + '%"></i></span>' +
+      '<b>' + r.days + '일</b></span></div>';
+  }).join('');
+  var rows = [].slice.call(tbody.children);
+
+  /* 부모 너비에 맞춰 스테이지 축소 */
+  function fit() {
+    var w = root.clientWidth;
+    if (!w) return;
+    var compact = w < 640;
+    root.classList.toggle('is-compact', compact);
+    scale = w / (compact ? 480 : 1200);
+    root.style.setProperty('--s', scale);
+    root.classList.add('is-ready');
+  }
+
+  function sleep(ms, t) {
+    return new Promise(function (res, rej) {
+      setTimeout(function () { t === token ? res() : rej(CANCEL); }, ms);
+    });
+  }
+  function show(el) { el.classList.add('is-in'); }
+
+  function renderAnswer() {
+    answer.innerHTML = CONFIG.answer.map(function (s) {
+      var tag = s.code ? 'code' : s.strong ? 'strong' : '';
+      return tag ? '<' + tag + '>' + esc(s.t) + '</' + tag + '>' : esc(s.t);
+    }).join('');
+  }
+
+  /* 처음 상태로 (전환 없이) */
+  function reset() {
+    root.classList.add('is-resetting');
+    root.classList.remove('is-chat', 'is-focus', 'has-text');
+    [].forEach.call(root.querySelectorAll('.sapd-rv, .sapd-step, .sapd-row'), function (el) { el.classList.remove('is-in'); });
+    [].forEach.call(root.querySelectorAll('.sapd-ico'), function (el) { el.dataset.state = 'run'; });
+    typed.textContent = ''; user.textContent = ''; answer.innerHTML = '';
+    title.textContent = HOME_TITLE; title.classList.remove('is-swap');
+    toolLabel.textContent = CONFIG.toolRunning;
+    toolBody.classList.remove('is-collapsed');
+    send.classList.remove('is-press');
+    cursor.classList.remove('is-on', 'is-click');
+    void root.offsetWidth;
+    root.classList.remove('is-resetting');
+  }
+
+  /* 모션을 끈 사용자에게 보여줄 완성 화면 */
+  function renderFinal() {
+    reset();
+    root.classList.add('is-chat');
+    user.textContent = CONFIG.prompt; title.textContent = CONFIG.chatTitle;
+    [].forEach.call(root.querySelectorAll('.sapd-rv, .sapd-step, .sapd-row'), show);
+    [].forEach.call(root.querySelectorAll('.sapd-ico'), function (el) { el.dataset.state = 'done'; });
+    toolLabel.textContent = CONFIG.toolDone; toolBody.classList.add('is-collapsed');
+    renderAnswer();
+  }
+
+  /* 커서 */
+  function point(el, fx, fy) {
+    var r = el.getBoundingClientRect(), s = stage.getBoundingClientRect();
+    return [(r.left - s.left + r.width * fx) / scale, (r.top - s.top + r.height * fy) / scale];
+  }
+  function moveTo(p) { cursor.style.transform = 'translate(' + (p[0] - 3) + 'px,' + (p[1] - 2) + 'px)'; }
+  function click() {
+    cursor.classList.remove('is-click'); void cursor.offsetWidth; cursor.classList.add('is-click');
+  }
+
+  /* 한글 조합 과정을 흉내 낸 타이핑: ㅇ → 왜, ㄴ → 느 → 느 ... */
+  var CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+  function frames(ch) {
+    var c = ch.charCodeAt(0) - 0xAC00;
+    if (c < 0 || c > 11171) return [ch];
+    var l = Math.floor(c / 588), v = Math.floor((c % 588) / 28), t = c % 28;
+    var out = [CHO[l], String.fromCharCode(0xAC00 + l * 588 + v * 28)];
+    if (t) out.push(ch);
+    return out;
+  }
+  async function type(text, t) {
+    var done = '';
+    for (var i = 0; i < text.length; i++) {
+      var f = frames(text[i]);
+      for (var j = 0; j < f.length; j++) {
+        typed.textContent = done + f[j];
+        root.classList.add('has-text');
+        await sleep(34 + Math.random() * 38, t);
+      }
+      done += text[i];
+      if (text[i] === ' ') await sleep(70, t);
+    }
+  }
+  async function stream(t) {
+    for (var i = 0; i < CONFIG.answer.length; i++) {
+      var seg = CONFIG.answer[i];
+      var node = seg.code ? document.createElement('code')
+               : seg.strong ? document.createElement('strong') : document.createTextNode('');
+      answer.appendChild(node);
+      for (var k = 0; k < seg.t.length; k += 2) {
+        node.textContent += seg.t.slice(k, k + 2);
+        await sleep(24, t);
+      }
+    }
+  }
+  async function play(t) {
+    try {
+      for (;;) {
+        reset();
+        await sleep(900, t);
+
+        // 1. 입력창 클릭 후 질문 입력
+        moveTo(point(stage, .78, .86)); void cursor.offsetWidth;
+        cursor.classList.add('is-on');
+        moveTo(point($('.sapd-input'), .46, .78));
+        await sleep(750, t);
+        click(); root.classList.add('is-focus');
+        await sleep(380, t);
+        await type(CONFIG.prompt, t);
+        await sleep(320, t);
+
+        // 2. 전송: 홈 화면이 대화 화면으로 전환
+        moveTo(point(send, .5, .5));
+        await sleep(720, t);
+        click(); send.classList.add('is-press');
+        await sleep(150, t);
+        send.classList.remove('is-press');
+        typed.textContent = '';
+        root.classList.remove('has-text', 'is-focus');
+        root.classList.add('is-chat');
+        user.textContent = CONFIG.prompt; show(user);
+        cursor.classList.remove('is-on');
+        await sleep(800, t);
+
+        // 3. 연결된 SAP 시스템 조회
+        show(tool);
+        await sleep(380, t);
+        for (var i = 0; i < steps.length; i++) {
+          show(steps[i]);
+          await sleep(680, t);
+          steps[i].firstChild.dataset.state = 'done';
+          await sleep(120, t);
+        }
+        toolIco.dataset.state = 'done'; toolLabel.textContent = CONFIG.toolDone;
+        await sleep(480, t);
+        toolBody.classList.add('is-collapsed');
+        title.classList.add('is-swap');
+        await sleep(260, t);
+        title.textContent = CONFIG.chatTitle; title.classList.remove('is-swap');
+        await sleep(240, t);
+
+        // 4. 답변과 조회 결과 표
+        await stream(t);
+        await sleep(300, t);
+        show(table);
+        await sleep(320, t);
+        for (var r = 0; r < rows.length; r++) {
+          show(rows[r]);
+          await sleep(190, t);
+        }
+        await sleep(CONFIG.holdMs, t);
+
+        root.classList.add('is-fading');
+        await sleep(520, t);
+        reset();
+        root.classList.remove('is-fading');
+      }
+    } catch (e) { if (e !== CANCEL) throw e; }
+  }
+
+  function start() { if (running) return; running = true; play(++token); }
+  function stop() { if (!running) return; running = false; token++; root.classList.remove('is-fading'); reset(); }
+
+  fit();
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(root);
+  else window.addEventListener('resize', fit);
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { renderFinal(); return; }
+
+  reset();
+  // 화면에 보일 때만 재생
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) {
+      en[0].isIntersecting ? start() : stop();
+    }, { threshold: .25 }).observe(root);
+  } else { start(); }
+})();
+</script>
+</body>
+</html>

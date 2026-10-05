@@ -57,7 +57,7 @@ window.SC4_STRINGS = (function () {
     whyAfter4: 'PII · 급여 · 뱅킹 테이블은 <b>4중 방어</b>로 차단합니다',
 
     impactH2: '압도적 성능과 효율을 경험하세요',
-    impactLede: '여러 세션으로 다중 병렬 작업이 가능합니다',
+    impactLede: '웹, 모바일, CLI 환경 어디서든지',
     impactDeckAria: '기능 12가지가 카드 4장에 차례로 나타납니다',
 
     startH2: '시작하는 데 세 단계면 충분합니다',
@@ -141,7 +141,7 @@ window.SC4_STRINGS = (function () {
     whyAfter4: 'PII, payroll, and banking tables are blocked by <b>four layers of defense</b>',
 
     impactH2: 'Performance and efficiency, on another level',
-    impactLede: 'Run several sessions at once, each working in parallel',
+    impactLede: 'Anywhere you work: web, mobile, or the CLI',
     impactDeckAria: 'Twelve capabilities, dealt four at a time',
 
     startH2: 'Three moves to get running',
@@ -225,7 +225,7 @@ window.SC4_STRINGS = (function () {
     whyAfter4: 'PII · 給与 · 銀行テーブルは <b>4 層の防御</b>で遮断します',
 
     impactH2: '圧倒的な性能と効率を体験してください',
-    impactLede: '複数のセッションで並列作業ができます',
+    impactLede: 'Web・モバイル・CLI、どの環境からでも',
     impactDeckAria: '12 の機能がカード 4 枚に順に現れます',
 
     startH2: '始めるまで 3 ステップ',

@@ -274,13 +274,6 @@ code, kbd, samp, pre {
   color: var(--ink);
 }
 
-/* Inside the accent band the page ink would land amber on amber, so the
-   selection lifts to paper instead of tinting. */
-.cta ::selection {
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--accent-ink);
-}
-
 /* ---------- Focus ---------- */
 
 :where(a, button, [tabindex]):focus-visible {

@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SC4SAP 인트로 애니메이션 (다크)</title>
+
+<!-- 미리보기 페이지용 스타일. 랜딩페이지에 붙일 때는 필요 없습니다. -->
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center;
+         padding: 48px 24px; box-sizing: border-box; background: #0c0d10; }
+  .preview-wrap { width: 100%; max-width: 1120px; }
+</style>
+
+
+<!-- ================================================================
+     여기부터 복사: (1) 폰트 링크  (2) <style>  (3) .kx 마크업  (4) <script>
+     ================================================================ -->
+
+<!-- (1) Pretendard. 이미 사이트에서 쓰고 있다면 이 줄은 빼도 됩니다. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
+<!-- (2) 스타일. 모든 클래스가 kx- 로 시작해서 다른 데모와 충돌하지 않습니다. -->
+<style>
+.kx {
+  /* 다크 테마 (기본) */
+  --bg: #111317;
+  --card: #171a1f;
+  --line: #2b2f36;
+  --line-strong: #383b40;
+  --ink: #e6e9ee;
+  --ink-2: #bdbfc4;
+  --muted: #888c91;
+  --dim: #6f737a;
+  --track: #2a2e35;
+  --chip: #1f2329;
+  --on-ink: #111317;
+  --on-ink-2: rgba(17, 19, 23, .6);
+  --c-read: #8fb6ff; --c-write: #f0b866; --c-act: #6fd9a8;   /* 읽고 · 쓰고 · 활성화 글자 색 */
+  --good: #56d39a;  --good-soft: rgba(86, 211, 154, .13);
+  --warn: #e2b04a;  --warn-soft: rgba(226, 176, 74, .14);
+  --bad: #f2786d;   --bad-soft: rgba(242, 120, 109, .13);
+  --edge: rgba(255, 255, 255, .07);
+  --frame: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 80px -24px rgba(0, 0, 0, .7);
+  --lift: 0 24px 60px -20px rgba(0, 0, 0, .75);
+
+  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* 글자 크기 (좁은 화면에서는 아래에서 다시 정의) */
+  --word: 84px; --term: 38px; --num: 220px; --lab: 32px; --h: 42px; --cw: 580px; --ch: 380px;
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1200 / 640;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--bg);
+  box-shadow: var(--frame);
+  font-family: var(--font);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  pointer-events: none;
+  visibility: hidden;
+}
+/* 라이트 테마: <div class="kx" data-theme="light"> */
+.kx[data-theme="light"] {
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --line: #e4e5e8;
+  --line-strong: #d5d7d9;
+  --ink: #2f3540;
+  --ink-2: #4a4f59;
+  --muted: #6d7179;
+  --dim: #a0a3a9;
+  --track: #e7eaee;
+  --chip: #eceef2;
+  --on-ink: #ffffff;
+  --on-ink-2: rgba(255, 255, 255, .62);
+  --c-read: #4f7fd6; --c-write: #c8862a; --c-act: #2e9a63;
+  --good: #15803d;  --good-soft: rgba(21, 128, 61, .1);
+  --warn: #a16207;  --warn-soft: rgba(202, 138, 4, .15);
+  --bad: #b91c1c;   --bad-soft: rgba(185, 28, 28, .09);
+  --edge: rgba(47, 53, 64, .07);
+  --frame: 0 0 0 1px rgba(47, 53, 64, .1), 0 30px 70px -30px rgba(47, 53, 64, .28);
+  --lift: 0 24px 60px -24px rgba(47, 53, 64, .35);
+}
+.kx.is-ready { visibility: visible; }
+.kx.is-compact { aspect-ratio: 480 / 640;
+                 --word: 37px; --term: 21px; --num: 132px; --lab: 22px; --h: 26px; --cw: 392px; --ch: 400px; }
+.kx *, .kx *::before, .kx *::after { box-sizing: border-box; }
+.kx p, .kx h3, .kx h4 { margin: 0; }
+
+.kx-stage { position: absolute; top: 0; left: 0; width: 1200px; height: 640px; overflow: hidden;
+            transform-origin: 0 0; transform: scale(var(--s, 1)); font-size: 13px; line-height: 1.5;
+            transition: opacity .45s; }
+.kx.is-compact .kx-stage { width: 480px; }
+.kx.is-fading .kx-stage { opacity: 0; }
+.kx-scene { position: absolute; inset: 0; z-index: 1; visibility: hidden; }
+.kx-scene.is-on { visibility: visible; }
+.kx-scene:not(.is-on) * { animation-play-state: paused !important; }
+.kx-wipe { position: absolute; inset: -2px; z-index: 5; background: var(--ink); transform: translateY(101%); }
+.kx-mask { display: block; overflow: hidden; }
+.kx-mask > * { display: block; }
+.kx-b .kx-mask { padding: .02em 0; }
+.kx-caret { display: inline-block; width: .55em; height: 1.1em; margin: 0 0 -.18em .12em; background: currentColor;
+            animation: kx-blink .9s steps(1) infinite; }
+
+/* ---------- A. 오프닝 ---------- */
+.kx-a, .kx-f { display: grid; place-items: center; }
+.kx-a > *, .kx-f > * { grid-area: 1 / 1; }
+.kx-term { font-family: var(--mono); font-size: var(--term); font-weight: 500; white-space: nowrap; }
+.kx-term i { font-style: normal; color: var(--dim); margin-right: .5em; }
+.kx-typebox { position: relative; display: inline-block; white-space: nowrap; }
+.kx-ghost { visibility: hidden; }
+.kx-term .kx-ghost { padding-right: .8em; }
+.kx-typeline { position: absolute; left: 0; top: 0; white-space: nowrap; }
+.kx-hero { text-align: center; }
+.kx-word { display: flex; justify-content: center; gap: .24em; white-space: nowrap;
+           font-size: var(--word); line-height: 1.12; font-weight: 800; letter-spacing: -.045em; }
+.kx-word .kx-mask:last-child { font-weight: 400; }
+.kx-word .kx-mask { padding-bottom: .08em; }
+.kx-word .kx-mask > span { transform: translateY(108%); }
+.kx.is-static .kx-word .kx-mask > span { transform: none; }
+.kx-tag { margin-top: 22px !important; font-size: calc(var(--lab) * .72); font-weight: 500; color: var(--muted); opacity: 0; }
+
+/* ---------- B. 숫자 (반전 배경) ---------- */
+.kx-b { z-index: 6; color: var(--on-ink); display: flex; align-items: center; justify-content: center; }
+.kx-stat { display: flex; align-items: center; gap: 40px; }
+.kx.is-compact .kx-stat { flex-direction: column; gap: 4px; text-align: center; }
+.kx-num { font-size: var(--num); line-height: 1; font-weight: 800; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
+.kx-b .kx-num { display: flex; }
+.kx-digits { position: relative; }
+.kx-live { position: absolute; right: 0; top: 0; }
+.kx-suffix { opacity: 0; }
+.kx-suffix.is-on { opacity: 1; transition: opacity .2s; }
+.kx-statlab strong { display: block; font-size: var(--lab); line-height: 1.25; font-weight: 700; letter-spacing: -.02em; }
+.kx-statlab small { display: block; margin-top: 8px; font-size: calc(var(--lab) * .5); color: var(--on-ink-2); }
+.kx-ticks { position: absolute; left: 50%; bottom: 44px; display: flex; gap: 8px; transform: translateX(-50%); }
+.kx-ticks i { width: 34px; height: 4px; border-radius: 2px; background: var(--on-ink); opacity: .22; transition: opacity .3s; }
+.kx-ticks i.is-on { opacity: 1; }
+
+/* ---------- C. MCP 도구가 흐르는 배경 ---------- */
+.kx-lanes { position: absolute; left: -10%; right: -10%; top: 50%; transform: translateY(-50%) rotate(-6deg);
+            display: flex; flex-direction: column; gap: 14px; }
+.kx-lane { display: flex; gap: 12px; width: max-content; animation: kx-left 34s linear infinite; }
+.kx-lane:nth-child(even) { animation-name: kx-right; animation-duration: 40s; }
+.kx-lane:nth-child(3n) { animation-duration: 28s; }
+.kx-lane span { height: 44px; padding: 0 18px; display: flex; align-items: center; border-radius: 12px;
+                background: var(--chip); font-family: var(--mono); font-size: 15px; color: var(--muted);
+                position: relative; }
+/* 켜진 칩은 미리 그려 둔 겹 하나를 투명도로만 드러냅니다. 배경색을 바꾸면 기울어진 채 흐르는
+   레인 전체를 매 프레임 다시 그려야 해서 켜지는 순간 화면이 한 번 걸렸습니다. */
+.kx-lane span::after { content: attr(data-n); position: absolute; inset: 0; display: flex; align-items: center;
+                       justify-content: center; border-radius: inherit; background: var(--ink); color: var(--on-ink);
+                       opacity: 0; transition: opacity .6s var(--d, 0s); will-change: opacity; }
+.kx.is-compact .kx-lane span { height: 36px; padding: 0 13px; font-size: 12.5px; }
+.kx-c[data-hot*="r"] .kx-lane span[data-k="r"]::after,
+.kx-c[data-hot*="w"] .kx-lane span[data-k="w"]::after,
+.kx-c[data-hot*="x"] .kx-lane span[data-k="x"]::after { opacity: 1; }
+.kx-claim { position: absolute; left: 50%; top: 50%; width: max-content; max-width: 92%; padding: 30px 46px; text-align: center;
+            border-radius: 22px; background: var(--bg); box-shadow: 0 0 0 1px var(--edge), var(--lift); }
+.kx.is-compact .kx-claim { padding: 22px 22px; }
+.kx-claim h3 { font-size: var(--h); line-height: 1.3; font-weight: 800; letter-spacing: -.035em; word-break: keep-all; }
+.kx-claim h3 b { position: relative; display: inline-block; font-weight: 800; color: var(--dim); transition: color .35s; }
+.kx-claim h3 b::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 4px; border-radius: 2px;
+                        background: currentColor; transform: scaleX(0); transform-origin: 0 50%;
+                        transition: transform .4s cubic-bezier(.22, .8, .24, 1); }
+.kx-claim h3 b.is-hot::after { transform: none; }
+.kx-claim h3 b.is-hot[data-k="r"] { color: var(--c-read); }
+.kx-claim h3 b.is-hot[data-k="w"] { color: var(--c-write); }
+.kx-claim h3 b.is-hot[data-k="x"] { color: var(--c-act); }
+.kx-claim p { margin-top: 10px !important; font-size: calc(var(--lab) * .56); color: var(--muted); }
+
+/* ---------- D. 기능 필름스트립 ---------- */
+.kx-dhead { position: absolute; left: 56px; right: 56px; top: 40px; display: flex; align-items: baseline; }
+.kx.is-compact .kx-dhead { left: 22px; right: 22px; top: 26px; }
+.kx-dhead h3 { font-size: calc(var(--h) * .72); font-weight: 800; letter-spacing: -.03em; }
+.kx-count { margin-left: auto; font-family: var(--mono); font-size: 15px; color: var(--muted); }
+.kx-count b { font-size: 26px; font-weight: 600; color: var(--ink); }
+.kx-strip { position: absolute; left: 50%; top: 50%; margin-top: calc(var(--ch) / -2 + 14px); display: flex; gap: 36px;
+            transition: transform .46s cubic-bezier(.3, .7, .2, 1); }
+.kx-card { width: var(--cw); height: var(--ch); flex: none; padding: 30px 32px; border-radius: 22px; background: var(--card);
+           box-shadow: 0 0 0 1px var(--edge); opacity: .32; transform: scale(.9);
+           transition: opacity .4s, transform .46s cubic-bezier(.3, .7, .2, 1), box-shadow .4s; }
+.kx.is-compact .kx-card { padding: 22px 22px; }
+.kx-card.is-cur { opacity: 1; transform: none; box-shadow: 0 0 0 1px var(--edge), var(--lift); }
+.kx-card-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-height: 44px; }
+.kx-card h4 { font-size: calc(var(--h) * .76); line-height: 1.2; font-weight: 800; letter-spacing: -.03em; }
+.kx.is-compact .kx-card h4 { font-size: 24px; }
+.kx-cmd { height: 27px; padding: 0 11px; display: flex; align-items: center; border: 1px solid var(--line-strong);
+          border-radius: 999px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.kx-v { height: calc(var(--ch) - 130px); display: flex; flex-direction: column; justify-content: center; }
+.kx-bar { position: absolute; left: 56px; right: 56px; bottom: 40px; height: 3px; border-radius: 2px; background: var(--track); }
+.kx.is-compact .kx-bar { left: 22px; right: 22px; bottom: 28px; }
+.kx-bar i { display: block; width: 0; height: 100%; border-radius: 2px; background: var(--ink); transition: width .46s cubic-bezier(.3, .7, .2, 1); }
+
+/* 카드 속 그림 조각 */
+.kx-p { opacity: 0; transform: translateY(12px); transition: opacity .32s, transform .42s cubic-bezier(.22, .8, .24, 1); }
+.kx-p.is-in { opacity: 1; transform: none; }
+.kx-row { display: flex; align-items: center; height: 58px; padding: 0 18px; border: 1px solid var(--line); border-radius: 13px; }
+.kx-row + .kx-row { margin-top: 10px; }
+.kx-row b { font-size: 15.5px; font-weight: 600; }
+.kx-row em, .kx-mx em { height: 28px; padding: 0 12px; display: flex; align-items: center; border-radius: 999px;
+                        font-size: 12px; font-weight: 700; font-style: normal; white-space: nowrap;
+                        background: var(--chip); color: var(--muted);
+                        opacity: 0; transform: scale(.7); transition: opacity .25s var(--d, 0s), transform .35s cubic-bezier(.3, 1.5, .5, 1) var(--d, 0s); }
+.kx-row em, .kx-ck { margin-left: auto; }
+.kx-v.is-go em, .kx-v.is-go .kx-ck { opacity: 1; transform: none; }
+.kx-v em[data-k="good"] { background: var(--good-soft); color: var(--good); }
+.kx-v em[data-k="warn"] { background: var(--warn-soft); color: var(--warn); }
+.kx-v em[data-k="bad"] { background: var(--bad-soft); color: var(--bad); }
+.kx-ck { position: relative; width: 26px; height: 26px; border-radius: 50%; background: var(--good-soft);
+         opacity: 0; transform: scale(.5); transition: opacity .25s var(--d, 0s), transform .35s cubic-bezier(.3, 1.5, .5, 1) var(--d, 0s); }
+.kx-ck::after { content: ""; position: absolute; left: 9.5px; top: 5.5px; width: 6px; height: 11px;
+                border: solid var(--good); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.kx-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.kx-chips span { height: 40px; padding: 0 16px; display: flex; align-items: center; border-radius: 11px;
+                 background: var(--chip); font-size: 14.5px; color: var(--ink-2);
+                 transition: opacity .32s, transform .42s cubic-bezier(.22, .8, .24, 1),
+                             background .25s var(--d, 0s), color .25s var(--d, 0s); }
+.kx.is-compact .kx-chips span { height: 34px; padding: 0 12px; font-size: 13px; }
+.kx-v.is-go .kx-pick { background: var(--ink); color: var(--on-ink); font-weight: 700; }
+.kx-v.is-go .kx-chips .kx-step { background: var(--good-soft); color: var(--good); font-weight: 600; }
+.kx-flow { display: flex; align-items: center; }
+.kx-flow div { flex: 1; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+               border: 1px solid var(--line-strong); border-radius: 15px;
+               transition: opacity .32s, transform .42s cubic-bezier(.22, .8, .24, 1),
+                           background .25s var(--d, 0s), color .25s var(--d, 0s), border-color .25s var(--d, 0s); }
+.kx-flow b { font-size: 22px; font-weight: 800; }
+.kx-flow small { font-size: 12px; opacity: .65; }
+.kx-flow i { flex: none; position: relative; width: 22px; height: 1.5px; margin: 0 4px; background: var(--muted); }
+.kx-flow i::after { content: ""; position: absolute; right: 0; top: -3px; width: 6px; height: 6px;
+                    border: solid var(--muted); border-width: 1.5px 1.5px 0 0; transform: rotate(45deg); }
+.kx.is-compact .kx-flow i { width: 10px; margin: 0 3px; }
+.kx.is-compact .kx-flow b { font-size: 18px; }
+.kx-v.is-go .kx-flow .kx-step { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.kx-spec { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.kx-code, .kx-doc { flex: 1; height: 150px; padding: 16px 18px; border: 1px solid var(--line-strong); border-radius: 12px; }
+.kx-code { background: var(--chip); border-color: transparent; }
+.kx-spec b { display: block; margin-bottom: 12px; font-size: 12px; font-weight: 700; }
+.kx-code b { font-family: var(--mono); font-weight: 500; color: var(--muted); }
+.kx-spec i { display: block; width: 0; height: 7px; margin: 0 0 9px var(--x, 0px); border-radius: 4px; background: var(--track);
+             transition: width .5s cubic-bezier(.22, .8, .24, 1) var(--d, 0s); }
+.kx-code i { background: var(--line-strong); }
+.kx-v.is-go .kx-spec i { width: var(--w); }
+.kx-arrow { flex: none; position: relative; width: 30px; height: 1.5px; background: var(--muted); }
+.kx-arrow::after { content: ""; position: absolute; right: 0; top: -3.5px; width: 7px; height: 7px;
+                   border: solid var(--muted); border-width: 1.5px 1.5px 0 0; transform: rotate(45deg); }
+.kx-man { display: flex; align-items: center; gap: 24px; }
+.kx-screen { position: relative; flex: 1.15; height: 196px; padding: 20px; border-radius: 12px; background: var(--chip); }
+.kx-screen i { display: block; width: var(--w); height: 12px; margin-bottom: 10px; border-radius: 4px; background: var(--line-strong); }
+.kx-screen u { display: block; height: 74px; margin-top: 16px; border-radius: 7px; background: var(--track); }
+.kx-mark { position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; display: grid; place-items: center; border-radius: 50%;
+           background: var(--ink); color: var(--on-ink); font-size: 13px; font-weight: 700; font-style: normal;
+           opacity: 0; transform: scale(.3); transition: opacity .25s var(--d, 0s), transform .4s cubic-bezier(.3, 1.5, .5, 1) var(--d, 0s); }
+.kx-manlist { flex: 1; display: grid; gap: 12px; }
+.kx-manlist div { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; white-space: nowrap; }
+.kx-manlist b { width: 24px; height: 24px; flex: none; display: grid; place-items: center; border: 1.5px solid var(--ink);
+                border-radius: 50%; font-size: 12px; }
+.kx.is-compact .kx-man { gap: 16px; }
+.kx.is-compact .kx-manlist div { font-size: 13px; }
+.kx-mx { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 10px; align-items: center; }
+.kx-mx b { font-size: 12.5px; font-weight: 700; text-align: center; }
+.kx-mx > span { font-size: 14px; color: var(--ink-2); }
+.kx-mx em { justify-content: center; height: 32px; border-radius: 9px; }
+
+/* ---------- E. 에이전트 ---------- */
+.kx-ehead { position: absolute; left: 0; right: 0; top: 38px; text-align: center; }
+.kx.is-compact .kx-ehead { top: 26px; }
+.kx-ehead h3 { font-size: calc(var(--h) * .86); font-weight: 800; letter-spacing: -.035em; }
+.kx-ehead p { margin-top: 4px !important; font-size: 14px; color: var(--muted); }
+.kx-orbit { position: absolute; inset: 0; }
+.kx-orbit svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.kx-orbit line { stroke: var(--line-strong); stroke-width: 1.2; }
+.kx-agent, .kx-hub, .kx-pulse { position: absolute; left: 0; top: 0; }
+.kx-agent { height: 36px; padding: 0 14px; margin: -18px 0 0 0; display: flex; align-items: center; border-radius: 999px;
+            background: var(--card); box-shadow: 0 0 0 1px var(--line-strong); font-size: 14px; font-weight: 700; white-space: nowrap;
+            transition: background .3s, color .3s, box-shadow .3s; }
+.kx-agent.is-core { height: 32px; padding: 0 13px; margin-top: -16px; font-size: 12.5px; font-weight: 600; }
+.kx.is-compact .kx-agent { height: 26px; padding: 0 9px; margin-top: -13px; font-size: 11px; }
+.kx.is-compact .kx-agent.is-core { height: 24px; padding: 0 8px; margin-top: -12px; font-size: 10px; }
+.kx-agent.is-hit { background: var(--ink); color: var(--on-ink); box-shadow: none; }
+.kx-hub { height: 46px; padding: 0 20px; margin-top: -23px; display: flex; align-items: center; border-radius: 999px;
+          background: var(--ink); color: var(--on-ink); font-family: var(--mono); font-size: 15px; font-weight: 600; white-space: nowrap;
+          transition: background .4s; }
+.kx-hub.is-done { background: var(--good); }
+.kx.is-compact .kx-hub { height: 36px; padding: 0 14px; margin-top: -18px; font-size: 12px; }
+.kx-pulse { width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--ink); opacity: 0; }
+.kx-legend { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; font-size: 13px; color: var(--muted); }
+
+/* ---------- F. 마무리 ---------- */
+.kx-steps { display: grid; gap: 18px; }
+.kx-stepline { display: flex; align-items: center; gap: 18px; font-size: var(--term); opacity: 0; }
+.kx-stepline small { font-family: var(--mono); font-size: .55em; color: var(--dim); }
+.kx-stepline b { width: 2.6em; font-weight: 800; letter-spacing: -.02em; }
+.kx-stepline code { height: 1.9em; padding: 0 .7em; display: flex; align-items: center; border-radius: .5em;
+                    background: var(--chip); font-family: var(--mono); font-size: .82em; white-space: nowrap; }
+
+@keyframes kx-blink { 50% { opacity: 0; } }
+@keyframes kx-left { to { transform: translateX(-50%); } }
+@keyframes kx-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.kx.is-resetting, .kx.is-resetting * { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .kx, .kx * { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+
+<body>
+<div class="preview-wrap">
+
+<!-- (3) 마크업. 데모가 들어갈 자리에 넣으세요. 부모 너비에 맞춰 자동으로 축소됩니다.
+     라이트로 쓰려면 data-theme="light" 속성을 추가하면 됩니다. 내용은 스크립트의 CONFIG에서 채워집니다. -->
+<div class="kx" data-kx-intro role="img"
+     aria-label="Super-Claude for SAP 소개 애니메이션: 설치 명령으로 시작해 지원 플랫폼 3개, MCP 도구 150여 개, 전문 에이전트 25개, 워크플로 스킬 17개를 보여주고, 기능 13가지와 에이전트 구성을 차례로 소개합니다.">
+  <div class="kx-stage" aria-hidden="true">
+
+    <div class="kx-scene kx-a">
+      <div class="kx-term"><i>›</i><span class="kx-typebox"><span class="kx-ghost" data-t="install"></span><span class="kx-typeline"><span class="kx-typed"></span><span class="kx-caret"></span></span></span></div>
+      <div class="kx-hero">
+        <div class="kx-word"><span class="kx-mask"><span data-t="word1"></span></span><span class="kx-mask"><span data-t="word2"></span></span></div>
+        <p class="kx-tag" data-t="tagline"></p>
+      </div>
+    </div>
+
+    <div class="kx-scene kx-b">
+      <div class="kx-stat">
+        <span class="kx-mask"><b class="kx-num"><span class="kx-digits"><span class="kx-ghost"></span><span class="kx-live">0</span></span><span class="kx-suffix"></span></b></span>
+        <div class="kx-statlab"><strong></strong><small></small></div>
+      </div>
+      <div class="kx-ticks"></div>
+    </div>
+
+    <div class="kx-scene kx-c">
+      <div class="kx-lanes"></div>
+      <div class="kx-claim">
+        <h3>ABAP을 직접 <b data-k="r">읽고</b>, <b data-k="w">쓰고</b>, <span style="white-space:nowrap"><b data-k="x">활성화</b>합니다</span></h3>
+        <p data-t="claimSub"></p>
+      </div>
+    </div>
+
+    <div class="kx-scene kx-d">
+      <div class="kx-dhead"><h3 data-t="featTitle"></h3><span class="kx-count"><b>01</b> / <span></span></span></div>
+      <div class="kx-strip"></div>
+      <div class="kx-bar"><i></i></div>
+    </div>
+
+    <div class="kx-scene kx-e">
+      <div class="kx-ehead"><h3 data-t="agentTitle"></h3><p data-t="agentSub"></p></div>
+      <div class="kx-orbit"></div>
+      <div class="kx-legend" data-t="agentLegend"></div>
+    </div>
+
+    <div class="kx-scene kx-f">
+      <div class="kx-fwrap">
+        <div class="kx-steps"></div>
+      </div>
+    </div>
+
+    <div class="kx-wipe"></div>
+  </div>
+</div>
+
+</div>
+
+<!-- (4) 스크립트. </body> 바로 앞에 넣으세요. 의존성 없고, 페이지 안의 모든 data-kx-intro 요소에 적용됩니다. -->
+<script>
+(function () {
+  /* ---------- 여기만 고치면 문구와 내용이 바뀝니다 ---------- */
+  var CONFIG = {
+    word1: 'Super-Claude', word2: 'for SAP',
+    tagline: 'SAP 시스템 전체를 Claude Code 안에서',
+    install: '/plugin install sc4sap',
+
+    stats: [
+      { n: 3, suffix: '', label: '지원 플랫폼', sub: 'ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud' },
+      { n: 150, suffix: '+', label: 'MCP 도구', sub: 'ABAP ADT 기반' },
+      { n: 25, suffix: '', label: '전문 에이전트', sub: 'Core 10 · Basis 1 · Module 14' },
+      { n: 17, suffix: '', label: '워크플로 스킬', sub: 'setup · create-program · analyze-code · team' }
+    ],
+
+    claimSub: 'MCP 기반 도구 150여 개',
+    // 배경에 흐르는 도구 이름. r 읽기, w 쓰기, x 활성화·검증
+    tools: {
+      r: ['GetObjectInfo', 'GetTextElement', 'GetScreensList', 'GetTypeInfo', 'GetProgram', 'GetClass', 'GetInclude', 'GetTable', 'GetStructure', 'GetFunction', 'GetPackage', 'GetWhereUsed', 'SearchObject'],
+      w: ['CreateClass', 'CreateProgram', 'UpdateInclude', 'UpdateClass', 'CreateTable', 'CreateTransport', 'UpdateTextElement', 'DeleteObject'],
+      x: ['ActivateObject', 'CheckSyntax', 'RunUnitTest', 'ActivateProgram']
+    },
+
+    featTitle: '기능 13가지',
+    /* kind 별 items 형식
+         checks : ['문구', ...]                            rows  : [['문구', '배지', 'good|warn|bad'], ...]
+         chips  : ['칩', ...] + pick                       steps : ['칩', ...]
+         flow   : [['단계', '설명'], ...]                    spec  : ['형식', ...] + pick
+         matrix : cols + [['항목', [0|1, ...]], ...]  (0 같음, 1 다름)
+         manual : ['항목', ...]  화면 위에 번호 표시가 찍힙니다 (최대 4개) */
+    features: [
+      { name: '자동 MCP 설치', cmd: '/sc4sap:setup', kind: 'checks', items: ['abap-mcp-adt-powerup 설치', 'SAP 연결 테스트', 'MCP 서버와 권한 훅 등록'] },
+      { name: '다중 환경 프로파일', cmd: '/sc4sap:sap-option', kind: 'rows', items: [['KR-DEV', '읽기 · 쓰기', 'good'], ['KR-QA', '읽기 전용', 'warn'], ['KR-PRD', '읽기 전용', 'warn']] },
+      { name: '자동 프로그램 생성기', cmd: '/sc4sap:create-program', kind: 'steps', items: ['Main', 'Include', 'ALV + Docking', 'Dynpro', 'GUI Status', 'Text Elements', 'ABAP Unit'] },
+      { name: '프로그램 분석', cmd: '/sc4sap:program-to-spec', kind: 'spec', items: ['Markdown', 'Excel', 'HTML'], pick: 2 },
+      { name: '프로그램 → 매뉴얼', cmd: '/sc4sap:program-to-manual', kind: 'manual', items: ['시나리오별 단계', '체크 포인트', '메시지', '용어집'] },
+      { name: '코드 분석', cmd: '/sc4sap:analyze-code', kind: 'rows', items: [['LOOP 안의 SELECT SINGLE', '높음', 'bad'], ['AUTHORITY-CHECK 없음', '중간', 'warn'], ['하드코딩된 텍스트', '낮음', '']] },
+      { name: '프로그램 비교', cmd: '/sc4sap:compare-programs', kind: 'matrix', cols: ['프로그램 A', '프로그램 B', '프로그램 C'],
+        items: [['선택 조건', [0, 0, 1]], ['데이터 원천', [0, 1, 1]], ['권한 검사', [0, 0, 0]], ['출력', [0, 1, 0]]] },
+      { name: '패키지 → 프로세스', cmd: '/sc4sap:package-to-process', kind: 'flow', items: [['PR', '구매요청'], ['PO', '구매오더'], ['GR', '입고'], ['IR', '송장검증']] },
+      { name: '운영 진단', cmd: '', kind: 'steps', items: ['ST22 덤프', 'SM02 시스템 메시지', '/IWFND/ERROR_LOG', '프로파일러 트레이스', '로그', 'where-used'] },
+      { name: 'CBO 재사용', cmd: '', kind: 'rows', items: [['기존 테이블과 클래스', '재사용', 'good'], ['CMOD · BAdI · APPEND', '재사용', 'good'], ['중복 CBO 생성', '건너뜀', '']] },
+      { name: '산업 컨텍스트', cmd: '', kind: 'chips', pick: 4, items: ['유통', '패션', '화장품', '타이어', '자동차', '제약', '식음료', '화학', '전자', '건설', '철강', '유틸리티', '은행', '공공'] },
+      { name: '국가 · 로컬라이제이션', cmd: '', kind: 'chips', pick: 0, items: ['KR', 'JP', 'CN', 'US', 'DE', 'GB', 'FR', 'IT', 'ES', 'NL', 'BR', 'MX', 'IN', 'AU', 'SG', 'EU 공통'] },
+      { name: '모듈 컨설테이션', cmd: '/sc4sap:ask-consultant', kind: 'chips', pick: 1, items: ['SD', 'MM', 'FI', 'CO', 'PP', 'PS', 'PM', 'QM', 'TR', 'HCM', 'WM', 'TM', 'BW', 'Ariba', 'BC'] }
+    ],
+    featureMs: 660,                           // 기능 카드 하나에 머무는 시간
+    same: '같음', diff: '다름',
+
+    agentTitle: '25개 에이전트가 나눠 처리합니다',
+    agentSub: '역공학, 코드 리뷰, 프로그램 생성',
+    agentLegend: 'Core 10 · Basis 1 · Module 14',
+    hub: '/sc4sap:team',
+    // 원 위에 놓이는 에이전트. Core 10은 좌우에, Module 14 + Basis 1(BC)은 위아래에 놓입니다
+    coreAgents: ['Analyst', 'Architect', 'Code Reviewer', 'Critic', 'Debugger', 'Doc Specialist', 'Executor', 'Planner', 'QA Tester', 'Writer'],
+    modules: ['SD', 'MM', 'FI', 'CO', 'PP', 'PS', 'PM', 'QM', 'TR', 'HCM', 'WM', 'TM', 'Ariba', 'BW', 'BC'],
+
+    steps: [['01', '설치', '/plugin install sc4sap'], ['02', '연결', '/sc4sap:setup'], ['03', '작업', '/sc4sap:team']]
+  };
+  /* --------------------------------------------------------- */
+
+  var CANCEL = {}, EASE = 'cubic-bezier(.22, .8, .24, 1)', SHARP = 'cubic-bezier(.7, 0, .3, 1)';
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function d(ms) { return ' style="--d:' + ms + 'ms"'; }
+
+  /* 기능 카드 속 그림 */
+  var RENDER = {
+    checks: function (f) {
+      return f.items.map(function (x, i) { return '<div class="kx-row kx-p"><b>' + esc(x) + '</b><i class="kx-ck"' + d(i * 110) + '></i></div>'; }).join('');
+    },
+    rows: function (f) {
+      return f.items.map(function (x, i) {
+        return '<div class="kx-row kx-p"><b>' + esc(x[0]) + '</b><em data-k="' + (x[2] || '') + '"' + d(i * 110) + '>' + esc(x[1]) + '</em></div>';
+      }).join('');
+    },
+    chips: function (f) {
+      return '<div class="kx-chips">' + f.items.map(function (x, i) {
+        return '<span class="kx-p' + (i === f.pick ? ' kx-pick' : '') + '">' + esc(x) + '</span>';
+      }).join('') + '</div>';
+    },
+    steps: function (f) {
+      return '<div class="kx-chips">' + f.items.map(function (x, i) { return '<span class="kx-p kx-step"' + d(i * 60) + '>' + esc(x) + '</span>'; }).join('') + '</div>';
+    },
+    flow: function (f) {
+      return '<div class="kx-flow">' + f.items.map(function (x, i) {
+        return (i ? '<i class="kx-p"></i>' : '') + '<div class="kx-p kx-step"' + d(i * 100) + '><b>' + esc(x[0]) + '</b><small>' + esc(x[1]) + '</small></div>';
+      }).join('') + '</div>';
+    },
+    spec: function (f) {
+      var code = [[62, 0], [78, 14], [50, 14], [70, 28], [44, 14], [30, 0]], doc = [92, 76, 84, 58];
+      return '<div class="kx-spec"><div class="kx-code kx-p"><b>ABAP</b>' + code.map(function (c, i) {
+        return '<i style="--w:' + c[0] + '%;--x:' + c[1] + 'px;--d:' + i * 30 + 'ms"></i>';
+      }).join('') + '</div><div class="kx-arrow kx-p"></div><div class="kx-doc kx-p"><b>기능/기술 명세서</b>' + doc.map(function (w, i) {
+        return '<i style="--w:' + w + '%;--d:' + (180 + i * 50) + 'ms"></i>';
+      }).join('') + '</div></div>' + RENDER.chips(f);
+    },
+    manual: function (f) {
+      var at = [[14, 20], [60, 40], [28, 74], [80, 82]];
+      return '<div class="kx-man"><div class="kx-screen kx-p"><i style="--w:44%"></i><i style="--w:62%"></i><i style="--w:36%"></i><u></u>' +
+        f.items.slice(0, 4).map(function (x, i) {
+          return '<em class="kx-mark" style="--d:' + i * 110 + 'ms;left:' + at[i][0] + '%;top:' + at[i][1] + '%">' + (i + 1) + '</em>';
+        }).join('') + '</div><div class="kx-manlist">' + f.items.slice(0, 4).map(function (x, i) {
+          return '<div class="kx-p"><b>' + (i + 1) + '</b>' + esc(x) + '</div>';
+        }).join('') + '</div></div>';
+    },
+    matrix: function (f) {
+      var k = 0;
+      return '<div class="kx-mx"><span></span>' + f.cols.map(function (c) { return '<b class="kx-p">' + esc(c) + '</b>'; }).join('') +
+        f.items.map(function (r) {
+          return '<span class="kx-p">' + esc(r[0]) + '</span>' + r[1].map(function (v) {
+            return '<em data-k="' + (v ? 'warn' : '') + '"' + d(k++ * 30) + '>' + (v ? CONFIG.diff : CONFIG.same) + '</em>';
+          }).join('');
+        }).join('') + '</div>';
+    }
+  };
+
+  function init(root) {
+    var $ = function (s) { return root.querySelector(s); };
+    var all = function (s) { return [].slice.call(root.querySelectorAll(s)); };
+    var S = { a: $('.kx-a'), b: $('.kx-b'), c: $('.kx-c'), d: $('.kx-d'), e: $('.kx-e'), f: $('.kx-f') };
+    var wipe = $('.kx-wipe'), term = $('.kx-term'), typed = $('.kx-typed'),
+        num = $('.kx-num'), numGhost = $('.kx-digits .kx-ghost'), numLive = $('.kx-live'), numSuffix = $('.kx-suffix'),
+        statLab = $('.kx-statlab'), ticks = $('.kx-ticks'),
+        lanes = $('.kx-lanes'), claim = $('.kx-claim'), strip = $('.kx-strip'), bar = $('.kx-bar i'),
+        count = $('.kx-count b'), orbit = $('.kx-orbit'), steps = $('.kx-steps');
+    var F = CONFIG.features, token = 0, running = false, compact = false, live = [];
+
+    /* ----- 고정 내용 채우기 ----- */
+    all('[data-t]').forEach(function (el) { el.textContent = CONFIG[el.getAttribute('data-t')]; });
+    ticks.innerHTML = CONFIG.stats.map(function () { return '<i></i>'; }).join('');
+    $('.kx-count span').textContent = ('0' + F.length).slice(-2);
+    (function buildLanes() {
+      var pool = [];
+      ['r', 'w', 'x'].forEach(function (k) { CONFIG.tools[k].forEach(function (n) { pool.push([n, k]); }); });
+      for (var l = 0; l < 10; l++) {
+        var html = '';
+        for (var i = 0; i < 14; i++) { var p = pool[(l * 5 + i * 3) % pool.length]; html += '<span data-k="' + p[1] + '" data-n="' + p[0] + '" style="--d:' + ((l * 7 + i * 5) % 9) * 45 + 'ms">' + p[0] + '</span>'; }
+        var lane = document.createElement('div');
+        lane.className = 'kx-lane'; lane.innerHTML = html + html;
+        lanes.appendChild(lane);
+      }
+    })();
+    strip.innerHTML = F.map(function (f) {
+      return '<div class="kx-card"><div class="kx-card-top"><h4>' + esc(f.name) + '</h4>' +
+             (f.cmd ? '<span class="kx-cmd">' + esc(f.cmd) + '</span>' : '') + '</div><div class="kx-v">' + RENDER[f.kind](f) + '</div></div>';
+    }).join('');
+    var cards = all('.kx-card');
+    steps.innerHTML = CONFIG.steps.map(function (s) {
+      return '<div class="kx-stepline"><small>' + s[0] + '</small><b>' + esc(s[1]) + '</b><code><span class="kx-typebox">' +
+             '<span class="kx-ghost">' + esc(s[2]) + '</span><span class="kx-typeline"><span></span></span></span></code></div>';
+    }).join('');
+    var stepLines = all('.kx-stepline');
+
+    /* ----- 도구 ----- */
+    function sleep(ms, t) {
+      return new Promise(function (res, rej) { setTimeout(function () { t === token ? res() : rej(CANCEL); }, ms); });
+    }
+    function anim(el, frames, opts) {
+      var o = { duration: 500, easing: EASE, fill: 'both' };
+      for (var k in opts) o[k] = opts[k];
+      var a = el.animate(frames, o); live.push(a); return a;
+    }
+    function tween(ms, t, fn) {
+      return new Promise(function (res, rej) {
+        var t0 = performance.now();
+        (function f(now) {
+          if (t !== token) return rej(CANCEL);
+          var p = Math.min(1, (now - t0) / ms);
+          fn(p < 1 ? 1 - Math.pow(1 - p, 3) : 1);
+          p < 1 ? requestAnimationFrame(f) : res();
+        })(t0);
+      });
+    }
+    function on(k) { for (var x in S) S[x].classList.toggle('is-on', x === k); }
+    function fit() {
+      var w = root.clientWidth;
+      if (!w) return;
+      compact = w < 640;
+      root.classList.toggle('is-compact', compact);
+      root.style.setProperty('--s', w / (compact ? 480 : 1200));
+      root.classList.add('is-ready');
+    }
+    function W() { return compact ? 480 : 1200; }
+    async function typeInto(el, text, per, t) {
+      for (var i = 1; i <= text.length; i++) { el.textContent = text.slice(0, i); await sleep(per, t); }
+    }
+    /* 화면을 훑고 지나가는 전환. 다 덮였을 때 swap을 실행 */
+    async function sweep(swap, t) {
+      anim(wipe, [{ transform: 'translateX(-101%)' }, { transform: 'translateX(0)', offset: .5 }, { transform: 'translateX(101%)' }],
+           { duration: 720, easing: SHARP });
+      await sleep(360, t); swap(); await sleep(300, t);
+    }
+    function riseIn(el, delay, dur) {
+      return anim(el, [{ transform: 'translateY(108%)' }, { transform: 'translateY(0)' }], { duration: dur || 720, delay: delay || 0 });
+    }
+    function fadeUp(el, delay, dist) {
+      return anim(el, [{ opacity: 0, transform: 'translateY(' + (dist || 18) + 'px)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: delay || 0 });
+    }
+
+    function reset() {
+      root.classList.add('is-resetting');
+      live.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+      live = [];
+      root.classList.remove('is-fading');
+      typed.textContent = ''; numSuffix.classList.remove('is-on');
+      all('.kx-ticks i').forEach(function (i) { i.classList.remove('is-on'); });
+      S.c.removeAttribute('data-hot');
+      all('.kx-claim b').forEach(function (b) { b.classList.remove('is-hot'); });
+      cards.forEach(function (c) { c.classList.remove('is-cur'); clearCard(c); });
+      setCard(0, true); bar.style.width = '0';
+      orbit.innerHTML = '';
+      stepLines.forEach(function (l) { l.querySelector('.kx-typeline span').textContent = ''; });
+      on('a');
+      void root.offsetWidth;
+      root.classList.remove('is-resetting');
+    }
+
+    /* ----- A. 오프닝: 설치 명령 → 이름 ----- */
+    async function sceneA(t) {
+      var lines = S.a.querySelectorAll('.kx-mask > span'), tag = S.a.querySelector('.kx-tag');
+      fadeUp(term, 0, 10);
+      await sleep(350, t);
+      await typeInto(typed, CONFIG.install, 34, t);
+      await sleep(380, t);
+      anim(term, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(-70px) scale(.9)' }], { duration: 380, easing: SHARP });
+      riseIn(lines[0], 140); riseIn(lines[1], 240);
+      fadeUp(tag, 620);
+      await sleep(1750, t);
+    }
+
+    /* ----- B. 숫자: 반전 배경 위에서 하나씩 ----- */
+    async function sceneB(t) {
+      var strong = statLab.querySelector('strong'), small = statLab.querySelector('small'), tk = all('.kx-ticks i');
+      for (var i = 0; i < CONFIG.stats.length; i++) {
+        var s = CONFIG.stats[i];
+        numGhost.textContent = s.n; numLive.textContent = '0'; numSuffix.textContent = s.suffix;
+        numSuffix.classList.remove('is-on');
+        strong.textContent = s.label; small.textContent = s.sub;
+        riseIn(num, 0, 420);
+        anim(statLab, [{ opacity: 0, transform: 'translateX(70px)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 90 });
+        tk[i].classList.add('is-on');
+        await tween(520, t, function (k) { numLive.textContent = Math.round(s.n * k); });
+        if (s.suffix) numSuffix.classList.add('is-on');
+        await sleep(i === CONFIG.stats.length - 1 ? 480 : 270, t);
+        if (i < CONFIG.stats.length - 1) {
+          anim(num, [{ transform: 'translateY(0)' }, { transform: 'translateY(-108%)' }], { duration: 200, easing: SHARP });
+          anim(statLab, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(-50px)' }], { duration: 200, easing: SHARP });
+          await sleep(200, t);
+        }
+      }
+    }
+
+    /* ----- C. 도구 이름이 흐르고, 읽고·쓰고·활성화에 차례로 밑줄 ----- */
+    async function sceneC(t) {
+      anim(lanes, [{ opacity: 0 }, { opacity: 1 }], { duration: 500 });
+      anim(claim, [{ opacity: 0, transform: 'translate(-50%, -50%) scale(.86)' }, { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' }],
+           { duration: 620, delay: 150 });
+      await sleep(800, t);
+      // 읽고 → 쓰고 → 활성화 순서로 밑줄이 그어지고, 같은 종류의 배경 칩이 함께 켜진다
+      var verbs = all('.kx-claim b');
+      for (var i = 0; i < verbs.length; i++) {
+        verbs[i].classList.add('is-hot');
+        S.c.setAttribute('data-hot', (S.c.getAttribute('data-hot') || '') + verbs[i].getAttribute('data-k'));
+        await sleep(820, t);
+      }
+      await sleep(350, t);
+    }
+
+    /* ----- D. 기능 카드가 옆으로 지나간다 ----- */
+    function clearCard(c) {
+      c.querySelector('.kx-v').classList.remove('is-go');
+      [].forEach.call(c.querySelectorAll('.kx-p'), function (p) { p.classList.remove('is-in'); });
+    }
+    function setCard(i, instant) {
+      var cw = compact ? 392 : 580, x = -(i * (cw + 36)) - cw / 2;
+      strip.style.transform = 'translateX(' + x + 'px)';
+      cards.forEach(function (c, k) { c.classList.toggle('is-cur', k === i); });
+      count.textContent = ('0' + (i + 1)).slice(-2);
+      if (!instant) bar.style.width = (i + 1) / F.length * 100 + '%';
+    }
+    async function playCard(i, t) {
+      var parts = [].slice.call(cards[i].querySelectorAll('.kx-p')), gap = Math.min(45, 260 / parts.length);
+      for (var k = 0; k < parts.length; k++) { parts[k].classList.add('is-in'); await sleep(gap, t); }
+      cards[i].querySelector('.kx-v').classList.add('is-go');
+    }
+    async function sceneD(t) {
+      anim(strip, [{ opacity: 0, marginLeft: '260px' }, { opacity: 1, marginLeft: '0px' }], { duration: 600 });
+      fadeUp(S.d.querySelector('.kx-dhead'), 100);
+      for (var i = 0; i < F.length; i++) {
+        setCard(i);
+        if (i > 1) clearCard(cards[i - 2]);
+        await sleep(i ? 190 : 320, t);
+        playCard(i, t).catch(function () {});
+        await sleep(CONFIG.featureMs - 190, t);
+      }
+      await sleep(350, t);
+    }
+
+    /* ----- E. 에이전트: 원 하나에 25개. 선은 모두 가운데에서 각 칩의 중심까지 곧게 이어진다 ----- */
+    async function sceneE(t) {
+      var cx = W() / 2, cy = compact ? 346 : 352, rx = compact ? 182 : 490, ry = compact ? 222 : 200;
+      var core = CONFIG.coreAgents, mods = CONFIG.modules;
+      // 원을 도는 순서: 위 오른쪽 모듈 → 오른쪽 Core → 아래 모듈 → 왼쪽 Core → 위 왼쪽 모듈
+      var mSide = Math.floor(mods.length * .27), cRight = Math.ceil(core.length / 2), order = [];
+      function push(list, from, to, isCore) { for (var i = from; i < to; i++) order.push({ label: list[i], core: isCore, k: i }); }
+      push(mods, 0, mSide, false); push(core, 0, cRight, true);
+      push(mods, mSide, mods.length - mSide, false); push(core, cRight, core.length, true);
+      push(mods, mods.length - mSide, mods.length, false);
+
+      var svg = '<svg viewBox="0 0 ' + W() + ' 640">', html = '', n = order.length;
+      order.forEach(function (nd, i) {
+        var a = -Math.PI / 2 + (i + .5) / n * Math.PI * 2;
+        nd.x = Math.round(cx + Math.cos(a) * rx); nd.y = Math.round(cy + Math.sin(a) * ry); nd.slot = i;
+        svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + nd.x + '" y2="' + nd.y + '"/>';
+        html += '<div class="kx-agent' + (nd.core ? ' is-core' : '') + '">' + esc(nd.label) + '</div>';
+      });
+      order.forEach(function () { html += '<i class="kx-pulse"></i>'; });
+      orbit.innerHTML = svg + '</svg>' + html + '<div class="kx-hub">' + esc(CONFIG.hub) + '</div>';
+
+      var hub = orbit.querySelector('.kx-hub'), agents = [].slice.call(orbit.querySelectorAll('.kx-agent')),
+          lines = [].slice.call(orbit.querySelectorAll('line')), pulses = [].slice.call(orbit.querySelectorAll('.kx-pulse'));
+      var at = function (x, y) { return 'translate(' + x + 'px,' + y + 'px) translateX(-50%)'; };
+      var hubAt = at(cx, cy);
+
+      // 펼쳐지기: 칩과 선이 같은 속도로 움직여서 선 끝이 항상 칩 중심에 붙어 있다
+      anim(hub, [{ transform: hubAt + ' scale(.3)', opacity: 0 }, { transform: hubAt + ' scale(1)', opacity: 1 }], { duration: 480 });
+      fadeUp(S.e.querySelector('.kx-ehead'), 0);
+      order.forEach(function (nd, i) {
+        var o = { duration: 620, delay: 260 + i * 34 }, len = Math.hypot(nd.x - cx, nd.y - cy);
+        anim(agents[i], [{ transform: hubAt + ' scale(.2)', opacity: 0 }, { opacity: 1, offset: .35 }, { transform: at(nd.x, nd.y) + ' scale(1)', opacity: 1 }], o);
+        lines[i].style.strokeDasharray = len;
+        anim(lines[i], [{ strokeDashoffset: len }, { strokeDashoffset: 0 }], o);
+      });
+      anim(S.e.querySelector('.kx-legend'), [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 1200 });
+      await sleep(260 + n * 34 + 620 + 350, t);
+
+      // 신호가 한 번만 지나간다: Core 먼저, 이어서 모듈
+      function send(isCore, gap) {
+        order.forEach(function (nd, i) {
+          if (nd.core !== isCore) return;
+          anim(pulses[i], [{ transform: 'translate(' + cx + 'px,' + cy + 'px)', opacity: 0 }, { opacity: 1, offset: .12 },
+                           { transform: 'translate(' + nd.x + 'px,' + nd.y + 'px)', opacity: 0 }],
+               { duration: 460, delay: nd.k * gap, easing: 'cubic-bezier(.4, 0, .6, 1)', fill: 'none' });
+          setTimeout(function () { if (t === token) agents[i].classList.add('is-hit'); }, nd.k * gap + 400);
+        });
+      }
+      send(true, 55);
+      await sleep(core.length * 55 + 500, t);
+      send(false, 42);
+      await sleep(mods.length * 42 + 640, t);
+
+      // 모두 켜지면 가운데 색이 바뀐다
+      hub.classList.add('is-done');
+      anim(hub, [{ transform: hubAt + ' scale(1)' }, { transform: hubAt + ' scale(1.14)', offset: .4 }, { transform: hubAt + ' scale(1)' }], { duration: 520 });
+      await sleep(1300, t);
+    }
+
+    /* ----- F. 마무리: 설치 → 연결 → 작업 ----- */
+    async function sceneF(t) {
+      for (var i = 0; i < stepLines.length; i++) {
+        anim(stepLines[i], [{ opacity: 0, transform: 'translateX(-40px)' }, { opacity: 1, transform: 'none' }], { duration: 380 });
+        await typeInto(stepLines[i].querySelector('.kx-typeline span'), CONFIG.steps[i][2], 16, t);
+        await sleep(170, t);
+      }
+      await sleep(1500, t);
+    }
+
+    /* 모션을 끈 사용자, 또는 애니메이션 API가 없는 브라우저에 보여줄 정지 화면 */
+    function renderFinal() {
+      reset(); on('a'); root.classList.add('is-static');
+      term.style.display = 'none';
+      S.a.querySelector('.kx-tag').style.opacity = 1;
+    }
+
+    async function play(t) {
+      try {
+        for (;;) {
+          reset();
+          await sleep(250, t);
+          await sceneA(t);
+          // A → B: 아래에서 올라온 판이 그대로 B의 배경이 된다
+          anim(wipe, [{ transform: 'translateY(101%)' }, { transform: 'translateY(0)' }], { duration: 460, easing: SHARP });
+          await sleep(460, t);
+          S.b.classList.add('is-on'); S.a.classList.remove('is-on');
+          await sceneB(t);
+          // B → C: 판이 위로 빠지면서 C가 드러난다
+          S.c.classList.add('is-on');
+          anim(S.b.querySelector('.kx-stat'), [{ opacity: 1 }, { opacity: 0 }], { duration: 200 });
+          anim(ticks, [{ opacity: 1 }, { opacity: 0 }], { duration: 200 });
+          anim(wipe, [{ transform: 'translateY(0)' }, { transform: 'translateY(-101%)' }], { duration: 520, easing: SHARP });
+          var p = sceneC(t); p.catch(function () {});
+          await sleep(520, t);
+          S.b.classList.remove('is-on');
+          await p;
+          await sweep(function () { on('d'); p = sceneD(t); p.catch(function () {}); }, t);
+          await p;
+          await sweep(function () { on('e'); p = sceneE(t); p.catch(function () {}); }, t);
+          await p;
+          await sweep(function () { on('f'); p = sceneF(t); p.catch(function () {}); }, t);
+          await p;
+          root.classList.add('is-fading');
+          await sleep(520, t);
+        }
+      } catch (e) { if (e !== CANCEL) throw e; }
+    }
+
+    function start() { if (running) return; running = true; play(++token); }
+    function stop() { if (!running) return; running = false; token++; reset(); }
+
+    fit();
+    if ('ResizeObserver' in window) new ResizeObserver(fit).observe(root);
+    else window.addEventListener('resize', fit);
+
+    if (!root.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { renderFinal(); return; }
+
+    reset();
+    // 화면에 보일 때만 재생
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        en[0].isIntersecting ? start() : stop();
+      }, { threshold: .25 }).observe(root);
+    } else { start(); }
+  }
+
+  [].forEach.call(document.querySelectorAll('[data-kx-intro]'), init);
+})();
+</script>
+</body>
+</html>

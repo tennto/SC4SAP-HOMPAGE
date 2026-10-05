@@ -1546,8 +1546,8 @@ html:lang(ja) .capd-lede { max-width: 56rem; }
   letter-spacing: 0.06em;
   color: #FFFFFF;
 }
-.ack-verdict.pass { background: #1F6B4B; }   /* white 6.4:1 */
-.ack-verdict.deny { background: #8E2A22; }   /* white 8.4:1 */
+.ack-verdict.pass { background: #15803D; }   /* PoC --ok, white 5.0:1 (was #1F6B4B) */
+.ack-verdict.deny { background: #B91C1C; }   /* PoC --bad, white 6.5:1 (was #8E2A22) */
 [data-theme="dark"] .ack-verdict.pass { background: #2E8654; }   /* 4.5:1 on white, 3.7:1 on the sheet */
 [data-theme="dark"] .ack-verdict.deny { background: #D0463B; }   /* 4.5:1 on white, 3.7:1 on the sheet */
 

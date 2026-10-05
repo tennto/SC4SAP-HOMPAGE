@@ -12,41 +12,50 @@
 :root {
   color-scheme: light;
 
+  /* ---- Palette source ----
+     Every value below comes from the PoC web app (sc4sap-ui-style-guide,
+     globals.css v0.5.3): one cool-grey ink, depth by surface steps, hue
+     only for status. The PoC states ink and lines as alpha over the page;
+     this site needs solid values (they sit on sheets, bands, and pictures
+     alike), so each one is that alpha flattened over --paper.
+
+     Previous ivory/amber set, kept for a one-step revert:
+       paper #F6F3EC · paper-sunk #EEEAE0 · sheet #FFFFFF
+       ink #1C1A17 · ink-2 #55504A · ink-3 #6E685D
+       rule #E0DACE · rule-strong #CBC3B2
+       accent #D17D00 · accent-text #8F5300 · accent-hi #E08E14
+       accent-soft #FBF0DE · accent-ink #201A10
+       ok #1F6B4B · warn #8A5A12 · danger #8E2A22 */
+
   /* ---- Surfaces ---- */
-  --paper:       #F6F3EC;   /* page canvas — ivory */
-  --paper-sunk:  #EEEAE0;   /* recessed band, one step down from paper */
-  --sheet:       #FFFFFF;   /* raised sheet — the only elevated surface */
+  --paper:       #F5F6F8;   /* page canvas            PoC --bg */
+  --paper-sunk:  #ECEEF2;   /* recessed band          PoC --rail-bg */
+  --sheet:       #FFFFFF;   /* raised sheet           PoC --panel */
 
   /* ---- Ink ---- */
-  --ink:    #1C1A17;        /* headlines, primary body */
-  --ink-2:  #55504A;        /* secondary body            6.9:1 on paper */
-  --ink-3:  #6E685D;        /* captions, meta            4.6:1 on paper */
+  --ink:    #2F3540;        /* headlines, primary body          PoC --ink */
+  --ink-2:  #575C65;        /* secondary body   ink 80% on paper */
+  --ink-3:  #676C74;        /* captions, meta   ink ~72% on paper: 4.9:1 on paper, 4.55:1 on paper-sunk */
 
   /* ---- Rules ---- */
-  --rule:        #E0DACE;   /* hairline between rows */
-  --rule-strong: #CBC3B2;   /* section boundary */
+  --rule:        #E1E3E6;   /* hairline     PoC --line-soft (ink 10%) */
+  --rule-strong: #CDCFD3;   /* boundary     PoC --line (ink 20%) */
 
-  /* ---- Accent (the only one on this page) ----
-     Swap these five values to recolour the whole page.
-     Previous navy set, kept here for a one-step revert:
-       --accent #2A3D6B · --accent-text #2A3D6B · --accent-hi #3B5391
-       --accent-soft #E7EBF4 · --accent-ink #FFFFFF
+  /* ---- Accent ----
+     The PoC has no accent colour: emphasis is the ink itself, filled.
+     So the accent role is the ink, its hover is --ink-hover, the tinted
+     fill is --panel-2, and text on the fill is --on-ink. Swap these five
+     to bring a hue back. */
+  --accent:      #2F3540;   /* fills, marks, borders, graphics   PoC --ink */
+  --accent-text: #2F3540;
+  --accent-hi:   #232831;   /* hover                             PoC --ink-hover */
+  --accent-soft: #F0F2F5;   /* tinted fill                       PoC --panel-2 */
+  --accent-ink:  #FFFFFF;   /* text on the accent fill           PoC --on-ink */
 
-     Amber sits at 2.85:1 on this ivory, which is under AA for text and
-     under 3:1 for meaningful icons, so the vivid value is reserved for
-     fills, marks, rules, and graphics, and text takes the darkened cut
-     of the same hue at 5.6:1. Navy needed no such split because it
-     already cleared 9.5:1. */
-  --accent:      #D17D00;   /* fills, marks, borders, graphics */
-  --accent-text: #8F5300;   /* text and icons on light   5.6:1 */
-  --accent-hi:   #E08E14;   /* hover / lighter step */
-  --accent-soft: #FBF0DE;   /* tinted fill */
-  --accent-ink:  #201A10;   /* text on the accent fill   5.7:1 */
-
-  /* ---- Semantic ---- */
-  --ok:     #1F6B4B;
-  --warn:   #8A5A12;
-  --danger: #8E2A22;
+  /* ---- Semantic (the only hues) ---- */
+  --ok:     #15803D;
+  --warn:   #B45309;
+  --danger: #B91C1C;
 
   /* ---- Geometry: one family, near-square ---- */
   --r-sm: 4px;              /* chips, code, buttons, inputs */
@@ -54,9 +63,9 @@
   --r-lg: 10px;             /* large panels */
 
   /* ---- Elevation: tinted to the paper hue, never pure black ---- */
-  --lift-1: 0 1px 2px rgba(60, 48, 28, .05);
-  --lift-2: 0 2px 4px rgba(60, 48, 28, .05), 0 8px 24px rgba(60, 48, 28, .06);
-  --lift-3: 0 4px 8px rgba(60, 48, 28, .06), 0 18px 48px rgba(60, 48, 28, .09);
+  --lift-1: 0 1px 2px rgba(30, 36, 48, .04);
+  --lift-2: 0 1px 2px rgba(30, 36, 48, .04), 0 4px 14px rgba(30, 36, 48, .04);   /* PoC --card-shadow */
+  --lift-3: 0 1px 2px rgba(30, 36, 48, .04), 0 8px 22px rgba(30, 36, 48, .07);   /* PoC --composer-shadow-focus */
 
   /* ---- Type ----
      IBM Plex was drawn for engineering and enterprise documentation, which
@@ -101,33 +110,35 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --paper:       #171613;
-  --paper-sunk:  #100F0D;
-  --sheet:       #201E1A;
+  /* PoC dark: the same design inverted. Ink is #E6E9EE, not pure white.
+     Previous warm set: paper #171613 · paper-sunk #100F0D · sheet #201E1A
+     · ink #EFEADF / #B4AEA1 / #8B8479 · rule #322F29 / #4A453C
+     · accent #E8A93C / #E8A93C / #F2BC5C / #33270F / #1C1508
+     · ok #64C79B · warn #DCA94A · danger #E58A80 */
+  --paper:       #111317;
+  --paper-sunk:  #0C0E11;
+  --sheet:       #171A1F;
 
-  --ink:    #EFEADF;
-  --ink-2:  #B4AEA1;
-  --ink-3:  #8B8479;
+  --ink:    #E6E9EE;
+  --ink-2:  #BBBEC3;        /* ink 80% on paper */
+  --ink-3:  #86898D;        /* ink 55% on paper */
 
-  --rule:        #322F29;
-  --rule-strong: #4A453C;
+  --rule:        #24262A;   /* ink 9% */
+  --rule-strong: #333539;   /* ink 16% */
 
-  /* On the warm near-black the amber lightens to 9:1, so fill and text
-     can share one value here. Previous navy set: #9FB3DF · #BCCAEA ·
-     #21283A · #101422. */
-  --accent:      #E8A93C;
-  --accent-text: #E8A93C;
-  --accent-hi:   #F2BC5C;
-  --accent-soft: #33270F;
-  --accent-ink:  #1C1508;
+  --accent:      #E6E9EE;
+  --accent-text: #E6E9EE;
+  --accent-hi:   #CFD4DB;
+  --accent-soft: #1D2127;
+  --accent-ink:  #111317;
 
-  --ok:     #64C79B;
-  --warn:   #DCA94A;
-  --danger: #E58A80;
+  --ok:     #4ADE80;
+  --warn:   #FBBF24;
+  --danger: #F87171;
 
-  --lift-1: 0 1px 2px rgba(0, 0, 0, .40);
-  --lift-2: 0 2px 4px rgba(0, 0, 0, .38), 0 8px 24px rgba(0, 0, 0, .34);
-  --lift-3: 0 4px 8px rgba(0, 0, 0, .42), 0 18px 48px rgba(0, 0, 0, .44);
+  --lift-1: 0 1px 2px rgba(0, 0, 0, .30);
+  --lift-2: 0 8px 22px rgba(0, 0, 0, .30);   /* PoC --card-shadow */
+  --lift-3: 0 8px 24px rgba(0, 0, 0, .36);   /* PoC --composer-shadow-focus */
 }
 
 /* Japanese needs the JP cut ahead of the KR cut so shared CJK glyphs are
