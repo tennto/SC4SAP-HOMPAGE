@@ -45,7 +45,8 @@
   --lift: 0 24px 60px -20px rgba(0, 0, 0, .75);
 
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR",
+          "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
   --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* 글자 크기 (좁은 화면에서는 아래에서 다시 정의) */
@@ -104,7 +105,10 @@
 .kx-wipe { position: absolute; inset: -2px; z-index: 5; background: var(--ink); transform: translateY(101%); }
 .kx-mask { display: block; overflow: hidden; }
 .kx-mask > * { display: block; }
-.kx-b .kx-mask { padding: .02em 0; }
+/* 숫자 창은 숫자와 같은 글자 크기로 재고, 사방으로 조금 넓혀 둡니다. 자간을 좁힌 숫자는
+   마지막 글자가 제 칸 밖으로 삐져나와서, 창이 딱 맞으면 오른쪽 끝(3, 25의 5)이 잘렸습니다.
+   넓힌 만큼 음수 여백으로 되돌려서 배치는 그대로입니다. */
+.kx-b .kx-stat > .kx-mask { font-size: var(--num); line-height: 1; padding: .05em .12em; margin: -.05em -.12em; }
 .kx-caret { display: inline-block; width: .55em; height: 1.1em; margin: 0 0 -.18em .12em; background: currentColor;
             animation: kx-blink .9s steps(1) infinite; }
 
@@ -295,7 +299,7 @@
 .kx-steps { display: grid; gap: 18px; }
 .kx-stepline { display: flex; align-items: center; gap: 18px; font-size: var(--term); opacity: 0; }
 .kx-stepline small { font-family: var(--mono); font-size: .55em; color: var(--dim); }
-.kx-stepline b { width: 2.6em; font-weight: 800; letter-spacing: -.02em; }
+.kx-stepline b { width: var(--stepw, 2.6em); font-weight: 800; letter-spacing: -.02em; }
 .kx-stepline code { height: 1.9em; padding: 0 .7em; display: flex; align-items: center; border-radius: .5em;
                     background: var(--chip); font-family: var(--mono); font-size: .82em; white-space: nowrap; }
 
@@ -338,7 +342,7 @@
     <div class="kx-scene kx-c">
       <div class="kx-lanes"></div>
       <div class="kx-claim">
-        <h3>ABAP을 직접 <b data-k="r">읽고</b>, <b data-k="w">쓰고</b>, <span style="white-space:nowrap"><b data-k="x">활성화</b>합니다</span></h3>
+        <h3 data-h="claim"></h3>
         <p data-t="claimSub"></p>
       </div>
     </div>
@@ -383,6 +387,7 @@
       { n: 17, suffix: '', label: '워크플로 스킬', sub: 'setup · create-program · analyze-code · team' }
     ],
 
+    claim: 'ABAP을 직접 <b data-k="r">읽고</b>, <b data-k="w">쓰고</b>, <span style="white-space:nowrap"><b data-k="x">활성화</b>합니다</span>',
     claimSub: 'MCP 기반 도구 150여 개',
     // 배경에 흐르는 도구 이름. r 읽기, w 쓰기, x 활성화·검증
     tools: {
@@ -420,12 +425,136 @@
     agentTitle: '25개 에이전트가 나눠 처리합니다',
     agentSub: '역공학, 코드 리뷰, 프로그램 생성',
     agentLegend: 'Core 10 · Basis 1 · Module 14',
-    hub: '/sc4sap:team',
+    // 가운데 칩: 신호가 도는 동안은 hub, 모두 켜져 초록색이 되면 hubDone
+    hub: 'Processing', hubDone: 'Automation',
     // 원 위에 놓이는 에이전트. Core 10은 좌우에, Module 14 + Basis 1(BC)은 위아래에 놓입니다
     coreAgents: ['Analyst', 'Architect', 'Code Reviewer', 'Critic', 'Debugger', 'Doc Specialist', 'Executor', 'Planner', 'QA Tester', 'Writer'],
     modules: ['SD', 'MM', 'FI', 'CO', 'PP', 'PS', 'PM', 'QM', 'TR', 'HCM', 'WM', 'TM', 'Ariba', 'BW', 'BC'],
 
-    steps: [['01', '설치', '/plugin install sc4sap'], ['02', '연결', '/sc4sap:setup'], ['03', '작업', '/sc4sap:team']]
+    steps: [['01', '설치', '/plugin install sc4sap'], ['02', '연결', '/sc4sap:setup'], ['03', '작업', '/sc4sap:team']],
+    stepW: '2.6em',                           // 마지막 장면의 단계 이름 칸 너비
+
+    specDoc: '기능/기술 명세서',
+    aria: 'Super-Claude for SAP 소개 애니메이션: 설치 명령으로 시작해 지원 플랫폼 3개, MCP 도구 150여 개, 전문 에이전트 25개, 워크플로 스킬 17개를 보여주고, 기능 13가지와 에이전트 구성을 차례로 소개합니다.'
+  };
+
+  /* ---------- 언어. 랜딩페이지가 window.__reelLang 으로 알려 주고, 없으면 문서의 lang ----------
+     다른 언어는 위 CONFIG에서 문구만 덮어씁니다. features 는 같은 순서로 name·items·cols 만 */
+  var LANG = (function () {
+    var l = String(window.__reelLang || document.documentElement.getAttribute('lang') || 'ko').toLowerCase();
+    return l.indexOf('ja') === 0 ? 'ja' : l.indexOf('en') === 0 ? 'en' : 'ko';
+  })();
+  var TEXT = {
+    en: {
+      tagline: 'Your whole SAP system, inside Claude Code',
+      stats: [
+        { label: 'Supported platforms' },
+        { label: 'MCP tools', sub: 'Built on ABAP ADT' },
+        { label: 'Specialist agents' },
+        { label: 'Workflow skills' }
+      ],
+      claim: '<b data-k="r">Reads</b>, <b data-k="w">writes</b> and <span style="white-space:nowrap"><b data-k="x">activates</b> ABAP</span>',
+      claimSub: '150+ MCP-based tools',
+      featTitle: '13 features',
+      features: [
+        { name: 'Auto MCP install', items: ['Install abap-mcp-adt-powerup', 'Test the SAP connection', 'Register MCP server and hooks'] },
+        { name: 'Multi-environment profiles', items: [['KR-DEV', 'Read · write', 'good'], ['KR-QA', 'Read-only', 'warn'], ['KR-PRD', 'Read-only', 'warn']] },
+        { name: 'Auto program generator' },
+        { name: 'Program analysis' },
+        { name: 'Program → manual', items: ['Scenario steps', 'Checkpoints', 'Messages', 'Glossary'] },
+        { name: 'Code analysis', items: [['SELECT SINGLE inside LOOP', 'High', 'bad'], ['No AUTHORITY-CHECK', 'Medium', 'warn'], ['Hardcoded text', 'Low', '']] },
+        { name: 'Program comparison', cols: ['Program A', 'Program B', 'Program C'],
+          items: [['Selection', [0, 0, 1]], ['Data source', [0, 1, 1]], ['Auth check', [0, 0, 0]], ['Output', [0, 1, 0]]] },
+        { name: 'Package → process', items: [['PR', 'Requisition'], ['PO', 'Order'], ['GR', 'Receipt'], ['IR', 'Invoice']] },
+        { name: 'Operations diagnosis', items: ['ST22 dumps', 'SM02 messages', '/IWFND/ERROR_LOG', 'Profiler traces', 'Logs', 'where-used'] },
+        { name: 'CBO reuse', items: [['Existing tables and classes', 'Reuse', 'good'], ['CMOD · BAdI · APPEND', 'Reuse', 'good'], ['Duplicate CBO', 'Skipped', '']] },
+        { name: 'Industry context', items: ['Retail', 'Fashion', 'Cosmetics', 'Tires', 'Automotive', 'Pharma', 'F&B', 'Chemicals', 'Electronics', 'Construction', 'Steel', 'Utilities', 'Banking', 'Public'] },
+        { name: 'Country · localization', items: ['KR', 'JP', 'CN', 'US', 'DE', 'GB', 'FR', 'IT', 'ES', 'NL', 'BR', 'MX', 'IN', 'AU', 'SG', 'EU-wide'] },
+        { name: 'Module consultation' }
+      ],
+      same: 'Same', diff: 'Diff',
+      agentTitle: '25 agents share the work',
+      agentSub: 'Reverse engineering, code review, program generation',
+      steps: [['01', 'Install'], ['02', 'Connect'], ['03', 'Work']],
+      stepW: '3.9em',
+      specDoc: 'Spec document',
+      aria: 'Super-Claude for SAP intro animation: it starts from the install command, shows 3 supported platforms, 150+ MCP tools, 25 specialist agents and 17 workflow skills, then walks through 13 features and the agent line-up.'
+    },
+    ja: {
+      tagline: 'SAP システム全体を Claude Code の中で',
+      stats: [
+        { label: '対応プラットフォーム' },
+        { label: 'MCP ツール', sub: 'ABAP ADT ベース' },
+        { label: '専門エージェント' },
+        { label: 'ワークフロースキル' }
+      ],
+      claim: 'ABAP を直接 <span style="white-space:nowrap"><b data-k="r">読み</b>、<b data-k="w">書き</b>、<b data-k="x">有効化</b>します</span>',
+      claimSub: 'MCP ベースのツール 150 以上',
+      featTitle: '13 の機能',
+      features: [
+        { name: 'MCP 自動インストール', items: ['abap-mcp-adt-powerup を導入', 'SAP 接続テスト', 'MCP サーバーと権限フックを登録'] },
+        { name: '複数環境プロファイル', items: [['KR-DEV', '読み取り · 書き込み', 'good'], ['KR-QA', '読み取り専用', 'warn'], ['KR-PRD', '読み取り専用', 'warn']] },
+        { name: 'プログラム自動生成' },
+        { name: 'プログラム分析' },
+        { name: 'プログラム → マニュアル', items: ['シナリオ別手順', 'チェックポイント', 'メッセージ', '用語集'] },
+        { name: 'コード分析', items: [['LOOP 内の SELECT SINGLE', '高', 'bad'], ['AUTHORITY-CHECK なし', '中', 'warn'], ['ハードコードされたテキスト', '低', '']] },
+        { name: 'プログラム比較', cols: ['プログラムA', 'プログラムB', 'プログラムC'],
+          items: [['選択条件', [0, 0, 1]], ['データ元', [0, 1, 1]], ['権限チェック', [0, 0, 0]], ['出力', [0, 1, 0]]] },
+        { name: 'パッケージ → プロセス', items: [['PR', '購買依頼'], ['PO', '購買発注'], ['GR', '入庫'], ['IR', '請求書照合']] },
+        { name: '運用診断', items: ['ST22 ダンプ', 'SM02 システムメッセージ', '/IWFND/ERROR_LOG', 'プロファイラトレース', 'ログ', 'where-used'] },
+        { name: 'CBO 再利用', items: [['既存のテーブルとクラス', '再利用', 'good'], ['CMOD · BAdI · APPEND', '再利用', 'good'], ['重複 CBO の作成', 'スキップ', '']] },
+        { name: '業種コンテキスト', items: ['流通', 'ファッション', '化粧品', 'タイヤ', '自動車', '製薬', '食品・飲料', '化学', '電子', '建設', '鉄鋼', 'ユーティリティ', '銀行', '公共'] },
+        { name: '国・ローカライズ', items: ['KR', 'JP', 'CN', 'US', 'DE', 'GB', 'FR', 'IT', 'ES', 'NL', 'BR', 'MX', 'IN', 'AU', 'SG', 'EU 共通'] },
+        { name: 'モジュール相談' }
+      ],
+      same: '同じ', diff: '違う',
+      agentTitle: '25 のエージェントが分担します',
+      agentSub: 'リバースエンジニアリング、コードレビュー、プログラム生成',
+      steps: [['01', '導入'], ['02', '接続'], ['03', '作業']],
+      specDoc: '機能・技術仕様書',
+      aria: 'Super-Claude for SAP 紹介アニメーション: インストールコマンドから始まり、対応プラットフォーム 3、MCP ツール 150 以上、専門エージェント 25、ワークフロースキル 17 を示したあと、13 の機能とエージェント構成を順に紹介します。'
+    }
+  };
+  var BASE = CONFIG;
+  // 객체 배열(stats, features)은 같은 자리끼리 합칩니다. 숫자, 명령, 종류처럼
+  // 언어와 무관한 값은 한국어 쪽 그대로 남습니다. 그 밖의 배열과 문자열은 통째로 바꿉니다.
+  function merge(base, over) {
+    if (Array.isArray(base) && Array.isArray(over) && base.length && typeof base[0] === 'object' && !Array.isArray(base[0])) {
+      return base.map(function (b, i) { return merge(b, over[i] || {}); });
+    }
+    if (Array.isArray(over) || typeof over !== 'object' || over === null) return over;
+    var o = {};
+    for (var k in base) o[k] = k in over ? merge(base[k], over[k]) : base[k];
+    return o;
+  }
+  function configFor(l) {
+    var tr = TEXT[l];
+    if (!tr) return BASE;
+    var o = {};
+    for (var k in tr) o[k] = tr[k];
+    // steps 는 [번호, 이름, 명령] 중 이름만 바꿉니다
+    if (tr.steps) o.steps = BASE.steps.map(function (s, i) { return [s[0], tr.steps[i] ? tr.steps[i][1] : s[1], s[2]]; });
+    return merge(BASE, o);
+  }
+  CONFIG = configFor(LANG);
+  document.documentElement.lang = LANG;
+
+  /* 재생 중에 언어 바꾸기. 처음부터 다시 틀지 않고, 화면에 이미 나온 글자만 새 언어로 바꿔 끼웁니다.
+     앞으로 스크립트가 쓸 문구는 CONFIG를 통째로 바꿔서 따라오게 합니다. 랜딩페이지가 부릅니다. */
+  var swaps = [];
+  function strings(o, path, out) {
+    if (typeof o === 'string') out[path] = o;
+    else if (o && typeof o === 'object') for (var k in o) strings(o[k], path + '.' + k, out);
+    return out;
+  }
+  window.__reelSetLang = function (l) {
+    l = l === 'en' || l === 'ja' ? l : 'ko';
+    if (l === LANG) return;
+    var from = strings(CONFIG, '', {}), next = configFor(l), to = strings(next, '', {}), map = {};
+    for (var p in from) if (p in to && from[p] !== to[p] && !(from[p] in map)) map[from[p]] = to[p];
+    CONFIG = next; LANG = l;
+    document.documentElement.lang = l;
+    swaps.forEach(function (f) { f(map); });
   };
   /* --------------------------------------------------------- */
 
@@ -460,7 +589,7 @@
       var code = [[62, 0], [78, 14], [50, 14], [70, 28], [44, 14], [30, 0]], doc = [92, 76, 84, 58];
       return '<div class="kx-spec"><div class="kx-code kx-p"><b>ABAP</b>' + code.map(function (c, i) {
         return '<i style="--w:' + c[0] + '%;--x:' + c[1] + 'px;--d:' + i * 30 + 'ms"></i>';
-      }).join('') + '</div><div class="kx-arrow kx-p"></div><div class="kx-doc kx-p"><b>기능/기술 명세서</b>' + doc.map(function (w, i) {
+      }).join('') + '</div><div class="kx-arrow kx-p"></div><div class="kx-doc kx-p"><b>' + esc(CONFIG.specDoc) + '</b>' + doc.map(function (w, i) {
         return '<i style="--w:' + w + '%;--d:' + (180 + i * 50) + 'ms"></i>';
       }).join('') + '</div></div>' + RENDER.chips(f);
     },
@@ -497,6 +626,23 @@
 
     /* ----- 고정 내용 채우기 ----- */
     all('[data-t]').forEach(function (el) { el.textContent = CONFIG[el.getAttribute('data-t')]; });
+    all('[data-h]').forEach(function (el) { el.innerHTML = CONFIG[el.getAttribute('data-h')]; });
+    root.setAttribute('aria-label', CONFIG.aria);
+    root.style.setProperty('--stepw', CONFIG.stepW);
+    swaps.push(function (map) {
+      var claimH = $('[data-h="claim"]');
+      var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), n;
+      while ((n = w.nextNode())) {
+        if (claimH.contains(n)) continue;
+        if (n.nodeValue in map) n.nodeValue = map[n.nodeValue];
+      }
+      // 문구 순서가 언어마다 달라서 밑줄 문장은 새로 짓고, 이미 켜진 밑줄은 그대로 켭니다
+      var hot = all('.kx-claim b.is-hot').map(function (b) { return b.getAttribute('data-k'); });
+      claimH.innerHTML = CONFIG.claim;
+      all('.kx-claim b').forEach(function (b) { if (hot.indexOf(b.getAttribute('data-k')) > -1) b.classList.add('is-hot'); });
+      root.setAttribute('aria-label', CONFIG.aria);
+      root.style.setProperty('--stepw', CONFIG.stepW);
+    });
     ticks.innerHTML = CONFIG.stats.map(function () { return '<i></i>'; }).join('');
     $('.kx-count span').textContent = ('0' + F.length).slice(-2);
     (function buildLanes() {
@@ -578,7 +724,7 @@
       all('.kx-claim b').forEach(function (b) { b.classList.remove('is-hot'); });
       cards.forEach(function (c) { c.classList.remove('is-cur'); clearCard(c); });
       setCard(0, true); bar.style.width = '0';
-      orbit.innerHTML = '';
+      orbit.innerHTML = ''; orbit.style.transform = '';
       stepLines.forEach(function (l) { l.querySelector('.kx-typeline span').textContent = ''; });
       on('a');
       void root.offsetWidth;
@@ -689,6 +835,15 @@
 
       var hub = orbit.querySelector('.kx-hub'), agents = [].slice.call(orbit.querySelectorAll('.kx-agent')),
           lines = [].slice.call(orbit.querySelectorAll('line')), pulses = [].slice.call(orbit.querySelectorAll('.kx-pulse'));
+
+      // 원은 대칭이어도 이름 길이는 좌우가 달라서(오른쪽 Code Reviewer 등) 무리 전체가 한쪽으로
+      // 쏠려 보였습니다. 칩 바깥 끝 기준으로 좌우 여백이 같아지도록 원 전체를 옆으로 옮깁니다.
+      var minL = Infinity, maxR = -Infinity;
+      order.forEach(function (nd, i) {
+        var hw = agents[i].offsetWidth / 2;
+        minL = Math.min(minL, nd.x - hw); maxR = Math.max(maxR, nd.x + hw);
+      });
+      orbit.style.transform = isFinite(minL) ? 'translateX(' + Math.round(W() / 2 - (minL + maxR) / 2) + 'px)' : '';
       var at = function (x, y) { return 'translate(' + x + 'px,' + y + 'px) translateX(-50%)'; };
       var hubAt = at(cx, cy);
 
@@ -721,6 +876,7 @@
 
       // 모두 켜지면 가운데 색이 바뀐다
       hub.classList.add('is-done');
+      hub.textContent = CONFIG.hubDone;
       anim(hub, [{ transform: hubAt + ' scale(1)' }, { transform: hubAt + ' scale(1.14)', offset: .4 }, { transform: hubAt + ' scale(1)' }], { duration: 520 });
       await sleep(1300, t);
     }

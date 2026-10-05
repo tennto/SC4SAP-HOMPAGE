@@ -48,8 +48,10 @@
   --cursor-shadow: rgba(0, 0, 0, .5);
 
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
-  --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR",
+          "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+  --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas,
+          "Hiragino Sans", "Yu Gothic UI", "Meiryo", monospace;
   --ease: cubic-bezier(.22, .8, .24, 1);
 
   position: relative;
@@ -311,7 +313,7 @@
 <!-- (3) 마크업. 데모가 들어갈 자리에 넣으세요. 부모 너비에 맞춰 자동으로 축소됩니다.
      다크로 쓰려면 data-theme="light" 속성을 지우면 됩니다. -->
 <div class="spx" data-theme="light" data-spx-spec role="img"
-     aria-label="프로그램 → 명세 데모: 패키지와 프로그램 이름을 입력하고 실행하면, 연결된 SAP 시스템에서 프로그램을 읽어 기능/기술 명세서를 HTML로 만들어 보여줍니다.">
+     data-i-aria="aria">
   <div class="spx-stage" aria-hidden="true">
 
     <svg class="spx-sprite">
@@ -327,88 +329,88 @@
 
     <div class="spx-page">
       <span class="spx-chip">/sc4sap:program-to-spec</span>
-      <div class="spx-h"><svg class="spx-i"><use href="#spx-doc"/></svg>프로그램 → 명세</div>
-      <p class="spx-desc">프로그램을 역공학해 기능 또는 기술 명세서로 만들고, 선택 화면과 ALV 목업을 붙입니다</p>
+      <div class="spx-h"><svg class="spx-i"><use href="#spx-doc"/></svg><span data-i="head"></span></div>
+      <p class="spx-desc" data-i="desc"></p>
       <div class="spx-rule"></div>
 
       <div class="spx-card">
-        <div class="spx-label">입력</div>
-        <p class="spx-sub">실행하면 연결된 시스템에 세션을 엽니다. 아무것도 보관하지 않습니다. 결과와 파일은 Done을 누르거나 이 화면을 떠나기 전까지만 남습니다.</p>
+        <div class="spx-label" data-i="input"></div>
+        <p class="spx-sub" data-i="inputSub"></p>
 
         <div class="spx-form">
           <div class="spx-f">
-            <b>패키지</b>
+            <b data-i="pkg"></b>
             <div class="spx-in" data-in="pkg"><span class="spx-val"></span><i class="spx-caret"></i><span class="spx-ph">ZMM_CBO</span></div>
-            <small>선택 사항. 프로그램과 커스텀 오브젝트를 찾는 데 씁니다.</small>
+            <small data-i="pkgHint"></small>
           </div>
           <div class="spx-f">
-            <b>프로그램 이름</b>
+            <b data-i="prog"></b>
             <div class="spx-in" data-in="prog"><span class="spx-val"></span><i class="spx-caret"></i><span class="spx-ph">ZPROGRAM</span></div>
           </div>
           <div class="spx-f spx-f-gap"></div>
           <div class="spx-f">
-            <b>모드</b>
-            <div class="spx-in">절약<svg class="spx-i"><use href="#spx-chev"/></svg></div>
-            <small>에이전트 1개로 실행합니다. 예상 소요비용은 약 200~400원, 예상 소요시간은 1~3분입니다.</small>
+            <b data-i="mode"></b>
+            <div class="spx-in"><span data-i="modeVal"></span><svg class="spx-i"><use href="#spx-chev"/></svg></div>
+            <small data-i="modeHint"></small>
           </div>
           <div class="spx-f">
-            <b>출력 형식</b>
+            <b data-i="fmt"></b>
             <div class="spx-in" data-in="fmt"><span class="spx-fmt"></span><svg class="spx-i"><use href="#spx-chev"/></svg></div>
-            <small class="spx-fmt-hint">실제 모양 그대로 미리보기하고, .html로 저장합니다.</small>
+            <small class="spx-fmt-hint" data-i="fmtHint"></small>
             <div class="spx-menu"></div>
           </div>
           <div class="spx-f">
-            <b>작성 언어</b>
-            <div class="spx-in">한국어<svg class="spx-i"><use href="#spx-chev"/></svg></div>
+            <b data-i="langLabel"></b>
+            <div class="spx-in"><span data-i="langVal"></span><svg class="spx-i"><use href="#spx-chev"/></svg></div>
           </div>
         </div>
 
         <div class="spx-rule2"></div>
-        <span class="spx-btn spx-run"><i class="spx-stop"></i><span class="spx-run-label">실행</span></span>
+        <span class="spx-btn spx-run"><i class="spx-stop"></i><span class="spx-run-label"></span></span>
 
         <div class="spx-result">
-          <div class="spx-label">결과</div>
-          <div class="spx-work"><i class="spx-spin"></i><canvas class="spx-orb" aria-hidden="true"></canvas>작업 중 <span class="spx-timer">1s</span></div>
+          <div class="spx-label" data-i="result"></div>
+          <div class="spx-work"><i class="spx-spin"></i><canvas class="spx-orb" aria-hidden="true"></canvas><span data-i="working"></span> <span class="spx-timer">1s</span></div>
 
           <div class="spx-out">
             <div class="spx-panel">
               <div class="spx-panel-head">
-                <svg class="spx-i"><use href="#spx-note"/></svg>요약
-                <div class="spx-tools">최종 결과만 표시 <i class="spx-toggle"></i></div>
+                <svg class="spx-i"><use href="#spx-note"/></svg><span data-i="summary"></span>
+                <div class="spx-tools"><span data-i="finalOnly"></span> <i class="spx-toggle"></i></div>
               </div>
               <div class="spx-sum">
-                <p>ZMMR00020은 구매오더(PO) 항목에 대한 변경 이력을 조회하는 감사용 ALV 리포트입니다. 자체 변경이력 테이블 ZMMT00120을 기준으로 EKKO와 조인해 공급업체 코드를 얻고, LFA1에서 공급업체명을 보강해 변경 전/후 값·변경 사유·변경자·변경일시를 도킹 컨테이너 ALV로 보여줍니다.</p>
-                <p>특이사항: 표준 CDHDR/CDPOS가 아닌 커스텀 테이블을 변경이력 원천으로 쓰고 있고, 구매문서/공급업체 조회에 대한 AUTHORITY-CHECK가 전혀 없어 운영 반입 전 보안 검토가 필요합니다.</p>
-                <p>산출물: <code class="spx-path"></code> 및 <code>.html</code>, 화면 이미지는 <code>_assets/</code> 폴더에 저장되었습니다.</p>
+                <p data-i="sum1"></p>
+                <p data-i="sum2"></p>
+                <p data-i-html="sum3"></p>
               </div>
             </div>
 
             <div class="spx-panel spx-prev">
               <div class="spx-panel-head">
-                <svg class="spx-i"><use href="#spx-doc"/></svg>HTML 미리보기
+                <svg class="spx-i"><use href="#spx-doc"/></svg><span data-i="preview"></span>
                 <div class="spx-tools">
                   <svg class="spx-i spx-zoomset"><use href="#spx-minus"/></svg>
                   <i class="spx-zoom spx-zoomset"></i>
                   <svg class="spx-i spx-zoomset"><use href="#spx-plus"/></svg>
                   <span class="spx-zoomset">100%</span>
-                  <span class="spx-dl"><svg class="spx-i"><use href="#spx-down"/></svg>.html 다운로드</span>
+                  <span class="spx-dl"><svg class="spx-i"><use href="#spx-down"/></svg><span data-i="download"></span></span>
                 </div>
               </div>
-              <div class="spx-note">명세서 상단 바의 편집 버튼으로 글과 표를 고칠 수 있습니다. 저장을 누르면 편집본(…-edited.html)이 다운로드되며, 편집 내용은 이 화면에 남지 않습니다.</div>
+              <div class="spx-note" data-i="note"></div>
 
               <div class="spx-doc">
                 <div class="spx-doc-bar">
-                  기능/기술 명세서: ZMMR00020
+                  <span data-i="docTitle"></span>
                   <div class="spx-doc-tools">
-                    <span class="spx-edit">편집</span>
-                    <span class="spx-doc-extra">모두 접기</span>
+                    <span class="spx-edit" data-i="edit"></span>
+                    <span class="spx-doc-extra" data-i="collapse"></span>
                     <svg class="spx-i spx-doc-extra"><use href="#spx-half"/></svg>
                     <svg class="spx-i spx-doc-extra"><use href="#spx-share"/></svg>
                   </div>
                 </div>
                 <div class="spx-doc-body">
                   <div class="spx-toc">
-                    <b>목차</b>
+                    <b data-i="toc"></b>
                     <ol>
                       <li>1. Business context</li><li>2. Data model</li><li>3. Inputs &amp; screens</li>
                       <li>4. Main logic</li><li>5. Outputs</li><li>6. Authorizations</li>
@@ -417,57 +419,57 @@
                     </ol>
                   </div>
                   <div class="spx-scroll">
-                    <h3>기능/기술 명세서: ZMMR00020</h3>
-                    <span class="spx-k">한 줄 목적</span>
-                    <p class="spx-lead">구매오더(PO) 항목에 대한 변경 이력(필드별 변경 전/후 값, 변경 사유, 변경자/변경일시)을 조회하여 감사(Audit) 목적으로 조회하는 리포트</p>
+                    <h3 data-i="docTitle"></h3>
+                    <span class="spx-k" data-i="purposeK"></span>
+                    <p class="spx-lead" data-i="lead"></p>
                     <div class="spx-meta">
-                      <div><span class="spx-k">오브젝트 유형</span><span>ABAP Report (Executable Program), Include 구조 (T/S/A/O/I/F)</span></div>
-                      <div><span class="spx-k">패키지</span><span>ZMMPAEK</span></div>
-                      <div><span class="spx-k">작성자 / 최종변경</span><span>SV5_000030 / 2026-04-19 (v1.1 — E-include 분리 + 헤더 표준화)</span></div>
-                      <div><span class="spx-k">아키타입</span><span>선택화면 → 조회 → ALV Grid(도킹 컨테이너) 표시형 리포트</span></div>
+                      <div><span class="spx-k" data-i="typeK"></span><span data-i="typeV"></span></div>
+                      <div><span class="spx-k" data-i="pkg"></span><span>ZMMPAEK</span></div>
+                      <div><span class="spx-k" data-i="authorK"></span><span data-i="authorV"></span></div>
+                      <div><span class="spx-k" data-i="archK"></span><span data-i="archV"></span></div>
                     </div>
 
                     <h4 data-sec="1">1. Business context</h4>
-                    <p class="spx-p">본 프로그램은 구매오더(Purchase Order) 데이터에 대한 변경 이력을 추적하는 감사용 리포트이다. 구매 담당자, 내부통제/감사 담당자가 특정 PO 또는 특정 기간에 어떤 필드가 누구에 의해 언제, 어떤 사유로 변경되었는지를 확인할 수 있도록 지원한다.</p>
+                    <p class="spx-p" data-i="bc"></p>
 
                     <h4 data-sec="2">2. Data model</h4>
                     <table class="spx-table">
                       <tr><th>Table</th><th>Access</th><th>Key fields</th><th class="spx-x">Notes</th></tr>
-                      <tr><td>ZMMT00120</td><td>R</td><td>EBELN, EBELP, SEQ_NO</td><td class="spx-x">커스텀 PO 변경이력 테이블. 변경 전후 값, 사유, 변경자, 변경시각 보유</td></tr>
-                      <tr><td>EKKO</td><td>R</td><td>EBELN</td><td class="spx-x">PO 헤더에서 공급업체(LIFNR) 획득 목적으로만 조인</td></tr>
-                      <tr><td>LFA1</td><td>R</td><td>LIFNR</td><td class="spx-x">공급업체명(NAME1) 조회, 루프 내 건별 SELECT SINGLE</td></tr>
+                      <tr><td>ZMMT00120</td><td>R</td><td>EBELN, EBELP, SEQ_NO</td><td class="spx-x" data-i="dm1"></td></tr>
+                      <tr><td>EKKO</td><td>R</td><td>EBELN</td><td class="spx-x" data-i="dm2"></td></tr>
+                      <tr><td>LFA1</td><td>R</td><td>LIFNR</td><td class="spx-x" data-i="dm3"></td></tr>
                     </table>
 
                     <h4 data-sec="3">3. Inputs &amp; screens</h4>
                     <table class="spx-table">
                       <tr><th>Field</th><th class="spx-x">Type</th><th class="spx-x">Required</th><th>Description</th></tr>
-                      <tr><td>S_EBELN</td><td class="spx-x">SELECT-OPTIONS (EBELN)</td><td class="spx-x">선택</td><td>PO 번호 범위</td></tr>
-                      <tr><td>S_EBELP</td><td class="spx-x">SELECT-OPTIONS (EBELP)</td><td class="spx-x">선택</td><td>PO 항목 번호 범위</td></tr>
-                      <tr><td>S_CHDATE</td><td class="spx-x">SELECT-OPTIONS (DATS)</td><td class="spx-x">선택</td><td>변경일자 범위</td></tr>
-                      <tr><td>P_FIELD</td><td class="spx-x">PARAMETERS (CHAR 30)</td><td class="spx-x">선택</td><td>변경 필드명 패턴 (와일드카드 비교)</td></tr>
+                      <tr><td>S_EBELN</td><td class="spx-x">SELECT-OPTIONS (EBELN)</td><td class="spx-x" data-i="opt"></td><td data-i="in1"></td></tr>
+                      <tr><td>S_EBELP</td><td class="spx-x">SELECT-OPTIONS (EBELP)</td><td class="spx-x" data-i="opt"></td><td data-i="in2"></td></tr>
+                      <tr><td>S_CHDATE</td><td class="spx-x">SELECT-OPTIONS (DATS)</td><td class="spx-x" data-i="opt"></td><td data-i="in3"></td></tr>
+                      <tr><td>P_FIELD</td><td class="spx-x">PARAMETERS (CHAR 30)</td><td class="spx-x" data-i="opt"></td><td data-i="in4"></td></tr>
                     </table>
 
                     <h4 data-sec="4">4. Main logic</h4>
                     <ol class="spx-steps">
-                      <li>사용자가 선택화면에서 PO번호, PO항목, 변경일자, 필드명 조건을 입력한다.</li>
-                      <li>START-OF-SELECTION에서 데이터 조회 FORM을 호출한다.</li>
-                      <li>ZMMT00120과 EKKO를 PO번호로 INNER JOIN하여 변경이력을 조회한다.</li>
+                      <li data-i="s1"></li>
+                      <li data-i="s2"></li>
+                      <li data-i="s3"></li>
                     </ol>
                     <div class="spx-flow">
-                      <div>선택화면<small>ZMMR00020S</small></div><i></i>
-                      <div>데이터 조회<small>fetch_data_0100</small></div><i></i>
-                      <div>필터·공급업체 결합<small>GT_DATA</small></div><i></i>
-                      <div>ALV Grid 표시<small>화면 0100</small></div>
+                      <div><span data-i="f1"></span><small>ZMMR00020S</small></div><i></i>
+                      <div><span data-i="f2"></span><small>fetch_data_0100</small></div><i></i>
+                      <div><span data-i="f3"></span><small>GT_DATA</small></div><i></i>
+                      <div><span data-i="f4"></span><small data-i="f4s"></small></div>
                     </div>
 
                     <h4 data-sec="5">5. Outputs</h4>
                     <table class="spx-table">
                       <tr><th>Column</th><th>Field</th><th>Description</th></tr>
-                      <tr><td>PO Number</td><td>EBELN</td><td>구매오더 번호</td></tr>
-                      <tr><td>Changed Field</td><td>CH_FIELD</td><td>변경된 필드명</td></tr>
-                      <tr><td>Old Value</td><td>CH_OLD</td><td>변경 전 값</td></tr>
-                      <tr><td>New Value</td><td>CH_NEW</td><td>변경 후 값</td></tr>
-                      <tr><td>Changed By</td><td>CH_USER</td><td>변경자 (시스템 사용자 ID)</td></tr>
+                      <tr><td>PO Number</td><td>EBELN</td><td data-i="out1"></td></tr>
+                      <tr><td>Changed Field</td><td>CH_FIELD</td><td data-i="out2"></td></tr>
+                      <tr><td>Old Value</td><td>CH_OLD</td><td data-i="out3"></td></tr>
+                      <tr><td>New Value</td><td>CH_NEW</td><td data-i="out4"></td></tr>
+                      <tr><td>Changed By</td><td>CH_USER</td><td data-i="out5"></td></tr>
                     </table>
                   </div>
                 </div>
@@ -499,7 +501,150 @@
   };
   /* ---------------------------------------------------- */
 
+  /* 화면 문구. 랜딩페이지는 window.__reelLang 으로 언어를 넘기고, 단독으로 열면 <html lang> 을 따릅니다 */
+  var LANG = (function () { var l = String(window.__reelLang || document.documentElement.getAttribute('lang') || 'ko').toLowerCase(); return l.indexOf('ja') === 0 ? 'ja' : l.indexOf('en') === 0 ? 'en' : 'ko'; })();
+  document.documentElement.lang = LANG;
+  var TEXT = {
+    ko: {
+      aria: '프로그램 → 명세 데모: 패키지와 프로그램 이름을 입력하고 실행하면, 연결된 SAP 시스템에서 프로그램을 읽어 기능/기술 명세서를 HTML로 만들어 보여줍니다.',
+      head: '프로그램 → 명세',
+      desc: '프로그램을 역공학해 기능 또는 기술 명세서로 만들고, 선택 화면과 ALV 목업을 붙입니다',
+      input: '입력',
+      inputSub: '실행하면 연결된 시스템에 세션을 엽니다. 아무것도 보관하지 않습니다. 결과와 파일은 Done을 누르거나 이 화면을 떠나기 전까지만 남습니다.',
+      pkg: '패키지',
+      pkgHint: '선택 사항. 프로그램과 커스텀 오브젝트를 찾는 데 씁니다.',
+      prog: '프로그램 이름',
+      mode: '모드', modeVal: '절약',
+      modeHint: '에이전트 1개로 실행합니다. 예상 소요비용은 약 200~400원, 예상 소요시간은 1~3분입니다.',
+      fmt: '출력 형식',
+      fmtHint: '실제 모양 그대로 미리보기하고, .html로 저장합니다.',
+      langLabel: '작성 언어', langVal: '한국어',
+      run: '실행', stop: '중지',
+      result: '결과', working: '작업 중',
+      summary: '요약', finalOnly: '최종 결과만 표시',
+      sum1: 'ZMMR00020은 구매오더(PO) 항목에 대한 변경 이력을 조회하는 감사용 ALV 리포트입니다. 자체 변경이력 테이블 ZMMT00120을 기준으로 EKKO와 조인해 공급업체 코드를 얻고, LFA1에서 공급업체명을 보강해 변경 전/후 값·변경 사유·변경자·변경일시를 도킹 컨테이너 ALV로 보여줍니다.',
+      sum2: '특이사항: 표준 CDHDR/CDPOS가 아닌 커스텀 테이블을 변경이력 원천으로 쓰고 있고, 구매문서/공급업체 조회에 대한 AUTHORITY-CHECK가 전혀 없어 운영 반입 전 보안 검토가 필요합니다.',
+      sum3: '산출물: <code class="spx-path"></code> 및 <code>.html</code>, 화면 이미지는 <code>_assets/</code> 폴더에 저장되었습니다.',
+      preview: 'HTML 미리보기', download: '.html 다운로드',
+      note: '명세서 상단 바의 편집 버튼으로 글과 표를 고칠 수 있습니다. 저장을 누르면 편집본(…-edited.html)이 다운로드되며, 편집 내용은 이 화면에 남지 않습니다.',
+      docTitle: '기능/기술 명세서: ZMMR00020',
+      edit: '편집', collapse: '모두 접기', toc: '목차',
+      purposeK: '한 줄 목적',
+      lead: '구매오더(PO) 항목에 대한 변경 이력(필드별 변경 전/후 값, 변경 사유, 변경자/변경일시)을 조회하여 감사(Audit) 목적으로 조회하는 리포트',
+      typeK: '오브젝트 유형', typeV: 'ABAP Report (Executable Program), Include 구조 (T/S/A/O/I/F)',
+      authorK: '작성자 / 최종변경', authorV: 'SV5_000030 / 2026-04-19 (v1.1 — E-include 분리 + 헤더 표준화)',
+      archK: '아키타입', archV: '선택화면 → 조회 → ALV Grid(도킹 컨테이너) 표시형 리포트',
+      bc: '본 프로그램은 구매오더(Purchase Order) 데이터에 대한 변경 이력을 추적하는 감사용 리포트이다. 구매 담당자, 내부통제/감사 담당자가 특정 PO 또는 특정 기간에 어떤 필드가 누구에 의해 언제, 어떤 사유로 변경되었는지를 확인할 수 있도록 지원한다.',
+      dm1: '커스텀 PO 변경이력 테이블. 변경 전후 값, 사유, 변경자, 변경시각 보유',
+      dm2: 'PO 헤더에서 공급업체(LIFNR) 획득 목적으로만 조인',
+      dm3: '공급업체명(NAME1) 조회, 루프 내 건별 SELECT SINGLE',
+      opt: '선택',
+      in1: 'PO 번호 범위', in2: 'PO 항목 번호 범위', in3: '변경일자 범위', in4: '변경 필드명 패턴 (와일드카드 비교)',
+      s1: '사용자가 선택화면에서 PO번호, PO항목, 변경일자, 필드명 조건을 입력한다.',
+      s2: 'START-OF-SELECTION에서 데이터 조회 FORM을 호출한다.',
+      s3: 'ZMMT00120과 EKKO를 PO번호로 INNER JOIN하여 변경이력을 조회한다.',
+      f1: '선택화면', f2: '데이터 조회', f3: '필터·공급업체 결합', f4: 'ALV Grid 표시', f4s: '화면 0100',
+      out1: '구매오더 번호', out2: '변경된 필드명', out3: '변경 전 값', out4: '변경 후 값', out5: '변경자 (시스템 사용자 ID)'
+    },
+    en: {
+      aria: 'Program to spec demo: enter a package and program name and run it, and the program is read from the connected SAP system and turned into a functional/technical spec, previewed as HTML.',
+      head: 'Program → Spec',
+      desc: 'Reverse-engineers a program into a functional or technical spec, with selection screen and ALV mockups attached',
+      input: 'Input',
+      inputSub: 'Running opens a session on the connected system. Nothing is stored: results and files stay only until you press Done or leave this screen.',
+      pkg: 'Package',
+      pkgHint: 'Optional. Used to find the program and custom objects.',
+      prog: 'Program name',
+      mode: 'Mode', modeVal: 'Economy',
+      modeHint: 'Runs with one agent. Estimated cost about $0.15–0.30, estimated time 1–3 minutes.',
+      fmt: 'Output format',
+      fmtHint: 'Previews it exactly as it will look and saves it as .html.',
+      langLabel: 'Document language', langVal: 'English',
+      run: 'Run', stop: 'Stop',
+      result: 'Result', working: 'Working',
+      summary: 'Summary', finalOnly: 'Final result only',
+      sum1: 'ZMMR00020 is an audit ALV report on the change history of purchase order (PO) items. It reads the custom change-log table ZMMT00120, joins EKKO for the vendor code, adds the vendor name from LFA1, and shows old/new values, change reason, changed by and changed at in a docking-container ALV.',
+      sum2: 'Notes: change history comes from a custom table rather than standard CDHDR/CDPOS, and the purchasing document and vendor reads have no AUTHORITY-CHECK at all, so it needs a security review before it goes to production.',
+      sum3: 'Output: <code class="spx-path"></code> and <code>.html</code>, with screen images saved in the <code>_assets/</code> folder.',
+      preview: 'HTML preview', download: 'Download .html',
+      note: 'Use the Edit button in the spec\'s top bar to change text and tables. Save downloads the edited copy (…-edited.html); edits are not kept on this screen.',
+      docTitle: 'Functional/Technical Spec: ZMMR00020',
+      edit: 'Edit', collapse: 'Collapse all', toc: 'Contents',
+      purposeK: 'Purpose in one line',
+      lead: 'A report showing the change history of purchase order (PO) items (old/new value per field, change reason, changed by/at) for audit purposes',
+      typeK: 'Object type', typeV: 'ABAP Report (Executable Program), Include structure (T/S/A/O/I/F)',
+      authorK: 'Author / Last changed', authorV: 'SV5_000030 / 2026-04-19 (v1.1 — E-include split + header standardised)',
+      archK: 'Archetype', archV: 'Selection screen → read → ALV Grid (docking container) display report',
+      bc: 'This program is an audit report that tracks the change history of purchase order data. It lets purchasing staff and internal control/audit staff see which fields of a given PO, or within a given period, were changed, by whom, when, and why.',
+      dm1: 'Custom PO change-log table. Holds old/new values, reason, changed by and changed at',
+      dm2: 'Joined only to get the vendor (LIFNR) from the PO header',
+      dm3: 'Vendor name (NAME1) lookup, SELECT SINGLE per row inside a loop',
+      opt: 'Optional',
+      in1: 'PO number range', in2: 'PO item number range', in3: 'Change date range', in4: 'Changed field name pattern (wildcard match)',
+      s1: 'The user enters PO number, PO item, change date and field name criteria on the selection screen.',
+      s2: 'START-OF-SELECTION calls the data-read FORM.',
+      s3: 'ZMMT00120 and EKKO are INNER JOINed on the PO number to read the change history.',
+      f1: 'Selection screen', f2: 'Data read', f3: 'Filter + vendor join', f4: 'ALV Grid display', f4s: 'Screen 0100',
+      out1: 'Purchase order number', out2: 'Changed field name', out3: 'Value before change', out4: 'Value after change', out5: 'Changed by (system user ID)'
+    },
+    ja: {
+      aria: 'プログラム → 仕様書デモ: パッケージとプログラム名を入力して実行すると、接続先の SAP システムからプログラムを読み取り、機能/技術仕様書を HTML で作成して表示します。',
+      head: 'プログラム → 仕様書',
+      desc: 'プログラムをリバースエンジニアリングして機能または技術仕様書にし、選択画面と ALV のモックアップを添えます',
+      input: '入力',
+      inputSub: '実行すると接続先のシステムでセッションを開きます。何も保存しません。結果とファイルは Done を押すか、この画面を離れるまでのみ残ります。',
+      pkg: 'パッケージ',
+      pkgHint: '任意。プログラムとカスタムオブジェクトの検索に使います。',
+      prog: 'プログラム名',
+      mode: 'モード', modeVal: '節約',
+      modeHint: 'エージェント 1 つで実行します。想定コストは約 20〜40 円、所要時間は 1〜3 分です。',
+      fmt: '出力形式',
+      fmtHint: '実際の見た目のままプレビューし、.html で保存します。',
+      langLabel: '作成言語', langVal: '日本語',
+      run: '実行', stop: '停止',
+      result: '結果', working: '作業中',
+      summary: '要約', finalOnly: '最終結果のみ表示',
+      sum1: 'ZMMR00020 は購買発注 (PO) 明細の変更履歴を照会する監査用 ALV レポートです。独自の変更履歴テーブル ZMMT00120 を基準に EKKO と結合して仕入先コードを取得し、LFA1 から仕入先名を補って、変更前/後の値・変更理由・変更者・変更日時をドッキングコンテナの ALV で表示します。',
+      sum2: '特記事項: 変更履歴の元データに標準の CDHDR/CDPOS ではなくカスタムテーブルを使っており、購買伝票/仕入先の照会に AUTHORITY-CHECK がまったくないため、本番移送前にセキュリティレビューが必要です。',
+      sum3: '成果物: <code class="spx-path"></code> と <code>.html</code>。画面イメージは <code>_assets/</code> フォルダに保存しました。',
+      preview: 'HTML プレビュー', download: '.html ダウンロード',
+      note: '仕様書上部バーの編集ボタンで文章や表を修正できます。保存を押すと編集版 (…-edited.html) がダウンロードされ、編集内容はこの画面には残りません。',
+      docTitle: '機能/技術仕様書: ZMMR00020',
+      edit: '編集', collapse: 'すべて折りたたむ', toc: '目次',
+      purposeK: '目的 (一行)',
+      lead: '購買発注 (PO) 明細の変更履歴 (項目ごとの変更前/後の値、変更理由、変更者/変更日時) を監査 (Audit) 目的で照会するレポート',
+      typeK: 'オブジェクトタイプ', typeV: 'ABAP Report (Executable Program)、Include 構成 (T/S/A/O/I/F)',
+      authorK: '作成者 / 最終変更', authorV: 'SV5_000030 / 2026-04-19 (v1.1 — E-include 分離 + ヘッダー標準化)',
+      archK: 'アーキタイプ', archV: '選択画面 → 照会 → ALV Grid (ドッキングコンテナ) 表示型レポート',
+      bc: '本プログラムは購買発注 (Purchase Order) データの変更履歴を追跡する監査用レポートである。購買担当者や内部統制/監査担当者が、特定の PO または期間について、どの項目が誰によって、いつ、どの理由で変更されたかを確認できるよう支援する。',
+      dm1: 'カスタム PO 変更履歴テーブル。変更前後の値、理由、変更者、変更時刻を保持',
+      dm2: 'PO ヘッダーから仕入先 (LIFNR) を取得する目的でのみ結合',
+      dm3: '仕入先名 (NAME1) を照会、ループ内で 1 件ずつ SELECT SINGLE',
+      opt: '任意',
+      in1: 'PO 番号範囲', in2: 'PO 明細番号範囲', in3: '変更日範囲', in4: '変更項目名パターン (ワイルドカード比較)',
+      s1: 'ユーザーが選択画面で PO 番号、PO 明細、変更日、項目名の条件を入力する。',
+      s2: 'START-OF-SELECTION でデータ照会 FORM を呼び出す。',
+      s3: 'ZMMT00120 と EKKO を PO 番号で INNER JOIN して変更履歴を照会する。',
+      f1: '選択画面', f2: 'データ照会', f3: 'フィルタ・仕入先結合', f4: 'ALV Grid 表示', f4s: '画面 0100',
+      out1: '購買発注番号', out2: '変更された項目名', out3: '変更前の値', out4: '変更後の値', out5: '変更者 (システムユーザー ID)'
+    }
+  };
+  var T = TEXT[LANG];
+
   var CANCEL = {};
+  var relangs = [];   // 데모마다 하나씩: 화면에 이미 나온 문구를 새 언어로 바꾸는 함수
+
+  /* 재생 중에 언어만 바꿉니다. 애니메이션, 스크롤, 타이머는 그대로 두고 문구만 갈아 끼웁니다.
+     랜딩페이지가 언어를 바꿀 때 부릅니다. */
+  window.__reelSetLang = function (l) {
+    l = String(l || '').toLowerCase();
+    l = l.indexOf('ja') === 0 ? 'ja' : l.indexOf('en') === 0 ? 'en' : 'ko';
+    if (l === LANG) return;
+    var old = T;
+    LANG = l; T = TEXT[l];
+    document.documentElement.lang = l;
+    relangs.forEach(function (f) { f(old); });
+  };
 
   function init(root) {
     var $ = function (s) { return root.querySelector(s); };
@@ -511,13 +656,37 @@
         docBody = $('.spx-doc-body'), scroller = $('.spx-scroll'), toc = all('.spx-toc li');
     var scale = 1, token = 0, running = false, compact = null;
 
+    function paintText() {
+      all('[data-i]').forEach(function (el) { el.textContent = T[el.getAttribute('data-i')]; });
+      all('[data-i-html]').forEach(function (el) { el.innerHTML = T[el.getAttribute('data-i-html')]; });
+      if (root.hasAttribute('data-i-aria')) root.setAttribute('aria-label', T[root.getAttribute('data-i-aria')]);
+    }
+    paintText();
+
     menu.innerHTML = CONFIG.formats.map(function (f) { return '<div>' + f + '</div>'; }).join('');
     var opts = [].slice.call(menu.children);
     var pickEl = opts[CONFIG.formats.indexOf(CONFIG.pick)];
 
     var d = new Date(), pad = function (n) { return ('0' + n).slice(-2); };
-    $('.spx-path').textContent = '.sc4sap/out/…/' + CONFIG.prog + '-' + d.getFullYear() +
-      pad(d.getMonth() + 1) + pad(d.getDate()) + '-ko.md';
+    function paintPath() {
+      $('.spx-path').textContent = '.sc4sap/out/…/' + CONFIG.prog + '-' + d.getFullYear() +
+        pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + LANG + '.md';
+    }
+    paintPath();
+
+    // 마지막 스크롤 목표. 언어가 바뀌어 글 길이가 달라지면 같은 목표로 다시 맞춥니다
+    var lastPage = null, lastDoc = 0;
+    relangs.push(function (old) {
+      paintText(); paintPath();
+      if (runLabel.textContent === old.stop) runLabel.textContent = T.stop;
+      else runLabel.textContent = T.run;
+      // 다시 맞추는 이동은 미끄러지지 않고 바로. 다른 요소의 전환과 애니메이션은 건드리지 않습니다
+      page.style.transition = scroller.style.transition = 'none';
+      if (lastPage) scrollPage(lastPage[0], lastPage[1]);
+      if (lastDoc) scrollDoc(lastDoc);
+      void root.offsetWidth;
+      page.style.transition = scroller.style.transition = '';
+    });
 
     function sleep(ms, t) {
       return new Promise(function (res, rej) {
@@ -550,12 +719,14 @@
     function scrollPage(el, gap) {
       var max = Math.max(0, page.offsetHeight - (compact ? 660 : 620));
       var y = Math.min(max, Math.max(0, topIn(el, page) - gap));
+      lastPage = [el, gap];
       page.style.transform = 'translateY(' + -y + 'px)';
     }
     function scrollDoc(n) {
       var sec = root.querySelector('[data-sec="' + n + '"]');
       var max = Math.max(0, scroller.offsetHeight - docBody.clientHeight);
       var y = Math.min(max, Math.max(0, topIn(sec, scroller) - 22));
+      lastDoc = n;
       scroller.style.transform = 'translateY(' + -y + 'px)';
       toc.forEach(function (li, i) { li.classList.toggle('is-active', i === n - 1); });
     }
@@ -598,9 +769,10 @@
       fmt.textContent = CONFIG.formats[0];
       menu.classList.remove('is-open');
       opts.forEach(function (o) { o.classList.remove('is-hover'); });
-      runLabel.textContent = '실행'; run.classList.remove('is-press');
+      runLabel.textContent = T.run; run.classList.remove('is-press');
       timer.textContent = '1s';
       page.style.transform = 'none'; scroller.style.transform = 'none';
+      lastPage = null; lastDoc = 0;
       toc.forEach(function (li) { li.classList.remove('is-active'); });
       cursor.classList.remove('is-on', 'is-click');
       void root.offsetWidth;
@@ -653,7 +825,7 @@
           run.classList.add('is-press');
           await sleep(150, t);
           run.classList.remove('is-press');
-          runLabel.textContent = '중지';
+          runLabel.textContent = T.stop;
           root.classList.add('is-running', 'has-result');
           cursor.classList.remove('is-on');
           await sleep(80, t);
@@ -661,7 +833,7 @@
           await tick(CONFIG.seconds, 3000, t);
 
           // 4. 결과: 요약, 이어서 명세서 미리보기
-          runLabel.textContent = '실행';
+          runLabel.textContent = T.run;
           root.classList.remove('is-running'); root.classList.add('is-done');
           await sleep(120, t);
           scrollPage(result, 12);

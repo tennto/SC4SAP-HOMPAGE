@@ -1665,12 +1665,18 @@
   /* `shape` is each demo's own aspect ratio (width / height) as its file
      declares it: the wide cut, then the portrait cut it switches to below
      640px of its own width. */
+  /* `title` is the frame's accessible name, in the page's languages. */
   var REEL = [
-    { light: 'motion/intro_w.html', dark: 'motion/intro_b.html', title: 'Super-Claude for SAP 소개', shape: [1200 / 640, 480 / 640] },
-    { light: 'motion/chat_w.html',  dark: 'motion/chat_w.html',  title: 'SAP AI 포탈 채팅 데모',     shape: [1200 / 640, 480 / 560] },
-    { light: 'motion/spec_w.html',  dark: 'motion/spec_b.html',  title: '프로그램 명세서 생성 데모', shape: [1200 / 620, 480 / 660] },
-    { light: 'motion/mcp_w.html',   dark: 'motion/mcp_b.html',   title: 'MCP 모니터 데모',           shape: [1200 / 640, 480 / 700] },
-    { light: 'motion/set_h.html',   dark: 'motion/set_b.html',   title: '설정 데모',                 shape: [1200 / 660, 480 / 720] }
+    { light: 'motion/intro_w.html', dark: 'motion/intro_b.html', shape: [1200 / 640, 480 / 640],
+      title: { ko: 'Super-Claude for SAP 소개', en: 'Super-Claude for SAP intro', ja: 'Super-Claude for SAP 紹介' } },
+    { light: 'motion/chat_w.html',  dark: 'motion/chat_w.html',  shape: [1200 / 640, 480 / 560],
+      title: { ko: 'SAP AI 포탈 채팅 데모', en: 'SAP AI portal chat demo', ja: 'SAP AI ポータル チャットデモ' } },
+    { light: 'motion/spec_w.html',  dark: 'motion/spec_b.html',  shape: [1200 / 620, 480 / 660],
+      title: { ko: '프로그램 명세서 생성 데모', en: 'Program spec generation demo', ja: 'プログラム仕様書生成デモ' } },
+    { light: 'motion/mcp_w.html',   dark: 'motion/mcp_b.html',   shape: [1200 / 640, 480 / 700],
+      title: { ko: 'MCP 모니터 데모', en: 'MCP monitor demo', ja: 'MCP モニターデモ' } },
+    { light: 'motion/set_h.html',   dark: 'motion/set_b.html',   shape: [1200 / 660, 480 / 720],
+      title: { ko: '설정 데모', en: 'Settings demo', ja: '設定デモ' } }
   ];
   var REEL_COMPACT = 640;   // the demos' own portrait breakpoint
 
@@ -1716,6 +1722,9 @@
     ' html.demo-out .stx-stage, html.demo-out .sapd-main' +
     ' { opacity: 0 !important; transition: opacity .45s !important; }';
   var REEL_HEAD = '<script>(' + reelHook.toString() + ')();<\/script><style>' + REEL_CSS + '</style>';
+  /* Each demo reads window.__reelLang before it fills in its text, so the
+     page's language is handed in ahead of the demo's own script. */
+  function reelHead(l) { return '<script>window.__reelLang=' + JSON.stringify(l) + ';<\/script>' + REEL_HEAD; }
 
   (function initReel() {
     var stage = document.querySelector('[data-demo-stage]');
@@ -1732,7 +1741,8 @@
     var front = null;            // the frame on screen
     var current = -1;            // index into REEL of what it shows
     var busy = false;            // a crossfade is running
-    var html = {};               // fetched demo pages, by path
+    var relang = false;          // the language changed during a crossfade
+    var html = {};               // fetched demo pages, by path, as served
 
     function win(f) { try { return f.contentWindow && f.contentWindow.__reel; } catch (e) { return null; } }
     function demoRoot(f) {
@@ -1753,24 +1763,27 @@
       } catch (e) { /* gone */ }
     }
 
-    function page(src) {
-      if (html[src]) return Promise.resolve(html[src]);
-      return fetch(src).then(function (r) { return r.text(); }).then(function (t) {
-        html[src] = t.replace(/<head[^>]*>/i, function (m) { return m + REEL_HEAD; });
-        return html[src];
+    function page(src, l) {
+      var got = html[src] ? Promise.resolve(html[src]) : fetch(src).then(function (r) { return r.text(); }).then(function (t) {
+        html[src] = t;
+        return t;
+      });
+      return got.then(function (t) {
+        return t.replace(/<head[^>]*>/i, function (m) { return m + reelHead(l); });
       });
     }
 
     /* Load REEL[i] into frame f, ready but not started. A frame already
        holding that demo is reused as it is. */
     function load(f, i) {
-      if (f.dataset.index === String(i) && f.dataset.ready === '1') return Promise.resolve(f);
+      if (f.dataset.index === String(i) && f.dataset.lang === lang && f.dataset.ready === '1') return Promise.resolve(f);
       var token = String(Math.random());
       f.dataset.index = String(i);
+      f.dataset.lang = lang;
       f.dataset.ready = '0';
       f.dataset.token = token;
-      f.title = REEL[i].title;
-      return page(REEL[i][theme()]).then(function (doc) {
+      f.title = REEL[i].title[lang] || REEL[i].title.ko;
+      return page(REEL[i][theme()], lang).then(function (doc) {
         return new Promise(function (res) {
           f.onload = function () {
             if (f.dataset.token !== token) return;   // superseded by a later load
@@ -1863,6 +1876,7 @@
       }).then(function () {
         if (out) out.hidden = true;
         busy = false;
+        if (relang) { relang = false; if (!relabel(front)) { show(current); return; } }
         // The next demo waits, loaded and not started, in the frame just vacated.
         load(out || other(front), (current + 1) % REEL.length);
       });
@@ -1882,6 +1896,29 @@
 
     new MutationObserver(function () { frames.forEach(paint); })
       .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
+    /* A language switch swaps the words in place: each demo exposes
+       __reelSetLang, which retranslates what is on screen and what it will
+       write next, without rewinding. A frame that cannot (still loading, or
+       a demo without the hook) falls back: the one on screen restarts in
+       the new language, a waiting one reloads on its turn. */
+    function relabel(f) {
+      if (f.dataset.ready !== '1' || f.dataset.lang === lang) return true;
+      var set;
+      try { set = f.contentWindow && f.contentWindow.__reelSetLang; } catch (e) { set = null; }
+      if (typeof set !== 'function') return false;
+      try { set(lang); } catch (e) { return false; }
+      f.dataset.lang = lang;
+      var item = REEL[+f.dataset.index];
+      if (item) f.title = item.title[lang] || item.title.ko;
+      return true;
+    }
+    new MutationObserver(function () {
+      frames.forEach(function (f) { if (f !== front) relabel(f); });
+      if (current < 0 || !front || relabel(front)) return;
+      if (busy) relang = true;
+      else show(current);
+    }).observe(root, { attributes: true, attributeFilter: ['lang'] });
 
     /* Started when the section first nears the screen, then left running:
        scrolling away does not stop it. */

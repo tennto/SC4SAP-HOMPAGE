@@ -47,8 +47,8 @@
   --cursor-shadow: rgba(0, 0, 0, .5);
 
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
-  --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+  --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Hiragino Sans", "Yu Gothic UI", "Meiryo", monospace;
   --ease: cubic-bezier(.22, .8, .24, 1);
 
   position: relative;
@@ -256,22 +256,22 @@
     </svg>
 
     <div class="mcx-page">
-      <div class="mcx-eyebrow">시스템</div>
-      <h3 class="mcx-title">MCP 모니터</h3>
-      <p class="mcx-desc">에이전트가 대신 호출하는 모든 도구를 실시간으로 봅니다. MCP 호출은 SAP 시스템에 닿는 것이고, 나머지는 에이전트가 자기 작업 공간을 읽는 것입니다.</p>
+      <div class="mcx-eyebrow" data-i="eyebrow"></div>
+      <h3 class="mcx-title" data-i="title"></h3>
+      <p class="mcx-desc" data-i="desc"></p>
       <div class="mcx-rule"></div>
 
       <div class="mcx-card mcx-stats">
-        <div class="mcx-head"><svg class="mcx-i"><use href="#mcx-cal"/></svg>최근 7일</div>
+        <div class="mcx-head"><svg class="mcx-i"><use href="#mcx-cal"/></svg><span data-i="week"></span></div>
         <div class="mcx-tiles">
           <div class="mcx-tile">
-            <div class="mcx-k">이번 주 호출</div>
-            <div class="mcx-big"><span class="mcx-num" data-v="total">0</span><small>건</small></div>
+            <div class="mcx-k" data-i="calls"></div>
+            <div class="mcx-big"><span class="mcx-num" data-v="total">0</span><small data-i="unit"></small></div>
             <div class="mcx-split"><i></i></div>
-            <div class="mcx-foot">SAP <span data-v="sap">0</span> · 워크스페이스 <span data-v="ws">0</span><br>최근 24시간 <span data-v="day">0</span>건</div>
+            <div class="mcx-foot" data-i-html="callsFoot"></div>
           </div>
           <div class="mcx-tile">
-            <div class="mcx-k">실패 또는 거부</div>
+            <div class="mcx-k" data-i="failDeny"></div>
             <div class="mcx-donut-row">
               <div class="mcx-donut">
                 <svg viewBox="0 0 84 84">
@@ -282,36 +282,36 @@
                 <b data-v="pct">0%</b>
               </div>
               <div class="mcx-legend">
-                <i style="background:var(--bad)"></i><span>실패</span><span data-v="fail">0</span>
-                <i style="background:var(--warn)"></i><span>거부</span><span data-v="deny">0</span>
-                <i style="background:var(--track)"></i><span>성공</span><span data-v="ok">0</span>
+                <i style="background:var(--bad)"></i><span data-i="fail"></span><span data-v="fail">0</span>
+                <i style="background:var(--warn)"></i><span data-i="deny"></span><span data-v="deny">0</span>
+                <i style="background:var(--track)"></i><span data-i="ok"></span><span data-v="ok">0</span>
               </div>
             </div>
           </div>
           <div class="mcx-tile">
-            <div class="mcx-k">SAP 응답 시간</div>
+            <div class="mcx-k" data-i="resp"></div>
             <div class="mcx-big"><span class="mcx-num" data-v="med">0.0</span> s</div>
-            <div class="mcx-foot">p95 <span data-v="p95">0.0</span> s · MCP 호출 <span data-v="sap2">0</span>건의 중앙값</div>
+            <div class="mcx-foot" data-i-html="respFoot"></div>
           </div>
           <div class="mcx-tile mcx-tile-top">
-            <div class="mcx-k">최다 호출</div>
+            <div class="mcx-k" data-i="most"></div>
             <div class="mcx-bars"></div>
-            <div class="mcx-foot">1위 <code data-v="topName"></code> · <span data-v="topN">0</span>건 · SAP 호출의 <span data-v="topPct">0</span>%</div>
+            <div class="mcx-foot" data-i-html="mostFoot"></div>
           </div>
         </div>
       </div>
 
       <div class="mcx-card mcx-calls">
-        <div class="mcx-head"><svg class="mcx-i"><use href="#mcx-wave"/></svg>호출<span class="mcx-live"><i></i>실시간</span></div>
-        <p class="mcx-sub">실시간. 에이전트가 호출하는 대로 새 항목이 나타납니다.</p>
+        <div class="mcx-head"><svg class="mcx-i"><use href="#mcx-wave"/></svg><span data-i="list"></span><span class="mcx-live"><i></i><span data-i="live"></span></span></div>
+        <p class="mcx-sub" data-i="sub"></p>
         <div class="mcx-filters">
-          <div class="mcx-field mcx-search"><svg class="mcx-i"><use href="#mcx-search"/></svg>도구 이름 또는 입력, 예: GetTypeInfo 또는 MARA</div>
-          <div class="mcx-field mcx-select mcx-x">모든 상태<svg class="mcx-i"><use href="#mcx-chev"/></svg></div>
-          <div class="mcx-field mcx-select mcx-x" style="width:150px"><svg class="mcx-i"><use href="#mcx-cal"/></svg>전체 기간<svg class="mcx-i"><use href="#mcx-chev"/></svg></div>
-          <div class="mcx-field mcx-select mcx-x">최신순<svg class="mcx-i"><use href="#mcx-chev"/></svg></div>
+          <div class="mcx-field mcx-search"><svg class="mcx-i"><use href="#mcx-search"/></svg><span data-i="search"></span></div>
+          <div class="mcx-field mcx-select mcx-x"><span data-i="status"></span><svg class="mcx-i"><use href="#mcx-chev"/></svg></div>
+          <div class="mcx-field mcx-select mcx-x" style="width:150px"><svg class="mcx-i"><use href="#mcx-cal"/></svg><span data-i="period"></span><svg class="mcx-i"><use href="#mcx-chev"/></svg></div>
+          <div class="mcx-field mcx-select mcx-x"><span data-i="sort"></span><svg class="mcx-i"><use href="#mcx-chev"/></svg></div>
           <div class="mcx-space mcx-x"></div>
-          <div class="mcx-field mcx-mcp"><i class="mcx-check"></i>MCP만</div>
-          <div class="mcx-field mcx-x"><svg class="mcx-i"><use href="#mcx-trash"/></svg>초기화</div>
+          <div class="mcx-field mcx-mcp"><i class="mcx-check"></i><span data-i="mcpOnly"></span></div>
+          <div class="mcx-field mcx-x"><svg class="mcx-i"><use href="#mcx-trash"/></svg><span data-i="clear"></span></div>
         </div>
         <div class="mcx-list"></div>
       </div>
@@ -326,8 +326,68 @@
 <!-- (4) 스크립트. </body> 바로 앞에 넣으세요. 의존성 없고, 페이지 안의 모든 data-mcx-monitor 요소에 적용됩니다. -->
 <script>
 (function () {
+  /* 언어: 사이트가 window.__reelLang 으로 넘겨 주고, 없으면 문서의 lang (기본 ko) */
+  var LANG = (function () { var l = String(window.__reelLang || document.documentElement.getAttribute('lang') || 'ko').toLowerCase(); return l.indexOf('ja') === 0 ? 'ja' : l.indexOf('en') === 0 ? 'en' : 'ko'; })();
+  document.documentElement.lang = LANG;
+
+  /* ---------- 화면 문구 (언어별) ---------- */
+  var TEXT = {
+    ko: {
+      docTitle: 'MCP 모니터 데모 모션',
+      aria: 'MCP 모니터 데모: 에이전트가 SAP 시스템과 작업 공간에서 호출하는 도구가 실시간으로 목록에 쌓이고, 호출 수와 응답 시간 지표가 함께 갱신됩니다.',
+      eyebrow: '시스템', title: 'MCP 모니터',
+      desc: '에이전트가 대신 호출하는 모든 도구를 실시간으로 봅니다. MCP 호출은 SAP 시스템에 닿는 것이고, 나머지는 에이전트가 자기 작업 공간을 읽는 것입니다.',
+      week: '최근 7일', calls: '이번 주 호출', unit: '건',
+      callsFoot: 'SAP <span data-v="sap">0</span> · 워크스페이스 <span data-v="ws">0</span><br>최근 24시간 <span data-v="day">0</span>건',
+      failDeny: '실패 또는 거부', fail: '실패', deny: '거부', ok: '성공',
+      resp: 'SAP 응답 시간',
+      respFoot: 'p95 <span data-v="p95">0.0</span> s · MCP 호출 <span data-v="sap2">0</span>건의 중앙값',
+      most: '최다 호출',
+      mostFoot: '1위 <code data-v="topName"></code> · <span data-v="topN">0</span>건 · SAP 호출의 <span data-v="topPct">0</span>%',
+      list: '호출', live: '실시간', sub: '실시간. 에이전트가 호출하는 대로 새 항목이 나타납니다.',
+      search: '도구 이름 또는 입력, 예: GetTypeInfo 또는 MARA',
+      status: '모든 상태', period: '전체 기간', sort: '최신순', mcpOnly: 'MCP만', clear: '초기화',
+      builtin: '내장', spec: '기능/기술 명세서'
+    },
+    en: {
+      docTitle: 'MCP Monitor demo',
+      aria: 'MCP Monitor demo: the tools an agent calls on the SAP system and in its workspace stack up in a live list, while call counts and response times update alongside.',
+      eyebrow: 'System', title: 'MCP Monitor',
+      desc: 'Watch every tool the agent calls on your behalf, live. MCP calls reach the SAP system; the rest are the agent reading its own workspace.',
+      week: 'Last 7 days', calls: 'Calls this week', unit: 'calls',
+      callsFoot: 'SAP <span data-v="sap">0</span> · Workspace <span data-v="ws">0</span><br>Last 24h: <span data-v="day">0</span>',
+      failDeny: 'Failed or denied', fail: 'Failed', deny: 'Denied', ok: 'OK',
+      resp: 'SAP response time',
+      respFoot: 'p95 <span data-v="p95">0.0</span> s · median of <span data-v="sap2">0</span> MCP calls',
+      most: 'Most called',
+      mostFoot: '#1 <code data-v="topName"></code> · <span data-v="topN">0</span> · <span data-v="topPct">0</span>% of SAP calls',
+      list: 'Calls', live: 'Live', sub: 'Live. New entries appear as the agent makes calls.',
+      search: 'Tool name or input, e.g. GetTypeInfo or MARA',
+      status: 'All statuses', period: 'All time', sort: 'Newest first', mcpOnly: 'MCP only', clear: 'Clear',
+      builtin: 'built-in', spec: 'Functional/Technical Spec'
+    },
+    ja: {
+      docTitle: 'MCPモニター デモ',
+      aria: 'MCPモニターのデモ: エージェントがSAPシステムと作業領域で呼び出すツールがリアルタイムに一覧へ積み重なり、呼び出し数と応答時間の指標も一緒に更新されます。',
+      eyebrow: 'システム', title: 'MCPモニター',
+      desc: 'エージェントが代わりに呼び出すすべてのツールをリアルタイムで確認できます。MCP呼び出しはSAPシステムに届くもの、それ以外はエージェントが自分の作業領域を読むものです。',
+      week: '直近7日間', calls: '今週の呼び出し', unit: '件',
+      callsFoot: 'SAP <span data-v="sap">0</span> · ワークスペース <span data-v="ws">0</span><br>直近24時間 <span data-v="day">0</span>件',
+      failDeny: '失敗または拒否', fail: '失敗', deny: '拒否', ok: '成功',
+      resp: 'SAP応答時間',
+      respFoot: 'p95 <span data-v="p95">0.0</span> s · MCP呼び出し<span data-v="sap2">0</span>件の中央値',
+      most: '最多呼び出し',
+      mostFoot: '1位 <code data-v="topName"></code> · <span data-v="topN">0</span>件 · SAP呼び出しの<span data-v="topPct">0</span>%',
+      list: '呼び出し', live: 'リアルタイム', sub: 'リアルタイム。エージェントが呼び出すたびに新しい項目が表示されます。',
+      search: 'ツール名または入力 例: GetTypeInfo、MARA',
+      status: 'すべての状態', period: '全期間', sort: '新しい順', mcpOnly: 'MCPのみ', clear: 'クリア',
+      builtin: '内蔵', spec: '機能/技術仕様書'
+    }
+  };
+  var T = TEXT[LANG];
+
   /* ---------- 여기만 고치면 숫자와 호출 내용이 바뀝니다 ---------- */
-  var MCP = 'sc4sap_sap', BUILTIN = '내장';   // 호출 출처 이름. MCP 쪽이 SAP 호출로 집계됩니다.
+  var MCP = 'sc4sap_sap', BUILTIN = T.builtin;   // 호출 출처 이름. MCP 쪽이 SAP 호출로 집계됩니다.
   var CONFIG = {
     // 시작 지표
     stats: { sap: 81, ws: 123, day: 10, fail: 1, deny: 2, med: 2.5, p95: 3.0 },
@@ -336,11 +396,11 @@
     topName: 'GetObjectInfo',
     // 처음부터 목록에 있는 호출. ago: 지금으로부터 몇 초 전인지
     initial: [
-      { tool: 'Bash', src: BUILTIN, arg: '{"command":"node scripts/spec/md-to-html.mjs \\".sc4sap/out/ZMMR00020-ko.md\\""}', ms: '172 ms', size: '153 B', ago: 41 },
-      { tool: 'Edit', src: BUILTIN, arg: '{"replace_all":false,"file_path":".sc4sap/out/ZMMR00020-ko.md","old_string":"## 2. Data…', ms: '23 ms', size: '226 B', ago: 45 },
-      { tool: 'Write', src: BUILTIN, arg: '{"file_path":".sc4sap/out/ZMMR00020-ko.md","content":"# 기능/기술 명세서: ZMMR00020…', ms: '29 ms', size: '216 B', ago: 49 },
+      { tool: 'Bash', src: BUILTIN, arg: '{"command":"node scripts/spec/md-to-html.mjs \\".sc4sap/out/ZMMR00020-' + LANG + '.md\\""}', ms: '172 ms', size: '153 B', ago: 41 },
+      { tool: 'Edit', src: BUILTIN, arg: '{"replace_all":false,"file_path":".sc4sap/out/ZMMR00020-' + LANG + '.md","old_string":"## 2. Data…', ms: '23 ms', size: '226 B', ago: 45 },
+      { tool: 'Write', src: BUILTIN, arg: '{"file_path":".sc4sap/out/ZMMR00020-' + LANG + '.md","content":"# ' + T.spec + ': ZMMR00020…', ms: '29 ms', size: '216 B', ago: 49 },
       { tool: 'Bash', src: BUILTIN, arg: '{"command":"node scripts/spec/render-md-images.mjs \\".sc4sap/out/_img\\""}', ms: '3.0 s', size: '694 B', ago: 100 },
-      { tool: 'Write', src: BUILTIN, arg: '{"file_path":".sc4sap/out/_img/image-spec.json","content":"{\\n \\"lang\\": \\"ko\\"…', ms: '30 ms', size: '212 B', ago: 104 },
+      { tool: 'Write', src: BUILTIN, arg: '{"file_path":".sc4sap/out/_img/image-spec.json","content":"{\\n \\"lang\\": \\"' + LANG + '\\"…', ms: '30 ms', size: '212 B', ago: 104 },
       { tool: 'GetTextElement', src: MCP, arg: '{"program_name":"ZMMR00020"}', ms: '3.2 s', size: '2 KB', ago: 121 }
     ],
     // 실시간으로 들어오는 호출 (위에서부터 순서대로 도착)
@@ -349,14 +409,41 @@
       { tool: 'GetTextElement', src: MCP, arg: '{"program_name":"ZMMR00030"}', ms: '3.1 s', size: '2 KB' },
       { tool: 'GetScreensList', src: MCP, arg: '{"program_name":"ZMMR00030"}', ms: '2.2 s', size: '418 B' },
       { tool: 'GetTypeInfo', src: MCP, arg: '{"type_name":"ZMMT00130"}', ms: '2.6 s', size: '3 KB' },
-      { tool: 'Write', src: BUILTIN, arg: '{"file_path":".sc4sap/out/ZMMR00030-ko.md","content":"# 기능/기술 명세서: ZMMR00030…', ms: '31 ms', size: '208 B' }
+      { tool: 'Write', src: BUILTIN, arg: '{"file_path":".sc4sap/out/ZMMR00030-' + LANG + '.md","content":"# ' + T.spec + ': ZMMR00030…', ms: '31 ms', size: '208 B' }
     ],
     gapMs: 1150,                              // 호출이 도착하는 간격
     holdMs: 1500                              // 마지막 화면 유지 시간
   };
   /* ------------------------------------------------------------- */
 
+  if (LANG !== 'ko') document.title = T.docTitle;
+
   var CANCEL = {}, C = 2 * Math.PI * 34;
+
+  /* ---------- 재생 중 언어 바꾸기 ----------
+     window.__reelSetLang('en') 처럼 부르면 애니메이션을 되감지 않고 문구만 그 자리에서 바뀝니다.
+     호출 기록의 출처 이름과 인자 속 언어 표시(-ko.md, "lang", 명세서 제목)도 함께 바꿔서,
+     이미 목록에 있는 줄과 앞으로 들어올 줄이 같은 언어가 되도록 합니다. */
+  var relang = [];
+  function swapArg(a, o, n, oT, nT) {
+    return a.split('-' + o + '.md').join('-' + n + '.md')
+            .split('\\"lang\\": \\"' + o).join('\\"lang\\": \\"' + n)
+            .split(oT.spec).join(nT.spec);
+  }
+  window.__reelSetLang = function (l) {
+    l = String(l || '').toLowerCase();
+    var n = l.indexOf('ja') === 0 ? 'ja' : l.indexOf('en') === 0 ? 'en' : 'ko';
+    if (n === LANG) return;
+    var o = LANG, oT = T, nT = TEXT[n];
+    LANG = n; T = nT; BUILTIN = nT.builtin;
+    document.documentElement.lang = n;
+    document.title = n === 'ko' ? TEXT.ko.docTitle : nT.docTitle;
+    CONFIG.initial.concat(CONFIG.incoming).forEach(function (c) {
+      if (c.src !== MCP) c.src = BUILTIN;
+      c.arg = swapArg(c.arg, o, n, oT, nT);
+    });
+    relang.forEach(function (f) { f(o, n, oT, nT); });
+  };
 
   function init(root) {
     var $ = function (s) { return root.querySelector(s); };
@@ -365,9 +452,35 @@
         list = $('.mcx-list'), bars = $('.mcx-bars'), split = $('.mcx-split i'),
         statsCard = $('.mcx-stats'), mcpBtn = $('.mcx-mcp'),
         arcFail = $('[data-arc="fail"]'), arcDeny = $('[data-arc="deny"]');
+    // 문구 채우기 (data-v 를 담은 문구가 있어서 out 을 모으기 전에)
+    root.setAttribute('aria-label', T.aria);
+    all('[data-i]').forEach(function (el) { el.textContent = T[el.getAttribute('data-i')]; });
+    all('[data-i-html]').forEach(function (el) { el.innerHTML = T[el.getAttribute('data-i-html')]; });
     var out = {};
     all('[data-v]').forEach(function (el) { out[el.getAttribute('data-v')] = el; });
     var scale = 1, token = 0, running = false, compact = null, st, top;
+
+    /* 언어 교체. data-i-html 문구에는 살아 있는 숫자 칸(data-v)이 들어 있어서,
+       새 문구를 만든 뒤 그 안의 빈 칸 자리에 기존 숫자 칸을 그대로 옮겨 끼웁니다. */
+    relang.push(function (o, n, oT, nT) {
+      root.setAttribute('aria-label', nT.aria);
+      all('[data-i]').forEach(function (el) { el.textContent = nT[el.getAttribute('data-i')]; });
+      all('[data-i-html]').forEach(function (el) {
+        var tmp = document.createElement('div');
+        tmp.innerHTML = nT[el.getAttribute('data-i-html')];
+        [].forEach.call(tmp.querySelectorAll('[data-v]'), function (slot) {
+          var live = out[slot.getAttribute('data-v')];
+          if (live) slot.parentNode.replaceChild(live, slot);
+        });
+        while (el.firstChild) el.removeChild(el.firstChild);
+        while (tmp.firstChild) el.appendChild(tmp.firstChild);
+      });
+      all('.mcx-row').forEach(function (r) {
+        var src = r.querySelector('.mcx-tool small'), arg = r.querySelector('.mcx-arg');
+        if (src && r.getAttribute('data-src') === 'builtin') src.textContent = nT.builtin;
+        if (arg) arg.textContent = swapArg(arg.textContent, o, n, oT, nT);
+      });
+    });
 
     bars.innerHTML = CONFIG.top.map(function (_, i) { return '<div><span></span><i></i><span>' + (i + 1) + '</span></div>'; }).join('');
     var barEls = [].slice.call(bars.children);

@@ -58,7 +58,8 @@
   --cursor-shadow: rgba(0, 0, 0, .5);
 
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR",
+          "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
   --mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --ease: cubic-bezier(.22, .8, .24, 1);
 
@@ -155,7 +156,7 @@
   display: flex; align-items: center; justify-content: space-between;
   margin: 24px 4px 0; font-size: 11.5px; font-weight: 600; color: var(--muted);
 }
-.sapd-sec span { display: flex; align-items: center; gap: 10px; font-weight: 400; }
+.sapd-sec > span:last-child { display: flex; align-items: center; gap: 10px; font-weight: 400; }
 .sapd-sec .sapd-i { width: 14px; height: 14px; }
 .sapd-day { margin: 18px 4px 5px; font-size: 10.5px; color: var(--dim); }
 .sapd-sec + .sapd-day { margin-top: 14px; }
@@ -334,8 +335,8 @@
 
 <!-- 미리보기 전용 테마 전환 버튼. 복사하지 않아도 됩니다. -->
 <div class="pv-bar">
-  <button type="button" data-pv="light" aria-pressed="true">라이트</button>
-  <button type="button" data-pv="dark" aria-pressed="false">다크</button>
+  <button type="button" data-pv="light" aria-pressed="true" data-t="pvLight">라이트</button>
+  <button type="button" data-pv="dark" aria-pressed="false" data-t="pvDark">다크</button>
 </div>
 <script>
   document.body.classList.add('pv-light');
@@ -364,20 +365,20 @@
     </svg>
 
     <aside class="sapd-side">
-      <div class="sapd-new"><svg class="sapd-i"><use href="#sapd-plus-circle"/></svg>새 채팅</div>
-      <div class="sapd-sec">프로젝트 <svg class="sapd-i"><use href="#sapd-plus"/></svg></div>
-      <div class="sapd-sec">최근 <span><svg class="sapd-i"><use href="#sapd-sliders"/></svg>모두 보기</span></div>
-      <div class="sapd-day">오늘</div>
-      <div class="sapd-item is-active"><svg class="sapd-i"><use href="#sapd-chat"/></svg><span class="sapd-title">새 대화</span></div>
-      <div class="sapd-day">지난 7일</div>
+      <div class="sapd-new"><svg class="sapd-i"><use href="#sapd-plus-circle"/></svg><span data-t="newChat">새 채팅</span></div>
+      <div class="sapd-sec"><span data-t="projects">프로젝트</span> <svg class="sapd-i"><use href="#sapd-plus"/></svg></div>
+      <div class="sapd-sec"><span data-t="recent">최근</span> <span><svg class="sapd-i"><use href="#sapd-sliders"/></svg><span data-t="viewAll">모두 보기</span></span></div>
+      <div class="sapd-day" data-t="today">오늘</div>
+      <div class="sapd-item is-active"><svg class="sapd-i"><use href="#sapd-chat"/></svg><span class="sapd-title" data-t="homeTitle">새 대화</span></div>
+      <div class="sapd-day" data-t="last7">지난 7일</div>
       <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-chat"/></svg>Object type: Program</div>
       <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-bolt"/></svg>Analyze Code · ZMMR00020</div>
       <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-bolt"/></svg>Ask a Consultant</div>
-      <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-chat"/></svg>이번 달 입고 현황</div>
+      <div class="sapd-item"><svg class="sapd-i"><use href="#sapd-chat"/></svg><span data-t="pastChat">이번 달 입고 현황</span></div>
     </aside>
 
     <div class="sapd-main">
-      <p class="sapd-col sapd-greet">반가워요, Sihun님!</p>
+      <p class="sapd-col sapd-greet" data-t="greet">반가워요, Sihun님!</p>
 
       <div class="sapd-col sapd-thread">
         <div class="sapd-user sapd-rv"></div>
@@ -393,7 +394,7 @@
           <p class="sapd-answer"></p>
           <div class="sapd-table sapd-rv">
             <div class="sapd-tr sapd-th">
-              <span>구매오더</span><span>공급업체</span><span class="sapd-c-item">품목</span><span>납기일</span><span>지연</span>
+              <span data-t="thPo">구매오더</span><span data-t="thVendor">공급업체</span><span class="sapd-c-item" data-t="thItem">품목</span><span data-t="thDue">납기일</span><span data-t="thDelay">지연</span>
             </div>
             <div class="sapd-tbody"></div>
           </div>
@@ -401,7 +402,7 @@
       </div>
 
       <div class="sapd-col sapd-composer">
-        <div class="sapd-input"><span class="sapd-typed"></span><i class="sapd-caret"></i><span class="sapd-ph">SAP 시스템에 대해 무엇이든 물어보세요...</span></div>
+        <div class="sapd-input"><span class="sapd-typed"></span><i class="sapd-caret"></i><span class="sapd-ph" data-t="placeholder">SAP 시스템에 대해 무엇이든 물어보세요...</span></div>
         <div class="sapd-bar">
           <svg class="sapd-i"><use href="#sapd-plus"/></svg>
           <span class="sapd-model">Haiku <svg class="sapd-i"><use href="#sapd-chev"/></svg></span>
@@ -422,34 +423,113 @@
   var root = document.getElementById('sap-demo');
   if (!root) return;
 
+  /* 언어: 사이트가 window.__reelLang 을 먼저 넣어 주고, 없으면 문서의 lang, 그것도 없으면 한국어 */
+  var LANG = (function () { var l = String(window.__reelLang || document.documentElement.getAttribute('lang') || 'ko').toLowerCase(); return l.indexOf('ja') === 0 ? 'ja' : l.indexOf('en') === 0 ? 'en' : 'ko'; })();
+  document.documentElement.lang = LANG;
+
   /* ---------- 여기만 고치면 시나리오가 바뀝니다 ---------- */
+  var I18N = {
+    ko: {
+      docTitle: 'SAP AI 포탈 히어로 데모 모션: 납기 지연 구매오더',
+      aria: 'SAP AI 포탈 데모: 납기 지연된 구매오더를 물으면 연결된 SAP 시스템을 조회해 지연 일수 순으로 정리한 표를 보여줍니다.',
+      pvLight: '라이트', pvDark: '다크',
+      newChat: '새 채팅', projects: '프로젝트', recent: '최근', viewAll: '모두 보기',
+      today: '오늘', homeTitle: '새 대화', last7: '지난 7일', pastChat: '이번 달 입고 현황',
+      greet: '반가워요, Sihun님!',
+      placeholder: 'SAP 시스템에 대해 무엇이든 물어보세요...',
+      thPo: '구매오더', thVendor: '공급업체', thItem: '품목', thDue: '납기일', thDelay: '지연',
+      dayUnit: '일',
+      prompt: '납기 지연된 구매오더 보여줘',
+      chatTitle: '납기 지연 구매오더',
+      toolRunning: 'SAP 시스템 조회 중',
+      toolDone: 'SAP 시스템에서 3개 항목 확인',
+      steps: ['구매오더 납품일정 조회', '입고 이력 대조', '공급업체 정보 조회'],
+      answer: [
+        { t: '납기일이 지났는데 아직 입고되지 않은 구매오더가 ' }, { t: '5건', strong: true },
+        { t: ' 있어요. 지연이 긴 순서로 정리했습니다.' }
+      ],
+      vendors: ['한성정밀', '대원케미칼', '세림전자', '동아패키징', '우진스틸'],
+      items: ['베어링 하우징', '에폭시 수지 20kg', '컨트롤 보드', '수출용 박스', '냉연강판 1.2T']
+    },
+    en: {
+      docTitle: 'SAP AI Portal demo: overdue purchase orders',
+      aria: 'SAP AI Portal demo: ask for overdue purchase orders and it queries the connected SAP system, then shows them in a table sorted by days late.',
+      pvLight: 'Light', pvDark: 'Dark',
+      newChat: 'New chat', projects: 'Projects', recent: 'Recent', viewAll: 'View all',
+      today: 'Today', homeTitle: 'New chat', last7: 'Previous 7 days', pastChat: 'Goods receipts this month',
+      greet: 'Welcome back, Sihun!',
+      placeholder: 'Ask anything about your SAP system...',
+      thPo: 'PO', thVendor: 'Vendor', thItem: 'Item', thDue: 'Due', thDelay: 'Late',
+      dayUnit: 'd',
+      prompt: 'Show me overdue purchase orders',
+      chatTitle: 'Overdue purchase orders',
+      toolRunning: 'Querying the SAP system',
+      toolDone: 'Checked 3 sources in the SAP system',
+      steps: ['Read PO delivery schedules', 'Match goods receipt history', 'Read vendor details'],
+      answer: [
+        { t: 'There are ' }, { t: '5 purchase orders', strong: true },
+        { t: ' past their delivery date with no goods receipt yet. Sorted by longest delay.' }
+      ],
+      vendors: ['Hansung Precision', 'Daewon Chemical', 'Serim Electronics', 'Donga Packaging', 'Woojin Steel'],
+      items: ['Bearing housing', 'Epoxy resin 20kg', 'Control board', 'Export carton', 'Cold-rolled sheet 1.2T']
+    },
+    ja: {
+      docTitle: 'SAP AI ポータル デモ: 納期遅延の購買発注',
+      aria: 'SAP AI ポータルのデモ: 納期遅延の購買発注を尋ねると、接続された SAP システムを照会し、遅延日数順に並べた表を表示します。',
+      pvLight: 'ライト', pvDark: 'ダーク',
+      newChat: '新しいチャット', projects: 'プロジェクト', recent: '最近', viewAll: 'すべて表示',
+      today: '今日', homeTitle: '新しい会話', last7: '過去 7 日間', pastChat: '今月の入庫状況',
+      greet: 'ようこそ、Sihun さん！',
+      placeholder: 'SAP システムについて何でも聞いてください...',
+      thPo: '購買発注', thVendor: '仕入先', thItem: '品目', thDue: '納期', thDelay: '遅延',
+      dayUnit: '日',
+      prompt: '納期遅延の購買発注を見せて',
+      chatTitle: '納期遅延の購買発注',
+      toolRunning: 'SAP システムを照会中',
+      toolDone: 'SAP システムで 3 項目を確認',
+      steps: ['購買発注の納入日程を照会', '入庫履歴と照合', '仕入先情報を照会'],
+      answer: [
+        { t: '納期を過ぎてもまだ入庫されていない購買発注が ' }, { t: '5 件', strong: true },
+        { t: 'あります。遅延の長い順に並べました。' }
+      ],
+      vendors: ['ハンソン精密', 'テウォン化学', 'セリム電子', 'トンア包装', 'ウジン製鉄'],
+      items: ['ベアリングハウジング', 'エポキシ樹脂 20kg', '制御基板', '輸出用ケース', '冷延鋼板 1.2T']
+    }
+  };
+  var L = I18N[LANG];
+
   var CONFIG = {
-    prompt: '납기 지연된 구매오더 보여줘',
-    chatTitle: '납기 지연 구매오더',
+    prompt: L.prompt,
+    chatTitle: L.chatTitle,
     system: 'S4P/100',                       // 연결된 시스템 ID/클라이언트
-    toolRunning: 'SAP 시스템 조회 중',
-    toolDone: 'SAP 시스템에서 3개 항목 확인',
+    toolRunning: L.toolRunning,
+    toolDone: L.toolDone,
     steps: [
-      { text: '구매오더 납품일정 조회', ref: 'EKKO, EKET' },
-      { text: '입고 이력 대조', ref: 'EKBE' },
-      { text: '공급업체 정보 조회', ref: 'LFA1' }
+      { text: L.steps[0], ref: 'EKKO, EKET' },
+      { text: L.steps[1], ref: 'EKBE' },
+      { text: L.steps[2], ref: 'LFA1' }
     ],
     // strong: true 는 굵게, code: true 는 인라인 코드로 표시
-    answer: [
-      { t: '납기일이 지났는데 아직 입고되지 않은 구매오더가 ' }, { t: '5건', strong: true },
-      { t: ' 있어요. 지연이 긴 순서로 정리했습니다.' }
-    ],
+    answer: L.answer,
     // days: 납기일에서 지난 일수. 납기일 날짜는 방문한 날 기준으로 자동 계산됩니다.
     rows: [
-      { po: '4500018274', vendor: '한성정밀',   item: '베어링 하우징',   days: 12 },
-      { po: '4500018311', vendor: '대원케미칼', item: '에폭시 수지 20kg', days: 9 },
-      { po: '4500018352', vendor: '세림전자',   item: '컨트롤 보드',     days: 6 },
-      { po: '4500018407', vendor: '동아패키징', item: '수출용 박스',     days: 3 },
-      { po: '4500018433', vendor: '우진스틸',   item: '냉연강판 1.2T',   days: 2 }
+      { po: '4500018274', vendor: L.vendors[0], item: L.items[0], days: 12 },
+      { po: '4500018311', vendor: L.vendors[1], item: L.items[1], days: 9 },
+      { po: '4500018352', vendor: L.vendors[2], item: L.items[2], days: 6 },
+      { po: '4500018407', vendor: L.vendors[3], item: L.items[3], days: 3 },
+      { po: '4500018433', vendor: L.vendors[4], item: L.items[4], days: 2 }
     ],
     holdMs: 1500                              // 마지막 화면 유지 시간
   };
   /* ------------------------------------------------------ */
+
+  // 마크업에 박힌 한국어 문구를 고른 언어로 바꿉니다
+  document.title = L.docTitle;
+  root.setAttribute('aria-label', L.aria);
+  [].forEach.call(document.querySelectorAll('[data-t]'), function (el) {
+    var v = L[el.getAttribute('data-t')];
+    if (typeof v === 'string') el.textContent = v;
+  });
 
   var $ = function (s) { return root.querySelector(s); };
   var stage = $('.sapd-stage'), typed = $('.sapd-typed'), send = $('.sapd-send'),
@@ -460,6 +540,7 @@
 
   var HOME_TITLE = title.textContent;
   var scale = 1, token = 0, running = false, CANCEL = {};
+  var langGen = 0;                          // 언어가 바뀔 때마다 하나씩 올라갑니다 (타이핑·답변 스트리밍이 봅니다)
   var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
 
   $('.sapd-sys-name').textContent = CONFIG.system;
@@ -481,7 +562,7 @@
       '<span class="sapd-c-item">' + esc(r.item) + '</span>' +
       '<span class="sapd-date">' + due(r.days) + '</span>' +
       '<span class="sapd-delay"><span><i style="--w:' + Math.round(r.days / maxDays * 100) + '%"></i></span>' +
-      '<b>' + r.days + '일</b></span></div>';
+      '<b>' + r.days + L.dayUnit + '</b></span></div>';
   }).join('');
   var rows = [].slice.call(tbody.children);
 
@@ -557,26 +638,38 @@
     if (t) out.push(ch);
     return out;
   }
-  async function type(text, t) {
-    var done = '';
+  /* 질문은 매 글자 CONFIG.prompt 에서 새로 읽습니다. 도중에 언어가 바뀌면 같은 진행 비율의
+     자리에서 새 언어 문장을 이어서 칩니다 */
+  async function type(t) {
+    var text = CONFIG.prompt, g = langGen;
     for (var i = 0; i < text.length; i++) {
-      var f = frames(text[i]);
+      if (g !== langGen) {
+        i = Math.min(CONFIG.prompt.length, Math.round(i / text.length * CONFIG.prompt.length));
+        text = CONFIG.prompt; g = langGen;
+        if (i >= text.length) break;
+      }
+      var done = text.slice(0, i), f = frames(text[i]);
       for (var j = 0; j < f.length; j++) {
+        if (g !== langGen) break;
         typed.textContent = done + f[j];
         root.classList.add('has-text');
         await sleep(34 + Math.random() * 38, t);
       }
-      done += text[i];
+      if (g !== langGen) { i--; continue; }
       if (text[i] === ' ') await sleep(70, t);
     }
   }
+  /* 도중에 언어가 바뀌면 setLang 이 답변을 새 언어로 통째로 그려 두므로 여기서 멈춥니다 */
   async function stream(t) {
+    var g = langGen;
     for (var i = 0; i < CONFIG.answer.length; i++) {
+      if (g !== langGen) return;
       var seg = CONFIG.answer[i];
       var node = seg.code ? document.createElement('code')
                : seg.strong ? document.createElement('strong') : document.createTextNode('');
       answer.appendChild(node);
       for (var k = 0; k < seg.t.length; k += 2) {
+        if (g !== langGen) return;
         node.textContent += seg.t.slice(k, k + 2);
         await sleep(24, t);
       }
@@ -595,7 +688,7 @@
         await sleep(750, t);
         click(); root.classList.add('is-focus');
         await sleep(380, t);
-        await type(CONFIG.prompt, t);
+        await type(t);
         await sleep(320, t);
 
         // 2. 전송: 홈 화면이 대화 화면으로 전환
@@ -646,6 +739,57 @@
       }
     } catch (e) { if (e !== CANCEL) throw e; }
   }
+
+  /* 재생을 멈추거나 되감지 않고 언어만 바꿉니다. 화면에 이미 있는 문구는 같은 자리에서
+     바꾸고, 앞으로 그릴 문구는 CONFIG 를 고쳐 두어 새 언어로 나옵니다 */
+  function setLang(next) {
+    next = String(next || 'ko').toLowerCase();
+    next = next.indexOf('ja') === 0 ? 'ja' : next.indexOf('en') === 0 ? 'en' : 'ko';
+    if (next === LANG) return;
+    var O = L, N = I18N[next];
+    var oldPrompt = CONFIG.prompt;
+    LANG = next; L = N; langGen++;
+    document.documentElement.lang = next;
+    document.title = N.docTitle;
+    root.setAttribute('aria-label', N.aria);
+
+    CONFIG.prompt = N.prompt; CONFIG.chatTitle = N.chatTitle;
+    CONFIG.toolRunning = N.toolRunning; CONFIG.toolDone = N.toolDone;
+    CONFIG.steps.forEach(function (s, i) { s.text = N.steps[i]; });
+    CONFIG.answer = N.answer;
+    CONFIG.rows.forEach(function (r, i) { r.vendor = N.vendors[i]; r.item = N.items[i]; });
+
+    // 마크업 문구. 제목은 홈/대화 상태에 따라 다른 문구라서 따로
+    [].forEach.call(document.querySelectorAll('[data-t]'), function (el) {
+      if (el === title) return;
+      var v = N[el.getAttribute('data-t')];
+      if (typeof v === 'string') el.textContent = v;
+    });
+    var wasHome = title.textContent === HOME_TITLE;
+    HOME_TITLE = N.homeTitle;
+    if (wasHome) title.textContent = HOME_TITLE;
+    else if (title.textContent === O.chatTitle) title.textContent = N.chatTitle;
+
+    // 스크립트가 만든 문구
+    steps.forEach(function (li, i) {
+      var tn = li.childNodes[1];
+      if (tn && tn.nodeType === 3) tn.nodeValue = N.steps[i] + ' ';
+    });
+    rows.forEach(function (row, i) {
+      var c = row.children;
+      c[1].textContent = N.vendors[i]; c[2].textContent = N.items[i];
+      c[4].querySelector('b').textContent = CONFIG.rows[i].days + N.dayUnit;
+    });
+    if (toolLabel.textContent === O.toolRunning) toolLabel.textContent = N.toolRunning;
+    else if (toolLabel.textContent === O.toolDone) toolLabel.textContent = N.toolDone;
+    if (user.textContent === oldPrompt) user.textContent = N.prompt;
+    if (answer.textContent) renderAnswer();
+    if (typed.textContent) {
+      var n = Math.round(typed.textContent.length / oldPrompt.length * N.prompt.length);
+      typed.textContent = N.prompt.slice(0, Math.max(1, n));
+    }
+  }
+  window.__reelSetLang = setLang;
 
   function start() { if (running) return; running = true; play(++token); }
   function stop() { if (!running) return; running = false; token++; root.classList.remove('is-fading'); reset(); }

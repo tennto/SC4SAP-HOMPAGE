@@ -49,7 +49,7 @@
   --cursor-shadow: rgba(0, 0, 0, .5);
 
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+          "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
   --ease: cubic-bezier(.22, .8, .24, 1);
 
   position: relative;
@@ -249,77 +249,77 @@
 
     <div class="stx-page">
       <div class="stx-col">
-        <h3 class="stx-title">설정</h3>
+        <h3 class="stx-title" data-t="title"></h3>
 
         <div class="stx-card" data-card="sys">
-          <div class="stx-head"><svg class="stx-i"><use href="#stx-db"/></svg>SAP 시스템
+          <div class="stx-head"><svg class="stx-i"><use href="#stx-db"/></svg><span data-t="sysHead"></span>
             <span class="stx-act"><svg class="stx-i"><use href="#stx-plus"/></svg></span></div>
-          <p class="stx-sub">모든 세션이 연결되는 시스템입니다. 이 계정이 아니라 백엔드 전체에 적용됩니다.</p>
+          <p class="stx-sub" data-t="sysSub"></p>
           <div class="stx-block">
-            <div class="stx-l">활성 시스템</div>
+            <div class="stx-l" data-t="active"></div>
             <div class="stx-dd stx-w-sys">
               <div class="stx-sel" data-sel="sys"><span></span><svg class="stx-i"><use href="#stx-chev"/></svg></div>
               <div class="stx-menu" data-menu="sys" style="right:0"></div>
             </div>
-            <p class="stx-hint">전환하면 다른 사람의 것까지 열려 있는 모든 세션이 닫힙니다. 다음에 여는 세션부터 새 시스템에서 시작합니다.</p>
+            <p class="stx-hint" data-t="sysHint"></p>
           </div>
           <div class="stx-row"><div class="stx-l">ADT URL</div><span class="stx-v" data-sys="url"></span></div>
-          <div class="stx-row"><div class="stx-l">클라이언트</div><span class="stx-v" data-sys="client"></span></div>
-          <div class="stx-row"><div class="stx-l">사용자</div><span class="stx-v" data-sys="user"></span></div>
-          <div class="stx-row"><div class="stx-l">릴리스</div><span class="stx-v" data-sys="release"></span></div>
+          <div class="stx-row"><div class="stx-l" data-t="client"></div><span class="stx-v" data-sys="client"></span></div>
+          <div class="stx-row"><div class="stx-l" data-t="user"></div><span class="stx-v" data-sys="user"></span></div>
+          <div class="stx-row"><div class="stx-l" data-t="release"></div><span class="stx-v" data-sys="release"></span></div>
         </div>
 
         <div class="stx-card" data-card="scope">
-          <div class="stx-head"><svg class="stx-i"><use href="#stx-shield"/></svg>범위
+          <div class="stx-head"><svg class="stx-i"><use href="#stx-shield"/></svg><span data-t="scope"></span>
             <span class="stx-act" data-act="edit"><svg class="stx-i"><use href="#stx-pencil"/></svg></span></div>
-          <p class="stx-sub">이 계정에 저장됩니다. 백엔드는 아직 모든 세션에 하나의 프로필을 쓰므로, 계정별 세션이 도입되면 적용됩니다.</p>
-          <div class="stx-row"><div class="stx-l">산업</div><span class="stx-v" data-scope="industry"></span>
-            <p class="stx-hint">컨설턴트 에이전트가 답하기 전에 읽을 참고 자료를 정합니다.</p></div>
-          <div class="stx-row"><div class="stx-l">차단 목록 프로필</div><span class="stx-v" data-scope="profile"></span>
+          <p class="stx-sub" data-t="scopeSub"></p>
+          <div class="stx-row"><div class="stx-l" data-t="industry"></div><span class="stx-v" data-scope="industry"></span>
+            <p class="stx-hint" data-t="industryHint"></p></div>
+          <div class="stx-row"><div class="stx-l" data-t="profile"></div><span class="stx-v" data-scope="profile"></span>
             <p class="stx-hint" data-scope="profileHint"></p></div>
-          <div class="stx-row"><div class="stx-l">허용 테이블</div><span class="stx-v" data-scope="allow"></span>
-            <p class="stx-hint">차단 목록과 무관하게 통과시킵니다. 읽을 때마다 감사 기록은 남습니다.</p></div>
+          <div class="stx-row"><div class="stx-l" data-t="allow"></div><span class="stx-v" data-scope="allow"></span>
+            <p class="stx-hint" data-t="allowHint"></p></div>
         </div>
 
         <div class="stx-card" data-card="session">
-          <div class="stx-head"><svg class="stx-i"><use href="#stx-sliders"/></svg>세션</div>
-          <p class="stx-sub">세션이 어떻게 실행되고, 먼저 무엇을 묻는지입니다.</p>
+          <div class="stx-head"><svg class="stx-i"><use href="#stx-sliders"/></svg><span data-t="session"></span></div>
+          <p class="stx-sub" data-t="sessionSub"></p>
           <div class="stx-block">
-            <div class="stx-l">승인</div>
+            <div class="stx-l" data-t="approval"></div>
             <div class="stx-dd stx-w-app">
               <div class="stx-sel" data-sel="app"><span></span><svg class="stx-i"><use href="#stx-chev"/></svg></div>
               <div class="stx-menu" data-menu="app" style="right:0"></div>
             </div>
             <p class="stx-hint" data-app-hint></p>
           </div>
-          <div class="stx-row"><div class="stx-l">기본 모델</div><span class="stx-v">Sonnet</span>
-            <p class="stx-hint">채팅이 시작할 때 쓰는 모델입니다. 리뷰어를 파견하는 스킬은 실행 전에 어떤 모델을 쓸지 묻습니다.</p></div>
+          <div class="stx-row"><div class="stx-l" data-t="model"></div><span class="stx-v">Sonnet</span>
+            <p class="stx-hint" data-t="modelHint"></p></div>
         </div>
       </div>
     </div>
 
     <div class="stx-backdrop"></div>
     <div class="stx-modal">
-      <span class="stx-chip">범위</span>
-      <h4>범위 수정</h4>
-      <p>여기 값은 SAP 시스템에 확인하지 않습니다. 저장하면 선택이 기록됩니다.</p>
-      <div class="stx-l">산업</div>
+      <span class="stx-chip" data-t="scope"></span>
+      <h4 data-t="editTitle"></h4>
+      <p data-t="editSub"></p>
+      <div class="stx-l" data-t="industry"></div>
       <div class="stx-dd">
         <div class="stx-sel" data-sel="ind"><span></span><svg class="stx-i"><use href="#stx-chev"/></svg></div>
         <div class="stx-menu is-scroll" data-menu="ind"></div>
       </div>
-      <div class="stx-l">차단 목록 프로필</div>
+      <div class="stx-l" data-t="profile"></div>
       <div class="stx-dd">
         <div class="stx-sel" data-sel="pro"><span></span><svg class="stx-i"><use href="#stx-chev"/></svg></div>
         <div class="stx-menu" data-menu="pro"></div>
       </div>
-      <div class="stx-l">허용 테이블</div>
+      <div class="stx-l" data-t="allow"></div>
       <div class="stx-dd" style="margin-bottom:0">
-        <div class="stx-sel stx-input" data-sel="allow"><span class="stx-typed"></span><i></i><span class="stx-ph">쉼표로 구분해 입력</span></div>
+        <div class="stx-sel stx-input" data-sel="allow"><span class="stx-typed"></span><i></i><span class="stx-ph" data-t="placeholder"></span></div>
       </div>
       <div class="stx-actions">
-        <span class="stx-btn stx-cancel">취소</span>
-        <span class="stx-btn stx-save">저장</span>
+        <span class="stx-btn stx-cancel" data-t="cancel"></span>
+        <span class="stx-btn stx-save" data-t="save"></span>
       </div>
     </div>
 
@@ -332,6 +332,93 @@
 <!-- (4) 스크립트. </body> 바로 앞에 넣으세요. 의존성 없고, 페이지 안의 모든 data-stx-settings 요소에 적용됩니다. -->
 <script>
 (function () {
+  /* 언어: 사이트가 window.__reelLang 으로 넘겨주고, 단독으로 열면 <html lang>을 따릅니다 (기본 한국어) */
+  var LANG = (function () { var l = String(window.__reelLang || document.documentElement.getAttribute('lang') || 'ko').toLowerCase(); return l.indexOf('ja') === 0 ? 'ja' : l.indexOf('en') === 0 ? 'en' : 'ko'; })();
+  document.documentElement.lang = LANG;
+
+  /* ---------- 화면 문구 (언어별) ---------- */
+  var TEXT = {
+    ko: {
+      aria: '설정 데모: 연결할 SAP 시스템을 클릭 한 번으로 전환하고, 산업과 차단 목록 프로필과 허용 테이블을 정하고, 세션에서 무엇을 승인받을지 고릅니다.',
+      title: '설정', sysHead: 'SAP 시스템',
+      sysSub: '모든 세션이 연결되는 시스템입니다. 이 계정이 아니라 백엔드 전체에 적용됩니다.',
+      active: '활성 시스템',
+      sysHint: '전환하면 다른 사람의 것까지 열려 있는 모든 세션이 닫힙니다. 다음에 여는 세션부터 새 시스템에서 시작합니다.',
+      client: '클라이언트', user: '사용자', release: '릴리스',
+      scope: '범위',
+      scopeSub: '이 계정에 저장됩니다. 백엔드는 아직 모든 세션에 하나의 프로필을 쓰므로, 계정별 세션이 도입되면 적용됩니다.',
+      industry: '산업', industryHint: '컨설턴트 에이전트가 답하기 전에 읽을 참고 자료를 정합니다.',
+      profile: '차단 목록 프로필', allow: '허용 테이블',
+      allowHint: '차단 목록과 무관하게 통과시킵니다. 읽을 때마다 감사 기록은 남습니다.',
+      session: '세션', sessionSub: '세션이 어떻게 실행되고, 먼저 무엇을 묻는지입니다.',
+      approval: '승인', model: '기본 모델',
+      modelHint: '채팅이 시작할 때 쓰는 모델입니다. 리뷰어를 파견하는 스킬은 실행 전에 어떤 모델을 쓸지 묻습니다.',
+      editTitle: '범위 수정', editSub: '여기 값은 SAP 시스템에 확인하지 않습니다. 저장하면 선택이 기록됩니다.',
+      placeholder: '쉼표로 구분해 입력', cancel: '취소', save: '저장',
+      industries: ['특정 산업 아님', '자동차', '은행', '화학', '건설 / E&C', '화장품', '전자 / 하이테크'],
+      profileHints: ['', '플러그인 기본값. HR, 급여, 재무 라인 아이템 테이블을 추가합니다.', '가장 엄격한 프로필입니다. 차단하는 테이블 범위가 가장 넓습니다.'],
+      allowNone: '없음',
+      approvals: [
+        { label: '쓰기만 묻기', hint: 'SAP 읽기, 에이전트 자체 읽기, 읽기 전용 셸 명령은 통과합니다. 파일을 바꾸거나, 테이블 행을 가져오거나, 머신 밖으로 나가는 것은 묻습니다.' },
+        { label: '모두 묻기', hint: '읽기를 포함해 에이전트가 하는 모든 동작을 실행 전에 묻습니다.' },
+        { label: '묻지 않기', hint: '' }
+      ]
+    },
+    en: {
+      aria: 'Settings demo: switch the connected SAP system in one click, set the industry, blocklist profile and allowed tables, then choose what a session asks approval for.',
+      title: 'Settings', sysHead: 'SAP system',
+      sysSub: 'The system every session connects to. Applies to the whole backend, not just this account.',
+      active: 'Active system',
+      sysHint: 'Switching closes every open session, including other people\u2019s. Sessions opened after that start on the new system.',
+      client: 'Client', user: 'User', release: 'Release',
+      scope: 'Scope',
+      scopeSub: 'Saved to this account. The backend still runs every session on one profile, so this applies once per-account sessions arrive.',
+      industry: 'Industry', industryHint: 'Sets the reference material the consultant agents read before answering.',
+      profile: 'Blocklist profile', allow: 'Allowed tables',
+      allowHint: 'Passed regardless of the blocklist. Every read still leaves an audit record.',
+      session: 'Session', sessionSub: 'How sessions run, and what they ask first.',
+      approval: 'Approval', model: 'Default model',
+      modelHint: 'The model a chat starts with. Skills that dispatch reviewers ask which model to use before running.',
+      editTitle: 'Edit scope', editSub: 'These values are not checked against the SAP system. Saving records your choice.',
+      placeholder: 'Comma-separated', cancel: 'Cancel', save: 'Save',
+      industries: ['No specific industry', 'Automotive', 'Banking', 'Chemicals', 'Construction / E&C', 'Cosmetics', 'Electronics / High-tech'],
+      profileHints: ['', 'Plugin default. Adds HR, payroll and finance line-item tables.', 'The strictest profile, blocking the widest range of tables.'],
+      allowNone: 'None',
+      approvals: [
+        { label: 'Ask before writes', hint: 'SAP reads, the agent\u2019s own reads and read-only shell commands pass. Changing files, fetching table rows or anything leaving the machine asks first.' },
+        { label: 'Ask for everything', hint: 'Asks before every action the agent takes, reads included.' },
+        { label: 'Never ask', hint: '' }
+      ]
+    },
+    ja: {
+      aria: '設定デモ：接続先の SAP システムをワンクリックで切り替え、業種・ブロックリストプロファイル・許可テーブルを決め、セッションで何の承認を求めるかを選びます。',
+      title: '設定', sysHead: 'SAP システム',
+      sysSub: 'すべてのセッションが接続するシステムです。このアカウントだけでなくバックエンド全体に適用されます。',
+      active: '有効なシステム',
+      sysHint: '切り替えると、他のユーザーのものも含め開いているセッションはすべて閉じます。次に開くセッションから新しいシステムで始まります。',
+      client: 'クライアント', user: 'ユーザー', release: 'リリース',
+      scope: 'スコープ',
+      scopeSub: 'このアカウントに保存されます。バックエンドはまだ全セッションで一つのプロファイルを使うため、アカウント別セッションの導入後に適用されます。',
+      industry: '業種', industryHint: 'コンサルタントエージェントが回答前に読む参考資料を決めます。',
+      profile: 'ブロックリストプロファイル', allow: '許可テーブル',
+      allowHint: 'ブロックリストに関係なく通します。読み取るたびに監査記録は残ります。',
+      session: 'セッション', sessionSub: 'セッションの実行方法と、最初に何を確認するかです。',
+      approval: '承認', model: '既定のモデル',
+      modelHint: 'チャット開始時に使うモデルです。レビュアーを派遣するスキルは、実行前にどのモデルを使うか確認します。',
+      editTitle: 'スコープを編集', editSub: 'ここの値は SAP システムに照合しません。保存すると選択が記録されます。',
+      placeholder: 'カンマ区切りで入力', cancel: 'キャンセル', save: '保存',
+      industries: ['特定の業種なし', '自動車', '銀行', '化学', '建設 / E&C', '化粧品', '電子 / ハイテク'],
+      profileHints: ['', 'プラグインの既定値。HR・給与・財務明細テーブルを追加します。', '最も厳格なプロファイルです。ブロックするテーブルの範囲が最も広くなります。'],
+      allowNone: 'なし',
+      approvals: [
+        { label: '書き込みのみ確認', hint: 'SAP の読み取り、エージェント自身の読み取り、読み取り専用のシェルコマンドは通します。ファイルの変更、テーブル行の取得、マシン外への送信は確認します。' },
+        { label: 'すべて確認', hint: '読み取りを含め、エージェントのすべての操作を実行前に確認します。' },
+        { label: '確認しない', hint: '' }
+      ]
+    }
+  };
+  var L = TEXT[LANG];
+
   /* ---------- 여기만 고치면 값과 선택지가 바뀝니다 ---------- */
   var CONFIG = {
     // SAP 시스템 목록. from에서 시작해 to로 전환합니다.
@@ -342,31 +429,70 @@
     systemFrom: 0, systemTo: 1,
 
     // 범위: 산업 (목록 앞부분만 보여줍니다)
-    industries: ['특정 산업 아님', '자동차', '은행', '화학', '건설 / E&C', '화장품', '전자 / 하이테크'],
+    industries: L.industries,
     industryFrom: 0, industryTo: 1,
 
     // 범위: 차단 목록 프로필과 프로필별 설명
     profiles: [
-      { label: 'Minimal', hint: '' },
-      { label: 'Standard', hint: '플러그인 기본값. HR, 급여, 재무 라인 아이템 테이블을 추가합니다.' },
-      { label: 'Strict', hint: '가장 엄격한 프로필입니다. 차단하는 테이블 범위가 가장 넓습니다.' }
+      { label: 'Minimal', hint: L.profileHints[0] },
+      { label: 'Standard', hint: L.profileHints[1] },
+      { label: 'Strict', hint: L.profileHints[2] }
     ],
     profileFrom: 1, profileTo: 2,
 
     // 범위: 허용 테이블
-    allowFrom: '없음', allowTo: 'BKPF, BSEG',
+    allowFrom: L.allowNone, allowTo: 'BKPF, BSEG',
 
     // 세션: 승인 방식과 방식별 설명
-    approvals: [
-      { label: '쓰기만 묻기', hint: 'SAP 읽기, 에이전트 자체 읽기, 읽기 전용 셸 명령은 통과합니다. 파일을 바꾸거나, 테이블 행을 가져오거나, 머신 밖으로 나가는 것은 묻습니다.' },
-      { label: '모두 묻기', hint: '읽기를 포함해 에이전트가 하는 모든 동작을 실행 전에 묻습니다.' },
-      { label: '묻지 않기', hint: '' }
-    ],
+    approvals: L.approvals,
     approvalFrom: 0, approvalTo: 1,
 
     holdMs: 1500                              // 마지막 화면 유지 시간
   };
   /* --------------------------------------------------------- */
+
+  /* ---------- 재생 중 언어 전환 ----------
+     window.__reelSetLang('en') 처럼 부르면 처음으로 돌아가지 않고 그 자리에서 문구만 바뀝니다.
+     앞으로 쓸 문구(L, CONFIG)를 새 언어로 바꾸고, 이미 화면에 있는 글자는 다른 언어의 같은 문구를
+     찾아 새 언어로 맞바꿉니다. 상태 클래스, 위치, 타이머는 건드리지 않습니다. */
+  var ROOTS = [];
+  // 같은 구조의 두 값에서 문자열끼리 짝을 지어 map[다른 언어 문구] = 새 언어 문구
+  function pairUp(from, to, map) {
+    if (typeof from === 'string') { if (from && typeof to === 'string' && from !== to) map[from] = to; return; }
+    if (from && typeof from === 'object') for (var k in from) if (to && k in to) pairUp(from[k], to[k], map);
+  }
+  function swapMap(lang) {
+    var map = {};
+    for (var l in TEXT) if (l !== lang) pairUp(TEXT[l], TEXT[lang], map);
+    return map;
+  }
+  function tr(s, map) { var k = String(s).trim(); return map[k] !== undefined ? String(s).replace(k, map[k]) : s; }
+  function swapText(el, map) {
+    var walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+    while ((n = walk.nextNode())) { var v = tr(n.nodeValue, map); if (v !== n.nodeValue) n.nodeValue = v; }
+    [].forEach.call(el.querySelectorAll('[placeholder], [title], [aria-label]'), function (x) {
+      ['placeholder', 'title', 'aria-label'].forEach(function (a) {
+        if (x.hasAttribute(a)) { var v = tr(x.getAttribute(a), map); if (v !== x.getAttribute(a)) x.setAttribute(a, v); }
+      });
+    });
+  }
+  var SWAP = {};   // 재생 중에 이미 넘겨받은 옛 언어 목록을 setSelect 에서 고칠 때 씁니다
+  window.__reelSetLang = function (lang) {
+    lang = String(lang || '').toLowerCase();
+    lang = lang.indexOf('ja') === 0 ? 'ja' : lang.indexOf('en') === 0 ? 'en' : 'ko';
+    if (lang === LANG) return;
+    LANG = lang; L = TEXT[lang]; SWAP = swapMap(lang);
+    document.documentElement.lang = lang;
+    CONFIG.industries = L.industries;
+    CONFIG.profiles.forEach(function (p, i) { p.hint = L.profileHints[i]; });
+    if (CONFIG.allowFrom === '' || SWAP[CONFIG.allowFrom] !== undefined) CONFIG.allowFrom = L.allowNone;
+    CONFIG.approvals = L.approvals;
+    ROOTS.forEach(function (root) {
+      root.setAttribute('aria-label', L.aria);
+      [].forEach.call(root.querySelectorAll('[data-t]'), function (el) { el.textContent = L[el.getAttribute('data-t')]; });
+      swapText(root, SWAP);
+    });
+  };
 
   var CANCEL = {};
   var CHECK = '<svg class="stx-i"><use href="#stx-check"/></svg>';
@@ -383,6 +509,9 @@
     all('[data-sys]').forEach(function (el) { sys[el.getAttribute('data-sys')] = el; });
     all('[data-scope]').forEach(function (el) { scope[el.getAttribute('data-scope')] = el; });
     var scale = 1, token = 0, running = false, compact = null;
+    all('[data-t]').forEach(function (el) { el.textContent = L[el.getAttribute('data-t')]; });
+    root.setAttribute('aria-label', L.aria);
+    ROOTS.push(root);
 
     function sleep(ms, t) {
       return new Promise(function (res, rej) {
@@ -417,7 +546,9 @@
     function bump(el) { el.classList.remove('is-bump'); void el.offsetWidth; el.classList.add('is-bump'); }
 
     /* 셀렉트 값과 메뉴 채우기 */
+    /* labels 는 언어 전환 전에 넘겨받았을 수 있어서, 쓰기 직전에 지금 언어로 맞춥니다 */
     function setSelect(name, labels, cur) {
+      labels = labels.map(function (l) { return tr(l, SWAP); });
       sel[name].firstElementChild.textContent = labels[cur];
       menu[name].innerHTML = labels.map(function (l, i) {
         return '<div' + (i === cur ? ' class="is-cur"' : '') + '>' + l.replace(/&/g, '&amp;') + CHECK + '</div>';
