@@ -13,6 +13,10 @@
 
   Object.assign(S.ko, {
     insTitle: '설치 가이드',
+    insMetaTitle: '설치 가이드 - Super-Claude for SAP',
+    insMetaDesc: 'SC4SAP 설치 및 설정 가이드. Claude Code에 커스텀 마켓플레이스를 추가하고 /sc4sap:setup 위저드로 MCP 서버, SAP 프로필, 권한 훅까지 한 번에 구성합니다.',
+    insMetaOgTitle: '설치 가이드 - Super-Claude for SAP',
+    insMetaOgDesc: 'Claude Code에 마켓플레이스를 추가하고 설정 위저드를 한 번 돌리면 끝납니다.',
     insLede: 'Claude Code 세션 안에서 마켓플레이스를 추가하고, 설정 위저드를 한 번 돌리면 끝납니다. MCP 서버는 위저드가 알아서 설치합니다',
     insDocLink: '전체 원문 문서',
     insBack: '메인으로',
@@ -87,6 +91,10 @@
 
   Object.assign(S.en, {
     insTitle: 'Install guide',
+    insMetaTitle: 'Install guide - Super-Claude for SAP',
+    insMetaDesc: 'How to install and set up SC4SAP. Add the custom marketplace to Claude Code, then let the /sc4sap:setup wizard configure the MCP server, SAP profile, and permission hooks in one pass.',
+    insMetaOgTitle: 'Install guide - Super-Claude for SAP',
+    insMetaOgDesc: 'Add the marketplace to Claude Code and run the setup wizard once. That is all it takes.',
     insLede: 'Add the marketplace inside a Claude Code session, run the setup wizard once, and you are done. The wizard installs the MCP server for you',
     insDocLink: 'Full reference',
     insBack: 'Back to main',
@@ -161,6 +169,10 @@
 
   Object.assign(S.ja, {
     insTitle: 'インストールガイド',
+    insMetaTitle: 'インストールガイド - Super-Claude for SAP',
+    insMetaDesc: 'SC4SAP のインストールと設定ガイド。Claude Code にカスタムマーケットプレイスを追加し、/sc4sap:setup ウィザードで MCP サーバー、SAP プロファイル、権限フックまで一度に構成します。',
+    insMetaOgTitle: 'インストールガイド - Super-Claude for SAP',
+    insMetaOgDesc: 'Claude Code にマーケットプレイスを追加して、設定ウィザードを一度実行すれば完了です。',
     insLede: 'Claude Code セッション内でマーケットプレイスを追加し、セットアップウィザードを一度実行すれば完了します。MCP サーバーはウィザードが自動で導入します',
     insDocLink: '原文ドキュメント',
     insBack: 'メインへ戻る',

@@ -1332,3 +1332,61 @@ body.lang-swap .nav-links > a { opacity: 0; }
   font-size: var(--fs-xs);
   color: var(--ink-3);
 }
+
+/* ============================================================
+   LANGUAGE HINT — offered once, at the foot of the screen, to a
+   reader whose browser does not ask for Korean (app.js offerLang).
+
+   Placed by ratios, not offsets: it centres itself in the viewport and
+   keeps a gutter's distance from the bottom edge at every width.
+   ============================================================ */
+
+.lang-hint {
+  --hint-width: 30rem;          /* widest it gets */
+  --hint-rise: 40%;             /* how far below its rest it starts, of its own height */
+  --hint-dur: 700ms;
+
+  position: fixed;
+  inset: auto 0 max(var(--gutter), env(safe-area-inset-bottom)) 0;
+  z-index: 90;                  /* under the nav's menu, over the page */
+  width: min(var(--hint-width), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--lift-3, var(--lift-2));
+  opacity: 0;
+  transform: translateY(var(--hint-rise));
+  transition: opacity var(--hint-dur) var(--ease), transform var(--hint-dur) var(--ease);
+}
+.lang-hint.is-in { opacity: 1; transform: none; }
+
+.lang-hint-text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.lang-hint-text .ph { font-size: 1.15em; color: var(--ink); flex: none; }
+
+.lang-hint-go { flex: none; white-space: nowrap; }
+.lang-hint-x { flex: none; }
+
+/* Too narrow to keep it on one row: the sentence takes the top line and
+   the two controls share the one beneath it. */
+@media (max-width: 30rem) {
+  .lang-hint { flex-wrap: wrap; }
+  .lang-hint-text { flex-basis: 100%; }
+  .lang-hint-go { flex: 1; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-hint { transform: none; transition: opacity var(--t-base) linear; }
+}

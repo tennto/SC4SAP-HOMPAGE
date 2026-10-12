@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://sc4sap.dev/</loc>
     <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/" />
   </url>
   <url>
     <loc>https://sc4sap.dev/install.html</loc>
     <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/install.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/install.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/install.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/install.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/install.html</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/install.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/install.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/install.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/install.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/install.html</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/install.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/install.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/install.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/install.html" />
   </url>
 </urlset>

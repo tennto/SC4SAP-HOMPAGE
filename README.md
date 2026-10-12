@@ -268,3 +268,15 @@ jsdom 기반 동작 테스트 173건 통과 (메인 28 · 히어로 31 · 모션
 - `prefers-reduced-transparency` 에서 네비 블러를 불투명 배경으로 대체
 - 터치 포인터(`pointer: coarse`)에서 모든 컨트롤 44px 확보
 - 스크롤 리스너 없음. 네비 상태와 리빌 모두 IntersectionObserver
+
+## 언어별 페이지 (en/, ja/)
+
+`en/`, `ja/` 아래 페이지와 `sitemap.xml` 은 생성물입니다. 루트의 `index.html`,
+`install.html`, 또는 `js/strings*.js`, `js/panels.ko.js`, `js/i18n.*.js` 를 고친 뒤에는
+반드시 다시 빌드해서 함께 커밋하세요.
+
+```
+node tools/build-i18n.mjs
+```
+
+루트 페이지는 한국어 원본이고, 빌드가 data-t 문구를 HTML 에 채워 넣고 hreflang 을 붙입니다.

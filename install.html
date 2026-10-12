@@ -3,23 +3,32 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- i18n:head -->
 <title>설치 가이드 - Super-Claude for SAP</title>
 <meta name="description" content="SC4SAP 설치 및 설정 가이드. Claude Code에 커스텀 마켓플레이스를 추가하고 /sc4sap:setup 위저드로 MCP 서버, SAP 프로필, 권한 훅까지 한 번에 구성합니다." />
+<link rel="canonical" href="https://sc4sap.dev/install.html" />
+<link rel="alternate" hreflang="ko" href="https://sc4sap.dev/install.html" />
+<link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/install.html" />
+<link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/install.html" />
+<link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/install.html" />
 <meta property="og:title" content="설치 가이드 - Super-Claude for SAP" />
 <meta property="og:description" content="Claude Code에 마켓플레이스를 추가하고 설정 위저드를 한 번 돌리면 끝납니다." />
-<meta property="og:type" content="article" />
-<link rel="canonical" href="https://sc4sap.dev/install.html" />
 <meta property="og:url" content="https://sc4sap.dev/install.html" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta property="og:locale:alternate" content="ja_JP" />
+<!-- /i18n:head -->
+<meta property="og:type" content="article" />
 <meta property="og:image" content="https://sc4sap.dev/assets/kakotalk_tumbnail.png?v=3" />
 <meta name="twitter:card" content="summary_large_image" />
 
-<link rel="icon" type="image/svg+xml" href="favicon/sc4_charcoal_rounded.svg" />
-<link rel="icon" type="image/png" sizes="512x512" href="favicon/sc4_charcoal_512_rounded.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="favicon/sc4_charcoal_32_rounded.png" />
-<link rel="icon" href="favicon/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/favicon/sc4_charcoal_rounded.svg" />
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon/sc4_charcoal_512_rounded.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/sc4_charcoal_32_rounded.png" />
+<link rel="icon" href="/favicon/favicon.ico" sizes="any" />
 <!-- Square on purpose: iOS masks the home screen icon itself, and a
      pre-rounded one comes out cut twice. -->
-<link rel="apple-touch-icon" sizes="180x180" href="favicon/sc4_charcoal_512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/sc4_charcoal_512.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,13 +48,24 @@
       document.documentElement.setAttribute('data-theme', 'dark');
     }
   } catch (e) { /* private mode */ }
+  // The Korean pages are the root URLs. A visitor who has picked another
+  // language before goes to that language's URL before anything paints.
+  // Crawlers keep no storage, so they always get the page they asked for.
+  try {
+    var l = localStorage.getItem('sc4sap-lang');
+    if (document.documentElement.lang === 'ko' && (l === 'en' || l === 'ja')) {
+      var p = location.pathname, file = p.slice(p.lastIndexOf('/') + 1);
+      location.replace(p.slice(0, p.length - file.length) + l + '/' +
+        (file === 'index.html' ? '' : file) + location.search + location.hash);
+    }
+  } catch (e) { /* private mode */ }
   document.documentElement.classList.remove('no-js');
 })();
 </script>
 </head>
 <body class="no-js">
 
-<a href="#install-steps" class="sr-only">본문으로 건너뛰기</a>
+<a data-t="skipLink" href="#install-steps" class="sr-only">본문으로 건너뛰기</a>
 
 <!-- ===================== NAV ===================== -->
 <nav class="nav">
@@ -90,7 +110,7 @@
 <header class="page-head">
   <div class="shell">
     <h1 class="t-display" data-t="insTitle">설치 가이드</h1>
-    <p class="t-lede" data-t="insLede">Claude Code 세션 안에서 마켓플레이스를 추가하고, 설정 위저드를 한 번 돌리면 끝납니다</p>
+    <p class="t-lede" data-t="insLede">Claude Code 세션 안에서 마켓플레이스를 추가하고, 설정 위저드를 한 번 돌리면 끝납니다. MCP 서버는 위저드가 알아서 설치합니다</p>
     <div class="head-links">
       <a class="btn btn-ghost" href="index.html">
         <i class="ph ph-arrow-left" aria-hidden="true"></i>
@@ -126,7 +146,7 @@
 
     <p class="note reveal">
       <i class="ph ph-info" aria-hidden="true"></i>
-      <span data-t-html="insReqNote"></span>
+      <span data-t-html="insReqNote">MCP 서버 <code>abap-mcp-adt-powerup</code> 는 <code>/sc4sap:setup</code> 중 자동으로 설치·설정됩니다. 미리 받아둘 필요가 없습니다</span>
     </p>
   </div>
 </section>
@@ -138,7 +158,7 @@
 
     <p class="note reveal">
       <i class="ph ph-warning-circle" aria-hidden="true"></i>
-      <span data-t="insInstallNote">sc4sap 은 아직 공식 마켓플레이스에 등록되어 있지 않습니다</span>
+      <span data-t="insInstallNote">sc4sap 은 아직 공식 Claude Code 플러그인 마켓플레이스에 등록되어 있지 않습니다. 당분간은 저장소를 커스텀 마켓플레이스로 추가한 뒤 설치하세요</span>
     </p>
 
     <div class="opts">
@@ -150,7 +170,7 @@
         <div class="cmd-block">
 <pre><code>/plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
 /plugin install sc4sap</code></pre>
-          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="설치 명령어 복사">
             <i class="ph ph-copy" aria-hidden="true"></i>
             <i class="ph ph-check" aria-hidden="true"></i>
             <span data-copy-label data-t="copy">복사</span>
@@ -161,7 +181,7 @@
         <div class="cmd-block">
 <pre><code>/plugin marketplace update babamba2/superclaude-for-sap
 /plugin install sc4sap</code></pre>
-          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="설치 명령어 복사">
             <i class="ph ph-copy" aria-hidden="true"></i>
             <i class="ph ph-check" aria-hidden="true"></i>
             <span data-copy-label data-t="copy">복사</span>
@@ -172,13 +192,13 @@
       <div class="opt reveal">
         <span class="opt-tag" data-t="insOptBK">대안</span>
         <h3 class="t-h3" data-t="insOptBH">소스에서 설치</h3>
-        <p data-t-html="insOptBP"></p>
+        <p data-t-html="insOptBP">클론 후 빌드하고, Claude Code에서 <code>/plugin marketplace add &lt;로컬-경로&gt;</code> 로 해당 디렉터리를 가리킵니다</p>
 
         <div class="cmd-block">
 <pre><code>git clone https://github.com/babamba2/superclaude-for-sap.git
 cd superclaude-for-sap
 npm install &amp;&amp; npm run build</code></pre>
-          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+          <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="설치 명령어 복사">
             <i class="ph ph-copy" aria-hidden="true"></i>
             <i class="ph ph-check" aria-hidden="true"></i>
             <span data-copy-label data-t="copy">복사</span>
@@ -193,11 +213,11 @@ npm install &amp;&amp; npm run build</code></pre>
 <section class="band band-sunk dash-top">
   <div class="shell">
     <h2 class="t-h2 reveal" data-t="insSetupH">설정 위저드</h2>
-    <p class="t-lede reveal" style="margin-top:16px;" data-t="insSetupP">위저드는 한 번에 한 질문만 합니다</p>
+    <p class="t-lede reveal" style="margin-top:16px;" data-t="insSetupP">위저드는 한 번에 한 질문만 합니다. 기존 값이 있으면 보여주고 Enter로 유지할 수 있습니다</p>
 
     <div class="cmd-block reveal" style="max-width:420px;">
 <pre><code>/sc4sap:setup</code></pre>
-      <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+      <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="설치 명령어 복사">
         <i class="ph ph-copy" aria-hidden="true"></i>
         <i class="ph ph-check" aria-hidden="true"></i>
         <span data-copy-label data-t="copy">복사</span>
@@ -209,35 +229,35 @@ npm install &amp;&amp; npm run build</code></pre>
         <span class="step-n">01</span>
         <div>
           <h3 class="t-h3" data-t="insW1H">시스템과 업종</h3>
-          <p data-t-html="insW1P"></p>
+          <p data-t-html="insW1P">S4 또는 ECC 선택, ABAP 릴리즈 입력, 15개 업종 메뉴에서 선택. 이 값이 SPRO 테이블·BAPI·TCode와 ABAP 문법 게이팅을 결정합니다</p>
         </div>
       </div>
       <div class="step">
         <span class="step-n">02</span>
         <div>
           <h3 class="t-h3" data-t="insW2H">MCP 서버 설치</h3>
-          <p data-t-html="insW2P"></p>
+          <p data-t-html="insW2P"><code>abap-mcp-adt-powerup</code> 을 <code>&lt;PLUGIN_ROOT&gt;/vendor/abap-mcp-adt/</code> 에 클론하고 빌드합니다. 이미 있으면 건너뜁니다</p>
         </div>
       </div>
       <div class="step">
         <span class="step-n">03</span>
         <div>
           <h3 class="t-h3" data-t="insW3H">프로필 생성과 연결</h3>
-          <p data-t-html="insW3P"></p>
+          <p data-t-html="insW3P">alias(<code>KR-DEV</code> 형식 권장)와 tier(<code>DEV</code>·<code>QA</code>·<code>PRD</code>)를 정한 뒤 URL·클라이언트·인증 방식·계정·언어를 하나씩 받습니다. RFC 백엔드는 soap · native · gateway · odata · zrfc 중 선택합니다</p>
         </div>
       </div>
       <div class="step">
         <span class="step-n">04</span>
         <div>
           <h3 class="t-h3" data-t="insW4H">연결 검증</h3>
-          <p data-t-html="insW4P"></p>
+          <p data-t-html="insW4P"><code>/mcp</code> 로 재연결한 뒤 <code>GetSession</code> 왕복, 시스템 정보 확인, <code>GetInactiveObjects</code> 로 ADT 권한까지 확인합니다. Claude Code 재시작은 필요 없습니다</p>
         </div>
       </div>
       <div class="step">
         <span class="step-n">05</span>
         <div>
           <h3 class="t-h3" data-t="insW5H">ABAP 유틸 객체 생성</h3>
-          <p data-t-html="insW5P"></p>
+          <p data-t-html="insW5P">DEV 프로필에서만 설치됩니다. <code>ZMCP_ADT_UTILS</code> 함수그룹과 <code>ZIF_S4SAP_CM</code> · <code>ZCL_S4SAP_CM_*</code> ALV 핸들러를 만듭니다. QA·PRD 에서는 거부하고 CTS 이관 안내를 출력합니다</p>
         </div>
       </div>
       <div class="step required">
@@ -247,16 +267,16 @@ npm install &amp;&amp; npm run build</code></pre>
             <span data-t="insW6H">권한 훅 설치</span>
             <span class="step-flag">required</span>
           </h3>
-          <p data-t-html="insW6P"></p>
+          <p data-t-html="insW6P">이 단계 없이는 설정이 완료되지 않습니다. <code>block-forbidden-tables.mjs</code>(행 추출 차단)와 <code>tier-readonly-guard.mjs</code>(tier 변이 차단)를 <code>.claude/settings.json</code> 에 등록하고 양쪽 스모크 테스트를 실행합니다</p>
         </div>
       </div>
     </div>
 
     <h3 class="sub-h reveal" data-t="insOptionalH">선택 단계</h3>
     <ul class="plain-list reveal">
-      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional1"></span></li>
-      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional2"></span></li>
-      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional3"></span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional1">SPRO 설정 추출 - 토큰을 많이 쓰지만 캐시가 이후 작업의 토큰 사용을 크게 줄입니다</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional2">커스터마이징 인벤토리 - <code>Z*</code>·<code>Y*</code> 확장과 어펜드 구조를 스캔합니다</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span data-t-html="insOptional3">HUD 상태 줄 - 재시작 후 활성 프로필과 tier, 토큰 사용량을 표시합니다</span></li>
     </ul>
 
     <h3 class="sub-h reveal" data-t="insSubH">서브커맨드</h3>
@@ -266,7 +286,7 @@ npm install &amp;&amp; npm run build</code></pre>
 /sc4sap:setup mcp            # MCP 설정으로 라우팅
 /sc4sap:setup spro           # SPRO 설정 추출만
 /sc4sap:setup customizations # Z*/Y* 인벤토리만</code></pre>
-      <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="명령어 복사">
+      <button type="button" class="copy-btn" data-copy data-t-aria="ariaCopy" aria-label="설치 명령어 복사">
         <i class="ph ph-copy" aria-hidden="true"></i>
         <i class="ph ph-check" aria-hidden="true"></i>
         <span data-copy-label data-t="copy">복사</span>
@@ -297,11 +317,11 @@ npm install &amp;&amp; npm run build</code></pre>
       </div>
 
       <div class="reveal">
-        <p class="t-lede" data-t="insProfileP">한 Claude Code 세션에서 여러 SAP 연결을 다룹니다</p>
+        <p class="t-lede" data-t="insProfileP">한 Claude Code 세션에서 여러 SAP 연결을 다룹니다. 연결 하나가 프로필 하나이고, 프로젝트에는 어느 프로필이 활성인지만 기록됩니다</p>
         <ul class="plain-list" style="margin-top:22px;">
-          <li><i class="ph ph-lock-key" aria-hidden="true"></i><span data-t-html="insTier1"></span></li>
-          <li><i class="ph ph-prohibit" aria-hidden="true"></i><span data-t-html="insTier2"></span></li>
-          <li><i class="ph ph-key" aria-hidden="true"></i><span data-t-html="insTier3"></span></li>
+          <li><i class="ph ph-lock-key" aria-hidden="true"></i><span data-t-html="insTier1"><b>tier 는 읽기전용 강제의 기준입니다</b> QA·PRD 프로필에서는 <code>Create*</code> · <code>Update*</code> · <code>Delete*</code> 가 훅과 MCP 서버 두 층에서 차단됩니다</span></li>
+          <li><i class="ph ph-prohibit" aria-hidden="true"></i><span data-t-html="insTier2"><b>tier 는 변경할 수 없습니다</b> 바꾸려면 프로필을 지우고 다시 만들어야 합니다</span></li>
+          <li><i class="ph ph-key" aria-hidden="true"></i><span data-t-html="insTier3"><b>비밀번호는 OS 키체인에 저장됩니다</b> Windows 자격 증명 관리자 · macOS 키체인 · Linux libsecret. 키체인을 못 쓰는 환경에서는 프로필 env 평문으로 대체하고 경고를 띄웁니다</span></li>
         </ul>
       </div>
     </div>
@@ -312,35 +332,35 @@ npm install &amp;&amp; npm run build</code></pre>
 <section class="band band-sunk dash-top">
   <div class="shell">
     <h2 class="t-h2 reveal" data-t="insDefenseH">3중 방어</h2>
-    <p class="t-lede reveal" style="margin-top:16px;" data-t="insDefenseP">운영계에 붙이기 전에 가장 먼저 검토되는 부분입니다</p>
+    <p class="t-lede reveal" style="margin-top:16px;" data-t="insDefenseP">운영계에 붙이기 전에 가장 먼저 검토되는 부분입니다. 문서가 아니라 코드로 강제됩니다</p>
 
     <div class="layers reveal">
       <div class="layer">
         <span class="layer-tag">L1a</span>
         <div>
           <h3 data-t="insL1aH">행 추출 차단</h3>
-          <p data-t-html="insL1aP"></p>
+          <p data-t-html="insL1aP">Claude Code <code>PreToolUse</code> 훅. 프로필의 <code>blocklistProfile</code> 을 기준으로 민감 테이블의 <code>GetTableContents</code> · <code>GetSqlQuery</code> 를 거부합니다</p>
         </div>
       </div>
       <div class="layer">
         <span class="layer-tag">L1b</span>
         <div>
           <h3 data-t="insL1bH">tier 변이 차단</h3>
-          <p data-t-html="insL1bP"></p>
+          <p data-t-html="insL1bP">Claude Code <code>PreToolUse</code> 훅. 매 호출마다 활성 프로필의 <code>SAP_TIER</code> 를 다시 읽어 QA·PRD 의 변경을 막습니다. 상태를 들고 있지 않습니다</p>
         </div>
       </div>
       <div class="layer hard">
         <span class="layer-tag">L2</span>
         <div>
           <h3 data-t="insL2H">MCP 서버 자체 가드</h3>
-          <p data-t-html="insL2P"></p>
+          <p data-t-html="insL2P">우회할 수 없는 층입니다. 훅이 빠지거나 잘못 설정되어도 <code>abap-mcp-adt-powerup</code> 내부 가드가 항상 동작합니다</p>
         </div>
       </div>
     </div>
 
     <p class="note reveal">
       <i class="ph ph-shield-check" aria-hidden="true"></i>
-      <span data-t-html="insDefenseNote"></span>
+      <span data-t-html="insDefenseNote">L1 훅은 IO·파싱 오류 시 통과시키고, L2 MCP 가드는 항상 켜져 있습니다. 권장 기본값은 L1a <code>strict</code>, MCP 서버 블록리스트 <code>standard</code> 입니다</span>
     </p>
   </div>
 </section>

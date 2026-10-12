@@ -62,20 +62,28 @@
      Language
      ========================================================== */
 
-  function detectLang() {
-    var saved = read(LANG_KEY);
-    if (SUPPORTED.indexOf(saved) > -1) return saved;
-    var nav = (navigator.language || 'ko').toLowerCase();
-    if (nav.indexOf('ja') === 0) return 'ja';
-    if (nav.indexOf('ko') === 0) return 'ko';
-    return 'en';
+  /* Each language has its own URL: Korean at the root, the others under
+     /en/ and /ja/ (built by tools/build-i18n.mjs). The URL decides the
+     language on load; a saved choice has already been honoured by the
+     redirect in the page head. Switching swaps the copy in place and
+     moves the address along with it. */
+
+  // The site root, wherever the page is served from: app.js is js/app.js.
+  var SITE_ROOT = new URL('..', document.currentScript.src);
+  var PAGE_FILE = /install\.html$/.test(location.pathname) ? 'install.html' : '';
+  var META_KEY = PAGE_FILE ? 'insMetaTitle' : 'metaTitle';
+
+  function langUrl(l) {
+    return new URL((l === 'ko' ? '' : l + '/') + PAGE_FILE, SITE_ROOT).href + location.search + location.hash;
   }
 
-  var lang = detectLang();
+  var pageLang = root.getAttribute('lang');
+  var lang = SUPPORTED.indexOf(pageLang) > -1 ? pageLang : 'ko';
   function t(key) { return (S[lang] && S[lang][key]) || (S.ko[key] || key); }
 
   function applyLang() {
     root.setAttribute('lang', lang);
+    if (S.ko[META_KEY]) document.title = t(META_KEY);
 
     document.querySelectorAll('[data-t]').forEach(function (el) {
       el.textContent = t(el.getAttribute('data-t'));
@@ -161,6 +169,8 @@
 
       lang = next;
       store(LANG_KEY, lang);
+      try { history.replaceState(history.state, '', langUrl(lang)); } catch (e) { /* file:// */ }
+      dismissHint();
 
       document.querySelectorAll('[data-lang-btn]').forEach(function (b) {
         b.setAttribute('aria-pressed', String(b.getAttribute('data-lang-btn') === lang));
@@ -183,6 +193,60 @@
       }, SWAP_OUT);
     });
   });
+
+  /* ---------- Offer the reader's own language, once ----------
+     Only on the Korean pages, only to a browser that does not ask for
+     Korean, and only until the reader has chosen a language or closed
+     the offer. Written in the language it offers, since the reader may
+     not read Korean. */
+
+  var HINT_KEY = 'sc4sap-lang-hint';
+  var HINT_DELAY = 1600;   // after the hero has finished arriving
+  var hintEl = null;
+
+  function dismissHint(remember) {
+    if (remember) store(HINT_KEY, 'closed');
+    if (!hintEl) return;
+    var el = hintEl;
+    hintEl = null;
+    el.classList.remove('is-in');
+    setTimeout(function () { el.remove(); }, prefersReduced() ? 0 : 700);
+  }
+
+  (function offerLang() {
+    if (lang !== 'ko' || read(LANG_KEY) || read(HINT_KEY)) return;
+    var asked = ((navigator.languages && navigator.languages[0]) || navigator.language || 'ko').toLowerCase();
+    if (asked.indexOf('ko') === 0) return;
+    var to = asked.indexOf('ja') === 0 ? 'ja' : 'en';
+    var T = S[to];
+
+    var el = document.createElement('div');
+    el.className = 'lang-hint';
+    el.setAttribute('role', 'region');
+    el.setAttribute('aria-label', T.ariaLang);
+    el.lang = to;
+    el.innerHTML =
+      '<p class="lang-hint-text"><i class="ph ph-translate" aria-hidden="true"></i></p>' +
+      '<a class="btn btn-primary lang-hint-go"></a>' +
+      '<button type="button" class="icon-btn lang-hint-x"><i class="ph ph-x" aria-hidden="true"></i></button>';
+    el.querySelector('.lang-hint-text').appendChild(document.createTextNode(T.hintText));
+    var go = el.querySelector('.lang-hint-go');
+    go.textContent = T.hintGo;
+    go.href = langUrl(to);
+    go.addEventListener('click', function () { store(LANG_KEY, to); });
+    var x = el.querySelector('.lang-hint-x');
+    x.setAttribute('aria-label', T.hintClose);
+    x.addEventListener('click', function () { dismissHint(true); });
+
+    setTimeout(function () {
+      if (lang !== 'ko' || read(LANG_KEY)) return;   // chose a language meanwhile
+      document.body.appendChild(el);
+      hintEl = el;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { el.classList.add('is-in'); });
+      });
+    }, HINT_DELAY);
+  })();
 
   /* ==========================================================
      Navigation
@@ -1764,7 +1828,8 @@
     }
 
     function page(src, l) {
-      var got = html[src] ? Promise.resolve(html[src]) : fetch(src).then(function (r) { return r.text(); }).then(function (t) {
+      // From the site root: /en/ and /ja/ share the one motion/ folder.
+      var got = html[src] ? Promise.resolve(html[src]) : fetch(new URL(src, SITE_ROOT)).then(function (r) { return r.text(); }).then(function (t) {
         html[src] = t;
         return t;
       });
