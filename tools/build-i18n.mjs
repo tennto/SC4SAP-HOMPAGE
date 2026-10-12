@@ -109,8 +109,62 @@ function headBlock(page, lang, t) {
     '<meta property="og:url" content="' + pageUrl(lang, page.file) + '" />',
     '<meta property="og:locale" content="' + LOCALE[lang] + '" />',
     ...LANGS.filter((l) => l !== lang).map((l) => '<meta property="og:locale:alternate" content="' + LOCALE[l] + '" />'),
+    '<script type="application/ld+json">' + JSON.stringify(structuredData(page, lang, t)).replace(/</g, '\\u003c') + '</script>',
   ];
   return '<!-- i18n:head -->\n' + lines.join('\n') + '\n<!-- /i18n:head -->';
+}
+
+/* schema.org description of the site for search engines. Invisible on
+   the page. Only facts the page itself states: the name, the MIT
+   licence, the repository and npm package it links, and the two people
+   in its footer. */
+const REPO = 'https://github.com/babamba2/superclaude-for-sap';
+const PEOPLE = [
+  { name: '백승현', sameAs: 'https://www.linkedin.com/in/seunghyun-paek-5b83b7183/' },
+  { name: '김시훈', sameAs: 'https://www.linkedin.com/in/sihun-kim-27737132b/' },
+];
+
+function structuredData(page, lang, t) {
+  const appId = SITE + '#app';
+  const app = {
+    '@type': 'SoftwareApplication',
+    '@id': appId,
+    name: 'Super-Claude for SAP',
+    alternateName: 'SC4SAP',
+    url: SITE,
+    description: t('metaDesc'),
+    inLanguage: lang,
+    applicationCategory: 'DeveloperApplication',
+    applicationSubCategory: 'Claude Code plugin',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    license: REPO + '/blob/main/LICENSE',
+    downloadUrl: REPO,
+    installUrl: pageUrl(lang, 'install.html'),
+    image: SITE + 'assets/kakotalk_tumbnail.png',
+    sameAs: [REPO, 'https://www.npmjs.com/package/@babamba2/abap-mcp-adt-powerup'],
+    author: PEOPLE.map((p) => ({ '@type': 'Person', name: p.name, sameAs: p.sameAs })),
+  };
+  const site = {
+    '@type': 'WebSite',
+    '@id': SITE + '#site',
+    name: 'Super-Claude for SAP',
+    url: SITE,
+    inLanguage: LANGS,
+    about: { '@id': appId },
+  };
+  const graph = page.file === 'index.html'
+    ? [site, app]
+    : [site, app, {
+        '@type': 'TechArticle',
+        headline: t(page.meta + 'Title'),
+        description: t(page.meta + 'Desc'),
+        url: pageUrl(lang, page.file),
+        inLanguage: lang,
+        about: { '@id': appId },
+        isPartOf: { '@id': SITE + '#site' },
+      }];
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
 
 /* The capability index as app.js's renderIndex() builds it, with each
