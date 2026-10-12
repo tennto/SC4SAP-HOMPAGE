@@ -1,0 +1,49 @@
+# Super-Claude for SAP (SC4SAP)
+
+> An open-source Claude Code plugin that turns Claude Code into a full-stack SAP development assistant. Across ECC 6.0, S/4HANA On-Premise, and S/4HANA Cloud (Public and Private), it reads, writes, and activates ABAP directly through 150+ MCP tools built on ABAP ADT. MIT licensed.
+
+The site is available in Korean (the root), English (/en/), and Japanese (/ja/).
+
+## Key facts
+
+- Platforms: ECC 6.0, S/4HANA On-Premise, S/4HANA Cloud (Public and Private), with ADT enabled
+- 150+ MCP tools, provided by the `abap-mcp-adt-powerup` MCP server
+- 25 specialist agents: Core 10, Basis 1, Module 14
+- 17 workflow skills, including setup, create-program, analyze-code, and team
+- Requirements: Node.js 20.0.0 or newer, and the Claude Code CLI (Max or Pro subscription, or an API key)
+
+## Getting started
+
+sc4sap is not on the official Claude Code plugin marketplace yet. Inside a Claude Code session, add the repository as a custom marketplace and install from it:
+
+```
+/plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
+/plugin install sc4sap
+```
+
+Then run `/sc4sap:setup` and answer once for SAP version, industry, and country. The setup wizard installs the MCP server and registers the permission hooks. `/sc4sap:team` splits work such as reverse engineering, code review, and program generation across the agents.
+
+## Capabilities
+
+1. Auto MCP Install (`/sc4sap:setup`): one-click install of the MCP server, permission hooks, and blocklist hooks
+2. Specialist Agents: Core 10, BC 1, and Modules 14, collaborating in parallel through `/sc4sap:team`
+3. Program Analyze (`/sc4sap:program-to-spec`): reverse-engineers programs into functional and technical specs
+4. Analyze Code: static review for Clean ABAP, performance, and security, with fix suggestions ranked by severity
+5. Compare Programs: compares 2 to 5 programs across 10 dimensions and detects clones and divergences
+6. Maintenance Diagnosis: first-pass analysis of ST22, SM02, Gateway logs, and the profiler, inside Claude
+7. Fit to System: documentation, incident response, and data protection in a single package
+8. Reusability and CBO Reuse (`/sc4sap:analyze-cbo-obj`): reuses existing Z programs so they never get rebuilt from scratch
+9. Industry Context: 14 industry references, including Retail, Auto, Pharma, Banking, Steel, and Utilities
+10. Country / Localization: localization for 16 countries, covering e-invoicing, banking, tax, and statutory reporting
+11. Active-Module Awareness: recognizes which modules are active together, for example MM+PS for WBS and SD+CO for CO-PA
+12. Formatted Auto Program Maker: generates complete programs with Main and Include, ALV, Dynpro, GUI Status, Text Elements, and ABAP Unit
+
+## Links
+
+- [Home (Korean)](https://sc4sap.dev/)
+- [Home (English)](https://sc4sap.dev/en/)
+- [Home (Japanese)](https://sc4sap.dev/ja/)
+- [Install guide (English)](https://sc4sap.dev/en/install.html)
+- [GitHub repository](https://github.com/babamba2/superclaude-for-sap)
+- [MCP server on npm: @babamba2/abap-mcp-adt-powerup](https://www.npmjs.com/package/@babamba2/abap-mcp-adt-powerup)
+- [License (MIT)](https://github.com/babamba2/superclaude-for-sap/blob/main/LICENSE)
