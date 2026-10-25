@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SC4SAP — ERP AX의 새로운 첫걸음</title>
+<meta name="description" content="SC4SAP는 우리 SAP에 직접 연결돼 코드 분석부터 문서 · 프로그램 생성까지 하는 AI 워크스페이스예요." />
+<!-- A design draft next to the deployed page, never a page of its own. -->
+<meta name="robots" content="noindex, nofollow" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#000000" />
+
+<link rel="icon" type="image/svg+xml" href="/favicon/sc4_charcoal_rounded.svg" />
+<link rel="icon" href="/favicon/favicon.ico" sizes="any" />
+
+<!-- Pretendard for Korean and Latin, Pretendard JP for Japanese. Both are
+     dynamic subsets, so a page only downloads the glyphs it renders. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-jp-dynamic-subset.min.css" />
+<!-- IBM Plex Mono only, for commands and object names. -->
+<link rel="stylesheet" href="../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="css/n.css" />
+
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body>
+
+<a class="skip" href="#platform" data-i="skip">본문으로 건너뛰기</a>
+
+<!-- ===================== NOTICE =====================
+     A thin strip above the nav. PLACEHOLDER link: the invite-code page
+     is not decided yet. -->
+<div class="notice" data-notice>
+  <div class="notice-inner">
+    <a class="notice-link" href="#contact">
+      <span class="notice-label">NOTICE</span>
+      <span class="notice-text"><span data-i="noticeText">SC4SAP 클로즈 테스트</span><span class="notice-sep" aria-hidden="true">|</span><span data-i="noticeCta">지금 초대코드 받기</span></span>
+      <!-- An SVG, not the icon font: the font's glyph sits on the text
+           baseline and never centres against Hangul. -->
+      <svg class="notice-chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg>
+    </a>
+  </div>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" data-nav>
+  <div class="nav-capsule glass">
+    <a href="#top" class="brand">
+      <span class="brand-text"><b>Super-Claude</b> for SAP</span>
+    </a>
+
+    <!-- Three groups. Pointing at one grows the capsule downward and shows
+         that group's entries inside it; every entry opens in a new tab.
+         PLACEHOLDER: the pages behind these URLs are not built yet. -->
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary">
+      <button type="button" class="nav-top" data-group="res" aria-expanded="false" aria-controls="grp-res"><span data-i="navRes">리소스</span></button>
+      <button type="button" class="nav-top" data-group="svc" aria-expanded="false" aria-controls="grp-svc"><span data-i="navSvc">서비스</span></button>
+      <button type="button" class="nav-top" data-group="legal" aria-expanded="false" aria-controls="grp-legal"><span data-i="navLegal">약관</span></button>
+    </nav>
+
+    <div class="nav-tools">
+      <!-- Hidden until the copy is settled section by section; English and
+           Japanese are translated once, from the final Korean. -->
+      <div class="lang" role="group" aria-label="Language" data-lang hidden>
+        <button type="button" data-lang-btn="ko" aria-pressed="true">KO</button>
+        <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang-btn="ja" aria-pressed="false">JP</button>
+      </div>
+      <a class="btn btn-sm nav-cta" href="#contact"><span data-i="ctaContact">도입 문의</span></a>
+      <!-- Two strokes that turn into an X. An SVG rather than the icon font,
+           whose glyphs sit on a text baseline and never centre exactly. -->
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-panel" data-nav-toggle>
+        <span class="sr-only" data-i="menu">메뉴</span>
+        <svg class="nav-burger" viewBox="0 0 16 16" aria-hidden="true"><path class="b1" d="M3 5.5h10" /><path class="b2" d="M3 10.5h10" /></svg>
+      </button>
+    </div>
+    <!-- The capsule's second row: one group at a time on wide screens,
+         all three as headed lists inside the phone menu. -->
+    <div class="nav-panel" id="nav-panel">
+      <div class="nav-panel-in">
+        <div class="nav-group" id="grp-res" data-group="res">
+          <p class="nav-group-h" data-i="navRes">리소스</p>
+          <div class="nav-group-links">
+            <a href="resources/sc4sap-brochure.pdf" target="_blank" rel="noopener"><b><span data-i="dResBrochure">SC4 소개서</span> <em>PDF</em></b><span class="pl-desc" data-i="dResBrochureD">제품 소개 자료를 받아보세요</span></a>
+            <a href="resources/updates.html" target="_blank" rel="noopener"><b><span data-i="dResUpdates">업데이트</span></b><span class="pl-desc" data-i="dResUpdatesD">새 기능과 변경 내역</span></a>
+            <a href="resources/guide.html" target="_blank" rel="noopener"><b><span data-i="dResGuide">사용 가이드</span></b><span class="pl-desc" data-i="dResGuideD">연결부터 첫 분석까지</span></a>
+          </div>
+        </div>
+        <div class="nav-group" id="grp-svc" data-group="svc">
+          <p class="nav-group-h" data-i="navSvc">서비스</p>
+          <div class="nav-group-links">
+            <a href="service/about.html" target="_blank" rel="noopener"><b><span data-i="dSvcAbout">About</span></b><span class="pl-desc" data-i="dSvcAboutD">SC4SAP를 만드는 사람들</span></a>
+            <a href="service/security.html" target="_blank" rel="noopener"><b><span data-i="dSvcSecurity">Security</span></b><span class="pl-desc" data-i="dSvcSecurityD">데이터 보호와 권한 설계</span></a>
+            <a href="service/sponsorship.html" target="_blank" rel="noopener"><b><span data-i="dSvcSponsor">Sponsorship</span></b><span class="pl-desc" data-i="dSvcSponsorD">프로젝트 후원 안내</span></a>
+          </div>
+        </div>
+        <div class="nav-group is-four" id="grp-legal" data-group="legal">
+          <p class="nav-group-h" data-i="navLegal">약관</p>
+          <div class="nav-group-links">
+            <a href="legal/terms.html" target="_blank" rel="noopener"><b><span data-i="dLegalTerms">이용약관</span></b><span class="pl-desc" data-i="dLegalTermsD">서비스 이용 조건</span></a>
+            <a href="legal/privacy.html" target="_blank" rel="noopener"><b><span data-i="dLegalPrivacy">개인정보처리방침</span></b><span class="pl-desc" data-i="dLegalPrivacyD">개인정보 수집과 보관</span></a>
+            <a href="legal/billing-terms.html" target="_blank" rel="noopener"><b><span data-i="dLegalBilling">유료 서비스 이용약관</span></b><span class="pl-desc" data-i="dLegalBillingD">결제와 구독 조건</span></a>
+            <a href="legal/refund-policy.html" target="_blank" rel="noopener"><b><span data-i="dLegalRefund">환불정책</span></b><span class="pl-desc" data-i="dLegalRefundD">환불 기준과 절차</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Sections" data-rail>
+  <a href="#top"><span data-i="railTop">소개</span></a>
+  <a href="#platform"><span data-i="navPlatform">플랫폼</span></a>
+  <a href="#analyze"><span data-i="navAnalyze">분석</span></a>
+  <a href="#document"><span data-i="navDocument">문서</span></a>
+  <a href="#build"><span data-i="navBuild">개발</span></a>
+  <a href="#graph"><span data-i="railGraph">그래프</span></a>
+  <a href="#trust"><span data-i="navTrust">보안</span></a>
+  <a href="#tech"><span data-i="navTech">기술</span></a>
+</nav>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section id="top" class="hero" data-section>
+  <!-- Photograph plus scrims; the image and its darkening are set on .hero in n.css. -->
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <div class="wrap hero-copy">
+    <!-- The roles SC4SAP stands in for, one after another. The dot stays
+         put and changes colour (amber, teal, amber...); only the words fade
+         out and the next fade in. All six share one grid cell, so the chip
+         keeps the longest one's width and never resizes. -->
+    <p class="chip glass enter" style="--d:0ms" data-rotor data-tone="amber">
+      <span class="chip-dot" aria-hidden="true"></span>
+      <span class="chip-rotor" aria-hidden="true">
+        <span class="rotor-item is-on">Enterprise AI for SAP</span>
+        <span class="rotor-item">SAP Module Specialist</span>
+        <span class="rotor-item">System Analyst</span>
+        <span class="rotor-item">Pro ABAP Developer</span>
+        <span class="rotor-item">ERP Architecture</span>
+        <span class="rotor-item">Project Manager</span>
+      </span>
+      <span class="sr-only">Enterprise AI for SAP · SAP Module Specialist · System Analyst · Pro ABAP Developer · ERP Architecture · Project Manager</span>
+    </p>
+    <h1 class="display enter" style="--d:120ms" data-i="heroTitle">ERP AX의 새로운 첫걸음</h1>
+    <p class="hero-sub enter" style="--d:260ms" data-i="heroSub">코드와 설정, 업무 흐름까지 읽어내는 AI<br>SC4SAP는 Enterprise AX 최적화 워크스페이스입니다</p>
+    <div class="actions enter" style="--d:380ms">
+      <a class="btn btn-light" href="#contact"><span data-i="ctaContactLong">도입 문의하기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">서비스 둘러보기</span></a>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== PROBLEM ===================== -->
+<section id="problem" class="problem" data-section>
+  <div class="wrap">
+    <p class="statement" data-statement data-i="statement">SAP 프로젝트의 시간은 새 코드를 짜는 데보다, 이미 있는 코드를 이해하는 데 더 많이 쓰여요. <em>SC4SAP는 그 시간을 돌려드려요.</em></p>
+
+    <ul class="turns">
+      <li class="turn glass reveal">
+        <span class="turn-from" data-i="turn1a">며칠 걸리던 레거시 분석</span>
+        <i class="ph ph-arrow-down" aria-hidden="true"></i>
+        <span class="turn-to" data-i="turn1b">바로 받아보는 명세서</span>
+      </li>
+      <li class="turn glass reveal">
+        <span class="turn-from" data-i="turn2a">사람마다 다른 문서</span>
+        <i class="ph ph-arrow-down" aria-hidden="true"></i>
+        <span class="turn-to" data-i="turn2b">늘 같은 양식의 산출물</span>
+      </li>
+      <li class="turn glass reveal">
+        <span class="turn-from" data-i="turn3a">컨설턴트 답변 기다리기</span>
+        <i class="ph ph-arrow-down" aria-hidden="true"></i>
+        <span class="turn-to" data-i="turn3b">모듈 전문가의 즉답</span>
+      </li>
+      <li class="turn glass reveal">
+        <span class="turn-from" data-i="turn4a">무엇을 했는지 모르는 AI</span>
+        <i class="ph ph-arrow-down" aria-hidden="true"></i>
+        <span class="turn-to" data-i="turn4b">모든 호출이 보이는 AI</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== PLATFORM: bento ===================== -->
+<section id="platform" class="platform" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="eyebrow">PLATFORM</span>
+      <h2 class="h2" data-i="platH">하나의 워크스페이스에서<br>SAP 업무가 끝나요</h2>
+      <p class="sec-sub" data-i="platSub">시스템을 한 번 연결하면 대화, 업무 스킬, 모니터링, 지식 그래프가 같은 자리에서 이어져요</p>
+    </header>
+
+    <div class="bento">
+      <article class="tile tile-wide glass reveal">
+        <span class="tile-icon"><i class="ph ph-chat-circle-text"></i></span>
+        <h3 data-i="p1h">모듈 컨설턴트에게 묻듯이</h3>
+        <p data-i="p1p">SD · MM · FI · CO · PP 등 모듈별 컨설턴트 에이전트가 우리 SAP 환경의 설정을 직접 확인하고 답해요</p>
+        <div class="tile-chips" aria-hidden="true"><span>SD</span><span>MM</span><span class="on">FI</span><span>CO</span><span>PP</span><span>PS</span><span>QM</span><span>HCM</span><span>+6</span></div>
+      </article>
+      <article class="tile glass reveal">
+        <span class="tile-icon"><i class="ph ph-squares-four"></i></span>
+        <h3 data-i="p2h">11가지 업무 스킬</h3>
+        <p data-i="p2p">분석 · 문서 · 개발 · 진단 업무를 정해진 흐름으로 실행해요</p>
+      </article>
+      <article class="tile glass reveal">
+        <span class="tile-icon"><i class="ph ph-pulse"></i></span>
+        <h3 data-i="p3h">실시간 MCP 모니터</h3>
+        <p data-i="p3p">AI가 시스템에 하는 모든 호출을 그대로 보여줘요</p>
+      </article>
+      <article class="tile glass reveal">
+        <span class="tile-icon"><i class="ph ph-graph"></i></span>
+        <h3 data-i="p4h">CBO 지식 그래프</h3>
+        <p data-i="p4p">프로그램, 테이블, 프로세스의 관계를 한눈에 봐요</p>
+      </article>
+      <article class="tile glass reveal">
+        <span class="tile-icon"><i class="ph ph-notebook"></i></span>
+        <h3 data-i="p5h">Obsidian 연동</h3>
+        <p data-i="p5p">분석 결과가 팀의 노트로 쌓이고, 다시 AI의 답에 쓰여요</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHAPTER: ANALYZE ===================== -->
+<section id="analyze" class="chapter" data-section data-chapter style="--items:4">
+  <div class="chapter-pin">
+    <div class="aura" aria-hidden="true"><span class="orb o1"></span><span class="orb o3"></span></div>
+    <div class="wrap chapter-grid">
+      <header class="chapter-head">
+        <span class="eyebrow">ANALYZE</span>
+        <h2 class="h2" data-i="anaH">읽고 진단하는 일은<br>몇 분이면 충분해요</h2>
+      </header>
+
+      <article class="item" data-item>
+        <button type="button" class="item-tab" data-item-tab><span class="item-n">01</span><span class="item-name">Ask a Consultant</span></button>
+        <div class="item-copy"><div class="item-copy-in">
+          <h3 class="item-h" data-i="a1h">운영 질문은 모듈 전문가에게</h3>
+          <p data-i="a1p">질문의 키워드로 맞는 컨설턴트를 골라 보내고, 우리 시스템의 실제 설정을 기준으로 답해요</p>
+        </div></div>
+        <div class="item-visual">
+          <div class="win glass">
+            <div class="win-bar"><span></span><span></span><span></span><b>Ask a Consultant · MM</b></div>
+            <div class="v-chat">
+              <div class="msg me"><span data-i="a1q">PO 승인 전략이 두 번째 결재자를 건너뛰어요</span></div>
+              <div class="msg ai">
+                <span class="who"><i class="ph ph-user-circle-gear"></i>sap-mm-consultant</span>
+                <p data-i="a1a">릴리스 전략 <b>Z2</b>의 금액 조건 때문이에요. 조건표와 관련 사용자 exit을 함께 정리해 드릴게요</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="item" data-item>
+        <button type="button" class="item-tab" data-item-tab><span class="item-n">02</span><span class="item-name">Analyze Code</span></button>
+        <div class="item-copy"><div class="item-copy-in">
+          <h3 class="item-h" data-i="a2h">심각한 것부터 짚어주는 코드 리뷰</h3>
+          <p data-i="a2p">AST · 의미 분석 · where-used까지 돌려서 Clean ABAP, 성능, 보안, SAP 표준 준수 관점으로 리뷰해요</p>
+        </div></div>
+        <div class="item-visual">
+          <div class="win glass">
+            <div class="win-bar"><span></span><span></span><span></span><b>Analyze Code · ZMMR00020</b></div>
+            <ul class="v-sev">
+              <li><em class="crit">CRITICAL</em><div><b data-i="a2r1">SQL Injection 가능성</b><span data-i="a2r1s">동적 WHERE에 입력값이 바로 들어가요</span></div></li>
+              <li><em class="crit">CRITICAL</em><div><b data-i="a2r2">AUTHORITY-CHECK 누락</b><span data-i="a2r2s">BUKRS 조회 뒤 권한 검증이 없어요</span></div></li>
+              <li><em class="maj">MAJOR</em><div><b>SELECT … ENDSELECT</b><span data-i="a2r3s">INTO TABLE로 바꾸면 훨씬 빨라져요</span></div></li>
+              <li><em class="min">MINOR</em><div><b data-i="a2r4">Clean ABAP 명명 규칙</b><span data-i="a2r4s">지역 변수 접두어가 섞여 있어요</span></div></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="item" data-item>
+        <button type="button" class="item-tab" data-item-tab><span class="item-n">03</span><span class="item-name">Analyze a Symptom</span></button>
+        <div class="item-copy"><div class="item-copy-in">
+          <h3 class="item-h" data-i="a3h">덤프와 장애의 원인을 좁혀요</h3>
+          <p data-i="a3p">덤프 · 전송 · where-used를 살펴 가설을 좁히고, 원인과 다음 조치를 정리해요</p>
+        </div></div>
+        <div class="item-visual">
+          <div class="win glass">
+            <div class="win-bar"><span></span><span></span><span></span><b>ST22 · TSV_TNEW_PAGE_ALLOC_FAILED</b></div>
+            <ol class="v-diag">
+              <li class="done"><span>01</span><div><b data-i="a3s1">덤프 수집</b><code>RuntimeAnalyzeDump</code></div></li>
+              <li class="done"><span>02</span><div><b data-i="a3s2">최근 전송 확인</b><em data-i="a3s2d">문제 직전 반입된 요청 2건</em></div></li>
+              <li class="done"><span>03</span><div><b data-i="a3s3">원인 가설</b><em data-i="a3s3d">내부 테이블 메모리 초과</em></div></li>
+              <li class="now"><span>04</span><div><b data-i="a3s4">조치 제안</b><em data-i="a3s4d">코드 수정안과 SAP Note 후보</em></div></li>
+            </ol>
+          </div>
+        </div>
+      </article>
+
+      <article class="item" data-item>
+        <button type="button" class="item-tab" data-item-tab><span class="item-n">04</span><span class="item-name">Compare Programs</span></button>
+        <div class="item-copy"><div class="item-copy-in">
+          <h3 class="item-h" data-i="a4h">비슷한 프로그램을 나란히 비교해요</h3>
+          <p data-i="a4p">시나리오는 같고 모듈 · 국가 · 사용자가 다른 프로그램 2~5개를 업무 관점에서 나란히 놓고 차이를 짚어요</p>
+        </div></div>
+        <div class="item-visual">
+          <div class="win glass">
+            <div class="win-bar"><span></span><span></span><span></span><b>ZMMR00020 vs ZMMR00030</b></div>
+            <table class="v-cmp">
+              <thead><tr><th scope="col"></th><th scope="col">00020</th><th scope="col">00030</th></tr></thead>
+              <tbody>
+                <tr><th scope="row" data-i="a4d1">업무 시나리오</th><td class="same">●</td><td class="same">●</td></tr>
+                <tr><th scope="row" data-i="a4d2">선택 화면</th><td class="diff">◐</td><td class="diff">◐</td></tr>
+                <tr><th scope="row" data-i="a4d3">데이터 소스</th><td class="same">●</td><td class="same">●</td></tr>
+                <tr><th scope="row" data-i="a4d4">출력 방식</th><td class="opp">WRITE</td><td class="opp">ALV</td></tr>
+              </tbody>
+            </table>
+            <p class="v-verdict"><b>VERDICT</b> <span data-i="a4v">하나로 통합 권장</span></p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DOCUMENT: three cards ===================== -->
+<section id="document" class="context" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="eyebrow">DOCUMENT</span>
+      <h2 class="h2" data-i="docH">문서 작업은<br>SC4SAP에 맡기세요</h2>
+      <p class="sec-sub" data-i="docSub">프로그램과 패키지를 읽고, 팀이 바로 쓸 수 있는 문서를 같은 양식으로 만들어요. 한국어, 영어, 일본어 모두 돼요</p>
+    </header>
+
+    <div class="cards">
+      <article class="card reveal">
+        <div class="card-art art-spec" aria-hidden="true">
+          <div class="art-glass glass doc-spec">
+            <div class="sheets"><span class="on">Cover</span><span>Inputs</span><span>Logic</span><span>CBO</span></div>
+            <div class="mock-screen">
+              <span class="ms-row"><b>P_BUKRS</b><i></i></span>
+              <span class="ms-row"><b>S_LIFNR</b><i></i><i></i></span>
+              <span class="ms-row"><b>S_BUDAT</b><i></i><i></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-copy">
+          <span class="card-k">Program → Spec</span>
+          <h3 data-i="d1h">코드를 기능 · 기술 명세서로</h3>
+          <p data-i="d1p">프로그램을 역공학해 명세서를 만들고, 선택 화면과 ALV 목업까지 붙여요</p>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-art art-manual" aria-hidden="true">
+          <div class="art-glass glass doc-manual">
+            <div class="mock-screen">
+              <span class="ms-row"><b>PO</b><i></i><em>1</em></span>
+              <span class="ms-row"><b>Vendor</b><i></i><em>2</em></span>
+              <span class="ms-btn">Execute <em>3</em></span>
+            </div>
+            <ol class="steps-mini"><li data-i="d2s1">구매오더 번호를 입력해요</li><li data-i="d2s2">공급업체를 고르세요</li></ol>
+          </div>
+        </div>
+        <div class="card-copy">
+          <span class="card-k">Program → Manual</span>
+          <h3 data-i="d2h">화면에 번호를 단 사용자 매뉴얼</h3>
+          <p data-i="d2p">시나리오별 단계, 체크 포인트, 메시지, 용어집까지 담아 현업에 바로 전달해요</p>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-art art-process" aria-hidden="true">
+          <div class="art-glass glass doc-process">
+            <div class="flow">
+              <span class="f-box" data-i="d3f1">구매요청</span><span class="f-line"></span>
+              <span class="f-box" data-i="d3f2">구매오더</span><span class="f-line"></span>
+              <span class="f-diamond"><span data-i="d3f3">승인?</span></span><span class="f-line"></span>
+              <span class="f-box" data-i="d3f4">입고</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-copy">
+          <span class="card-k">Package → Process</span>
+          <h3 data-i="d3h">패키지에서 업무 프로세스 문서로</h3>
+          <p data-i="d3p">CBO 패키지를 읽어 순서도, 시퀀스 다이어그램, 단계 표가 담긴 종단 간 프로세스 문서를 만들어요</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHAPTER: BUILD ===================== -->
+<section id="build" class="chapter flip" data-section data-chapter style="--items:3">
+  <div class="chapter-pin">
+    <div class="aura" aria-hidden="true"><span class="orb o2"></span><span class="orb o3"></span></div>
+    <div class="wrap chapter-grid">
+      <header class="chapter-head">
+        <span class="eyebrow">BUILD</span>
+        <h2 class="h2" data-i="bldH">만드는 일은<br>승인하고 지켜보기만</h2>
+      </header>
+
+      <article class="item" data-item>
+        <button type="button" class="item-tab" data-item-tab><span class="item-n">01</span><span class="item-name">Inventory a CBO Package</span></button>
+        <div class="item-copy"><div class="item-copy-in">
+          <h3 class="item-h" data-i="b1h">있는 것부터 찾아요</h3>
+          <p data-i="b1p">커스텀 패키지를 훑어 재사용할 만한 Z 오브젝트를 정리해요. 이후의 모든 개발은 새로 만들기보다 이 목록을 먼저 써요</p>
+        </div></div>
+        <div class="item-visual">
+          <div class="win glass">
+            <div class="win-bar"><span></span><span></span><span></span><b>ZMM_CBO · inventory</b></div>
+            <div class="v-reuse">
+              <div class="search"><i class="ph ph-magnifying-glass"></i><span data-i="b1q">공급업체별 미결 구매오더 조회</span></div>
+              <div class="hit best"><div><b>ZCL_MM_PO_READER</b><span data-i="b1r1">클래스 · 구매오더 조회 공통</span></div><em data-i="b1reuse">재사용</em></div>
+              <div class="hit"><div><b>ZMMR00020</b><span data-i="b1r2">리포트 · 같은 시나리오</span></div><em class="soft" data-i="b1ref">참고</em></div>
+              <div class="hit"><div><b>ZMM_PO_ALV_S</b><span data-i="b1r3">구조 · ALV 필드 카탈로그</span></div><em class="soft" data-i="b1reuse2">재사용</em></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="item" data-item>
+        <button type="button" class="item-tab" data-item-tab><span class="item-n">02</span><span class="item-name">Create a Program</span></button>
+        <div class="item-copy"><div class="item-copy-in">
+          <h3 class="item-h" data-i="b2h">요구사항이 활성화된 프로그램으로</h3>
+          <p data-i="b2p">Report · CRUD · ALV · Batch 중 형태를 고르고 요구사항을 적으면, 스펙을 승인받은 뒤 명명 규칙에 맞춰 생성하고 활성화해요</p>
+        </div></div>
+        <div class="item-visual">
+          <div class="win glass">
+            <div class="win-bar"><span></span><span></span><span></span><b>Create a Program · ZMMR00040</b></div>
+            <div class="v-maker">
+              <div class="approval">
+                <i class="ph ph-seal-check"></i>
+                <div><b data-i="b2ap">스펙 승인 완료</b><span>ALV · OOP · ZMM_CBO</span></div>
+              </div>
+              <ul class="objs">
+                <li><span>ZMMR00040</span><em>Main</em></li>
+                <li><span>ZMMR00040_TOP</span><em>Include</em></li>
+                <li><span>ZCL_MMR00040_ALV</span><em>Class</em></li>
+                <li class="pending"><span>SCREEN 0100</span><em>Dynpro</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="item" data-item>
+        <button type="button" class="item-tab" data-item-tab><span class="item-n">03</span><span class="item-name">Create an Object</span></button>
+        <div class="item-copy"><div class="item-copy-in">
+          <h3 class="item-h" data-i="b3h">오브젝트 하나도 끝까지</h3>
+          <p data-i="b3p">클래스, 인터페이스, 함수, 테이블, CDS View까지. 전송 요청과 패키지를 확인하고 생성해서 활성화까지 마쳐요</p>
+        </div></div>
+        <div class="item-visual">
+          <div class="win glass">
+            <div class="win-bar"><span></span><span></span><span></span><b>Create an Object</b></div>
+            <div class="v-agents">
+              <p class="v-label">OBJECT TYPE</p>
+              <div class="tags"><span class="on">Class</span><span>Interface</span><span>Function Module</span><span>Table</span><span>Structure</span><span>Data Element</span><span>Domain</span><span>CDS View</span></div>
+              <ul class="ticks">
+                <li><i class="ph ph-check-circle"></i><span data-i="b3t1">전송 요청 S4DK900412 확인</span></li>
+                <li><i class="ph ph-check-circle"></i><span data-i="b3t2">패키지 ZMM_CBO 확인</span></li>
+                <li class="is-live"><i class="ph ph-circle-notch"></i><span data-i="b3t3">ZCL_MM_PO_HANDLER 활성화 중</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GRAPH ===================== -->
+<section id="graph" class="graph" data-section>
+  <div class="aura" aria-hidden="true"><span class="orb o1"></span></div>
+  <div class="wrap graph-grid">
+    <header class="graph-head">
+      <span class="eyebrow">KNOWLEDGE GRAPH</span>
+      <h2 class="h2" data-i="grH">흩어진 Z 오브젝트를<br>한 장의 지도로</h2>
+      <p class="sec-sub" data-i="grSub">분석할수록 프로그램 · 테이블 · 프로세스의 관계가 그래프로 쌓여요. Obsidian 볼트와 양방향으로 동기화되고, 팀이 단 관계는 다음 답변에 그대로 반영돼요</p>
+      <ul class="graph-points">
+        <li><i class="ph ph-check" aria-hidden="true"></i><span data-i="gr1">CBO 패키지 분석이 그래프의 출발점이에요</span></li>
+        <li><i class="ph ph-check" aria-hidden="true"></i><span data-i="gr2">Obsidian에서 관계를 고치면 AI가 그걸 따라요</span></li>
+        <li><i class="ph ph-check" aria-hidden="true"></i><span data-i="gr3">연동 토큰은 그래프와 노트만 읽을 수 있어요</span></li>
+      </ul>
+    </header>
+
+    <div class="graph-stage glass reveal" aria-hidden="true">
+      <svg class="graph-svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+        <g class="edges">
+          <line x1="200" y1="150" x2="90"  y2="70" /><line x1="200" y1="150" x2="320" y2="80" />
+          <line x1="200" y1="150" x2="80"  y2="220" /><line x1="200" y1="150" x2="310" y2="230" />
+          <line x1="320" y1="80"  x2="360" y2="170" /><line x1="90"  y1="70"  x2="170" y2="40" />
+          <line x1="310" y1="230" x2="360" y2="170" /><line x1="80"  y1="220" x2="180" y2="265" />
+        </g>
+        <g class="nodes">
+          <circle class="n-proc" cx="200" cy="150" r="16" />
+          <circle class="n-prog" cx="90"  cy="70"  r="10" /><circle class="n-prog" cx="320" cy="80"  r="10" />
+          <circle class="n-tab"  cx="80"  cy="220" r="8" /><circle class="n-tab"  cx="310" cy="230" r="8" />
+          <circle class="n-tab"  cx="360" cy="170" r="7" /><circle class="n-cls"  cx="170" cy="40"  r="7" />
+          <circle class="n-cls"  cx="180" cy="265" r="7" />
+        </g>
+        <g class="labels">
+          <text x="200" y="182" data-i="grN1">수출 컨테이너 출하</text>
+          <text x="90" y="52">ZSDR0142</text><text x="320" y="62">ZSDR0188</text>
+          <text x="80" y="246">VBAK</text><text x="310" y="256">LIKP</text>
+          <text x="360" y="196">VBFA</text><text x="170" y="24">ZCL_SD_SHIP</text>
+        </g>
+      </svg>
+      <div class="graph-legend">
+        <span><i class="dot proc"></i><span data-i="grL1">프로세스</span></span>
+        <span><i class="dot prog"></i><span data-i="grL2">프로그램</span></span>
+        <span><i class="dot tab"></i><span data-i="grL3">테이블</span></span>
+        <span><i class="dot cls"></i><span data-i="grL4">클래스</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST ===================== -->
+<section id="trust" class="trust" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="eyebrow">TRUST &amp; CONTROL</span>
+      <h2 class="h2" data-i="trH">엔터프라이즈가<br>믿고 맡길 수 있도록</h2>
+      <p class="sec-sub" data-i="trSub">AI가 무엇을 읽고 무엇을 바꾸는지, 언제나 사람이 보고 결정해요</p>
+    </header>
+
+    <div class="trust-grid">
+      <article class="tcard tcard-wide glass reveal">
+        <span class="tile-icon"><i class="ph ph-pulse"></i></span>
+        <h3 data-i="t1h">모든 호출이 보여요</h3>
+        <p data-i="t1p">MCP 모니터에 에이전트의 도구 호출이 실시간으로 남아요</p>
+        <ul class="feed" aria-hidden="true">
+          <li><code>GetTable</code><span>T16FS</span><em>42ms</em></li>
+          <li><code>GetWhereUsed</code><span>ME_PROCESS_PO</span><em>310ms</em></li>
+          <li class="deny"><code>GetTableContents</code><span>PA0008</span><em>DENY</em></li>
+        </ul>
+      </article>
+      <article class="tcard glass reveal">
+        <span class="tile-icon"><i class="ph ph-seal-check"></i></span>
+        <h3 data-i="t2h">바꾸기 전엔 반드시 승인</h3>
+        <p data-i="t2p">프로그램 생성은 스펙 승인 뒤에만 시작하고, 시스템을 바꾸는 호출은 사용자 확인을 거쳐요</p>
+      </article>
+      <article class="tcard glass reveal">
+        <span class="tile-icon"><i class="ph ph-shield-check"></i></span>
+        <h3 data-i="t3h">민감 데이터는 네 겹으로 차단</h3>
+        <p data-i="t3p">개인정보 · 급여 · 뱅킹 · 거래 재무 테이블은 에이전트, 정책, 훅, 서버 네 단계에서 기본으로 막혀요</p>
+      </article>
+      <article class="tcard glass reveal">
+        <span class="tile-icon"><i class="ph ph-gauge"></i></span>
+        <h3 data-i="t4h">실행 전에 사용량을 미리</h3>
+        <p data-i="t4p">무거운 작업은 실행 전에 예상 사용량을 보여주고, Economy와 Standard 중에서 고를 수 있어요</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TECHNOLOGY ===================== -->
+<section id="tech" class="tech" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="eyebrow">TECHNOLOGY</span>
+      <h2 class="h2" data-i="tcH">검증된 오픈소스 엔진 위에<br>만든 서비스예요</h2>
+      <p class="sec-sub" data-i="tcSub">SC4SAP 웹 서비스는 직접 개발해 공개한 Claude Code 플러그인과 ABAP MCP 서버를 엔진으로 써요</p>
+    </header>
+
+    <dl class="num-grid" data-count>
+      <div class="num glass"><dt data-i="n1k">SAP 도구</dt><dd><b data-to="170" data-suffix="+">170+</b><span data-i="n1v">ABAP ADT 기반 MCP 서버</span></dd></div>
+      <div class="num glass"><dt data-i="n2k">전문 에이전트</dt><dd><b data-to="26">26</b><span data-i="n2v">모듈 컨설턴트 · 리뷰어 · 디버거</span></dd></div>
+      <div class="num glass"><dt data-i="n3k">업종 레퍼런스</dt><dd><b data-to="14">14</b><span>Retail · Automotive · Pharma ···</span></dd></div>
+      <div class="num glass"><dt data-i="n4k">국가 레퍼런스</dt><dd><b data-to="16">16</b><span data-i="n4v">세금 · 전자세금계산서 · 은행</span></dd></div>
+    </dl>
+
+    <div class="stack glass reveal">
+      <div class="stack-row"><span class="stack-k">Web</span><span>SC4SAP Workspace</span><em>0.6</em></div>
+      <div class="stack-row"><span class="stack-k">Engine</span><span>sc4sap plugin · Claude Agent SDK</span><em>0.6</em></div>
+      <div class="stack-row"><span class="stack-k">Connector</span><span>abap-mcp-adt · Model Context Protocol</span><em>4.8</em></div>
+      <div class="stack-row"><span class="stack-k">SAP</span><span>ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud</span><em>ADT</em></div>
+      <a class="stack-link" href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener"><i class="ph ph-github-logo" aria-hidden="true"></i><span data-i="tcGh">오픈소스 엔진 보기</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section id="contact" class="join">
+  <div class="wrap">
+    <div class="join-card glass reveal">
+      <div class="aura" aria-hidden="true"><span class="orb o1"></span></div>
+      <img class="join-mark" src="/favicon/mark_iv.png" alt="" width="512" height="512" loading="lazy" decoding="async" />
+      <h2 class="h2" data-i="ctaH">우리 SAP에<br>SC4SAP를 연결해 보세요</h2>
+      <p class="sec-sub" data-i="ctaSub">도입 상담부터 시스템 연결, 첫 분석까지 함께해요</p>
+      <!-- PLACEHOLDER: the inquiry target (mail, form or calendar) is
+           decided in the CTA section pass. -->
+      <div class="actions">
+        <a class="btn btn-light" href="#contact"><span data-i="ctaContactLong">도입 문의하기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+        <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">서비스 둘러보기</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="brand-text"><b>SC4SAP</b></span>
+        <p data-i="footTag">SAP를 이해하는 AI 개발 파트너</p>
+      </div>
+      <div class="foot-col">
+        <h3 data-i="footContact">연락처</h3>
+        <a href="https://www.linkedin.com/in/seunghyun-paek-5b83b7183/" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo" aria-hidden="true"></i><span data-i="p1">백승현</span></a>
+        <a href="https://www.linkedin.com/in/sihun-kim-27737132b/" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo" aria-hidden="true"></i><span data-i="p2">김시훈</span></a>
+      </div>
+      <div class="foot-col">
+        <h3 data-i="footProduct">제품</h3>
+        <a href="#platform" data-i="navPlatform">플랫폼</a>
+        <a href="#trust" data-i="navTrust">보안</a>
+        <a href="#tech" data-i="navTech">기술</a>
+      </div>
+      <div class="foot-col">
+        <h3 data-i="footOpen">오픈소스</h3>
+        <a href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener"><i class="ph ph-github-logo" aria-hidden="true"></i>sc4sap plugin</a>
+        <a href="https://www.npmjs.com/package/@babamba2/abap-mcp-adt-powerup" target="_blank" rel="noopener"><i class="ph ph-package" aria-hidden="true"></i>abap-mcp-adt</a>
+      </div>
+    </div>
+    <div class="foot-meta">
+      <span>© SC4SAP</span>
+      <span>Built on Claude · MCP · ABAP ADT</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/n.i18n.js" defer></script>
+<script src="js/n.js" defer></script>
+</body>
+</html>
