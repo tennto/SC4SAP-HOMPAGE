@@ -260,6 +260,8 @@
     if (!statement) return;
     var out = [];
     [].slice.call(statement.childNodes).forEach(function (node) {
+      // Line breaks are kept as they are; they carry no words to light.
+      if (node.nodeName === 'BR') { out.push('<br>'); return; }
       var key = node.nodeType === 1;
       var text = node.textContent;
       // Space-separated scripts split on spaces; Japanese has none, so
@@ -336,6 +338,214 @@
     });
   }
 
+  /* ==========================================================
+     Before -> After: states 0-8 over the pinned stretch.
+     0 untouched · 1-5 a manual step is struck and the time drops
+     · 6 the empty spec rises · 7-8 it widens over the meter and the
+     result is drawn in. Stacked (narrow, short) everything shows at
+     its final state.
+     ========================================================== */
+
+  var shift = document.querySelector('[data-shift]');
+  var shiftUI = shift && {
+    tasks: [].slice.call(shift.querySelectorAll('[data-task]')),
+    num: shift.querySelector('[data-shift-num]'),
+    val: shift.querySelector('[data-shift-val]'),
+    win: shift.querySelector('.spec-win'),
+    view: shift.querySelector('[data-dx]'),
+    badge: shift.querySelector('.shift-done'),
+    state: null,
+    wide: null,
+    token: 0
+  };
+  if (shiftUI) {
+    shiftUI.page = shiftUI.view.querySelector('.dx-page');
+    shiftUI.result = shiftUI.view.querySelector('.dx-result');
+    shiftUI.prev = shiftUI.view.querySelector('[data-dx-prev]');
+    shiftUI.docBody = shiftUI.view.querySelector('.dx-doc-body');
+    shiftUI.scroller = shiftUI.view.querySelector('.dx-scroll');
+    shiftUI.toc = [].slice.call(shiftUI.view.querySelectorAll('.dx-toc li'));
+    shiftUI.cursor = shiftUI.view.querySelector('.dx-cursor');
+    shiftUI.flow = shiftUI.view.querySelector('.dx-flow');
+  }
+
+  /* The demo's result phase, as motion/spec_b.html plays it: the result
+     arrives, the page scrolls to the preview, then the cursor clicks two
+     contents entries and the document moves to each. Positions are read
+     from the layout each time, so they hold at any width. */
+  function topIn(el, box) { return el.getBoundingClientRect().top - box.getBoundingClientRect().top; }
+  function dxScrollPage(el, gap) {
+    var ui = shiftUI;
+    var max = Math.max(0, ui.page.offsetHeight - ui.view.clientHeight);
+    var y = Math.min(max, Math.max(0, topIn(el, ui.page) - gap));
+    ui.page.style.transform = 'translateY(' + -y + 'px)';
+  }
+  function dxScrollDoc(n) {
+    var ui = shiftUI;
+    var sec = ui.scroller.querySelector('[data-sec="' + n + '"]');
+    var max = Math.max(0, ui.scroller.offsetHeight - ui.docBody.clientHeight);
+    var y = Math.min(max, Math.max(0, topIn(sec, ui.scroller) - ui.docBody.clientHeight * 0.06));
+    ui.scroller.style.transform = 'translateY(' + -y + 'px)';
+    ui.toc.forEach(function (li, i) { li.classList.toggle('is-active', i === n - 1); });
+  }
+  function dxPoint(el, fx, fy) {
+    var r = el.getBoundingClientRect(), v = shiftUI.view.getBoundingClientRect();
+    return [r.left - v.left + r.width * fx, r.top - v.top + r.height * fy];
+  }
+  function dxMove(p) { shiftUI.cursor.style.transform = 'translate(' + (p[0] - 3) + 'px,' + (p[1] - 2) + 'px)'; }
+  function dxClick() {
+    var c = shiftUI.cursor;
+    c.classList.remove('is-click'); void c.offsetWidth; c.classList.add('is-click');
+  }
+  function dxReset() {
+    var ui = shiftUI;
+    ui.win.classList.remove('is-done');
+    ui.page.style.transform = ''; ui.scroller.style.transform = '';
+    ui.toc.forEach(function (li) { li.classList.remove('is-active'); });
+    ui.cursor.classList.remove('is-on', 'is-click');
+    ui.badge.classList.remove('is-on');
+    ui.flow.classList.remove('is-live');
+  }
+
+  function playSpec(wide, animate) {
+    var ui = shiftUI;
+    if (ui.wide === wide) return;
+    ui.wide = wide;
+    var t = ++ui.token;                                 // a newer call cancels this run
+    dxReset();
+    if (!wide) return;
+    ui.toc[0].classList.add('is-active');
+    if (!animate) { ui.win.classList.add('is-done'); ui.badge.classList.add('is-on'); ui.flow.classList.add('is-live'); return; }
+    var wait = function (ms) {
+      return new Promise(function (res, rej) { setTimeout(function () { t === ui.token ? res() : rej(); }, ms); });
+    };
+    wait(1100)                                          // the window finishes widening
+      .then(function () { ui.win.classList.add('is-done'); dxScrollPage(ui.result, 12); return wait(2700); })
+      .then(function () { dxScrollPage(ui.prev, 10); return wait(1900); })
+      .then(function () {
+        dxMove(dxPoint(ui.view, 0.5, 0.92)); void ui.cursor.offsetWidth;
+        ui.cursor.classList.add('is-on');
+        return [2, 4].reduce(function (chain, n, i) {
+          return chain.then(function () {
+            dxMove(dxPoint(ui.toc[n - 1], 0.5, 0.55));
+            return wait(500);
+          }).then(function () {
+            dxClick(); dxScrollDoc(n);
+            // Section 4 holds the flowchart: it runs once the page settles.
+            if (n === 4) setTimeout(function () { if (t === ui.token) ui.flow.classList.add('is-live'); }, 500);
+            return wait(i ? 2000 : 1300);
+          });
+        }, Promise.resolve());
+      })
+      .then(function () { ui.cursor.classList.remove('is-on'); ui.badge.classList.add('is-on'); })
+      .catch(function () { /* cancelled by a newer state */ });
+  }
+  // Program -> Spec in Standard mode: 5-10 minutes in the app's own
+  // estimate, shown at its upper end.
+  var FAST = '약 10분';
+  var FAST_S = 600;
+  var TOTAL = 5;                                     // days, the manual total
+
+  function days(n) { return n > 0 ? (n % 1 ? n.toFixed(1) : n) + '일' : FAST; }
+
+  function setShift(state, pinnedNow) {
+    var ui = shiftUI;
+    var key = state + (pinnedNow ? 'p' : 's');
+    if (ui.state === key) return;
+    ui.state = key;
+
+    var struck = pinnedNow ? Math.min(state, ui.tasks.length) : 0;
+    var left = TOTAL;
+    ui.tasks.forEach(function (task, i) {
+      var done = i < struck;
+      task.classList.toggle('is-done', done);
+      if (done) left -= parseFloat(task.getAttribute('data-task'));
+    });
+    var fast = !pinnedNow || struck === ui.tasks.length;
+    var label = fast ? FAST : (left === TOTAL ? '약 ' : '') + days(left);
+    if (ui.num.textContent !== label) {
+      ui.num.textContent = label;
+      ui.num.classList.remove('is-swap');
+      void ui.num.offsetWidth;                       // restart the swap
+      ui.num.classList.add('is-swap');
+    }
+    ui.num.classList.toggle('is-slow', !fast);
+    ui.val.textContent = fast ? FAST : days(left);
+    // Ten minutes against five eight-hour days, kept as a visible sliver.
+    shift.style.setProperty('--left', fast ? (FAST_S /(TOTAL * 8 * 3600)).toFixed(4) : (left / TOTAL).toFixed(3));
+
+    shift.classList.toggle('is-fast', fast);
+    shift.classList.toggle('is-up', !pinnedNow || state >= 6);
+    var wide = pinnedNow && state >= 7;
+    shift.classList.toggle('is-wide', wide);
+    playSpec(wide || !pinnedNow, pinnedNow && !still());
+  }
+
+  function stepShift(vh) {
+    if (!shift) return;
+    if (!pinned.matches) { setShift(7, false); return; }
+    var r = shift.getBoundingClientRect();
+    var run = shift.offsetHeight - vh;
+    var p = run > 0 ? -r.top / run : 1;
+    p = Math.max(0, Math.min(0.9999, p));
+    setShift(Math.floor(p * 9), true);
+  }
+
+  /* One wheel gesture, one step: between the untouched list and the spec
+     rising (states 0-6) the wheel moves the stage exactly one state and
+     ignores the rest of that gesture, its inertia included, until the
+     wheel has been still for a moment. Coming in from above, a fast flick
+     lands on state 0 instead of skipping into the struck steps. */
+  if (shift) {
+    var STEP_LAST = 6, QUIET = 220, HOLD = 750;
+    var lockUntil = 0, lastWheel = 0, needFresh = false;
+    var stateTop = function (k) {
+      var top = shift.getBoundingClientRect().top + window.scrollY;
+      var run = shift.offsetHeight - window.innerHeight;
+      return Math.round(top + run * ((k + 0.5) / 9));
+    };
+    window.addEventListener('wheel', function (e) {
+      if (!pinned.matches || e.ctrlKey || !e.deltaY) return;
+      var now = performance.now();
+      if (now - lastWheel > QUIET) needFresh = false; // a new gesture, not the tail of one
+      lastWheel = now;
+      var vh = window.innerHeight;
+      var r = shift.getBoundingClientRect();
+      var down = e.deltaY > 0;
+      var run = shift.offsetHeight - vh;
+      var p = run > 0 ? -r.top / run : 0;
+      var state = Math.floor(Math.max(0, Math.min(0.9999, p)) * 9);
+      var target = null;
+      if (r.top > 0) {
+        // Above the pin: only catch the gesture that would cross into it.
+        if (down && r.top < Math.abs(e.deltaY) * 2) target = 0;
+        else return;
+      } else if (down && state < STEP_LAST && p >= 0) target = state + 1;
+      else if (!down && state > 0 && state <= STEP_LAST) target = state - 1;
+      else return;
+      e.preventDefault();
+      if (now < lockUntil || needFresh) return;
+      lockUntil = now + HOLD;
+      needFresh = true;
+      glide(stateTop(target));
+    }, { passive: false });
+
+    // The page's own glide, eased in and out: native smooth scrolling is
+    // not reliable enough to step on (some browsers drop or cut it short).
+    var glideId = 0;
+    var glide = function (to) {
+      var from = window.scrollY, id = ++glideId, t0 = performance.now(), MS = 650;
+      if (still()) { window.scrollTo({ top: to, behavior: 'instant' }); return; }
+      (function frame(now) {
+        if (id !== glideId) return;
+        var k = Math.min(1, (now - t0) / MS);
+        var e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        window.scrollTo({ top: from + (to - from) * e, behavior: 'instant' });
+        if (k < 1) requestAnimationFrame(frame);
+      })(t0);
+    };
+  }
+
   /* ---------- One scroll handler, once a frame ---------- */
 
   var ticking = false;
@@ -348,6 +558,7 @@
       if (nav) nav.classList.toggle('is-scrolled', window.scrollY > vh * 0.25);
       litStatement(vh);
       stepChapters(vh);
+      stepShift(vh);
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });

@@ -158,30 +158,160 @@
 <!-- ===================== PROBLEM ===================== -->
 <section id="problem" class="problem" data-section>
   <div class="wrap">
-    <p class="statement" data-statement data-i="statement">SAP 프로젝트의 시간은 새 코드를 짜는 데보다, 이미 있는 코드를 이해하는 데 더 많이 쓰여요. <em>SC4SAP는 그 시간을 돌려드려요.</em></p>
+    <p class="statement" data-statement data-i="statement">복잡한 SAP 레거시, 이제 SC4SAP에 맡기세요<br>기존 코드 파악에만 며칠씩 걸리던 일<br><em>SC4SAP가 분석부터 문서화까지 한 번에 해결합니다</em></p>
+  </div>
 
-    <ul class="turns">
-      <li class="turn glass reveal">
-        <span class="turn-from" data-i="turn1a">며칠 걸리던 레거시 분석</span>
-        <i class="ph ph-arrow-down" aria-hidden="true"></i>
-        <span class="turn-to" data-i="turn1b">바로 받아보는 명세서</span>
-      </li>
-      <li class="turn glass reveal">
-        <span class="turn-from" data-i="turn2a">사람마다 다른 문서</span>
-        <i class="ph ph-arrow-down" aria-hidden="true"></i>
-        <span class="turn-to" data-i="turn2b">늘 같은 양식의 산출물</span>
-      </li>
-      <li class="turn glass reveal">
-        <span class="turn-from" data-i="turn3a">컨설턴트 답변 기다리기</span>
-        <i class="ph ph-arrow-down" aria-hidden="true"></i>
-        <span class="turn-to" data-i="turn3b">모듈 전문가의 즉답</span>
-      </li>
-      <li class="turn glass reveal">
-        <span class="turn-from" data-i="turn4a">무엇을 했는지 모르는 AI</span>
-        <i class="ph ph-arrow-down" aria-hidden="true"></i>
-        <span class="turn-to" data-i="turn4b">모든 호출이 보이는 AI</span>
-      </li>
-    </ul>
+  <!-- Before -> After, pinned. Scrolling strikes the manual steps one by
+       one while the time counts down, then the generated spec rises in
+       their place. Stacked and fully shown on narrow or short screens. -->
+  <div class="shift" data-shift>
+    <div class="shift-pin">
+      <div class="aura" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span></div>
+      <div class="wrap shift-grid">
+
+        <div class="shift-meter">
+          <p class="shift-kicker"><span>BEFORE</span><i class="ph ph-arrow-right" aria-hidden="true"></i><span>AFTER</span></p>
+          <p class="shift-k" data-i="shiftK">명세서 한 건 만드는 데 걸리는 시간</p>
+          <p class="shift-num" data-shift-num>약 10분</p>
+          <div class="shift-bars">
+            <div class="bar is-before">
+              <span class="bar-name" data-i="shiftBarA">사람이 직접</span>
+              <span class="bar-track"><i></i></span>
+              <span class="bar-val" data-i="shiftBarAv">약 5일</span>
+            </div>
+            <div class="bar is-after">
+              <span class="bar-name">SC4SAP</span>
+              <span class="bar-track"><i></i></span>
+              <span class="bar-val" data-shift-val>약 10분</span>
+            </div>
+          </div>
+          <div class="shift-ratio">
+            <p data-i="shiftRatio">표준 모드 · 업무시간 기준 <b>약 240배</b> 빠르게</p>
+            <p class="shift-eco" data-i="shiftEco">절약 모드 기준 약 150초 내외</p>
+          </div>
+        </div>
+
+        <div class="shift-stage">
+          <div class="shift-before">
+            <p class="shift-label"><span>BEFORE</span><span data-i="shiftBeforeL">사람이 직접 하던 일</span></p>
+            <ol class="task-list">
+              <li class="task" data-task="1.5"><span class="task-n">01</span><span class="task-t"><b data-i="task1">소스 코드 한 줄씩 읽기</b><small>SE38 · SE80</small></span><span class="task-time" data-i="task1v">1~2일</span></li>
+              <li class="task" data-task="0.5"><span class="task-n">02</span><span class="task-t"><b data-i="task2">테이블 · 필드 관계 추적</b><small>SE11 · SE16</small></span><span class="task-time" data-i="task2v">반나절</span></li>
+              <li class="task" data-task="1"><span class="task-n">03</span><span class="task-t"><b data-i="task3">Include · 호출 흐름 따라가기</b><small>SE80 · SE37</small></span><span class="task-time" data-i="task3v">1일</span></li>
+              <li class="task" data-task="1"><span class="task-n">04</span><span class="task-t"><b data-i="task4">명세서 양식에 옮겨 적기</b><small>Excel · Word</small></span><span class="task-time" data-i="task4v">1일</span></li>
+              <li class="task" data-task="1"><span class="task-n">05</span><span class="task-t"><b data-i="task5">담당자에게 묻고 답 기다리기</b><small data-i="task5s">메일 · 메신저</small></span><span class="task-time" data-i="task5v">기약 없음</span></li>
+            </ol>
+            <p class="task-sum"><span data-i="taskSum">합계</span><b data-i="taskSumV">약 5일</b></p>
+          </div>
+
+          <div class="shift-after">
+            <div class="spec-win glass win">
+              <div class="win-bar"><em class="win-label">Program → Spec</em></div>
+              <!-- The Program -> Spec screen of the app, after motion/spec_b.html.
+                   Narrow it is still working; wide, the result arrives and the
+                   cursor walks the document the way the demo does (n.js). -->
+              <p class="sr-only" data-i="dxAlt">SC4SAP가 프로그램 ZMMR00020을 읽고 기능/기술 명세서를 만든 결과 화면</p>
+              <div class="dx-view" data-dx aria-hidden="true">
+                <div class="dx-page">
+                  <span class="dx-chip">/sc4sap:program-to-spec</span>
+                  <p class="dx-h"><i class="ph ph-file-text"></i>프로그램 → 명세</p>
+                  <p class="dx-desc">프로그램을 역공학해 기능 또는 기술 명세서로 만들고, 선택 화면과 ALV 목업을 붙입니다</p>
+                  <div class="dx-result">
+                    <p class="dx-label">결과</p>
+                    <div class="dx-work"><i class="dx-spin"></i><canvas class="dx-orb"></canvas>작업 중</div>
+                    <div class="dx-out">
+                      <div class="dx-panel">
+                        <div class="dx-head"><i class="ph ph-note"></i>요약<span class="dx-tools">최종 결과만 표시<i class="dx-toggle"></i></span></div>
+                        <div class="dx-sum">
+                          <p>ZMMR00020은 구매오더(PO) 항목에 대한 변경 이력을 조회하는 감사용 ALV 리포트입니다. 자체 변경이력 테이블 ZMMT00120을 기준으로 EKKO와 조인해 공급업체 코드를 얻고, LFA1에서 공급업체명을 보강해 변경 전/후 값 · 변경 사유 · 변경자 · 변경일시를 도킹 컨테이너 ALV로 보여줍니다.</p>
+                          <p>특이사항: 표준 CDHDR/CDPOS가 아닌 커스텀 테이블을 변경이력 원천으로 쓰고 있고, 구매문서/공급업체 조회에 대한 AUTHORITY-CHECK가 전혀 없어 운영 반입 전 보안 검토가 필요합니다.</p>
+                          <p>산출물: <code>.sc4sap/out/…/ZMMR00020-ko.md</code> 및 <code>.html</code>, 화면 이미지는 <code>_assets/</code> 폴더에 저장되었습니다.</p>
+                        </div>
+                      </div>
+                      <div class="dx-panel" data-dx-prev>
+                        <div class="dx-head"><i class="ph ph-file-text"></i>HTML 미리보기<span class="dx-tools"><i class="dx-zoom"></i>100%<span class="dx-dl"><i class="ph ph-download-simple"></i>.html 다운로드</span></span></div>
+                        <div class="dx-doc">
+                          <div class="dx-doc-bar">기능/기술 명세서: ZMMR00020<span class="dx-doc-tools"><span class="dx-edit">편집</span>모두 접기</span></div>
+                          <div class="dx-doc-body">
+                            <div class="dx-toc">
+                              <b>목차</b>
+                              <ol>
+                                <li>1. Business context</li><li>2. Data model</li><li>3. Inputs &amp; screens</li>
+                                <li>4. Main logic</li><li>5. Outputs</li><li>6. Authorizations</li>
+                                <li>7. Exceptions &amp; messages</li><li>8. Dependencies</li><li>9. Routines</li>
+                                <li>10. Open questions</li>
+                              </ol>
+                            </div>
+                            <div class="dx-scroll">
+                              <h3>기능/기술 명세서: ZMMR00020</h3>
+                              <span class="dx-k">한 줄 목적</span>
+                              <p class="dx-lead">구매오더(PO) 항목에 대한 변경 이력(필드별 변경 전/후 값, 변경 사유, 변경자/변경일시)을 조회하여 감사(Audit) 목적으로 조회하는 리포트</p>
+                              <div class="dx-meta">
+                                <div><span class="dx-k">오브젝트 유형</span><span>ABAP Report (Executable Program), Include 구조 (T/S/A/O/I/F)</span></div>
+                                <div><span class="dx-k">패키지</span><span>ZMMPAEK</span></div>
+                                <div><span class="dx-k">아키타입</span><span>선택화면 → 조회 → ALV Grid(도킹 컨테이너) 표시형 리포트</span></div>
+                              </div>
+
+                              <h4 data-sec="1">1. Business context</h4>
+                              <p class="dx-p">본 프로그램은 구매오더(Purchase Order) 데이터에 대한 변경 이력을 추적하는 감사용 리포트이다. 구매 담당자, 내부통제/감사 담당자가 특정 PO 또는 특정 기간에 어떤 필드가 누구에 의해 언제, 어떤 사유로 변경되었는지를 확인할 수 있도록 지원한다.</p>
+
+                              <h4 data-sec="2">2. Data model</h4>
+                              <table class="dx-table">
+                                <tr><th>Table</th><th>Access</th><th>Key fields</th><th class="dx-x">Notes</th></tr>
+                                <tr><td>ZMMT00120</td><td>R</td><td>EBELN, EBELP, SEQ_NO</td><td class="dx-x">커스텀 PO 변경이력 테이블. 변경 전후 값, 사유, 변경자, 변경시각 보유</td></tr>
+                                <tr><td>EKKO</td><td>R</td><td>EBELN</td><td class="dx-x">PO 헤더에서 공급업체(LIFNR) 획득 목적으로만 조인</td></tr>
+                                <tr><td>LFA1</td><td>R</td><td>LIFNR</td><td class="dx-x">공급업체명(NAME1) 조회, 루프 내 건별 SELECT SINGLE</td></tr>
+                              </table>
+
+                              <h4 data-sec="3">3. Inputs &amp; screens</h4>
+                              <table class="dx-table">
+                                <tr><th>Field</th><th class="dx-x">Type</th><th class="dx-x">Required</th><th>Description</th></tr>
+                                <tr><td>S_EBELN</td><td class="dx-x">SELECT-OPTIONS (EBELN)</td><td class="dx-x">선택</td><td>PO 번호 범위</td></tr>
+                                <tr><td>S_EBELP</td><td class="dx-x">SELECT-OPTIONS (EBELP)</td><td class="dx-x">선택</td><td>PO 항목 번호 범위</td></tr>
+                                <tr><td>S_CHDATE</td><td class="dx-x">SELECT-OPTIONS (DATS)</td><td class="dx-x">선택</td><td>변경일자 범위</td></tr>
+                                <tr><td>P_FIELD</td><td class="dx-x">PARAMETERS (CHAR 30)</td><td class="dx-x">선택</td><td>변경 필드명 패턴 (와일드카드 비교)</td></tr>
+                              </table>
+
+                              <h4 data-sec="4">4. Main logic</h4>
+                              <ol class="dx-steps">
+                                <li>사용자가 선택화면에서 PO번호, PO항목, 변경일자, 필드명 조건을 입력한다.</li>
+                                <li>START-OF-SELECTION에서 데이터 조회 FORM을 호출한다.</li>
+                                <li>ZMMT00120과 EKKO를 PO번호로 INNER JOIN하여 변경이력을 조회한다.</li>
+                              </ol>
+                              <div class="dx-flow">
+                                <div class="dx-node is-io"><span class="dx-node-n">01</span><i class="ph ph-browser"></i><b>선택화면</b><small>ZMMR00020S</small></div>
+                                <span class="dx-edge"></span>
+                                <div class="dx-node"><span class="dx-node-n">02</span><i class="ph ph-database"></i><b>데이터 조회</b><small>ZMMT00120</small></div>
+                                <span class="dx-edge"></span>
+                                <div class="dx-node"><span class="dx-node-n">03</span><i class="ph ph-funnel"></i><b>공급업체 결합</b><small>LFA1</small></div>
+                                <span class="dx-edge"></span>
+                                <div class="dx-node is-io"><span class="dx-node-n">04</span><i class="ph ph-table"></i><b>ALV 표시</b><small>화면 0100</small></div>
+                              </div>
+
+                              <h4 data-sec="5">5. Outputs</h4>
+                              <table class="dx-table">
+                                <tr><th>Column</th><th>Field</th><th>Description</th></tr>
+                                <tr><td>PO Number</td><td>EBELN</td><td>구매오더 번호</td></tr>
+                                <tr><td>Changed Field</td><td>CH_FIELD</td><td>변경된 필드명</td></tr>
+                                <tr><td>Old Value</td><td>CH_OLD</td><td>변경 전 값</td></tr>
+                                <tr><td>New Value</td><td>CH_NEW</td><td>변경 후 값</td></tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dx-cursor"><svg viewBox="0 0 20 20"><path d="M3 2l13.2 6.4-5.7 1.7-1.9 5.7L3 2z" stroke-width="1" stroke-linejoin="round"/></svg></div>
+              </div>
+            </div>
+            <p class="shift-done glass"><i class="ph ph-check-circle" aria-hidden="true"></i><span data-i="shiftDone">명세서 완료</span><span class="shift-done-t" data-i="shiftDoneT">표준 모드</span></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </section>
 
@@ -600,36 +730,93 @@
 <!-- ===================== FOOTER ===================== -->
 <footer class="foot">
   <div class="wrap">
+    <!-- The nav's three groups, plus the open-source projects. Every entry
+         opens in a new tab, as in the nav. PLACEHOLDER: the pages behind
+         the resource, service and legal URLs are not built yet. -->
     <div class="foot-grid">
       <div class="foot-brand">
-        <span class="brand-text"><b>SC4SAP</b></span>
-        <p data-i="footTag">SAP를 이해하는 AI 개발 파트너</p>
+        <span class="brand-text"><b>Super-Claude</b> for SAP</span>
+        <p data-i="footTag">내 SAP 시스템을 이해하는 AX 파트너</p>
       </div>
-      <div class="foot-col">
-        <h3 data-i="footContact">연락처</h3>
-        <a href="https://www.linkedin.com/in/seunghyun-paek-5b83b7183/" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo" aria-hidden="true"></i><span data-i="p1">백승현</span></a>
-        <a href="https://www.linkedin.com/in/sihun-kim-27737132b/" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo" aria-hidden="true"></i><span data-i="p2">김시훈</span></a>
-      </div>
-      <div class="foot-col">
-        <h3 data-i="footProduct">제품</h3>
-        <a href="#platform" data-i="navPlatform">플랫폼</a>
-        <a href="#trust" data-i="navTrust">보안</a>
-        <a href="#tech" data-i="navTech">기술</a>
-      </div>
-      <div class="foot-col">
-        <h3 data-i="footOpen">오픈소스</h3>
-        <a href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener"><i class="ph ph-github-logo" aria-hidden="true"></i>sc4sap plugin</a>
-        <a href="https://www.npmjs.com/package/@babamba2/abap-mcp-adt-powerup" target="_blank" rel="noopener"><i class="ph ph-package" aria-hidden="true"></i>abap-mcp-adt</a>
-      </div>
+      <nav class="foot-col" aria-labelledby="foot-res">
+        <h3 id="foot-res" data-i="navRes">리소스</h3>
+        <a href="resources/sc4sap-brochure.pdf" target="_blank" rel="noopener"><span data-i="dResBrochure">SC4 소개서</span><em>PDF</em></a>
+        <a href="resources/updates.html" target="_blank" rel="noopener" data-i="dResUpdates">업데이트</a>
+        <a href="resources/guide.html" target="_blank" rel="noopener" data-i="dResGuide">사용 가이드</a>
+      </nav>
+      <nav class="foot-col" aria-labelledby="foot-svc">
+        <h3 id="foot-svc" data-i="navSvc">서비스</h3>
+        <a href="service/about.html" target="_blank" rel="noopener" data-i="dSvcAbout">About</a>
+        <a href="service/security.html" target="_blank" rel="noopener" data-i="dSvcSecurity">Security</a>
+        <a href="service/sponsorship.html" target="_blank" rel="noopener" data-i="dSvcSponsor">Sponsorship</a>
+      </nav>
+      <nav class="foot-col" aria-labelledby="foot-legal">
+        <h3 id="foot-legal" data-i="navLegal">약관</h3>
+        <a href="legal/terms.html" target="_blank" rel="noopener" data-i="dLegalTerms">이용약관</a>
+        <a href="legal/privacy.html" target="_blank" rel="noopener" data-i="dLegalPrivacy">개인정보처리방침</a>
+        <a href="legal/billing-terms.html" target="_blank" rel="noopener" data-i="dLegalBilling">유료 서비스 이용약관</a>
+        <a href="legal/refund-policy.html" target="_blank" rel="noopener" data-i="dLegalRefund">환불정책</a>
+      </nav>
+      <nav class="foot-col" aria-labelledby="foot-open">
+        <h3 id="foot-open" data-i="footOpen">오픈소스</h3>
+        <a href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener">sc4sap plugin</a>
+      </nav>
     </div>
+
+    <div class="foot-biz">
+      <!-- Business details as registered. PLACEHOLDER: the mail-order
+           registration number and the hosting provider are still to come. -->
+      <address class="foot-info">
+        <span class="foot-row">
+          <span>에스에이치랩솔루션즈</span>
+          <span>대표 백승현</span>
+          <span>사업자등록번호 556-39-01540</span>
+          <span>통신판매업 신고 【통신판매업 신고번호】</span>
+        </span>
+        <span class="foot-row">
+          <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+          <span><a href="tel:+821082575798">010-8257-5798</a></span>
+          <span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span>
+          <span>호스팅 【호스팅 업체】</span>
+        </span>
+      </address>
+    </div>
+
     <div class="foot-meta">
-      <span>© SC4SAP</span>
-      <span>Built on Claude · MCP · ABAP ADT</span>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+      <p class="foot-legal">
+        <a href="legal/privacy.html" target="_blank" rel="noopener"><b data-i="dLegalPrivacy">개인정보처리방침</b></a>
+        <a href="legal/terms.html" target="_blank" rel="noopener" data-i="dLegalTerms">이용약관</a>
+      </p>
     </div>
   </div>
 </footer>
 
 <script src="js/n.i18n.js" defer></script>
 <script src="js/n.js" defer></script>
+<!-- The thinking orb in the spec window's working state, as the demo draws
+     it (motion/spec_b.html). If the engine cannot load, the dotted spinner stays. -->
+<script type="module">
+import { resolvePreset, MODE_DRAWS } from 'https://cdn.jsdelivr.net/npm/thinking-orbs@0.3.2/dist/engine.es.js';
+const win = document.querySelector('.spec-win');
+const cv = win && win.querySelector('.dx-orb');
+const ctx = cv && cv.getContext('2d');
+if (ctx) {
+  const SIZE = 20, RES = 3;                 // the engine has presets for 20 and 32 only
+  const preset = resolvePreset('working', SIZE), draw = MODE_DRAWS[preset.mode];
+  cv.width = cv.height = SIZE * RES;
+  win.classList.add('has-orb');
+  const t0 = performance.now();
+  (function frame(now) {
+    // Drawn only while the working line is on screen.
+    if (!win.classList.contains('is-done') && cv.offsetParent) {
+      ctx.setTransform(RES, 0, 0, RES, 0, 0);
+      ctx.clearRect(0, 0, SIZE, SIZE);
+      draw(ctx, SIZE, (now - t0) / 1000 * preset.speed, true, preset.opts);
+    }
+    requestAnimationFrame(frame);
+  })(t0);
+}
+</script>
 </body>
 </html>
