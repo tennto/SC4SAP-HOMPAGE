@@ -63,6 +63,7 @@
   --wrap:   70rem;
   --gutter: clamp(1.25rem, 5vw, 3rem);
   --band:   clamp(5rem, 11vw, 9rem);
+  --band-tight: clamp(2.5rem, 4.5vw, 4rem);   /* platform and every section after it */
   --r-sm:   0.75rem;
   --r-md:   1.25rem;
   --r-lg:   1.75rem;
@@ -248,7 +249,7 @@ html[lang="ja"] .hero .display { max-width: 18ch; }
 .btn:hover .ph-arrow-right { transform: translateX(0.2em); }
 
 .btn-light { background: var(--ink); color: #000; }
-.btn-light:hover { background: var(--accent); color: var(--accent-ink); }
+.btn-light:hover { background: #C9C9CE; color: #000; }
 
 .btn-glass { color: var(--ink); }
 .btn-glass:hover { border-color: rgb(255 255 255 / 0.28); }
@@ -486,7 +487,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   font-size: 0.82rem;
   line-height: 1;
 }
-.nav-cta.btn:hover { background: var(--accent); color: #000; }
+.nav-cta.btn:hover { background: rgb(255 255 255 / 0.26); color: var(--ink); }
 
 .nav-tools { display: flex; align-items: center; gap: 0.5rem; }
 
@@ -618,7 +619,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 }
 .rail:hover span, .rail a[aria-current="true"] span { opacity: 1; transform: none; }
 .rail a[aria-current="true"] { color: var(--ink); }
-.rail a[aria-current="true"]::after { transform: none; opacity: 1; background: var(--accent); }
+.rail a[aria-current="true"]::after { transform: none; opacity: 1; background: var(--ink); }
 
 @media (max-width: 1320px) { .rail { display: none; } }
 
@@ -685,37 +686,121 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 
 .hero-copy { display: grid; justify-items: center; gap: 2rem; }
 
-.chip {
-  --fade-out: 650ms;      /* the old words leave */
-  --fade-in: 750ms;       /* the new ones arrive once the old are gone */
-  display: inline-flex;
+/* The prompt bar: questions typed out one after another, after flex.team's
+   hero input. Darker than the shared glass so the white type sits on it, a
+   heavier blur, and a soft inner light instead of a hard top edge.
+   Each round: the empty bar opens out to its full width, the question types
+   in, the words fade, the bar eases back to its minimum. Phones keep the
+   bar full width, left aligned, and let the words wrap downward. */
+.ask-wrap { display: grid; justify-items: center; width: 100%; margin-top: 1.4rem; }
+.ask {
+  --ask-min: min(14rem, 100%);   /* empty, between questions */
+  --ask-full: min(42em, 100%);   /* open: the longest question (about 34em) fits; em, so it scales with the type */
+  --open: 650ms;          /* min to full: quick growth, then a small spring at full width */
+  /* A damped spring (damping 0.67): about 6% past full width, a hair back, then it settles. */
+  --spring: linear(0, 0.039, 0.136, 0.264, 0.403, 0.541, 0.666, 0.775, 0.864, 0.934, 0.985, 1.021, 1.043, 1.055, 1.059, 1.057, 1.052, 1.044, 1.036, 1.028, 1.021, 1.014, 1.009, 1.004, 1.001, 0.999, 0.998, 0.997, 0.997, 0.997, 0.997, 0.997, 0.998, 0.998, 0.999, 0.999, 1);
+  --fade: 800ms;          /* the next round's bar fades in, eased at both ends so it reads as a fade, not a pop */
+  --fade-out: 500ms;      /* a finished round eases away */
+  --soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --send: 1.2em;          /* the paper-plane icon's column */
+  --ask-r: var(--r-pill);
+  --metal-w: 2px;         /* liquid-metal rim thickness */
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--send) minmax(0, 1fr) var(--send);   /* empty first column keeps the line truly centred */
   align-items: center;
-  gap: 0.7em;
-  padding: 0.6em 1.4em 0.6em 1.25em;
-  border-radius: var(--r-pill);
-  font-size: 0.82rem;
-  font-weight: 550;
-  color: var(--ink-2);
+  column-gap: 0.9em;
+  box-sizing: border-box;
+  width: var(--ask-min);
+  max-width: 100%;
+  padding: 1.15em 1.4em;
+  border-radius: var(--ask-r);
+  overflow: hidden;
+  font-size: clamp(0.95rem, 0.86rem + 0.42vw, 1.18rem);
+  font-weight: 650;
+  line-height: 1.5;
+  color: var(--ink);
+  background: rgb(0 0 0 / 0.26);
+  -webkit-backdrop-filter: blur(32px) saturate(1.4);
+          backdrop-filter: blur(32px) saturate(1.4);
+  box-shadow:
+    inset 0 -0.25rem 1.1rem rgb(255 255 255 / 0.07),
+    inset 0 0.25rem 1.1rem rgb(0 0 0 / 0.08),
+    0 2rem 2.5rem rgb(0 0 0 / 0.1);
+  transition: width var(--open) var(--spring), opacity var(--fade) var(--ease-io);
 }
-.chip-dot {
-  flex: none;
-  width: 0.5em; height: 0.5em; border-radius: 50%;
-  margin-inline: 0.3em 0.05em;      /* room for the ring on both sides */
-  background: var(--accent);
-  box-shadow: 0 0 0 0.3em rgb(var(--light-amber) / 0.2);
-  transition: background var(--fade-in) ease-in-out, box-shadow var(--fade-in) ease-in-out;
-}
-.chip[data-tone="teal"] .chip-dot { background: var(--teal); box-shadow: 0 0 0 0.3em rgb(44 201 180 / 0.2); }
+.ask.is-open { width: var(--ask-full); }
+/* Between rounds: the whole bar fades; the reset to the minimum happens unseen. */
+.ask.is-out { opacity: 0; transition: opacity var(--fade-out) var(--ease-io); }
+.ask.is-reset { transition: opacity var(--fade) var(--soft); }
 
-.chip-rotor { display: grid; }
-.rotor-item {
-  grid-area: 1 / 1;
+.ask-line {
+  grid-column: 2;
+  position: relative; z-index: 1;
+  white-space: nowrap;
+  overflow-x: clip;       /* while the bar is still narrow; never clip vertically, the line box is trimmed to the caps */
   text-align: center;
-  line-height: 1.3;
-  opacity: 0;
-  transition: opacity var(--fade-out) ease-in-out;
+  text-box: trim-both cap alphabetic;   /* centres the ink, not the line box */
 }
-.rotor-item.is-on { opacity: 1; transition: opacity var(--fade-in) ease-in-out var(--fade-out); }
+.ask-caret {
+  display: inline-block;
+  width: 0.08em; height: 1.15em;
+  margin: -0.5em 0 -0.5em 0.1em;        /* tall stroke, but it never sets the line height */
+  vertical-align: 0.28em;
+  background: currentColor;
+  animation: ask-blink 1s steps(1) infinite;
+}
+@keyframes ask-blink { 50% { opacity: 0; } }
+.ask-send {
+  grid-column: 3;
+  position: relative; z-index: 1;
+  display: grid; place-items: center;
+  color: var(--ink-3);
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+/* Liquid-metal rim: the @paper-design/shaders liquid-metal shader (the one
+   behind the LiquidMetalButton component) drawn on a canvas under the
+   element, with a ring mask so only the rim shows. Used on the hero prompt
+   bar and the spec badge; the module script at the end of index_n.html
+   mounts a canvas in every .metal-rim. The host needs position and
+   border-radius; --metal-w sets the thickness. */
+.metal-rim {
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: var(--metal-w, 2px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms var(--soft);
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.metal-rim.is-on { opacity: 0.85; }
+.metal-rim canvas {
+  position: absolute !important; inset: 0;
+  width: 100% !important; height: 100% !important;
+  display: block;
+}
+
+/* Below this the open bar would be cut short of the longest question. */
+@media (max-width: 56rem) {
+  .ask, .ask.is-open {
+    --ask-r: 1.6em;
+    grid-template-columns: minmax(0, 1fr) var(--send);
+    width: 100%;
+  }
+  .ask-line {
+    grid-column: 1;
+    white-space: normal;
+    overflow: visible;
+    text-align: left;
+    word-break: keep-all;
+    min-height: calc(1lh + 1cap);       /* two lines reserved, so nothing below jumps */
+    align-content: center;
+  }
+  .ask-send { grid-column: 2; }
+}
 
 .hero .display {
   /* One line at every width. The headline measures 9.3em, so the viewport
@@ -725,7 +810,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   font-size: min(calc(var(--fs-display) * 0.86), 8.6vw);
 }
 .hero-sub { max-width: 40rem;   /* rem, not ch: ch is a Latin digit and wraps Hangul early */ font-size: var(--fs-sub); color: var(--ink-2); text-wrap: balance; }
-.hero .actions { margin-top: 3.2rem; }
+.hero .actions { margin-top: 1.2rem; }
 @media (max-width: 26rem) {
   .hero .actions { flex-wrap: nowrap; gap: 0.5rem; }
   .hero .actions .btn { padding: 0.75em 1.05em; font-size: 0.84rem; }
@@ -780,7 +865,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 }
 .statement .w { color: var(--ink-dim); transition: color 500ms var(--ease); }
 .statement .w.lit { color: var(--ink); }
-.statement .w.key.lit { color: var(--accent-text); }
+.statement .w.key.lit { color: var(--ink); }
 
 /* ---- Before -> After ----
    Stacked by default: the meter, the manual steps, then the generated
@@ -788,6 +873,11 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
    stage pins and the scroll walks it through --steps states (see n.js). */
 
 .shift {
+  /* This stage runs on the teal, not the page's amber: every accent token
+     inside it is re-pointed here. */
+  --accent: var(--teal);
+  --accent-text: var(--teal);
+  --light-amber: 44 201 180;
   --shift-step: 34svh;            /* scroll length each state holds */
   --steps: 9;                     /* 0 untouched, 1-5 steps struck, 6 spec up, 7-8 wide */
   --left: 0.006;                  /* the SC4SAP bar against the manual one; script sets it */
@@ -821,10 +911,11 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   line-height: 0.95;
   letter-spacing: var(--track-display);
   font-variant-numeric: tabular-nums;
-  color: var(--accent-text);
-  transition: color 900ms var(--ease);
+  color: var(--ink);
 }
-.shift-num.is-slow { color: var(--ink); }
+/* The display tracking pulls the unit into the last digit at this size,
+   so the unit (일, 분) gets a little air back. */
+.shift-num .u { margin-left: 0.07em; }
 .shift-num.is-swap { animation: num-swap 700ms var(--ease); }
 @keyframes num-swap { from { opacity: 0.2; transform: translateY(0.12em); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
 
@@ -839,8 +930,20 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   transition: transform 1100ms var(--ease);
 }
 .bar.is-before .bar-track i {
-  background: repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.28) 0 0.3rem, rgb(255 255 255 / 0.16) 0.3rem 0.6rem);
+  /* The stripes live in a square tile one band-pair wide. At 45 degrees a
+     square's gradient line is exactly two band-pairs long, so tiles meet
+     without a seam. The bar's own box as the tile (the default) left a
+     seam that showed at the left edge once the stripes moved. */
+  --tile: 0.75rem;
+  background: repeating-linear-gradient(-45deg,
+      rgb(255 255 255 / 0.28) 0 calc(var(--tile) * 0.35355),
+      rgb(255 255 255 / 0.16) calc(var(--tile) * 0.35355) calc(var(--tile) * 0.70711));
+  background-size: var(--tile) var(--tile);
+  /* The bands crawl sideways, slowly: work still grinding on. One loop is
+     exactly one tile, so it never jumps. */
+  animation: bar-crawl 1.4s linear infinite;
 }
+@keyframes bar-crawl { to { background-position: var(--tile) 0; } }
 .bar.is-after .bar-track i {
   background: var(--accent);
   box-shadow: 0 0 1rem rgb(var(--light-amber) / 0.8);
@@ -850,7 +953,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 .bar-val { font-size: 0.8rem; font-weight: 650; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-3); }
 .bar.is-after .bar-val { color: var(--accent-text); }
 .shift-ratio { margin-top: 0.4rem; font-size: 0.9rem; color: var(--ink-2); transition: opacity 900ms var(--ease), transform 900ms var(--ease); }
-.shift-ratio b { color: var(--ink); font-weight: 750; }
+.shift-ratio b { color: var(--accent-text); font-weight: 750; }
 .shift-eco { margin-top: 0.3rem; font-size: 0.76rem; color: var(--ink-3); }
 
 /* -- Stage: the manual list and the spec share one cell when pinned -- */
@@ -878,23 +981,22 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   padding: 0.85rem 0;
   border-top: 1px solid var(--line);
 }
-.task-n { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink-3); transition: color 700ms var(--ease); }
+.task-n { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
 .task-t { display: grid; gap: 0.2rem; min-width: 0; }
 .task-t b { font-size: 0.95rem; font-weight: 650; letter-spacing: -0.02em; color: var(--ink); }
-.task-t small { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); }
+.task-t small { font-size: 0.72rem; font-weight: 500; letter-spacing: 0; color: var(--ink-3); }   /* Pretendard: the mono face spaces Hangul apart */
 .task-time {
   padding: 0.3em 0.75em; border-radius: var(--r-pill);
   background: rgb(255 255 255 / 0.06);
   font-size: 0.78rem; font-weight: 600; color: var(--ink-2); white-space: nowrap;
 }
-/* A struck step: crossed out, its number turns amber. */
+/* A struck step: crossed out; its number stays white. */
 .task-t b, .task-time {
   text-decoration: line-through 1px transparent;
   transition: color 700ms var(--ease), text-decoration-color 700ms var(--ease), opacity 700ms var(--ease);
 }
 .task.is-done .task-t b { color: var(--ink-3); text-decoration-color: rgb(255 255 255 / 0.4); }
 .task.is-done .task-time { opacity: 0.35; text-decoration-color: currentColor; }
-.task.is-done .task-n { color: var(--accent-text); }
 
 .task-sum {
   display: flex; justify-content: space-between; align-items: baseline;
@@ -902,10 +1004,19 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   font-size: 0.86rem; color: var(--ink-3);
 }
 .task-sum b { font-size: 1.05rem; color: var(--ink); font-weight: 750; }
+.task-sum { transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
 
 /* -- The generated spec: the app's Program -> Spec screen, after the demo
    (motion/spec_b.html), in this page's dark glass. -- */
 .shift-after { position: relative; }
+/* The spec demo and its finish badge run in white, not the stage's teal:
+   every accent token inside them is re-pointed to the ink. */
+.spec-win, .shift-done {
+  --teal: var(--ink);
+  --accent: var(--ink);
+  --accent-text: var(--ink);
+  --light-amber: 244 244 245;
+}
 .spec-win { --doc-h: 22rem; border-radius: var(--r-lg); overflow: hidden; display: flex; flex-direction: column; }
 .spec-win.win > :not(.win-bar) { padding: 0; }   /* outranks the shared .win > * padding */
 /* The bar carries only the skill's name, as a teal label like the notice's. */
@@ -976,6 +1087,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 }
 .dx-doc-tools { margin-left: auto; display: flex; align-items: center; gap: 1rem; font-size: 0.74rem; font-weight: 500; color: var(--ink-3); }
 .dx-edit { height: 1.85rem; padding: 0 0.8rem; display: flex; align-items: center; border-radius: 0.5rem; background: var(--ink); color: #000; font-weight: 700; }
+.dx-edit > span { text-box: trim-both cap alphabetic; }   /* centres the ink; needs a real element, trim skips anonymous flex text */
 .dx-doc-body {
   position: relative; height: var(--doc-h); overflow: hidden;
   display: grid; grid-template-columns: 11rem minmax(0, 1fr); column-gap: 3rem; padding: 0 3rem 0 3.5rem;
@@ -1047,32 +1159,36 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 .dx-node:nth-child(5) { --i: 2; }
 .dx-node:nth-child(7) { --i: 3; }
 
-/* An edge: a dashed track and an amber fill that runs along it. */
+/* An edge: a plain line joining two steps, the same colour as the steps'
+   borders. A lit line in the lit border colour runs along it. */
+.dx-flow { --node-edge: var(--line-2); --node-edge-on: rgb(var(--light-amber) / 0.45); }
 .dx-edge {
   position: relative; flex: 0 1 2.4rem; min-width: 1.1rem; align-self: center;
-  height: 1px; margin-inline: 0.2rem;
-  background: repeating-linear-gradient(90deg, var(--ink-3) 0 0.25rem, transparent 0.25rem 0.45rem);
+  height: 1px;
+  background: var(--node-edge);
 }
 .dx-edge::before {
-  content: ''; position: absolute; inset: -0.5px 0;
-  background: var(--accent); box-shadow: 0 0 0.5rem rgb(var(--light-amber) / 0.7);
+  content: ''; position: absolute; inset: 0;
+  background: var(--node-edge-on);
   transform: scaleX(0); transform-origin: left center;
   transition: transform 420ms var(--ease);
-}
-.dx-edge::after {
-  content: ''; position: absolute; right: -1px; top: 50%; width: 0.4rem; aspect-ratio: 1;
-  border: solid var(--ink-3); border-width: 1px 1px 0 0; transform: translateY(-50%) rotate(45deg);
-  transition: border-color 300ms var(--ease);
 }
 .dx-edge:nth-child(2) { --i: 0; }
 .dx-edge:nth-child(4) { --i: 1; }
 .dx-edge:nth-child(6) { --i: 2; }
-.dx-edge::before, .dx-edge::after { transition-delay: calc(var(--i) * var(--step) + var(--step) * 0.55); }
+.dx-edge::before { transition-delay: calc(var(--i) * var(--step) + var(--step) * 0.55); }
 
-.dx-flow.is-live .dx-node { border-color: rgb(var(--light-amber) / 0.45); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 0 0 3px rgb(var(--light-amber) / 0.08), 0 0.6rem 1.4rem -0.8rem rgb(0 0 0 / 0.8); }
-.dx-flow.is-live .dx-node-n { color: var(--accent-text); box-shadow: 0 0 0 1px rgb(var(--light-amber) / 0.45); }
+/* Lit: the teal border plus a wide, soft glow around each step. */
+.dx-flow.is-live .dx-node {
+  border-color: var(--node-edge-on);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 0 0 3px rgb(var(--light-amber) / 0.05),
+    0 0 1.6rem 0.2rem rgb(var(--light-amber) / 0.07),
+    0 0.6rem 1.4rem -0.8rem rgb(0 0 0 / 0.8);
+}
+.dx-flow.is-live .dx-node-n { color: var(--accent-text); box-shadow: 0 0 0 1px var(--node-edge-on); }
 .dx-flow.is-live .dx-edge::before { transform: scaleX(1); }
-.dx-flow.is-live .dx-edge::after { border-color: var(--accent); }
 
 /* The demo's cursor: it walks the contents and clicks. */
 .dx-cursor {
@@ -1096,12 +1212,17 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   padding: 0.75rem 1.1rem;
   border-radius: var(--r-pill);
   font-size: 0.9rem; font-weight: 700; color: var(--ink);
-  --glass-top: rgb(46 34 14 / 0.78);
-  --glass-bottom: rgb(26 19 8 / 0.62);
+  overflow: hidden;
+  background: rgb(10 12 14 / 0.62);
+  -webkit-backdrop-filter: blur(32px) saturate(1.4);
+          backdrop-filter: blur(32px) saturate(1.4);
+  box-shadow:
+    inset 0 -0.25rem 1.1rem rgb(255 255 255 / 0.07),
+    0 1.2rem 2.5rem -0.6rem rgb(0 0 0 / 0.6);
   transition: opacity 900ms var(--ease), transform 900ms var(--ease);
 }
 .shift-done .ph { color: var(--accent-text); font-size: 1.15rem; }
-.shift-done-t { font-weight: 600; font-size: 0.78rem; color: var(--accent-text); }
+.shift-done-t { font-weight: 600; font-size: 0.78rem; color: var(--ink-2); }
 
 @media (max-width: 760px) {
   .dx-doc-body { grid-template-columns: minmax(0, 1fr); padding: 0 1rem; }
@@ -1109,11 +1230,9 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   .dx-flow { flex-direction: column; align-items: stretch; padding-top: 1.3rem; }
   .dx-node { flex: none; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.6rem; align-items: center; }
   .dx-node > .ph { grid-row: span 2; margin-bottom: 0; }
-  .dx-edge { flex: none; align-self: start; width: 1px; height: 1.6rem; min-width: 0; margin: 0.2rem 0 0.75rem 1.6rem;
-    background: repeating-linear-gradient(180deg, var(--ink-3) 0 0.25rem, transparent 0.25rem 0.45rem); }
+  .dx-edge { flex: none; align-self: start; width: 1px; height: 1.6rem; min-width: 0; margin: 0.2rem 0 0.75rem 1.6rem; }
   .dx-edge::before { transform: scaleY(0); transform-origin: center top; }
   .dx-flow.is-live .dx-edge::before { transform: scaleY(1); }
-  .dx-edge::after { display: none; }
 }
 /* Stacked, the screen shows its summary and the top of the preview, then
    fades out rather than running the whole document down the page. */
@@ -1161,7 +1280,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 
   .js .shift-stage { gap: 0; }
   .js .shift-before, .js .shift-after { grid-area: 1 / 1; }
-  .js .shift-after { align-self: center; }
+  .js .shift-before, .js .shift-after { align-self: center; }   /* the card keeps its own height, not the window's */
 
   /* Until the spec is up it waits below, unseen. The wrapper only moves:
      opacity or filter on an ancestor of the glass switches its backdrop
@@ -1190,15 +1309,48 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   .js .shift-done { opacity: 0; transform: translateY(40%) scale(0.9); transition-duration: 300ms; }
   .js .shift-done.is-on { opacity: 1; transform: none; transition-duration: 900ms; }
   .js .shift:not(.is-fast) .shift-ratio { opacity: 0; transform: translateY(0.5rem); }
+  /* The total shows once all five manual steps are struck. Space stays reserved. */
+  .js .shift:not(.is-fast) .task-sum { opacity: 0; transform: translateY(0.4rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shift-grid, .shift-meter, .shift-before, .shift-after, .spec-win, .shift-done, .shift-ratio, .dx-page, .dx-scroll, .dx-cursor, .dx-node, .dx-node-n, .dx-edge::before, .dx-edge::after,
+  .shift-grid, .shift-meter, .shift-before, .shift-after, .spec-win, .shift-done, .shift-ratio, .task-sum, .dx-page, .dx-scroll, .dx-cursor, .dx-node, .dx-node-n, .dx-edge::before,
   .bar-track i, .task-n, .task-t b, .task-time, .dx-toc li { transition: none !important; }
+  .bar.is-before .bar-track i { animation: none; }
   .shift-num.is-swap, .dx-spin, .spec-win.is-done .dx-out { animation: none; }
 }
+
+/* ============================================================
+   BELOW THE PLATFORM — centred, no colour washes, placeholders
+   The split sections (analyze, build, graph) are a heading over a
+   placeholder box until their content is decided. Every section from
+   here down is centred and carries no gradient glow.
+   ============================================================ */
+
+.ph-sec { position: relative; padding-block: var(--band); }
+.ph-box {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  aspect-ratio: 16 / 7;
+  display: grid; place-items: center;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-lg);
+  background: rgb(255 255 255 / 0.015);
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; color: var(--ink-3);
 }
-}
+@media (max-width: 760px) { .ph-box { aspect-ratio: 4 / 3; } }
+
+.platform ~ section .aura,
+.platform ~ section .card-art::before { display: none; }
+
+.platform ~ section { text-align: center; }
+.platform ~ section .sec-head .sec-sub { margin-inline: auto; }
+.platform ~ section :is(.card, .card-copy, .tcard, .num, .num dd) { justify-items: center; text-align: center; }
+.platform ~ section .tcard-wide { grid-template-columns: minmax(0, 1fr); }
+.platform ~ section .tcard-wide .feed { grid-column: 1; grid-row: auto; width: min(100%, 30rem); margin-top: 0.6rem; }
+.platform ~ section :is(.card-art, .tcard-wide .feed) { justify-self: stretch; }   /* centring the text must not shrink the pictures */
+.platform ~ section .tcard-wide .feed { justify-self: center; }
+.graph-points { justify-items: center; }
+.graph-points li { justify-content: center; }
 
 /* ============================================================
    CHAPTERS — pinned split, list on one side, glass picture on the other
@@ -1249,18 +1401,22 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 /* ---- Pinned: wide and tall enough, script running ---- */
 
 @media (min-width: 1000px) and (min-height: 680px) {
+  /* The pinned frame is only as tall as its content at its tallest item
+     (--pin-h, measured by n.js), not a whole screen, so the chapter has no
+     more empty space above and below than any other section. It sticks
+     centred in the space under the nav. */
   .js .chapter {
-    height: calc(100svh + (var(--items) - 1) * var(--step) + 2 * var(--band));
+    --pin-clear: calc(var(--notice-h) + 4.5rem);   /* clears the floating nav */
+    --pin-h: 100svh;                               /* until measured */
+    height: calc(var(--pin-h) + (var(--items) - 1) * var(--step) + 2 * var(--band));
   }
   .js .chapter-pin {
     position: sticky;
-    top: 0;
-    height: 100svh;
-    padding-top: var(--pin-clear);     /* clears the floating nav */
+    top: max(var(--pin-clear), calc((100svh + var(--pin-clear) - var(--pin-h)) / 2));
+    height: var(--pin-h);
     display: grid;
     align-items: center;
   }
-  .js .chapter { --pin-clear: calc(var(--notice-h) + 4.5rem); }
   /* The whole list has to fit one screen, so the chapter headline sits
      a size below the page's other h2s. */
   .js .chapter .h2 { font-size: clamp(1.8rem, 1.15rem + 1.7vw, 2.6rem); }
@@ -1326,6 +1482,8 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   .js .chapter.flip .item-visual { grid-column: 1; }
   .js .item.is-active .item-visual { opacity: 1; transform: none; pointer-events: auto; }
   .js .item.is-past .item-visual { transform: translateY(-6%) scale(0.97); }
+  /* While n.js measures the pin, every state lands at once. */
+  .js .chapter.is-measuring * { transition: none !important; }
 }
 
 /* ============================================================
@@ -1508,26 +1666,56 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
    JOIN
    ============================================================ */
 
-.join { padding-bottom: var(--band); }
-.join-card {
-  overflow: hidden;
-  isolation: isolate;
-  max-width: 56rem;
-  margin-inline: auto;
-  padding: clamp(3.5rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem);
-  border-radius: calc(var(--r-lg) * 1.3);
-  display: grid; justify-items: center; gap: 1.1rem; text-align: center;
+.join { position: relative; padding-top: var(--band); }
+.join-sub {
+  margin-top: 0.2rem;
+  font-size: var(--fs-sub);   /* the same size as the section subtitles */
+  font-weight: 400;
+  color: var(--ink-3);
 }
-.join-card .aura { z-index: -1; }
-.join-card .orb.o1 { left: 30%; top: 55%; --size: 46%; --alpha: 0.5; }
-.join-mark { width: clamp(3rem, 2.4rem + 2vw, 4.25rem); margin-bottom: 0.5rem; }
-.join-card .actions { margin-top: 1rem; }
+/* The globe: square, centred, and pulled down so the footer (drawn over
+   it, below) covers its lower part (--globe-hidden). */
+.join-globe {
+  --globe-size: min(44rem, 88vw);
+  --globe-dot: var(--ink-2);
+  width: var(--globe-size);
+  aspect-ratio: 1;
+  --globe-hidden: 0.6;    /* share of the globe's height the footer covers */
+  margin: clamp(2.5rem, 5vw, 3.5rem) auto calc(var(--globe-size) * var(--globe-hidden) * -1);
+  touch-action: pan-y;
+  cursor: grab;
+}
+.join-globe:active { cursor: grabbing; }
+/* The disc the globe sits on, as on the landing page's dark theme: a
+   raised dark sheet (#171A1F at 94%) fading out, and a faint light ring
+   (#E6E9EE at 14%) just inside the rim. closest-side makes 100% half the
+   block, so 88% lands just inside the sphere, which globe.js draws at
+   0.92 of the half-size. */
+.join-globe {
+  position: relative;
+  isolation: isolate;     /* keeps the disc behind the dots, in front of the page */
+  --globe-halo: rgb(23 26 31 / 0.94);
+  --globe-halo-edge: rgb(230 233 238 / 0.14);
+}
+.join-globe::before {
+  content: '';
+  position: absolute; inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle closest-side at 50% 50%,
+    var(--globe-halo) 0%,
+    color-mix(in srgb, var(--globe-halo) 55%, transparent) 64%,
+    var(--globe-halo-edge) 88%,
+    transparent 94%);
+}
+.join-globe canvas { display: block; width: 100%; height: 100%; }
 
 /* ============================================================
    FOOTER
    ============================================================ */
 
-.foot { padding-block: 4.5rem 2.5rem; border-top: 1px solid var(--line); }
+.foot { position: relative; z-index: 1; padding-block: 4.5rem 2.5rem; border-top: 1px solid var(--line); background: var(--bg); }   /* opaque and on top: it hides the globe's lower half */
 
 /* Link columns: small grey headings over bold white entries. */
 .foot-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr)); gap: 2.5rem 2rem; }
@@ -1670,20 +1858,33 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 @media (max-width: 640px) { .msg { max-width: 100%; } }
 
 /* ============================================================
-   PLATFORM — bento of glass tiles
+   PLATFORM — heading over the Fibre Arc picture
    ============================================================ */
 
+/* From here down the sections sit closer together. */
+.platform, .platform ~ section { --band: var(--band-tight); }
 .platform { position: relative; padding-block: var(--band); }
 
-.bento {
-  margin-top: clamp(3rem, 6vw, 4rem);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.8rem;
+.plat-visual {
+  position: relative;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  aspect-ratio: 16 / 7;
+  /* Edges dissolve into the page black on all four sides, so the strands
+     never end at a hard line. */
+  --fade-x: 16%;
+  --fade-y: 18%;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
+    linear-gradient(180deg, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(90deg, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
+    linear-gradient(180deg, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
+          mask-composite: intersect;
 }
+.plat-visual canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+@media (max-width: 760px) { .plat-visual { aspect-ratio: 4 / 3; } }
 .tile { padding: 1.6rem; border-radius: var(--r-lg); display: grid; gap: 0.6rem; align-content: start; }
-.tile-wide { grid-column: span 2; grid-row: span 2; align-content: end; min-height: 17rem; overflow: hidden; isolation: isolate; }
-.tile-wide h3 { font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.75rem); }
 .tile h3, .tcard h3 { font-size: 1.1rem; font-weight: 750; letter-spacing: -0.03em; line-height: 1.35; }
 .tile p, .tcard p { color: var(--ink-3); font-size: 0.9rem; }
 .tile-icon {
@@ -1691,26 +1892,6 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   display: grid; place-items: center; margin-bottom: 0.5rem;
   background: rgb(var(--light-amber) / 0.14); color: var(--accent-text); font-size: 1.2rem;
 }
-.tile-wide .tile-icon { margin-bottom: auto; }
-.tile-chips { margin-top: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.35rem; }
-.tile-chips span {
-  padding: 0.3em 0.7em; border-radius: var(--r-pill); background: rgb(255 255 255 / 0.07);
-  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0; color: var(--ink-2);
-}
-.tile-chips .on { background: var(--ink); color: #000; }
-/* The wide tile carries its own light so its glass reads as glass. */
-.tile-wide::before {
-  content: ''; position: absolute; inset: -30%; z-index: -1;
-  background: radial-gradient(40% 45% at 75% 25%, rgb(var(--light-amber) / 0.45), transparent 70%),
-              radial-gradient(35% 40% at 30% 80%, rgb(var(--light-ember) / 0.3), transparent 70%);
-  filter: blur(24px);
-}
-
-@media (max-width: 900px) {
-  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tile-wide { grid-column: 1 / -1; grid-row: auto; min-height: 14rem; }
-}
-@media (max-width: 560px) { .bento { grid-template-columns: minmax(0, 1fr); } }
 
 /* chat picture inside the analyze chapter */
 .v-chat { display: grid; gap: 1rem; }
@@ -1879,7 +2060,9 @@ body.is-swapping :is(main, .foot, .rail) { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .orb, .ticks .is-live .ph, .tools .live .ph, .hero-bg { animation: none; }
-  .rotor-item, .nav-glow, .nav-panel, .nav-group, .nav-burger path, .nav-panel-in { transition: none; }
+  .ask-caret { animation: none; }
+  .ask { transition: none; }
+  .nav-glow, .nav-panel, .nav-group, .nav-burger path, .nav-panel-in { transition: none; }
   .enter { opacity: 1; transform: none; animation: none; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .statement .w { color: var(--ink); transition: none; }

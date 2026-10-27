@@ -129,25 +129,34 @@
   <div class="hero-bg" aria-hidden="true"></div>
 
   <div class="wrap hero-copy">
-    <!-- The roles SC4SAP stands in for, one after another. The dot stays
-         put and changes colour (amber, teal, amber...); only the words fade
-         out and the next fade in. All six share one grid cell, so the chip
-         keeps the longest one's width and never resizes. -->
-    <p class="chip glass enter" style="--d:0ms" data-rotor data-tone="amber">
-      <span class="chip-dot" aria-hidden="true"></span>
-      <span class="chip-rotor" aria-hidden="true">
-        <span class="rotor-item is-on">Enterprise AI for SAP</span>
-        <span class="rotor-item">SAP Module Specialist</span>
-        <span class="rotor-item">System Analyst</span>
-        <span class="rotor-item">Pro ABAP Developer</span>
-        <span class="rotor-item">ERP Architecture</span>
-        <span class="rotor-item">Project Manager</span>
-      </span>
-      <span class="sr-only">Enterprise AI for SAP · SAP Module Specialist · System Analyst · Pro ABAP Developer · ERP Architecture · Project Manager</span>
-    </p>
-    <h1 class="display enter" style="--d:120ms" data-i="heroTitle">ERP AX의 새로운 첫걸음</h1>
-    <p class="hero-sub enter" style="--d:260ms" data-i="heroSub">코드와 설정, 업무 흐름까지 읽어내는 AI<br>SC4SAP는 Enterprise AX 최적화 워크스페이스입니다</p>
-    <div class="actions enter" style="--d:380ms">
+    <h1 class="display enter" style="--d:0ms" data-i="heroTitle">ERP AX의 새로운 첫걸음</h1>
+    <p class="hero-sub enter" style="--d:140ms" data-i="heroSub">코드와 설정, 업무 흐름까지 읽어내는 AI<br>SC4SAP는 Enterprise AX 최적화 워크스페이스입니다</p>
+
+    <!-- Questions people ask SC4SAP, typed out one after another in a glass
+         prompt bar. The list is the source: the script reads it, and screen
+         readers get it as plain text while the animated bar stays hidden. -->
+    <div class="ask-wrap enter" style="--d:280ms" data-ask>
+      <p class="sr-only">SC4SAP에 이렇게 물어볼 수 있습니다</p>
+      <ul class="sr-only">
+        <li>A사 발주 중에 납기 지연되고 있는 건 보여줘</li>
+        <li>신규 플랜트 추가하려면 어떤 IMG 설정부터 손봐야 해?</li>
+        <li>지금 ZCTTR203 테이블에 계좌정보 저장하는 RFC가 뭐였지?</li>
+        <li>어제부터 운영 서버 응답이 느린데 원인 좀 진단해줘</li>
+        <li>ZSDR0150 돌리면 덤프 나는데 원인 좀 찾아줘</li>
+        <li>지난 프로젝트 설계서에서 반품 프로세스 부분 찾아줘</li>
+        <li>이번 달 마감 전에 미결로 남은 매입 전표만 정리해줘</li>
+        <li>납기 지연 조회 로직을 CDS 뷰로 다시 만들어줘</li>
+        <li>ZMMR0420 프로그램 명세서 만들어서 현업 공유용으로 정리해줘</li>
+        <li>예전 WMS 입고 확정 로직이 어디서 TO를 만드는지 찾아주고 첨부한 엑셀이랑 비교해줘</li>
+      </ul>
+      <div class="ask" aria-hidden="true">
+        <span class="metal-rim"></span>
+        <span class="ask-line"><span class="ask-text"></span><span class="ask-caret"></span></span>
+        <span class="ask-send"><i class="ph ph-paper-plane-tilt"></i></span>
+      </div>
+    </div>
+
+    <div class="actions enter" style="--d:420ms">
       <a class="btn btn-light" href="#contact"><span data-i="ctaContactLong">도입 문의하기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">서비스 둘러보기</span></a>
     </div>
@@ -172,7 +181,7 @@
         <div class="shift-meter">
           <p class="shift-kicker"><span>BEFORE</span><i class="ph ph-arrow-right" aria-hidden="true"></i><span>AFTER</span></p>
           <p class="shift-k" data-i="shiftK">명세서 한 건 만드는 데 걸리는 시간</p>
-          <p class="shift-num" data-shift-num>약 10분</p>
+          <p class="shift-num" data-shift-num>약 10<span class="u">분</span></p>
           <div class="shift-bars">
             <div class="bar is-before">
               <span class="bar-name" data-i="shiftBarA">사람이 직접</span>
@@ -201,7 +210,7 @@
               <li class="task" data-task="1"><span class="task-n">04</span><span class="task-t"><b data-i="task4">명세서 양식에 옮겨 적기</b><small>Excel · Word</small></span><span class="task-time" data-i="task4v">1일</span></li>
               <li class="task" data-task="1"><span class="task-n">05</span><span class="task-t"><b data-i="task5">담당자에게 묻고 답 기다리기</b><small data-i="task5s">메일 · 메신저</small></span><span class="task-time" data-i="task5v">기약 없음</span></li>
             </ol>
-            <p class="task-sum"><span data-i="taskSum">합계</span><b data-i="taskSumV">약 5일</b></p>
+            <p class="task-sum"><span data-i="taskSum">기존</span><b data-i="taskSumV">약 5일</b></p>
           </div>
 
           <div class="shift-after">
@@ -231,7 +240,7 @@
                       <div class="dx-panel" data-dx-prev>
                         <div class="dx-head"><i class="ph ph-file-text"></i>HTML 미리보기<span class="dx-tools"><i class="dx-zoom"></i>100%<span class="dx-dl"><i class="ph ph-download-simple"></i>.html 다운로드</span></span></div>
                         <div class="dx-doc">
-                          <div class="dx-doc-bar">기능/기술 명세서: ZMMR00020<span class="dx-doc-tools"><span class="dx-edit">편집</span>모두 접기</span></div>
+                          <div class="dx-doc-bar">기능/기술 명세서: ZMMR00020<span class="dx-doc-tools"><span class="dx-edit"><span>편집</span></span>모두 접기</span></div>
                           <div class="dx-doc-body">
                             <div class="dx-toc">
                               <b>목차</b>
@@ -306,7 +315,7 @@
                 <div class="dx-cursor"><svg viewBox="0 0 20 20"><path d="M3 2l13.2 6.4-5.7 1.7-1.9 5.7L3 2z" stroke-width="1" stroke-linejoin="round"/></svg></div>
               </div>
             </div>
-            <p class="shift-done glass"><i class="ph ph-check-circle" aria-hidden="true"></i><span data-i="shiftDone">명세서 완료</span><span class="shift-done-t" data-i="shiftDoneT">표준 모드</span></p>
+            <p class="shift-done"><span class="metal-rim" aria-hidden="true"></span><i class="ph ph-check-circle" aria-hidden="true"></i><span data-i="shiftDone">명세서 완료</span><span class="shift-done-t" data-i="shiftDoneT">표준 모드</span></p>
           </div>
         </div>
 
@@ -315,137 +324,29 @@
   </div>
 </section>
 
-<!-- ===================== PLATFORM: bento ===================== -->
+<!-- ===================== PLATFORM ===================== -->
 <section id="platform" class="platform" data-section>
   <div class="wrap">
     <header class="sec-head">
-      <span class="eyebrow">PLATFORM</span>
-      <h2 class="h2" data-i="platH">하나의 워크스페이스에서<br>SAP 업무가 끝나요</h2>
+      <h2 class="h2" data-i="platH">하나의 워크스페이스에서<br>모든 SAP 업무를</h2>
       <p class="sec-sub" data-i="platSub">시스템을 한 번 연결하면 대화, 업무 스킬, 모니터링, 지식 그래프가 같은 자리에서 이어져요</p>
     </header>
 
-    <div class="bento">
-      <article class="tile tile-wide glass reveal">
-        <span class="tile-icon"><i class="ph ph-chat-circle-text"></i></span>
-        <h3 data-i="p1h">모듈 컨설턴트에게 묻듯이</h3>
-        <p data-i="p1p">SD · MM · FI · CO · PP 등 모듈별 컨설턴트 에이전트가 우리 SAP 환경의 설정을 직접 확인하고 답해요</p>
-        <div class="tile-chips" aria-hidden="true"><span>SD</span><span>MM</span><span class="on">FI</span><span>CO</span><span>PP</span><span>PS</span><span>QM</span><span>HCM</span><span>+6</span></div>
-      </article>
-      <article class="tile glass reveal">
-        <span class="tile-icon"><i class="ph ph-squares-four"></i></span>
-        <h3 data-i="p2h">11가지 업무 스킬</h3>
-        <p data-i="p2p">분석 · 문서 · 개발 · 진단 업무를 정해진 흐름으로 실행해요</p>
-      </article>
-      <article class="tile glass reveal">
-        <span class="tile-icon"><i class="ph ph-pulse"></i></span>
-        <h3 data-i="p3h">실시간 MCP 모니터</h3>
-        <p data-i="p3p">AI가 시스템에 하는 모든 호출을 그대로 보여줘요</p>
-      </article>
-      <article class="tile glass reveal">
-        <span class="tile-icon"><i class="ph ph-graph"></i></span>
-        <h3 data-i="p4h">CBO 지식 그래프</h3>
-        <p data-i="p4p">프로그램, 테이블, 프로세스의 관계를 한눈에 봐요</p>
-      </article>
-      <article class="tile glass reveal">
-        <span class="tile-icon"><i class="ph ph-notebook"></i></span>
-        <h3 data-i="p5h">Obsidian 연동</h3>
-        <p data-i="p5p">분석 결과가 팀의 노트로 쌓이고, 다시 AI의 답에 쓰여요</p>
-      </article>
-    </div>
+    <!-- The section's picture: the Fibre Arc shader (js/fibre-arc.js).
+         A placeholder box until the canvas mounts; the edges fade into the
+         page so it never reads as a panel. -->
+    <div class="plat-visual" data-fibre aria-hidden="true"></div>
   </div>
 </section>
 
-<!-- ===================== CHAPTER: ANALYZE ===================== -->
-<section id="analyze" class="chapter" data-section data-chapter style="--items:4">
-  <div class="chapter-pin">
-    <div class="aura" aria-hidden="true"><span class="orb o1"></span><span class="orb o3"></span></div>
-    <div class="wrap chapter-grid">
-      <header class="chapter-head">
-        <span class="eyebrow">ANALYZE</span>
-        <h2 class="h2" data-i="anaH">읽고 진단하는 일은<br>몇 분이면 충분해요</h2>
-      </header>
-
-      <article class="item" data-item>
-        <button type="button" class="item-tab" data-item-tab><span class="item-n">01</span><span class="item-name">Ask a Consultant</span></button>
-        <div class="item-copy"><div class="item-copy-in">
-          <h3 class="item-h" data-i="a1h">운영 질문은 모듈 전문가에게</h3>
-          <p data-i="a1p">질문의 키워드로 맞는 컨설턴트를 골라 보내고, 우리 시스템의 실제 설정을 기준으로 답해요</p>
-        </div></div>
-        <div class="item-visual">
-          <div class="win glass">
-            <div class="win-bar"><span></span><span></span><span></span><b>Ask a Consultant · MM</b></div>
-            <div class="v-chat">
-              <div class="msg me"><span data-i="a1q">PO 승인 전략이 두 번째 결재자를 건너뛰어요</span></div>
-              <div class="msg ai">
-                <span class="who"><i class="ph ph-user-circle-gear"></i>sap-mm-consultant</span>
-                <p data-i="a1a">릴리스 전략 <b>Z2</b>의 금액 조건 때문이에요. 조건표와 관련 사용자 exit을 함께 정리해 드릴게요</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="item" data-item>
-        <button type="button" class="item-tab" data-item-tab><span class="item-n">02</span><span class="item-name">Analyze Code</span></button>
-        <div class="item-copy"><div class="item-copy-in">
-          <h3 class="item-h" data-i="a2h">심각한 것부터 짚어주는 코드 리뷰</h3>
-          <p data-i="a2p">AST · 의미 분석 · where-used까지 돌려서 Clean ABAP, 성능, 보안, SAP 표준 준수 관점으로 리뷰해요</p>
-        </div></div>
-        <div class="item-visual">
-          <div class="win glass">
-            <div class="win-bar"><span></span><span></span><span></span><b>Analyze Code · ZMMR00020</b></div>
-            <ul class="v-sev">
-              <li><em class="crit">CRITICAL</em><div><b data-i="a2r1">SQL Injection 가능성</b><span data-i="a2r1s">동적 WHERE에 입력값이 바로 들어가요</span></div></li>
-              <li><em class="crit">CRITICAL</em><div><b data-i="a2r2">AUTHORITY-CHECK 누락</b><span data-i="a2r2s">BUKRS 조회 뒤 권한 검증이 없어요</span></div></li>
-              <li><em class="maj">MAJOR</em><div><b>SELECT … ENDSELECT</b><span data-i="a2r3s">INTO TABLE로 바꾸면 훨씬 빨라져요</span></div></li>
-              <li><em class="min">MINOR</em><div><b data-i="a2r4">Clean ABAP 명명 규칙</b><span data-i="a2r4s">지역 변수 접두어가 섞여 있어요</span></div></li>
-            </ul>
-          </div>
-        </div>
-      </article>
-
-      <article class="item" data-item>
-        <button type="button" class="item-tab" data-item-tab><span class="item-n">03</span><span class="item-name">Analyze a Symptom</span></button>
-        <div class="item-copy"><div class="item-copy-in">
-          <h3 class="item-h" data-i="a3h">덤프와 장애의 원인을 좁혀요</h3>
-          <p data-i="a3p">덤프 · 전송 · where-used를 살펴 가설을 좁히고, 원인과 다음 조치를 정리해요</p>
-        </div></div>
-        <div class="item-visual">
-          <div class="win glass">
-            <div class="win-bar"><span></span><span></span><span></span><b>ST22 · TSV_TNEW_PAGE_ALLOC_FAILED</b></div>
-            <ol class="v-diag">
-              <li class="done"><span>01</span><div><b data-i="a3s1">덤프 수집</b><code>RuntimeAnalyzeDump</code></div></li>
-              <li class="done"><span>02</span><div><b data-i="a3s2">최근 전송 확인</b><em data-i="a3s2d">문제 직전 반입된 요청 2건</em></div></li>
-              <li class="done"><span>03</span><div><b data-i="a3s3">원인 가설</b><em data-i="a3s3d">내부 테이블 메모리 초과</em></div></li>
-              <li class="now"><span>04</span><div><b data-i="a3s4">조치 제안</b><em data-i="a3s4d">코드 수정안과 SAP Note 후보</em></div></li>
-            </ol>
-          </div>
-        </div>
-      </article>
-
-      <article class="item" data-item>
-        <button type="button" class="item-tab" data-item-tab><span class="item-n">04</span><span class="item-name">Compare Programs</span></button>
-        <div class="item-copy"><div class="item-copy-in">
-          <h3 class="item-h" data-i="a4h">비슷한 프로그램을 나란히 비교해요</h3>
-          <p data-i="a4p">시나리오는 같고 모듈 · 국가 · 사용자가 다른 프로그램 2~5개를 업무 관점에서 나란히 놓고 차이를 짚어요</p>
-        </div></div>
-        <div class="item-visual">
-          <div class="win glass">
-            <div class="win-bar"><span></span><span></span><span></span><b>ZMMR00020 vs ZMMR00030</b></div>
-            <table class="v-cmp">
-              <thead><tr><th scope="col"></th><th scope="col">00020</th><th scope="col">00030</th></tr></thead>
-              <tbody>
-                <tr><th scope="row" data-i="a4d1">업무 시나리오</th><td class="same">●</td><td class="same">●</td></tr>
-                <tr><th scope="row" data-i="a4d2">선택 화면</th><td class="diff">◐</td><td class="diff">◐</td></tr>
-                <tr><th scope="row" data-i="a4d3">데이터 소스</th><td class="same">●</td><td class="same">●</td></tr>
-                <tr><th scope="row" data-i="a4d4">출력 방식</th><td class="opp">WRITE</td><td class="opp">ALV</td></tr>
-              </tbody>
-            </table>
-            <p class="v-verdict"><b>VERDICT</b> <span data-i="a4v">하나로 통합 권장</span></p>
-          </div>
-        </div>
-      </article>
-    </div>
+<!-- ===================== ANALYZE (placeholder) ===================== -->
+<section id="analyze" class="ph-sec" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 class="h2" data-i="anaH">읽고 진단하는 일은<br>몇 분이면 충분해요</h2>
+    </header>
+    <!-- Placeholder: the content of this section is still to be decided. -->
+    <div class="ph-box" aria-hidden="true"><span>ANALYZE · 콘텐츠 준비 중</span></div>
   </div>
 </section>
 
@@ -453,7 +354,6 @@
 <section id="document" class="context" data-section>
   <div class="wrap">
     <header class="sec-head">
-      <span class="eyebrow">DOCUMENT</span>
       <h2 class="h2" data-i="docH">문서 작업은<br>SC4SAP에 맡기세요</h2>
       <p class="sec-sub" data-i="docSub">프로그램과 패키지를 읽고, 팀이 바로 쓸 수 있는 문서를 같은 양식으로 만들어요. 한국어, 영어, 일본어 모두 돼요</p>
     </header>
@@ -471,7 +371,6 @@
           </div>
         </div>
         <div class="card-copy">
-          <span class="card-k">Program → Spec</span>
           <h3 data-i="d1h">코드를 기능 · 기술 명세서로</h3>
           <p data-i="d1p">프로그램을 역공학해 명세서를 만들고, 선택 화면과 ALV 목업까지 붙여요</p>
         </div>
@@ -489,7 +388,6 @@
           </div>
         </div>
         <div class="card-copy">
-          <span class="card-k">Program → Manual</span>
           <h3 data-i="d2h">화면에 번호를 단 사용자 매뉴얼</h3>
           <p data-i="d2p">시나리오별 단계, 체크 포인트, 메시지, 용어집까지 담아 현업에 바로 전달해요</p>
         </div>
@@ -507,7 +405,6 @@
           </div>
         </div>
         <div class="card-copy">
-          <span class="card-k">Package → Process</span>
           <h3 data-i="d3h">패키지에서 업무 프로세스 문서로</h3>
           <p data-i="d3p">CBO 패키지를 읽어 순서도, 시퀀스 다이어그램, 단계 표가 담긴 종단 간 프로세스 문서를 만들어요</p>
         </div>
@@ -516,91 +413,21 @@
   </div>
 </section>
 
-<!-- ===================== CHAPTER: BUILD ===================== -->
-<section id="build" class="chapter flip" data-section data-chapter style="--items:3">
-  <div class="chapter-pin">
-    <div class="aura" aria-hidden="true"><span class="orb o2"></span><span class="orb o3"></span></div>
-    <div class="wrap chapter-grid">
-      <header class="chapter-head">
-        <span class="eyebrow">BUILD</span>
-        <h2 class="h2" data-i="bldH">만드는 일은<br>승인하고 지켜보기만</h2>
-      </header>
-
-      <article class="item" data-item>
-        <button type="button" class="item-tab" data-item-tab><span class="item-n">01</span><span class="item-name">Inventory a CBO Package</span></button>
-        <div class="item-copy"><div class="item-copy-in">
-          <h3 class="item-h" data-i="b1h">있는 것부터 찾아요</h3>
-          <p data-i="b1p">커스텀 패키지를 훑어 재사용할 만한 Z 오브젝트를 정리해요. 이후의 모든 개발은 새로 만들기보다 이 목록을 먼저 써요</p>
-        </div></div>
-        <div class="item-visual">
-          <div class="win glass">
-            <div class="win-bar"><span></span><span></span><span></span><b>ZMM_CBO · inventory</b></div>
-            <div class="v-reuse">
-              <div class="search"><i class="ph ph-magnifying-glass"></i><span data-i="b1q">공급업체별 미결 구매오더 조회</span></div>
-              <div class="hit best"><div><b>ZCL_MM_PO_READER</b><span data-i="b1r1">클래스 · 구매오더 조회 공통</span></div><em data-i="b1reuse">재사용</em></div>
-              <div class="hit"><div><b>ZMMR00020</b><span data-i="b1r2">리포트 · 같은 시나리오</span></div><em class="soft" data-i="b1ref">참고</em></div>
-              <div class="hit"><div><b>ZMM_PO_ALV_S</b><span data-i="b1r3">구조 · ALV 필드 카탈로그</span></div><em class="soft" data-i="b1reuse2">재사용</em></div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="item" data-item>
-        <button type="button" class="item-tab" data-item-tab><span class="item-n">02</span><span class="item-name">Create a Program</span></button>
-        <div class="item-copy"><div class="item-copy-in">
-          <h3 class="item-h" data-i="b2h">요구사항이 활성화된 프로그램으로</h3>
-          <p data-i="b2p">Report · CRUD · ALV · Batch 중 형태를 고르고 요구사항을 적으면, 스펙을 승인받은 뒤 명명 규칙에 맞춰 생성하고 활성화해요</p>
-        </div></div>
-        <div class="item-visual">
-          <div class="win glass">
-            <div class="win-bar"><span></span><span></span><span></span><b>Create a Program · ZMMR00040</b></div>
-            <div class="v-maker">
-              <div class="approval">
-                <i class="ph ph-seal-check"></i>
-                <div><b data-i="b2ap">스펙 승인 완료</b><span>ALV · OOP · ZMM_CBO</span></div>
-              </div>
-              <ul class="objs">
-                <li><span>ZMMR00040</span><em>Main</em></li>
-                <li><span>ZMMR00040_TOP</span><em>Include</em></li>
-                <li><span>ZCL_MMR00040_ALV</span><em>Class</em></li>
-                <li class="pending"><span>SCREEN 0100</span><em>Dynpro</em></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="item" data-item>
-        <button type="button" class="item-tab" data-item-tab><span class="item-n">03</span><span class="item-name">Create an Object</span></button>
-        <div class="item-copy"><div class="item-copy-in">
-          <h3 class="item-h" data-i="b3h">오브젝트 하나도 끝까지</h3>
-          <p data-i="b3p">클래스, 인터페이스, 함수, 테이블, CDS View까지. 전송 요청과 패키지를 확인하고 생성해서 활성화까지 마쳐요</p>
-        </div></div>
-        <div class="item-visual">
-          <div class="win glass">
-            <div class="win-bar"><span></span><span></span><span></span><b>Create an Object</b></div>
-            <div class="v-agents">
-              <p class="v-label">OBJECT TYPE</p>
-              <div class="tags"><span class="on">Class</span><span>Interface</span><span>Function Module</span><span>Table</span><span>Structure</span><span>Data Element</span><span>Domain</span><span>CDS View</span></div>
-              <ul class="ticks">
-                <li><i class="ph ph-check-circle"></i><span data-i="b3t1">전송 요청 S4DK900412 확인</span></li>
-                <li><i class="ph ph-check-circle"></i><span data-i="b3t2">패키지 ZMM_CBO 확인</span></li>
-                <li class="is-live"><i class="ph ph-circle-notch"></i><span data-i="b3t3">ZCL_MM_PO_HANDLER 활성화 중</span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </article>
-    </div>
+<!-- ===================== BUILD (placeholder) ===================== -->
+<section id="build" class="ph-sec" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 class="h2" data-i="bldH">만드는 일은<br>승인하고 지켜보기만</h2>
+    </header>
+    <!-- Placeholder: the content of this section is still to be decided. -->
+    <div class="ph-box" aria-hidden="true"><span>BUILD · 콘텐츠 준비 중</span></div>
   </div>
 </section>
 
-<!-- ===================== GRAPH ===================== -->
-<section id="graph" class="graph" data-section>
-  <div class="aura" aria-hidden="true"><span class="orb o1"></span></div>
-  <div class="wrap graph-grid">
-    <header class="graph-head">
-      <span class="eyebrow">KNOWLEDGE GRAPH</span>
+<!-- ===================== GRAPH (placeholder) ===================== -->
+<section id="graph" class="ph-sec graph" data-section>
+  <div class="wrap">
+    <header class="sec-head">
       <h2 class="h2" data-i="grH">흩어진 Z 오브젝트를<br>한 장의 지도로</h2>
       <p class="sec-sub" data-i="grSub">분석할수록 프로그램 · 테이블 · 프로세스의 관계가 그래프로 쌓여요. Obsidian 볼트와 양방향으로 동기화되고, 팀이 단 관계는 다음 답변에 그대로 반영돼요</p>
       <ul class="graph-points">
@@ -609,120 +436,47 @@
         <li><i class="ph ph-check" aria-hidden="true"></i><span data-i="gr3">연동 토큰은 그래프와 노트만 읽을 수 있어요</span></li>
       </ul>
     </header>
-
-    <div class="graph-stage glass reveal" aria-hidden="true">
-      <svg class="graph-svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
-        <g class="edges">
-          <line x1="200" y1="150" x2="90"  y2="70" /><line x1="200" y1="150" x2="320" y2="80" />
-          <line x1="200" y1="150" x2="80"  y2="220" /><line x1="200" y1="150" x2="310" y2="230" />
-          <line x1="320" y1="80"  x2="360" y2="170" /><line x1="90"  y1="70"  x2="170" y2="40" />
-          <line x1="310" y1="230" x2="360" y2="170" /><line x1="80"  y1="220" x2="180" y2="265" />
-        </g>
-        <g class="nodes">
-          <circle class="n-proc" cx="200" cy="150" r="16" />
-          <circle class="n-prog" cx="90"  cy="70"  r="10" /><circle class="n-prog" cx="320" cy="80"  r="10" />
-          <circle class="n-tab"  cx="80"  cy="220" r="8" /><circle class="n-tab"  cx="310" cy="230" r="8" />
-          <circle class="n-tab"  cx="360" cy="170" r="7" /><circle class="n-cls"  cx="170" cy="40"  r="7" />
-          <circle class="n-cls"  cx="180" cy="265" r="7" />
-        </g>
-        <g class="labels">
-          <text x="200" y="182" data-i="grN1">수출 컨테이너 출하</text>
-          <text x="90" y="52">ZSDR0142</text><text x="320" y="62">ZSDR0188</text>
-          <text x="80" y="246">VBAK</text><text x="310" y="256">LIKP</text>
-          <text x="360" y="196">VBFA</text><text x="170" y="24">ZCL_SD_SHIP</text>
-        </g>
-      </svg>
-      <div class="graph-legend">
-        <span><i class="dot proc"></i><span data-i="grL1">프로세스</span></span>
-        <span><i class="dot prog"></i><span data-i="grL2">프로그램</span></span>
-        <span><i class="dot tab"></i><span data-i="grL3">테이블</span></span>
-        <span><i class="dot cls"></i><span data-i="grL4">클래스</span></span>
-      </div>
-    </div>
+    <!-- Placeholder: the content of this section is still to be decided. -->
+    <div class="ph-box" aria-hidden="true"><span>KNOWLEDGE GRAPH · 콘텐츠 준비 중</span></div>
   </div>
 </section>
 
-<!-- ===================== TRUST ===================== -->
-<section id="trust" class="trust" data-section>
+<!-- ===================== TRUST (placeholder) ===================== -->
+<section id="trust" class="ph-sec" data-section>
   <div class="wrap">
     <header class="sec-head">
-      <span class="eyebrow">TRUST &amp; CONTROL</span>
       <h2 class="h2" data-i="trH">엔터프라이즈가<br>믿고 맡길 수 있도록</h2>
       <p class="sec-sub" data-i="trSub">AI가 무엇을 읽고 무엇을 바꾸는지, 언제나 사람이 보고 결정해요</p>
     </header>
-
-    <div class="trust-grid">
-      <article class="tcard tcard-wide glass reveal">
-        <span class="tile-icon"><i class="ph ph-pulse"></i></span>
-        <h3 data-i="t1h">모든 호출이 보여요</h3>
-        <p data-i="t1p">MCP 모니터에 에이전트의 도구 호출이 실시간으로 남아요</p>
-        <ul class="feed" aria-hidden="true">
-          <li><code>GetTable</code><span>T16FS</span><em>42ms</em></li>
-          <li><code>GetWhereUsed</code><span>ME_PROCESS_PO</span><em>310ms</em></li>
-          <li class="deny"><code>GetTableContents</code><span>PA0008</span><em>DENY</em></li>
-        </ul>
-      </article>
-      <article class="tcard glass reveal">
-        <span class="tile-icon"><i class="ph ph-seal-check"></i></span>
-        <h3 data-i="t2h">바꾸기 전엔 반드시 승인</h3>
-        <p data-i="t2p">프로그램 생성은 스펙 승인 뒤에만 시작하고, 시스템을 바꾸는 호출은 사용자 확인을 거쳐요</p>
-      </article>
-      <article class="tcard glass reveal">
-        <span class="tile-icon"><i class="ph ph-shield-check"></i></span>
-        <h3 data-i="t3h">민감 데이터는 네 겹으로 차단</h3>
-        <p data-i="t3p">개인정보 · 급여 · 뱅킹 · 거래 재무 테이블은 에이전트, 정책, 훅, 서버 네 단계에서 기본으로 막혀요</p>
-      </article>
-      <article class="tcard glass reveal">
-        <span class="tile-icon"><i class="ph ph-gauge"></i></span>
-        <h3 data-i="t4h">실행 전에 사용량을 미리</h3>
-        <p data-i="t4p">무거운 작업은 실행 전에 예상 사용량을 보여주고, Economy와 Standard 중에서 고를 수 있어요</p>
-      </article>
-    </div>
+    <!-- Placeholder: the content of this section is still to be decided. -->
+    <div class="ph-box" aria-hidden="true"><span>TRUST &amp; CONTROL · 콘텐츠 준비 중</span></div>
   </div>
 </section>
 
-<!-- ===================== TECHNOLOGY ===================== -->
-<section id="tech" class="tech" data-section>
+<!-- ===================== TECHNOLOGY (placeholder) ===================== -->
+<section id="tech" class="ph-sec" data-section>
   <div class="wrap">
     <header class="sec-head">
-      <span class="eyebrow">TECHNOLOGY</span>
       <h2 class="h2" data-i="tcH">검증된 오픈소스 엔진 위에<br>만든 서비스예요</h2>
       <p class="sec-sub" data-i="tcSub">SC4SAP 웹 서비스는 직접 개발해 공개한 Claude Code 플러그인과 ABAP MCP 서버를 엔진으로 써요</p>
     </header>
-
-    <dl class="num-grid" data-count>
-      <div class="num glass"><dt data-i="n1k">SAP 도구</dt><dd><b data-to="170" data-suffix="+">170+</b><span data-i="n1v">ABAP ADT 기반 MCP 서버</span></dd></div>
-      <div class="num glass"><dt data-i="n2k">전문 에이전트</dt><dd><b data-to="26">26</b><span data-i="n2v">모듈 컨설턴트 · 리뷰어 · 디버거</span></dd></div>
-      <div class="num glass"><dt data-i="n3k">업종 레퍼런스</dt><dd><b data-to="14">14</b><span>Retail · Automotive · Pharma ···</span></dd></div>
-      <div class="num glass"><dt data-i="n4k">국가 레퍼런스</dt><dd><b data-to="16">16</b><span data-i="n4v">세금 · 전자세금계산서 · 은행</span></dd></div>
-    </dl>
-
-    <div class="stack glass reveal">
-      <div class="stack-row"><span class="stack-k">Web</span><span>SC4SAP Workspace</span><em>0.6</em></div>
-      <div class="stack-row"><span class="stack-k">Engine</span><span>sc4sap plugin · Claude Agent SDK</span><em>0.6</em></div>
-      <div class="stack-row"><span class="stack-k">Connector</span><span>abap-mcp-adt · Model Context Protocol</span><em>4.8</em></div>
-      <div class="stack-row"><span class="stack-k">SAP</span><span>ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud</span><em>ADT</em></div>
-      <a class="stack-link" href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener"><i class="ph ph-github-logo" aria-hidden="true"></i><span data-i="tcGh">오픈소스 엔진 보기</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
-    </div>
+    <!-- Placeholder: the content of this section is still to be decided. -->
+    <div class="ph-box" aria-hidden="true"><span>TECHNOLOGY · 콘텐츠 준비 중</span></div>
   </div>
 </section>
 
 <!-- ===================== CTA ===================== -->
 <section id="contact" class="join">
   <div class="wrap">
-    <div class="join-card glass reveal">
-      <div class="aura" aria-hidden="true"><span class="orb o1"></span></div>
-      <img class="join-mark" src="/favicon/mark_iv.png" alt="" width="512" height="512" loading="lazy" decoding="async" />
-      <h2 class="h2" data-i="ctaH">우리 SAP에<br>SC4SAP를 연결해 보세요</h2>
-      <p class="sec-sub" data-i="ctaSub">도입 상담부터 시스템 연결, 첫 분석까지 함께해요</p>
-      <!-- PLACEHOLDER: the inquiry target (mail, form or calendar) is
-           decided in the CTA section pass. -->
-      <div class="actions">
-        <a class="btn btn-light" href="#contact"><span data-i="ctaContactLong">도입 문의하기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
-        <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">서비스 둘러보기</span></a>
-      </div>
-    </div>
+    <header class="sec-head">
+      <h2 class="h2" data-i="ctaH">“세상은 빠르게 변화하니까”</h2>
+      <p class="join-sub" data-i="ctaSub">엔터프라이즈 AX 혁신에 빠르게 대응하세요</p>
+    </header>
   </div>
+  <!-- The landing page's dotted globe, without its labels (js/globe.js).
+       The footer is drawn over its lower half, so it rises from the
+       footer's top edge like a horizon. Drag to turn it. -->
+  <div class="join-globe" data-globe aria-hidden="true"><canvas></canvas></div>
 </section>
 
 </main>
@@ -794,6 +548,9 @@
 
 <script src="js/n.i18n.js" defer></script>
 <script src="js/n.js" defer></script>
+<script src="js/fibre-arc.js" defer></script>
+<script src="js/globe.data.js" defer></script>
+<script src="js/globe.js" defer></script>
 <!-- The thinking orb in the spec window's working state, as the demo draws
      it (motion/spec_b.html). If the engine cannot load, the dotted spinner stays. -->
 <script type="module">
@@ -816,6 +573,29 @@ if (ctx) {
     }
     requestAnimationFrame(frame);
   })(t0);
+}
+</script>
+<script type="module">
+// Liquid-metal rims (hero prompt bar, spec badge). Settings follow the
+// LiquidMetalButton component; the circle shape is fitted to cover so it
+// spans the whole width of the bar instead of only its middle.
+import { ShaderMount, liquidMetalFragmentShader, ShaderFitOptions } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@0.0.81/+esm';
+const SPEED = 0.6;
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  for (const rim of document.querySelectorAll('.metal-rim')) {
+    const mount = new ShaderMount(rim, liquidMetalFragmentShader, {
+      u_colorBack: [0, 0, 0, 0], u_colorTint: [1, 1, 1, 1],
+      u_image: undefined, u_isImage: false,
+      u_repetition: 4, u_softness: 0.5, u_shiftRed: 0.3, u_shiftBlue: 0.3,
+      u_distortion: 0, u_contour: 0, u_angle: 45, u_shape: 1,
+      u_fit: ShaderFitOptions.cover, u_scale: 1.3, u_rotation: 0,
+      u_originX: 0.5, u_originY: 0.5, u_offsetX: 0, u_offsetY: 0,
+      u_worldWidth: 0, u_worldHeight: 0,
+    }, undefined, SPEED);
+    rim.classList.add('is-on');
+    // Idle off screen.
+    new IntersectionObserver(([e]) => mount.setSpeed(e.isIntersecting ? SPEED : 0)).observe(rim);
+  }
 }
 </script>
 </body>

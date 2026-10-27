@@ -224,27 +224,70 @@
     if (wide.addEventListener) wide.addEventListener('change', function () { show(null); measure(); });
   }
 
-  /* ---------- Hero chip: the roles, one after another ---------- */
+  /* ---------- Hero prompt bar: questions typed out in turn ---------- */
 
-  (function rotor() {
-    var chip = document.querySelector('[data-rotor]');
-    if (!chip || still()) return;
-    var items = [].slice.call(chip.querySelectorAll('.rotor-item'));
-    var HOLD = 3600;   // from one change to the next, fades included
-    var i = 0, timer = null;
+  (function ask() {
+    var root = document.querySelector('[data-ask]');
+    if (!root) return;
+    var bar = root.querySelector('.ask');
+    var text = root.querySelector('.ask-text');
+    var qs = [].slice.call(root.querySelectorAll('li')).map(function (li) { return li.textContent.trim(); });
+    if (!qs.length) return;
 
-    function step() {
-      items[i].classList.remove('is-on');
-      i = (i + 1) % items.length;
-      items[i].classList.add('is-on');
-      // The dot turns as the new words come in.
-      setTimeout(function () { chip.setAttribute('data-tone', i % 2 ? 'teal' : 'amber'); }, 650);
+    // Reduced motion: the first question, typed, in the open bar.
+    if (still()) { bar.classList.add('is-open'); text.textContent = qs[0]; return; }
+
+    var OPEN = 650;     // matches --open
+    var FADE_OUT = 500; // matches --fade-out
+    var GAP = 150;      // nothing on screen between two rounds
+    var PAUSE = 800;    // the short bar fades in (--fade), then opens straight away
+    var HOLD = 3000;    // the finished question stays this long
+    var TYPE = 50;      // per character, steady: uneven gaps read as stutter
+    var q = 0, timer = null, running = false;
+
+    function later(fn, ms) { timer = setTimeout(fn, ms); }
+    // Open the empty bar all the way, then type into it.
+    function open() {
+      bar.classList.add('is-open');
+      later(function () { type(1); }, OPEN * 0.45);
     }
-    function play() { if (!timer) timer = setInterval(step, HOLD); }
-    function stop() { clearInterval(timer); timer = null; }
+    function type(n) {
+      var chars = Array.from(qs[q]);   // whole Hangul syllables, never half a pair
+      text.textContent = chars.slice(0, n).join('');
+      if (n < chars.length) later(function () { type(n + 1); }, TYPE);
+      else later(clear, HOLD);
+    }
+    // The whole bar fades out; hidden, it snaps back to its minimum width,
+    // fades back in short, rests a beat, then opens.
+    function clear() {
+      bar.classList.add('is-out');
+      later(function () {
+        text.textContent = '';
+        bar.classList.add('is-reset');
+        bar.classList.remove('is-open');
+        void bar.offsetWidth;
+        bar.classList.remove('is-reset');
+        q = (q + 1) % qs.length;
+        later(function () {
+          bar.classList.remove('is-out');
+          later(open, PAUSE);
+        }, GAP);
+      }, FADE_OUT);
+    }
+    function play() {
+      if (running) return;
+      running = true;
+      later(open, 500);
+    }
+    function stop() {
+      running = false;
+      clearTimeout(timer);
+      text.textContent = '';
+      bar.classList.remove('is-out', 'is-open');
+    }
 
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es) { es[0].isIntersecting ? play() : stop(); }).observe(chip);
+      new IntersectionObserver(function (es) { es[0].isIntersecting ? play() : stop(); }).observe(root);
     } else play();
     document.addEventListener('visibilitychange', function () { document.hidden ? stop() : play(); });
   })();
@@ -297,17 +340,46 @@
   var pinned = window.matchMedia('(min-width: 1000px) and (min-height: 680px)');
   var chapters = [].slice.call(document.querySelectorAll('[data-chapter]')).map(function (el) {
     var items = [].slice.call(el.querySelectorAll('[data-item]'));
-    var ch = { el: el, items: items, active: -1 };
+    var ch = { el: el, items: items, active: -1, pin: el.querySelector('.chapter-pin'), grid: el.querySelector('.chapter-grid') };
     items.forEach(function (item, i) {
       item.querySelector('[data-item-tab]').addEventListener('click', function () {
         if (!pinned.matches) return;
-        var top = el.getBoundingClientRect().top + window.scrollY;
-        var run = el.offsetHeight - window.innerHeight;
-        window.scrollTo({ top: top + run * ((i + 0.5) / items.length), behavior: still() ? 'auto' : 'smooth' });
+        var g = pinGeometry(ch);
+        var top = el.getBoundingClientRect().top + window.scrollY + g.padTop - g.stick;
+        window.scrollTo({ top: top + g.run * ((i + 0.5) / items.length), behavior: still() ? 'auto' : 'smooth' });
       });
     });
     return ch;
   });
+
+  // Where the pinned stretch starts and how long it runs. The pin sticks
+  // at its CSS top (under the nav), not at the top of the screen.
+  function pinGeometry(ch) {
+    var padTop = parseFloat(getComputedStyle(ch.el).paddingTop) || 0;
+    var stick = parseFloat(getComputedStyle(ch.pin).top) || 0;
+    return { padTop: padTop, stick: stick, run: ch.el.offsetHeight - padTop * 2 - ch.pin.offsetHeight };
+  }
+
+  // The pin is sized to the chapter's tallest state: each item is opened in
+  // turn with transitions off and the grid measured, all inside one frame,
+  // so nothing is painted mid-way. The original state goes back before
+  // transitions come back on, so nothing animates either.
+  function measurePins() {
+    chapters.forEach(function (ch) {
+      if (!pinned.matches) { ch.el.style.removeProperty('--pin-h'); return; }
+      var was = ch.items.map(function (it) { return [it.classList.contains('is-active'), it.classList.contains('is-past')]; });
+      ch.el.classList.add('is-measuring');
+      var tallest = 0;
+      ch.items.forEach(function (item, i) {
+        ch.items.forEach(function (it, k) { it.classList.toggle('is-active', k === i); });
+        tallest = Math.max(tallest, ch.grid.offsetHeight);
+      });
+      ch.items.forEach(function (it, k) { it.classList.toggle('is-active', was[k][0]); it.classList.toggle('is-past', was[k][1]); });
+      void ch.grid.offsetHeight;
+      ch.el.classList.remove('is-measuring');
+      ch.el.style.setProperty('--pin-h', tallest + 'px');
+    });
+  }
 
   function setActive(ch, idx) {
     if (ch.active === idx) return;
@@ -327,12 +399,11 @@
       if (!pinned.matches) { setActive(ch, -2); return; }
       var r = ch.el.getBoundingClientRect();
       // Progress is measured over the stretch where the stage is pinned:
-      // from the section's padding edge reaching the top of the screen
+      // from the section's padding edge reaching the pin's sticking line
       // until the pinned stage lets go. (The pin's own offsetTop cannot
       // be used; a stuck element reports where it is stuck.)
-      var padTop = parseFloat(getComputedStyle(ch.el).paddingTop) || 0;
-      var run = ch.el.offsetHeight - padTop * 2 - vh;
-      var p = run > 0 ? (-(r.top + padTop)) / run : 0;
+      var g = pinGeometry(ch);
+      var p = g.run > 0 ? (g.stick - (r.top + g.padTop)) / g.run : 0;
       p = Math.max(0, Math.min(0.9999, p));
       setActive(ch, Math.floor(p * ch.items.length));
     });
@@ -463,13 +534,21 @@
     });
     var fast = !pinnedNow || struck === ui.tasks.length;
     var label = fast ? FAST : (left === TOTAL ? '약 ' : '') + days(left);
-    if (ui.num.textContent !== label) {
-      ui.num.textContent = label;
+    if (ui.num.getAttribute('data-label') !== label) {
+      ui.num.setAttribute('data-label', label);
+      // The unit goes in its own span so CSS can space it off the digits.
+      var m = /^(.*?)(일|분)$/.exec(label);
+      ui.num.textContent = m ? m[1] : label;
+      if (m) {
+        var unit = document.createElement('span');
+        unit.className = 'u';
+        unit.textContent = m[2];
+        ui.num.appendChild(unit);
+      }
       ui.num.classList.remove('is-swap');
       void ui.num.offsetWidth;                       // restart the swap
       ui.num.classList.add('is-swap');
     }
-    ui.num.classList.toggle('is-slow', !fast);
     ui.val.textContent = fast ? FAST : days(left);
     // Ten minutes against five eight-hour days, kept as a visible sliver.
     shift.style.setProperty('--left', fast ? (FAST_S /(TOTAL * 8 * 3600)).toFixed(4) : (left / TOTAL).toFixed(3));
@@ -491,61 +570,6 @@
     setShift(Math.floor(p * 9), true);
   }
 
-  /* One wheel gesture, one step: between the untouched list and the spec
-     rising (states 0-6) the wheel moves the stage exactly one state and
-     ignores the rest of that gesture, its inertia included, until the
-     wheel has been still for a moment. Coming in from above, a fast flick
-     lands on state 0 instead of skipping into the struck steps. */
-  if (shift) {
-    var STEP_LAST = 6, QUIET = 220, HOLD = 750;
-    var lockUntil = 0, lastWheel = 0, needFresh = false;
-    var stateTop = function (k) {
-      var top = shift.getBoundingClientRect().top + window.scrollY;
-      var run = shift.offsetHeight - window.innerHeight;
-      return Math.round(top + run * ((k + 0.5) / 9));
-    };
-    window.addEventListener('wheel', function (e) {
-      if (!pinned.matches || e.ctrlKey || !e.deltaY) return;
-      var now = performance.now();
-      if (now - lastWheel > QUIET) needFresh = false; // a new gesture, not the tail of one
-      lastWheel = now;
-      var vh = window.innerHeight;
-      var r = shift.getBoundingClientRect();
-      var down = e.deltaY > 0;
-      var run = shift.offsetHeight - vh;
-      var p = run > 0 ? -r.top / run : 0;
-      var state = Math.floor(Math.max(0, Math.min(0.9999, p)) * 9);
-      var target = null;
-      if (r.top > 0) {
-        // Above the pin: only catch the gesture that would cross into it.
-        if (down && r.top < Math.abs(e.deltaY) * 2) target = 0;
-        else return;
-      } else if (down && state < STEP_LAST && p >= 0) target = state + 1;
-      else if (!down && state > 0 && state <= STEP_LAST) target = state - 1;
-      else return;
-      e.preventDefault();
-      if (now < lockUntil || needFresh) return;
-      lockUntil = now + HOLD;
-      needFresh = true;
-      glide(stateTop(target));
-    }, { passive: false });
-
-    // The page's own glide, eased in and out: native smooth scrolling is
-    // not reliable enough to step on (some browsers drop or cut it short).
-    var glideId = 0;
-    var glide = function (to) {
-      var from = window.scrollY, id = ++glideId, t0 = performance.now(), MS = 650;
-      if (still()) { window.scrollTo({ top: to, behavior: 'instant' }); return; }
-      (function frame(now) {
-        if (id !== glideId) return;
-        var k = Math.min(1, (now - t0) / MS);
-        var e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-        window.scrollTo({ top: from + (to - from) * e, behavior: 'instant' });
-        if (k < 1) requestAnimationFrame(frame);
-      })(t0);
-    };
-  }
-
   /* ---------- One scroll handler, once a frame ---------- */
 
   var ticking = false;
@@ -564,6 +588,15 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   if (pinned.addEventListener) pinned.addEventListener('change', onScroll);
+
+  // Pin heights follow the layout: measured now, after the web fonts land,
+  // and after a resize settles.
+  var pinTimer = null;
+  function remeasure() { measurePins(); onScroll(); }
+  remeasure();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+  window.addEventListener('resize', function () { clearTimeout(pinTimer); pinTimer = setTimeout(remeasure, 150); });
+  if (pinned.addEventListener) pinned.addEventListener('change', remeasure);
 
   /* ==========================================================
      Hero terminal: lines arrive in order, then the session loops
