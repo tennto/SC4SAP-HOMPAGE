@@ -244,8 +244,12 @@
     var HOLD = 3000;    // the finished question stays this long
     var TYPE = 50;      // per character, steady: uneven gaps read as stutter
     var q = 0, timer = null, running = false;
+    var next = null, due = 0, left = 0;   // the step waiting to run, kept across a pause
 
-    function later(fn, ms) { timer = setTimeout(fn, ms); }
+    function later(fn, ms) {
+      next = fn; due = Date.now() + ms;
+      timer = setTimeout(function () { next = null; fn(); }, ms);
+    }
     // Open the empty bar all the way, then type into it.
     function open() {
       bar.classList.add('is-open');
@@ -274,16 +278,18 @@
         }, GAP);
       }, FADE_OUT);
     }
+    // Off screen the bar pauses where it is and picks up from there on return.
     function play() {
       if (running) return;
       running = true;
-      later(open, 500);
+      if (next) later(next, left);
+      else later(open, 500);
     }
     function stop() {
+      if (!running) return;
       running = false;
       clearTimeout(timer);
-      text.textContent = '';
-      bar.classList.remove('is-out', 'is-open');
+      left = Math.max(0, due - Date.now());
     }
 
     if ('IntersectionObserver' in window) {
@@ -303,8 +309,9 @@
     if (!statement) return;
     var out = [];
     [].slice.call(statement.childNodes).forEach(function (node) {
-      // Line breaks are kept as they are; they carry no words to light.
-      if (node.nodeName === 'BR') { out.push('<br>'); return; }
+      // Line breaks are kept as they are, class and all (.br-m breaks on
+      // phones only); they carry no words to light.
+      if (node.nodeName === 'BR') { out.push(node.outerHTML); return; }
       var key = node.nodeType === 1;
       var text = node.textContent;
       // Space-separated scripts split on spaces; Japanese has none, so
@@ -459,6 +466,17 @@
     ui.scroller.style.transform = 'translateY(' + -y + 'px)';
     ui.toc.forEach(function (li, i) { li.classList.toggle('is-active', i === n - 1); });
   }
+  function dxShowSection(n) {
+    var ui = shiftUI;
+    var sec = ui.scroller.querySelector('[data-sec="' + n + '"]');
+    var max = Math.max(0, ui.scroller.offsetHeight - ui.docBody.clientHeight);
+    var y = Math.min(max, Math.max(0, topIn(sec, ui.scroller) - ui.docBody.clientHeight * 0.06));
+    ui.scroller.style.transition = 'none';                // lands there, it does not travel
+    ui.scroller.style.transform = 'translateY(' + -y + 'px)';
+    void ui.scroller.offsetWidth;
+    ui.scroller.style.transition = '';
+    ui.toc.forEach(function (li, i) { li.classList.toggle('is-active', i === n - 1); });
+  }
   function dxPoint(el, fx, fy) {
     var r = el.getBoundingClientRect(), v = shiftUI.view.getBoundingClientRect();
     return [r.left - v.left + r.width * fx, r.top - v.top + r.height * fy];
@@ -486,25 +504,30 @@
     dxReset();
     if (!wide) return;
     ui.toc[0].classList.add('is-active');
-    if (!animate) { ui.win.classList.add('is-done'); ui.badge.classList.add('is-on'); ui.flow.classList.add('is-live'); return; }
+    if (!animate) {
+      ui.win.classList.add('is-done'); ui.badge.classList.add('is-on'); ui.flow.classList.add('is-live');
+      // A phone shows the preview without the walk: open it on the data model.
+      if (phone.matches) requestAnimationFrame(function () { if (t === ui.token) dxShowSection(2); });
+      return;
+    }
     var wait = function (ms) {
       return new Promise(function (res, rej) { setTimeout(function () { t === ui.token ? res() : rej(); }, ms); });
     };
     wait(1100)                                          // the window finishes widening
-      .then(function () { ui.win.classList.add('is-done'); dxScrollPage(ui.result, 12); return wait(2700); })
-      .then(function () { dxScrollPage(ui.prev, 10); return wait(1900); })
+      .then(function () { ui.win.classList.add('is-done'); dxScrollPage(ui.result, 12); return wait(1500); })
+      .then(function () { dxScrollPage(ui.prev, 10); return wait(1100); })
       .then(function () {
         dxMove(dxPoint(ui.view, 0.5, 0.92)); void ui.cursor.offsetWidth;
         ui.cursor.classList.add('is-on');
         return [2, 4].reduce(function (chain, n, i) {
           return chain.then(function () {
             dxMove(dxPoint(ui.toc[n - 1], 0.5, 0.55));
-            return wait(500);
+            return wait(380);
           }).then(function () {
             dxClick(); dxScrollDoc(n);
             // Section 4 holds the flowchart: it runs once the page settles.
-            if (n === 4) setTimeout(function () { if (t === ui.token) ui.flow.classList.add('is-live'); }, 500);
-            return wait(i ? 2000 : 1300);
+            if (n === 4) setTimeout(function () { if (t === ui.token) ui.flow.classList.add('is-live'); }, 350);
+            return wait(i ? 1300 : 800);
           });
         }, Promise.resolve());
       })
@@ -519,6 +542,13 @@
 
   function days(n) { return n > 0 ? (n % 1 ? n.toFixed(1) : n) + '일' : FAST; }
 
+  // Days left once the first `struck` manual steps are gone.
+  function leftAfter(struck) {
+    var left = TOTAL;
+    for (var i = 0; i < struck; i++) left -= parseFloat(shiftUI.tasks[i].getAttribute('data-task'));
+    return left;
+  }
+
   function setShift(state, pinnedNow) {
     var ui = shiftUI;
     var key = state + (pinnedNow ? 'p' : 's');
@@ -526,13 +556,19 @@
     ui.state = key;
 
     var struck = pinnedNow ? Math.min(state, ui.tasks.length) : 0;
-    var left = TOTAL;
-    ui.tasks.forEach(function (task, i) {
-      var done = i < struck;
-      task.classList.toggle('is-done', done);
-      if (done) left -= parseFloat(task.getAttribute('data-task'));
-    });
-    var fast = !pinnedNow || struck === ui.tasks.length;
+    ui.tasks.forEach(function (task, i) { task.classList.toggle('is-done', i < struck); });
+    // On a phone the meter runs its own loop (meterLoop) and is left alone here.
+    if (pinnedNow || !ui.looping) setMeter(!pinnedNow || struck === ui.tasks.length, leftAfter(struck));
+
+    shift.classList.toggle('is-up', !pinnedNow || state >= 6);
+    var wide = pinnedNow && state >= 7;
+    shift.classList.toggle('is-wide', wide);
+    playSpec(wide || !pinnedNow, pinnedNow && !still());
+  }
+
+  // The big number, the SC4SAP bar and its value.
+  function setMeter(fast, left) {
+    var ui = shiftUI;
     var label = fast ? FAST : (left === TOTAL ? '약 ' : '') + days(left);
     if (ui.num.getAttribute('data-label') !== label) {
       ui.num.setAttribute('data-label', label);
@@ -549,16 +585,50 @@
       void ui.num.offsetWidth;                       // restart the swap
       ui.num.classList.add('is-swap');
     }
-    ui.val.textContent = fast ? FAST : days(left);
+    var val = fast ? FAST : days(left);
+    if (ui.val.textContent !== val) {
+      ui.val.textContent = val;
+      ui.val.classList.remove('is-swap');
+      void ui.val.offsetWidth;                       // the value eases in with the number
+      ui.val.classList.add('is-swap');
+    }
     // Ten minutes against five eight-hour days, kept as a visible sliver.
     shift.style.setProperty('--left', fast ? (FAST_S /(TOTAL * 8 * 3600)).toFixed(4) : (left / TOTAL).toFixed(3));
 
     shift.classList.toggle('is-fast', fast);
-    shift.classList.toggle('is-up', !pinnedNow || state >= 6);
-    var wide = pinnedNow && state >= 7;
-    shift.classList.toggle('is-wide', wide);
-    playSpec(wide || !pinnedNow, pinnedNow && !still());
   }
+
+  /* Phones have no pinned stretch to scroll the steps through, so while the
+     meter is on screen it plays them on its own: five days, each step
+     falling away, ten minutes, a rest, and round again. */
+  var phone = window.matchMedia('(max-width: 760px)');
+  function meterLoop() {
+    var ui = shiftUI, timer = null, at = 0;
+    var HOLD_START = 1400, STEP = 750, HOLD_END = 2800;
+    function step(n) {
+      var end = n >= ui.tasks.length;
+      at = n;
+      setMeter(end, leftAfter(n));
+      timer = setTimeout(function () { step(end ? 0 : n + 1); }, n === 0 ? HOLD_START : end ? HOLD_END : STEP);
+    }
+    // Scrolled out and back, the loop pauses and picks up where it was.
+    // Resetting it each time made the bar jump whenever the meter sat at
+    // the edge of the screen and the observer flicked it off and on.
+    function sync(inView) {
+      var run = inView && phone.matches && !pinned.matches && !still();
+      if (run === ui.looping) return;
+      var wasLooping = ui.looping;
+      ui.looping = run;
+      clearTimeout(timer);
+      if (run) step(wasLooping === false && phone.matches ? at : 0);
+      else if (!phone.matches || still()) { at = 0; ui.state = null; stepShift(window.innerHeight); }   // no loop here: the resting state
+    }
+    var seen = false;
+    new IntersectionObserver(function (es) { seen = es[0].isIntersecting; sync(seen); })
+      .observe(shift.querySelector('.shift-meter'));
+    phone.addEventListener('change', function () { sync(seen); });
+  }
+  if (shift && 'IntersectionObserver' in window) meterLoop();
 
   function stepShift(vh) {
     if (!shift) return;

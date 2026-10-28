@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>사용 가이드 · Super-Claude for SAP</title>
+<meta name="description" content="SC4SAP 설치와 설정 가이드" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/sc4_charcoal_32_rounded.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../css/doc.css" />
+</head>
+<body>
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../index_n.html"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="../index_n.html"><i class="ph ph-arrow-left" aria-hidden="true"></i>홈으로</a>
+  </div>
+</header>
+
+<!-- Text: the landing site's install guide (install.html), in the redesign's type on white. -->
+<main class="doc">
+  <header class="doc-head">
+    <p class="doc-eyebrow">사용 가이드</p>
+    <h1>설치 가이드</h1>
+    <p class="doc-lede">Claude Code 세션 안에서 마켓플레이스를 추가하고, 설정 위저드를 한 번 돌리면 끝납니다. MCP 서버는 위저드가 알아서 설치합니다</p>
+    <div class="g-links">
+      <a class="g-btn" href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.ko.md" target="_blank" rel="noopener"><i class="ph ph-book-open" aria-hidden="true"></i>전체 원문 문서</a>
+    </div>
+  </header>
+
+  <section class="g-sec">
+    <h2>요구사항</h2>
+    <dl class="g-spec">
+      <div><dt>Node.js</dt><dd>20.0.0 이상</dd></div>
+      <div><dt>Claude Code</dt><dd>CLI 설치 완료 (Max·Pro 구독 또는 API 키)</dd></div>
+      <div><dt>SAP 시스템</dt><dd>ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud (Public·Private), ADT 활성화</dd></div>
+    </dl>
+    <p class="g-note"><i class="ph ph-info" aria-hidden="true"></i><span>MCP 서버 <code>abap-mcp-adt-powerup</code> 는 <code>/sc4sap:setup</code> 중 자동으로 설치·설정됩니다. 미리 받아둘 필요가 없습니다</span></p>
+  </section>
+
+  <section class="g-sec" id="install-steps">
+    <h2>설치</h2>
+    <p class="g-note"><i class="ph ph-warning-circle" aria-hidden="true"></i><span>sc4sap 은 아직 공식 Claude Code 플러그인 마켓플레이스에 등록되어 있지 않습니다. 당분간은 저장소를 커스텀 마켓플레이스로 추가한 뒤 설치하세요</span></p>
+    <div class="g-opts">
+      <div class="g-opt is-main">
+        <span class="g-tag">권장</span>
+        <h3>커스텀 마켓플레이스로 추가</h3>
+        <p>Claude Code 세션 안에서 두 줄을 차례로 실행합니다</p>
+        <div class="g-cmd"><pre><code>/plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
+/plugin install sc4sap</code></pre><button type="button" class="g-copy" data-copy aria-label="명령어 복사"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>복사</span></button></div>
+        <p class="g-opt-sub">업데이트할 때</p>
+        <div class="g-cmd"><pre><code>/plugin marketplace update babamba2/superclaude-for-sap
+/plugin install sc4sap</code></pre><button type="button" class="g-copy" data-copy aria-label="명령어 복사"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>복사</span></button></div>
+      </div>
+      <div class="g-opt">
+        <span class="g-tag">대안</span>
+        <h3>소스에서 설치</h3>
+        <p>클론 후 빌드하고, Claude Code에서 <code>/plugin marketplace add &lt;로컬-경로&gt;</code> 로 해당 디렉터리를 가리킵니다</p>
+        <div class="g-cmd"><pre><code>git clone https://github.com/babamba2/superclaude-for-sap.git
+cd superclaude-for-sap
+npm install &amp;&amp; npm run build</code></pre><button type="button" class="g-copy" data-copy aria-label="명령어 복사"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>복사</span></button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="g-sec">
+    <h2>설정 위저드</h2>
+    <p>위저드는 한 번에 한 질문만 합니다. 기존 값이 있으면 보여주고 Enter로 유지할 수 있습니다</p>
+    <div class="g-cmd"><pre><code>/sc4sap:setup</code></pre><button type="button" class="g-copy" data-copy aria-label="명령어 복사"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>복사</span></button></div>
+    <ol class="g-steps">
+      <li><span class="n">01</span><div><h3>시스템과 업종</h3><p>S4 또는 ECC 선택, ABAP 릴리즈 입력, 15개 업종 메뉴에서 선택. 이 값이 SPRO 테이블·BAPI·TCode와 ABAP 문법 게이팅을 결정합니다</p></div></li>
+      <li><span class="n">02</span><div><h3>MCP 서버 설치</h3><p><code>abap-mcp-adt-powerup</code> 을 <code>&lt;PLUGIN_ROOT&gt;/vendor/abap-mcp-adt/</code> 에 클론하고 빌드합니다. 이미 있으면 건너뜁니다</p></div></li>
+      <li><span class="n">03</span><div><h3>프로필 생성과 연결</h3><p>alias(<code>KR-DEV</code> 형식 권장)와 tier(<code>DEV</code>·<code>QA</code>·<code>PRD</code>)를 정한 뒤 URL·클라이언트·인증 방식·계정·언어를 하나씩 받습니다. RFC 백엔드는 soap · native · gateway · odata · zrfc 중 선택합니다</p></div></li>
+      <li><span class="n">04</span><div><h3>연결 검증</h3><p><code>/mcp</code> 로 재연결한 뒤 <code>GetSession</code> 왕복, 시스템 정보 확인, <code>GetInactiveObjects</code> 로 ADT 권한까지 확인합니다. Claude Code 재시작은 필요 없습니다</p></div></li>
+      <li><span class="n">05</span><div><h3>ABAP 유틸 객체 생성</h3><p>DEV 프로필에서만 설치됩니다. <code>ZMCP_ADT_UTILS</code> 함수그룹과 <code>ZIF_S4SAP_CM</code> · <code>ZCL_S4SAP_CM_*</code> ALV 핸들러를 만듭니다. QA·PRD 에서는 거부하고 CTS 이관 안내를 출력합니다</p></div></li>
+      <li class="is-required"><span class="n">06</span><div><h3>권한 훅 설치 <span class="g-flag">required</span></h3><p>이 단계 없이는 설정이 완료되지 않습니다. <code>block-forbidden-tables.mjs</code>(행 추출 차단)와 <code>tier-readonly-guard.mjs</code>(tier 변이 차단)를 <code>.claude/settings.json</code> 에 등록하고 양쪽 스모크 테스트를 실행합니다</p></div></li>
+    </ol>
+    <h3 class="g-sub">선택 단계</h3>
+    <ul class="g-list">
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>SPRO 설정 추출 - 토큰을 많이 쓰지만 캐시가 이후 작업의 토큰 사용을 크게 줄입니다</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>커스터마이징 인벤토리 - <code>Z*</code>·<code>Y*</code> 확장과 어펜드 구조를 스캔합니다</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>HUD 상태 줄 - 재시작 후 활성 프로필과 tier, 토큰 사용량을 표시합니다</span></li>
+    </ul>
+    <h3 class="g-sub">서브커맨드</h3>
+    <div class="g-cmd"><pre><code>/sc4sap:setup                # 전체 위저드
+/sc4sap:setup doctor         # 상태 점검으로 라우팅
+/sc4sap:setup mcp            # MCP 설정으로 라우팅
+/sc4sap:setup spro           # SPRO 설정 추출만
+/sc4sap:setup customizations # Z*/Y* 인벤토리만</code></pre><button type="button" class="g-copy" data-copy aria-label="명령어 복사"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>복사</span></button></div>
+  </section>
+
+  <section class="g-sec">
+    <h2>멀티 프로필</h2>
+    <p>한 Claude Code 세션에서 여러 SAP 연결을 다룹니다. 연결 하나가 프로필 하나이고, 프로젝트에는 어느 프로필이 활성인지만 기록됩니다</p>
+    <div class="g-cmd"><pre><code><span class="t-dir">~/.sc4sap/</span>                      <span class="t-note">저장소 간 공유</span>
+└── profiles/
+    ├── <span class="t-dir">KR-DEV/</span>  sap.env · config.json
+    ├── <span class="t-dir">KR-QA/</span>   sap.env · config.json
+    └── <span class="t-dir">KR-PRD/</span>  sap.env · config.json
+
+<span class="t-dir">&lt;project&gt;/.sc4sap/</span>              <span class="t-note">프로젝트 범위</span>
+├── active-profile.txt          <span class="t-note">"KR-DEV"</span>
+└── work/
+    ├── <span class="t-dir">KR-DEV/</span>  program · cbo · ...
+    └── <span class="t-dir">KR-PRD/</span>  ...</code></pre></div>
+    <ul class="g-list g-tiers">
+      <li><i class="ph ph-lock-key" aria-hidden="true"></i><span><b>tier 는 읽기전용 강제의 기준입니다</b> QA·PRD 프로필에서는 <code>Create*</code> · <code>Update*</code> · <code>Delete*</code> 가 훅과 MCP 서버 두 층에서 차단됩니다</span></li>
+      <li><i class="ph ph-prohibit" aria-hidden="true"></i><span><b>tier 는 변경할 수 없습니다</b> 바꾸려면 프로필을 지우고 다시 만들어야 합니다</span></li>
+      <li><i class="ph ph-key" aria-hidden="true"></i><span><b>비밀번호는 OS 키체인에 저장됩니다</b> Windows 자격 증명 관리자 · macOS 키체인 · Linux libsecret. 키체인을 못 쓰는 환경에서는 프로필 env 평문으로 대체하고 경고를 띄웁니다</span></li>
+    </ul>
+  </section>
+
+  <section class="g-sec">
+    <h2>3중 방어</h2>
+    <p>운영계에 붙이기 전에 가장 먼저 검토되는 부분입니다. 문서가 아니라 코드로 강제됩니다</p>
+    <div class="g-layers">
+      <div class="g-layer"><span class="g-layer-tag">L1a</span><div><h3>행 추출 차단</h3><p>Claude Code <code>PreToolUse</code> 훅. 프로필의 <code>blocklistProfile</code> 을 기준으로 민감 테이블의 <code>GetTableContents</code> · <code>GetSqlQuery</code> 를 거부합니다</p></div></div>
+      <div class="g-layer"><span class="g-layer-tag">L1b</span><div><h3>tier 변이 차단</h3><p>Claude Code <code>PreToolUse</code> 훅. 매 호출마다 활성 프로필의 <code>SAP_TIER</code> 를 다시 읽어 QA·PRD 의 변경을 막습니다. 상태를 들고 있지 않습니다</p></div></div>
+      <div class="g-layer is-hard"><span class="g-layer-tag">L2</span><div><h3>MCP 서버 자체 가드</h3><p>우회할 수 없는 층입니다. 훅이 빠지거나 잘못 설정되어도 <code>abap-mcp-adt-powerup</code> 내부 가드가 항상 동작합니다</p></div></div>
+    </div>
+    <p class="g-note"><i class="ph ph-shield-check" aria-hidden="true"></i><span>L1 훅은 IO·파싱 오류 시 통과시키고, L2 MCP 가드는 항상 켜져 있습니다. 권장 기본값은 L1a <code>strict</code>, MCP 서버 블록리스트 <code>standard</code> 입니다</span></p>
+  </section>
+
+  <section class="g-sec">
+    <h2>설정 완료 후</h2>
+    <dl class="g-ref">
+      <div><dt>활성 시스템 전환</dt><dd><code>/sc4sap:sap-option switch &lt;alias&gt;</code></dd></div>
+      <div><dt>법인이나 tier 추가</dt><dd><code>/sc4sap:sap-option add</code></dd></div>
+      <div><dt>프로필 목록</dt><dd><code>/sc4sap:sap-option list</code></dd></div>
+      <div><dt>상태 점검</dt><dd><code>/sc4sap:sap-doctor</code></dd></div>
+      <div><dt>SPRO 재추출</dt><dd><code>/sc4sap:setup spro</code></dd></div>
+    </dl>
+    <h3 class="g-sub">더 읽을거리</h3>
+    <div class="g-reading">
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.ko.md" target="_blank" rel="noopener"><span>설치 및 설정 원문</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/FEATURES.ko.md" target="_blank" rel="noopener"><span>기능 상세</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/CHANGELOG.ko.md" target="_blank" rel="noopener"><span>변경 이력</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+    </div>
+  </section>
+</main>
+<script>
+// Copy buttons: the command text, then a tick for a moment.
+document.querySelectorAll('[data-copy]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var t = b.parentElement.querySelector('code').textContent;
+    var label = b.querySelector('[data-copy-label]');
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(t).then(function () {
+      b.classList.add('is-done'); label.textContent = '복사됨';
+      setTimeout(function () { b.classList.remove('is-done'); label.textContent = '복사'; }, 1600);
+    }, function () {});
+  });
+});
+</script>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <address class="foot-info">
+      <span class="foot-row">
+        <span>에스에이치랩솔루션즈</span>
+        <span>대표 백승현</span>
+        <span>사업자등록번호 556-39-01540</span>
+        <span>통신판매업 신고 【통신판매업 신고번호】</span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+        <span><a href="tel:+821082575798">010-8257-5798</a></span>
+        <span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span>
+        <span>호스팅 【호스팅 업체】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">이용약관</a><a href="../legal/privacy.html">개인정보처리방침</a><a href="../legal/billing-terms.html">유료 서비스 이용약관</a><a href="../legal/refund-policy.html">환불정책</a></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
