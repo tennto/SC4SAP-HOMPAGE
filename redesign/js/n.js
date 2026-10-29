@@ -599,17 +599,21 @@
   }
 
   /* Phones have no pinned stretch to scroll the steps through, so while the
-     meter is on screen it plays them on its own: five days, each step
-     falling away, ten minutes, a rest, and round again. */
+     meter or the step list is on screen it plays them on its own: five
+     days, each step struck as its time falls away, ten minutes, a rest,
+     and round again. */
   var phone = window.matchMedia('(max-width: 760px)');
   function meterLoop() {
     var ui = shiftUI, timer = null, at = 0;
-    var HOLD_START = 1400, STEP = 750, HOLD_END = 2800;
+    var HOLD_START = 1400, STEP = 750, HOLD_LAST = 1300, HOLD_END = 5000;   // the last strike is seen, then the spec is read
+    // One step past the last strike, the spec takes the list's place (.is-spec).
     function step(n) {
-      var end = n >= ui.tasks.length;
+      var last = ui.tasks.length, end = n >= last, spec = n > last;
       at = n;
-      setMeter(end, leftAfter(n));
-      timer = setTimeout(function () { step(end ? 0 : n + 1); }, n === 0 ? HOLD_START : end ? HOLD_END : STEP);
+      ui.tasks.forEach(function (task, i) { task.classList.toggle('is-done', i < n); });
+      setMeter(end, leftAfter(Math.min(n, last)));
+      shift.classList.toggle('is-spec', spec);
+      timer = setTimeout(function () { step(spec ? 0 : n + 1); }, n === 0 ? HOLD_START : spec ? HOLD_END : end ? HOLD_LAST : STEP);
     }
     // Scrolled out and back, the loop pauses and picks up where it was.
     // Resetting it each time made the bar jump whenever the meter sat at
@@ -619,14 +623,21 @@
       if (run === ui.looping) return;
       var wasLooping = ui.looping;
       ui.looping = run;
+      shift.classList.toggle('is-looping', phone.matches && !pinned.matches && !still());   // kept while paused
       clearTimeout(timer);
       if (run) step(wasLooping === false && phone.matches ? at : 0);
-      else if (!phone.matches || still()) { at = 0; ui.state = null; stepShift(window.innerHeight); }   // no loop here: the resting state
+      else if (!phone.matches || still()) { at = 0; ui.state = null; shift.classList.remove('is-spec'); stepShift(window.innerHeight); }   // no loop here: the resting state
     }
-    var seen = false;
-    new IntersectionObserver(function (es) { seen = es[0].isIntersecting; sync(seen); })
-      .observe(shift.querySelector('.shift-meter'));
-    phone.addEventListener('change', function () { sync(seen); });
+    // Either the meter or the step list on screen keeps it running.
+    var shown = { meter: false, before: false };
+    function seen() { return shown.meter || shown.before; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { shown[e.target.classList.contains('shift-meter') ? 'meter' : 'before'] = e.isIntersecting; });
+      sync(seen());
+    });
+    io.observe(shift.querySelector('.shift-meter'));
+    io.observe(shift.querySelector('.shift-before'));
+    phone.addEventListener('change', function () { sync(seen()); });
   }
   if (shift && 'IntersectionObserver' in window) meterLoop();
 
@@ -818,6 +829,40 @@
     }, { rootMargin: '10% 0px' });
     document.querySelectorAll('.aura').forEach(function (a) { auraIO.observe(a); });
   }
+
+  /* ---------- Phones open the site's own pages in place ---------- */
+
+  // On a desktop the nav and footer pages open in new tabs, which are easy
+  // to close; on a phone they pile up, so there the site's own links stay
+  // in the same tab. Links off the site (GitHub) keep their new tab.
+  var handheld = window.matchMedia('(max-width: 760px), (hover: none) and (pointer: coarse)');
+  document.addEventListener('click', function (e) {
+    if (!handheld.matches || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[target="_blank"]');
+    if (!a || a.origin !== location.origin) return;
+    e.preventDefault();
+    location.href = a.href;
+  });
+
+  /* ---------- Run modes: the rim takes turns, both modes have their case ---------- */
+
+  (function costRim() {
+    var grid = document.querySelector('[data-cost]');
+    if (!grid || still() || !('IntersectionObserver' in window)) return;
+    var cards = [].slice.call(grid.querySelectorAll('.cost-card'));
+    grid.classList.add('is-cycling');   // a phone shows one card and swaps its content (n.css)
+    var at = cards.findIndex(function (c) { return c.classList.contains('is-lit'); });
+    var timer = null;
+    function turn() {
+      at = (at + 1) % cards.length;
+      cards.forEach(function (c, i) { c.classList.toggle('is-lit', i === at); });
+    }
+    // Only while the cards are on screen.
+    new IntersectionObserver(function (es) {
+      clearInterval(timer);
+      if (es[0].isIntersecting) timer = setInterval(turn, 6000);
+    }).observe(grid);
+  })();
 
   /* ---------- GitHub stars, shown only when the request succeeds ---------- */
 

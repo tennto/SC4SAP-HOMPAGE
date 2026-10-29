@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>도입 문의 · Super-Claude for SAP</title>
+<meta name="description" content="SAP 환경과 도입 목적을 알려 주시면 담당자가 연락드려요." />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/sc4_charcoal_32_rounded.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../css/doc.css" />
+</head>
+<body>
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../index_n.html"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="../index_n.html"><i class="ph ph-arrow-left" aria-hidden="true"></i>홈으로</a>
+  </div>
+</header>
+
+<main class="doc">
+  <header class="doc-head">
+    <p class="doc-eyebrow">도입 문의</p>
+    <h1>SC4SAP 도입 문의</h1>
+    <p class="doc-lede">SAP 환경과 도입 목적을 알려 주시면 담당자가 연락드려요.</p>
+    <ul class="doc-meta">
+      <li><b>소요 시간</b>약 3분</li>
+      <li><b>회신</b>정식 배포 후</li>
+      <li><b>직접 문의</b><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></li>
+    </ul>
+  </header>
+  <!-- Closed test: inquiries are taken but not handled until release.
+     Drop this note, and restore the reply times, on release. -->
+  <p class="doc-note iq-closed"><i class="ph ph-info" aria-hidden="true"></i><span><b>지금은 클로즈 테스트 기간이라 도입 문의를 운영하지 않아요.</b> 남겨 주신 문의는 접수만 되고, 상담은 정식 배포 후 상담 채널이 개설되면 접수 순서대로 연락드려요.</span></p>
+
+  <!-- Posts to the Google Apps Script web app in tools/inquiry-apps-script
+       (a sheet row plus a mail to sc4sap.dev@gmail.com). A new deployment
+       gets a new /exec URL; this one must follow it. -->
+  <form class="iq" data-inquiry data-endpoint="https://script.google.com/macros/s/AKfycbwA-XP-2XNhx_zl7ZX_kIPtOtMPxkjlUBOO6vz_CMrntgPENjbjhN2vx9pcUo7UDDnx/exec" novalidate>
+    <!-- Left empty by people, filled by bots; the script drops those. -->
+    <div class="iq-trap" aria-hidden="true"><label>웹사이트 <input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <p class="iq-legend"><span class="iq-req" aria-hidden="true">*</span> 표시는 필수 항목이에요.</p>
+
+    <section class="doc-sec" aria-labelledby="iq-s1">
+      <h2 id="iq-s1"><span class="n">1.</span>담당자 정보</h2>
+      <div class="iq-grid">
+        <label class="iq-f"><span class="iq-l">이름<span class="iq-req">*</span></span>
+          <input name="name" autocomplete="name" required></label>
+        <label class="iq-f"><span class="iq-l">회사명<span class="iq-req">*</span></span>
+          <input name="company" autocomplete="organization" required></label>
+        <label class="iq-f"><span class="iq-l">부서 · 직책</span>
+          <input name="title" autocomplete="organization-title" placeholder="예: IT기획팀 · 팀장"></label>
+        <label class="iq-f"><span class="iq-l">업무 이메일<span class="iq-req">*</span></span>
+          <input name="email" type="email" autocomplete="email" inputmode="email" required></label>
+        <label class="iq-f"><span class="iq-l">연락처<span class="iq-req">*</span></span>
+          <input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="010-0000-0000" required></label>
+      </div>
+    </section>
+
+    <section class="doc-sec" aria-labelledby="iq-s2">
+      <h2 id="iq-s2"><span class="n">2.</span>회사와 SAP 환경</h2>
+      <div class="iq-grid">
+        <label class="iq-f"><span class="iq-l">업종<span class="iq-req">*</span></span>
+          <select name="industry" required>
+            <option value="">선택</option>
+            <option>제조</option><option>유통 · 물류</option><option>금융 · 보험</option>
+            <option>건설 · 엔지니어링</option><option>에너지 · 화학</option><option>IT · 서비스</option>
+            <option>공공 · 교육</option><option>SI · 컨설팅사</option><option>기타</option>
+          </select></label>
+        <label class="iq-f"><span class="iq-l">임직원 규모<span class="iq-req">*</span></span>
+          <select name="size" required>
+            <option value="">선택</option>
+            <option>300명 미만</option><option>300~1,000명</option><option>1,000~5,000명</option><option>5,000명 이상</option>
+          </select></label>
+        <label class="iq-f"><span class="iq-l">SAP 버전<span class="iq-req">*</span></span>
+          <select name="sapVersion" required>
+            <option value="">선택</option>
+            <option>SAP ECC 6.0</option><option>S/4HANA (온프레미스)</option><option>S/4HANA Cloud Private (RISE)</option>
+            <option>S/4HANA Cloud Public</option><option>전환 준비 중 (ECC → S/4)</option><option>잘 모르겠어요</option>
+          </select></label>
+        <label class="iq-f"><span class="iq-l">CBO 프로그램 규모</span>
+          <select name="cbo">
+            <option value="">선택</option>
+            <option>500본 미만</option><option>500~2,000본</option><option>2,000~5,000본</option><option>5,000본 이상</option><option>잘 모르겠어요</option>
+          </select></label>
+      </div>
+
+      <fieldset class="iq-set">
+        <legend class="iq-l">운영 중인 주요 모듈</legend>
+        <div class="iq-chips">
+          <label><input type="checkbox" name="modules" value="FI/CO"><span>FI/CO</span></label>
+          <label><input type="checkbox" name="modules" value="MM"><span>MM</span></label>
+          <label><input type="checkbox" name="modules" value="SD"><span>SD</span></label>
+          <label><input type="checkbox" name="modules" value="PP"><span>PP</span></label>
+          <label><input type="checkbox" name="modules" value="QM/PM"><span>QM/PM</span></label>
+          <label><input type="checkbox" name="modules" value="WM/EWM"><span>WM/EWM</span></label>
+          <label><input type="checkbox" name="modules" value="HR/HCM"><span>HR/HCM</span></label>
+          <label><input type="checkbox" name="modules" value="BW/BI"><span>BW/BI</span></label>
+          <label><input type="checkbox" name="modules" value="기타"><span>기타</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="iq-set">
+        <legend class="iq-l">설치 · 보안 요건</legend>
+        <div class="iq-chips">
+          <label><input type="radio" name="deploy" value="일반 네트워크"><span>일반 네트워크</span></label>
+          <label><input type="radio" name="deploy" value="망분리 환경"><span>망분리 환경</span></label>
+          <label><input type="radio" name="deploy" value="사내 설치 필수"><span>사내 설치 필수</span></label>
+          <label><input type="radio" name="deploy" value="검토 필요"><span>검토 필요</span></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <section class="doc-sec" aria-labelledby="iq-s3">
+      <h2 id="iq-s3"><span class="n">3.</span>도입 계획</h2>
+      <fieldset class="iq-set" data-need-one>
+        <legend class="iq-l">관심 있는 업무<span class="iq-req">*</span><small>여러 개 고를 수 있어요</small></legend>
+        <div class="iq-chips">
+          <label><input type="checkbox" name="goals" value="코드 분석 · 문서화"><span>코드 분석 · 문서화</span></label>
+          <label><input type="checkbox" name="goals" value="명세서 · 매뉴얼 생성"><span>명세서 · 매뉴얼 생성</span></label>
+          <label><input type="checkbox" name="goals" value="운영 장애 진단"><span>운영 장애 진단</span></label>
+          <label><input type="checkbox" name="goals" value="신규 개발 지원"><span>신규 개발 지원</span></label>
+          <label><input type="checkbox" name="goals" value="IMG · 설정 분석"><span>IMG · 설정 분석</span></label>
+          <label><input type="checkbox" name="goals" value="S/4HANA 전환"><span>S/4HANA 전환</span></label>
+          <label><input type="checkbox" name="goals" value="SAP 지식 관리"><span>SAP 지식 관리</span></label>
+        </div>
+        <p class="iq-err" data-err>하나 이상 골라 주세요.</p>
+      </fieldset>
+
+      <div class="iq-grid">
+        <label class="iq-f"><span class="iq-l">사용 예정 인원</span>
+          <select name="seats">
+            <option value="">선택</option>
+            <option>1~5명</option><option>6~20명</option><option>21~50명</option><option>50명 이상</option>
+          </select></label>
+        <label class="iq-f"><span class="iq-l">희망 도입 시점</span>
+          <select name="timeline">
+            <option value="">선택</option>
+            <option>1개월 이내</option><option>3개월 이내</option><option>6개월 이내</option><option>정보 수집 단계</option>
+          </select></label>
+      </div>
+
+      <label class="iq-f"><span class="iq-l">문의 내용</span>
+        <textarea name="message" rows="6" placeholder="현재 겪는 어려움, 먼저 시도해 보고 싶은 업무, PoC 희망 여부 등을 자유롭게 적어 주세요."></textarea></label>
+
+      <label class="iq-f iq-half"><span class="iq-l">알게 된 경로</span>
+        <select name="source">
+          <option value="">선택</option>
+          <option>검색</option><option>지인 추천</option><option>SNS · 커뮤니티</option><option>세미나 · 행사</option><option>GitHub</option><option>기타</option>
+        </select></label>
+    </section>
+
+    <section class="doc-sec" aria-labelledby="iq-s4">
+      <h2 id="iq-s4"><span class="n">4.</span>개인정보 수집 · 이용 동의</h2>
+      <div class="legal-table-wrap"><table class="legal-table">
+        <thead><tr><th>항목</th><th>목적</th><th>보유 기간</th></tr></thead>
+        <tbody><tr><td>이름, 회사명, 부서 · 직책, 업무 이메일, 연락처</td><td>도입 문의 확인과 회신, 상담 진행</td><td>문의 처리 후 1년, 요청 시 즉시 파기</td></tr></tbody>
+      </table></div>
+      <p class="iq-fine">동의하지 않을 수 있지만, 동의하지 않으면 문의를 접수할 수 없어요. 자세한 내용은 <a href="../legal/privacy.html">개인정보처리방침</a>을 확인해 주세요.</p>
+      <label class="iq-check"><input type="checkbox" name="agreePrivacy" required><span>개인정보 수집 · 이용에 동의해요 <span class="iq-req">(필수)</span></span></label>
+      <label class="iq-check"><input type="checkbox" name="agreeMarketing"><span>제품 소식과 행사 안내를 이메일로 받을게요 <span class="iq-opt">(선택)</span></span></label>
+    </section>
+
+    <div class="iq-submit">
+      <button class="iq-btn" type="submit"><span>문의 보내기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+      <p class="iq-status" data-status role="status" aria-live="polite"></p>
+    </div>
+  </form>
+
+  <div class="iq-done" data-done hidden tabindex="-1">
+    <i class="ph ph-check-circle" aria-hidden="true"></i>
+    <h2>문의가 접수됐어요</h2>
+    <p>클로즈 테스트 기간이라 정식 배포 후 상담 채널이 개설되면<br>접수 순서대로 남겨 주신 이메일로 연락드릴게요.<br>직접 문의는 <a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a> 또는 <span class="iq-nw">010-8257-5798</span>로 알려 주세요.</p>
+    <a class="g-btn" href="../index_n.html">홈으로 돌아가기</a>
+  </div>
+</main>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <address class="foot-info">
+      <!-- One line each wide; narrow, each pair or lone field takes a line. -->
+      <span class="foot-row">
+        <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>대표 백승현</span></span>
+        <span class="foot-pair is-long"><span>사업자등록번호 556-39-01540</span><span>통신판매업 신고 【통신판매업 신고번호】</span></span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+      </span>
+      <span class="foot-row">
+        <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+        <span>호스팅 【호스팅 업체】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">이용약관</a><a href="../legal/privacy.html">개인정보처리방침</a><a href="../legal/billing-terms.html">유료 서비스 이용약관</a><a href="../legal/refund-policy.html">환불정책</a></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Checks the form, then posts it as JSON to data-endpoint. */
+(function () {
+  var form = document.querySelector('[data-inquiry]');
+  if (!form) return;
+  var status = form.querySelector('[data-status]');
+  var done = document.querySelector('[data-done]');
+  var btn = form.querySelector('.iq-btn');
+
+  /* Each select becomes a button and a listbox in the page's style. The
+     select stays (hidden) as the value and the required check. */
+  var dds = [];
+  [].forEach.call(form.querySelectorAll('select'), function (sel, n) {
+    var wrap = sel.closest('.iq-f');
+    var label = wrap.querySelector('.iq-l');
+    // A label around a button would forward its clicks; a div does not.
+    var box = document.createElement('div');
+    box.className = wrap.className;
+    while (wrap.firstChild) box.appendChild(wrap.firstChild);
+    wrap.parentNode.replaceChild(box, wrap);
+    label.id = 'iq-dd-l' + n;
+
+    var dd = document.createElement('div');
+    dd.className = 'iq-dd';
+    sel.parentNode.insertBefore(dd, sel);
+    dd.appendChild(sel);
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'iq-dd-btn';
+    btn.id = 'iq-dd-b' + n;
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-labelledby', label.id + ' ' + btn.id);
+    btn.innerHTML = '<span class="iq-dd-val"></span><i class="ph ph-caret-down" aria-hidden="true"></i>';
+    var val = btn.firstChild;
+    var list = document.createElement('ul');
+    list.className = 'iq-dd-list';
+    list.setAttribute('role', 'listbox');
+    list.setAttribute('aria-labelledby', label.id);
+    list.tabIndex = -1;
+    list.hidden = true;
+    var opts = [].filter.call(sel.options, function (o) { return o.value; });
+    opts.forEach(function (o, i) {
+      var li = document.createElement('li');
+      li.id = 'iq-dd-' + n + '-' + i;
+      li.setAttribute('role', 'option');
+      li.textContent = o.textContent;
+      li.insertAdjacentHTML('beforeend', '<i class="ph ph-check" aria-hidden="true"></i>');
+      list.appendChild(li);
+    });
+    dd.appendChild(btn);
+    dd.appendChild(list);
+    var items = [].slice.call(list.children), at = -1;
+
+    function paint() {
+      var i = sel.selectedIndex - (sel.options.length - opts.length);
+      val.textContent = i >= 0 ? opts[i].textContent : sel.options[0].textContent;
+      val.classList.toggle('is-empty', i < 0);
+      items.forEach(function (li, k) { li.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+      return i;
+    }
+    function move(i) {
+      at = Math.max(0, Math.min(items.length - 1, i));
+      items.forEach(function (li, k) { li.classList.toggle('is-active', k === at); });
+      list.setAttribute('aria-activedescendant', items[at].id);
+      var li = items[at];
+      if (li.offsetTop < list.scrollTop) list.scrollTop = li.offsetTop;
+      else if (li.offsetTop + li.offsetHeight > list.scrollTop + list.clientHeight) list.scrollTop = li.offsetTop + li.offsetHeight - list.clientHeight;
+    }
+    function open() {
+      dds.forEach(function (d) { if (d !== api) d.close(); });
+      list.hidden = false;
+      dd.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      move(Math.max(0, paint()));
+      list.focus();
+    }
+    function close(refocus) {
+      if (list.hidden) return;
+      list.hidden = true;
+      dd.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      if (refocus) btn.focus();
+    }
+    function pick(i) {
+      sel.value = opts[i].value;
+      paint();
+      sel.dispatchEvent(new Event('input', { bubbles: true }));
+      close(true);
+    }
+
+    btn.addEventListener('click', function () { list.hidden ? open() : close(true); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); }
+    });
+    list.addEventListener('click', function (e) {
+      var li = e.target.closest('li');
+      if (li) pick(items.indexOf(li));
+    });
+    list.addEventListener('mousemove', function (e) {
+      var li = e.target.closest('li');
+      if (li && items.indexOf(li) !== at) move(items.indexOf(li));
+    });
+    list.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(at + 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(at - 1); }
+      else if (e.key === 'Home') { e.preventDefault(); move(0); }
+      else if (e.key === 'End') { e.preventDefault(); move(items.length - 1); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(at); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+      else if (e.key === 'Tab') close(false);
+    });
+    list.addEventListener('focusout', function (e) { if (!dd.contains(e.relatedTarget)) close(false); });
+
+    var api = { close: close, btn: btn, sel: sel };
+    dds.push(api);
+    paint();
+  });
+  document.addEventListener('pointerdown', function (e) {
+    dds.forEach(function (d) { if (!d.btn.parentNode.contains(e.target)) d.close(false); });
+  });
+  function focusField(el) {
+    var d = dds.filter(function (d) { return d.sel === el; })[0];
+    (d ? d.btn : el).focus();
+  }
+
+  function groupOk(set) {
+    var ok = !!set.querySelector('input:checked');
+    set.classList.toggle('is-invalid', !ok);
+    return ok;
+  }
+  function fieldOk(el) {
+    var ok = el.checkValidity();
+    (el.closest('.iq-f, .iq-check') || el).classList.toggle('is-invalid', !ok);
+    return ok;
+  }
+
+  // Marks clear as soon as the field is fixed.
+  form.addEventListener('input', function (e) {
+    var el = e.target;
+    var set = el.closest('[data-need-one]');
+    if (set && set.classList.contains('is-invalid')) groupOk(set);
+    if (el.closest('.is-invalid') && el.matches('[required]')) fieldOk(el);
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var first = null;
+    [].forEach.call(form.querySelectorAll('[required]'), function (el) {
+      if (!fieldOk(el) && !first) first = el;
+    });
+    [].forEach.call(form.querySelectorAll('[data-need-one]'), function (set) {
+      if (!groupOk(set) && !first) first = set.querySelector('input');
+    });
+    if (first) {
+      status.textContent = '빠진 필수 항목을 채워 주세요.';
+      focusField(first);
+      return;
+    }
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) {
+      if (k === 'modules' || k === 'goals') (data[k] = data[k] || []).push(v);
+      else data[k] = v;
+    });
+    data.agreePrivacy = form.agreePrivacy.checked;
+    data.agreeMarketing = form.agreeMarketing.checked;
+
+    var endpoint = form.getAttribute('data-endpoint');
+    if (!endpoint) {
+      status.textContent = '지금은 온라인 접수를 준비 중이에요. sc4sap.dev@gmail.com으로 보내 주세요.';
+      return;
+    }
+    btn.disabled = true;
+    status.textContent = '보내는 중이에요…';
+    // Sent as text/plain: Apps Script cannot answer a CORS preflight, which
+    // an application/json body would trigger. The script parses it as JSON.
+    fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (res) { if (!res.ok) throw new Error(res.error); })
+      .then(function () { form.hidden = true; done.hidden = false; done.focus(); })
+      .catch(function () {
+        btn.disabled = false;
+        status.textContent = '보내지 못했어요. 잠시 뒤 다시 시도하거나 sc4sap.dev@gmail.com으로 보내 주세요.';
+      });
+  });
+})();
+</script>
+</body>
+</html>

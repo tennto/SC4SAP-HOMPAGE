@@ -68,7 +68,7 @@
         <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
         <button type="button" data-lang-btn="ja" aria-pressed="false">JP</button>
       </div>
-      <a class="btn btn-sm nav-cta" href="#contact"><span data-i="ctaContact">도입 문의</span></a>
+      <a class="btn btn-sm nav-cta" href="contact/inquiry.html" target="_blank" rel="noopener"><span data-i="ctaContact">도입 문의</span></a>
       <!-- Two strokes that turn into an X. An SVG rather than the icon font,
            whose glyphs sit on a text baseline and never centre exactly. -->
       <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-panel" data-nav-toggle>
@@ -83,7 +83,7 @@
         <div class="nav-group" id="grp-res" data-group="res">
           <p class="nav-group-h" data-i="navRes">리소스</p>
           <div class="nav-group-links">
-            <a href="resources/sc4sap-brochure.pdf" target="_blank" rel="noopener"><b><span data-i="dResBrochure">SC4 소개서</span> <em>PDF</em></b><span class="pl-desc" data-i="dResBrochureD">제품 소개 자료를 받아보세요</span></a>
+            <a href="resources/brochure.html" target="_blank" rel="noopener"><b><span data-i="dResBrochure">SC4 소개서</span> <em>PDF</em></b><span class="pl-desc" data-i="dResBrochureD">제품 소개 자료를 받아보세요</span></a>
             <a href="resources/updates.html" target="_blank" rel="noopener"><b><span data-i="dResUpdates">업데이트</span></b><span class="pl-desc" data-i="dResUpdatesD">새 기능과 변경 내역</span></a>
             <a href="resources/guide.html" target="_blank" rel="noopener"><b><span data-i="dResGuide">사용 가이드</span></b><span class="pl-desc" data-i="dResGuideD">연결부터 첫 분석까지</span></a>
           </div>
@@ -91,7 +91,7 @@
         <div class="nav-group" id="grp-svc" data-group="svc">
           <p class="nav-group-h" data-i="navSvc">서비스</p>
           <div class="nav-group-links">
-            <a href="service/about.html" target="_blank" rel="noopener"><b><span data-i="dSvcAbout">About</span></b><span class="pl-desc" data-i="dSvcAboutD">SC4SAP를 만드는 사람들</span></a>
+            <a href="service/about.html" target="_blank" rel="noopener"><b><span data-i="dSvcAbout">About</span></b><span class="pl-desc" data-i="dSvcAboutD">SC4SAP 플러그인과 웹 소개</span></a>
             <a href="service/security.html" target="_blank" rel="noopener"><b><span data-i="dSvcSecurity">Security</span></b><span class="pl-desc" data-i="dSvcSecurityD">데이터 보호와 권한 설계</span></a>
             <a href="service/sponsorship.html" target="_blank" rel="noopener"><b><span data-i="dSvcSponsor">Sponsorship</span></b><span class="pl-desc" data-i="dSvcSponsorD">프로젝트 후원 안내</span></a>
           </div>
@@ -147,12 +147,12 @@
       <div class="ask" aria-hidden="true">
         <span class="metal-rim"></span>
         <span class="ask-line"><span class="ask-text"></span><span class="ask-caret"></span></span>
-        <span class="ask-send"><i class="ph ph-paper-plane-tilt"></i></span>
+        <span class="ask-send"><i class="ph ph-arrow-elbow-down-left"></i></span>
       </div>
     </div>
 
     <div class="actions enter" style="--d:420ms">
-      <a class="btn btn-light" href="#contact"><span data-i="ctaContactLong">도입 문의하기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      <a class="btn btn-light" href="contact/inquiry.html" target="_blank" rel="noopener"><span data-i="ctaContactLong">도입 문의하기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">서비스 둘러보기</span></a>
     </div>
   </div>
@@ -419,12 +419,12 @@
           <!-- The PoC and plug-in at a glance: one glass capsule (SC4SAP, its
                workspace, the tools it works through) with its twelve skills
                branching off both ends. Wide it is a 1024 x 632 frame with the
-               skills in two columns; on a phone, 400 x 640 with a row above
+               skills in two columns; on a phone, 400 x 520 with a row above
                and below. Each frame has its own SVG of lines, and the pieces
                are placed on the same numbers. -->
           <figure class="fx" aria-label="SC4SAP 구조: 채팅·스킬·그래프 워크스페이스가 VS Code CLI 플러그인, Obsidian RAG, Notion과 연동되고, 양옆으로 12개 스킬이 이어집니다">
             <svg class="fx-lines is-wide" viewBox="0 0 1024 632" aria-hidden="true"><path d="M259 316.5H196.5"/><path d="M765 316.5H827.5"/><path d="M154 126.5H186.5Q196.5 126.5 196.5 136.5V496.5Q196.5 506.5 186.5 506.5H154"/><path d="M196.5 202.5H154"/><path d="M196.5 278.5H154"/><path d="M196.5 354.5H154"/><path d="M196.5 430.5H154"/><path d="M870 126.5H837.5Q827.5 126.5 827.5 136.5V496.5Q827.5 506.5 837.5 506.5H870"/><path d="M827.5 202.5H870"/><path d="M827.5 278.5H870"/><path d="M827.5 354.5H870"/><path d="M827.5 430.5H870"/></svg>
-            <svg class="fx-lines is-narrow" viewBox="0 0 400 640" aria-hidden="true"><path d="M200.5 280.8V214.5"/><path d="M200.5 359.2V426.5"/><path d="M45.5 176V204.5Q45.5 214.5 55.5 214.5H345.5Q355.5 214.5 355.5 204.5V176"/><path d="M107.5 214.5V176"/><path d="M169.5 214.5V176"/><path d="M231.5 214.5V176"/><path d="M293.5 214.5V176"/><path d="M45.5 464V436.5Q45.5 426.5 55.5 426.5H345.5Q355.5 426.5 355.5 436.5V464"/><path d="M107.5 426.5V464"/><path d="M169.5 426.5V464"/><path d="M231.5 426.5V464"/><path d="M293.5 426.5V464"/></svg>
+            <svg class="fx-lines is-narrow" viewBox="0 60 400 520" aria-hidden="true"><path d="M200.5 280.8V214.5"/><path d="M200.5 359.2V426.5"/><path d="M45.5 176V204.5Q45.5 214.5 55.5 214.5H345.5Q355.5 214.5 355.5 204.5V176"/><path d="M107.5 214.5V176"/><path d="M169.5 214.5V176"/><path d="M231.5 214.5V176"/><path d="M293.5 214.5V176"/><path d="M45.5 464V436.5Q45.5 426.5 55.5 426.5H345.5Q355.5 426.5 355.5 436.5V464"/><path d="M107.5 426.5V464"/><path d="M169.5 426.5V464"/><path d="M231.5 426.5V464"/><path d="M293.5 426.5V464"/></svg>
             <div class="fx-cap" aria-hidden="true">
               <img class="fx-mark" src="sc4_w_logo.png" alt="">
               <span class="fx-pill"><span class="fx-claude" title="Claude"><img src="claude2.png" alt=""></span><i class="ph ph-squares-four" title="스킬"></i><i class="ph ph-graph" title="그래프"></i><span class="fx-sep"></span><img src="vscode.svg" alt="" title="VS Code · CLI 플러그인"><img src="Obsidian_logo.svg" alt="" title="Obsidian · RAG"><img src="Notion-logo.svg" alt="" title="Notion"></span>
@@ -454,7 +454,50 @@
       </li>
       <li class="ana-item">
         <h3 class="ana-h" data-i="ana5">작업 규모에 맞춰<br>비용을 선택할 수 있어요</h3>
-        <div class="ph-box" aria-hidden="true"></div>
+        <p class="sec-sub ana-sub" data-i="ana5Sub">같은 기능도 쓰임에 따라 필요한 깊이가 달라요<br>빠르게 훑어볼 땐 절약 모드, 그대로 넘길 문서가 필요할 땐 표준 모드</p>
+        <!-- The PoC's two run modes, as its skill forms describe them
+             (web/src/lib/i18n/skills.ts). The figures are Program -> Spec's
+             own estimates in the form, in dollars at the pricing doc's ₩1,400/$;
+             keep them in step with the app. -->
+        <div class="cost-stage">
+          <div class="cost-grid" data-cost>
+            <article class="cost-card glass">
+              <span class="metal-rim" data-box aria-hidden="true"></span>
+              <header class="cost-head">
+                <span class="cost-ic"><i class="ph ph-leaf" aria-hidden="true"></i></span>
+                <p class="cost-mode" data-i="costEcoK">Economy</p>
+                <h4 data-i="costEcoH">절약 모드</h4>
+                <p class="cost-tag" data-i="costEcoT">빠르고 가볍게, 비용은 최소로</p>
+              </header>
+              <dl class="cost-spec">
+                <div><dt data-i="costHow">일하는 방식</dt><dd data-i="costEcoHow">에이전트 하나가 소스를 읽고 끝까지 써요</dd></div>
+                <div><dt data-i="costFit">이럴 때</dt><dd data-i="costEcoFit">빠른 확인, 초안, 여러 본 반복 작업</dd></div>
+              </dl>
+              <div class="cost-ex">
+                <span class="cost-ex-k" data-i="costEx">프로그램 → 명세 기준</span>
+                <span class="cost-ex-v"><b>$0.15~0.30</b><small>(약 200~400원)</small><i></i><b data-i="costEcoTime">1~3분</b></span>
+              </div>
+            </article>
+            <article class="cost-card glass is-lit">
+              <span class="metal-rim" data-box aria-hidden="true"></span>
+              <header class="cost-head">
+                <span class="cost-ic"><i class="ph ph-target" aria-hidden="true"></i></span>
+                <p class="cost-mode" data-i="costStdK">Standard</p>
+                <h4 data-i="costStdH">표준 모드</h4>
+                <p class="cost-tag" data-i="costStdT">깊고 꼼꼼하게, 품질을 끝까지</p>
+              </header>
+              <dl class="cost-spec">
+                <div><dt data-i="costHow">일하는 방식</dt><dd data-i="costStdHow">분석 에이전트와 모듈 컨설턴트가 먼저 보고, 작성 에이전트가 정리해요</dd></div>
+                <div><dt data-i="costFit">이럴 때</dt><dd data-i="costStdFit">납품할 문서, 성능 · 권한 같은 숨은 문제까지</dd></div>
+              </dl>
+              <div class="cost-ex">
+                <span class="cost-ex-k" data-i="costEx">프로그램 → 명세 기준</span>
+                <span class="cost-ex-v"><b>$0.70~1.15</b><small>(약 1,000~1,600원)</small><i></i><b data-i="costStdTime">5~10분</b></span>
+              </div>
+            </article>
+          </div>
+          <p class="cost-note" data-i="costNote">두 모드 모두 실행 전에 예상 비용과 시간을 먼저 보여 주고, 기능마다 정해진 예산 상한을 넘지 않아요</p>
+        </div>
       </li>
     </ol>
   </div>
@@ -489,7 +532,7 @@
       </div>
       <nav class="foot-col" aria-labelledby="foot-res">
         <h3 id="foot-res" data-i="navRes">리소스</h3>
-        <a href="resources/sc4sap-brochure.pdf" target="_blank" rel="noopener"><span data-i="dResBrochure">SC4 소개서</span><em>PDF</em></a>
+        <a href="resources/brochure.html" target="_blank" rel="noopener"><span data-i="dResBrochure">SC4 소개서</span><em>PDF</em></a>
         <a href="resources/updates.html" target="_blank" rel="noopener" data-i="dResUpdates">업데이트</a>
         <a href="resources/guide.html" target="_blank" rel="noopener" data-i="dResGuide">사용 가이드</a>
       </nav>
@@ -516,16 +559,14 @@
       <!-- Business details as registered. PLACEHOLDER: the mail-order
            registration number and the hosting provider are still to come. -->
       <address class="foot-info">
+        <!-- Pairs stay on one line on a phone; the address has its own. -->
         <span class="foot-row">
-          <span>에스에이치랩솔루션즈</span>
-          <span>대표 백승현</span>
-          <span>사업자등록번호 556-39-01540</span>
-          <span>통신판매업 신고 【통신판매업 신고번호】</span>
+          <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>대표 백승현</span></span>
+          <span class="foot-pair is-long"><span>사업자등록번호 556-39-01540</span><span>통신판매업 신고 【통신판매업 신고번호】</span></span>
         </span>
         <span class="foot-row">
           <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
-          <span><a href="tel:+821082575798">010-8257-5798</a></span>
-          <span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span>
+          <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
           <span>호스팅 【호스팅 업체】</span>
         </span>
       </address>
@@ -580,12 +621,15 @@ const SPEED = 0.6;
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   for (const rim of document.querySelectorAll('.metal-rim')) {
     const speed = SPEED;
+    // A box (data-box) is near square, so the circle fitted to cover it
+    // leaves the corners outside, dark. It gets a bigger circle instead.
+    const box = 'box' in rim.dataset;
     const mount = new ShaderMount(rim, liquidMetalFragmentShader, {
       u_colorBack: [0, 0, 0, 0], u_colorTint: [1, 1, 1, 1],
       u_image: undefined, u_isImage: false,
       u_repetition: 4, u_softness: 0.5, u_shiftRed: 0.3, u_shiftBlue: 0.3,
       u_distortion: 0, u_contour: 0, u_angle: 45, u_shape: 1,
-      u_fit: ShaderFitOptions.cover, u_scale: 1.3, u_rotation: 0,
+      u_fit: ShaderFitOptions.cover, u_scale: box ? 1.9 : 1.3, u_rotation: 0,
       u_originX: 0.5, u_originY: 0.5, u_offsetX: 0, u_offsetY: 0,
       u_worldWidth: 0, u_worldHeight: 0,
     }, undefined, speed);

@@ -714,7 +714,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   --fade: 800ms;          /* the next round's bar fades in, eased at both ends so it reads as a fade, not a pop */
   --fade-out: 500ms;      /* a finished round eases away */
   --soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --send: 1.2em;          /* the paper-plane icon's column */
+  --send: 1.2em;          /* the enter-key icon's column */
   --ask-r: var(--r-pill);
   --metal-w: 2px;         /* liquid-metal rim thickness */
   position: relative;
@@ -768,7 +768,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   position: relative; z-index: 1;
   display: grid; place-items: center;
   color: var(--ink-3);
-  font-size: 1.05em;
+  font-size: 0.85em;
   line-height: 1;
 }
 
@@ -1273,10 +1273,9 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 .shift-done-t { font-weight: 600; font-size: 0.78rem; color: var(--ink-2); }
 
 @media (max-width: 760px) {
-  /* Phones get the result only: the meter, then the spec window. The task
-     list stays a desktop story; the two bars already tell it here. */
-  .shift-before { display: none; }
-  /* and inside the window, the HTML preview straight away, without the summary above it */
+  /* Phones get the meter over one cell that holds the task list, struck
+     in step with it (meterLoop in n.js), then the spec window. */
+  /* inside the window, the HTML preview straight away, without the summary above it */
   .dx-out > .dx-panel:not([data-dx-prev]) { display: none; }
   .dx-doc-body { grid-template-columns: minmax(0, 1fr); padding: 0 1rem; }
   .dx-toc, .dx-x, .dx-zoom, .dx-doc-tools, .dx-tools > :not(.dx-dl) { display: none; }
@@ -1300,6 +1299,41 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   /* the phone loop (meterLoop in n.js) steps faster than scrolling does */
   .bar.is-after .bar-track i { transition: transform 700ms cubic-bezier(0.45, 0, 0.2, 1); }
   .shift-num.is-swap, .bar-val.is-swap { animation-duration: 650ms; }
+  .task-t b, .task-time { transition-duration: 450ms; }
+  /* As on the pinned layout, the total and the ratio wait for the last step. */
+  .shift.is-looping:not(.is-fast) .task-sum { opacity: 0; transform: translateY(0.4rem); }
+  .shift.is-looping:not(.is-fast) .shift-ratio { opacity: 0; transform: translateY(0.5rem); }
+
+  /* The task list and the spec share one cell: the list while the time
+     counts down and the last step is struck, then the spec (.is-spec). As when pinned,
+     the window fades itself so its backdrop blur holds through the fade. */
+  .js .shift.is-looping .shift-stage { gap: 0; }
+  .js .shift.is-looping .shift-before,
+  .js .shift.is-looping .shift-after { grid-area: 1 / 1; align-self: start; }
+  .js .shift.is-looping .shift-before { transition: opacity 600ms var(--ease) 450ms, transform 600ms var(--ease) 450ms; }   /* back in once the window is gone */
+  .js .shift.is-looping.is-spec .shift-before { transition-delay: 0ms; }
+  .js .shift.is-looping .shift-after { transform: translateY(1.5rem); pointer-events: none; transition: transform 900ms var(--ease); }
+  .js .shift.is-looping .spec-win,
+  .js .shift.is-looping .shift-done { opacity: 0; transition: opacity 500ms var(--ease); }
+  .js .shift.is-looping.is-spec .shift-before { opacity: 0; transform: scale(0.96); pointer-events: none; }
+  .js .shift.is-looping.is-spec .shift-after { transform: none; pointer-events: auto; }
+  .js .shift.is-looping.is-spec .spec-win,
+  .js .shift.is-looping.is-spec .shift-done { opacity: 1; transition: opacity 800ms var(--ease) 200ms; }
+
+  /* Tighter, so the meter and its cell fit one phone screen together. */
+  .shift-grid { gap: 1.25rem; }
+  .shift-meter { gap: 0.5rem; }
+  .shift-num { font-size: clamp(2.4rem, 1.6rem + 4vw, 3rem); }
+  .shift-bars { gap: 0.5rem; margin-top: 0.3rem; }
+  .shift-ratio { margin-top: 0.15rem; font-size: 0.84rem; }
+  .shift-eco { margin-top: 0.15rem; }
+  .shift-before { padding: 0.9rem 1rem; }
+  .shift-label { margin-bottom: 0.4rem; }
+  .task { gap: 0.7rem; padding: 0.55rem 0; }
+  .task-t { gap: 0.1rem; }
+  .task-t b { font-size: 0.88rem; }
+  .task-sum { padding-top: 0.6rem; }
+  .dx-view { max-height: 24rem; }
 }
 @media (max-width: 640px) {
   .shift-done { right: 4%; }
@@ -1428,6 +1462,107 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
           mask-image: radial-gradient(closest-side, #000 55%, transparent);
 }
 .ana-sphere canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Analyze 4: the two run modes as glass cards, the liquid-metal rim
+   taking turns between them. */
+.cost-stage {
+  position: relative; isolation: isolate;
+  justify-self: stretch; width: min(100%, 56rem); margin-inline: auto;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding: clamp(0.5rem, 2vw, 1.5rem) 0 0;
+}
+.cost-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(0.9rem, 2vw, 1.25rem); }
+.cost-card { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 1.4rem; padding: clamp(1.4rem, 3vw, 1.9rem); border-radius: var(--r-lg); text-align: left; }
+/* With nothing behind them to blur, the cards carry the glass themselves:
+   a sheen falling from the top-left corner, a frosted fill, lit inner
+   edges, and a rim that catches the light on the top and left only. */
+.cost-card.glass {
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.13), transparent 55%),
+    radial-gradient(90% 60% at 100% 100%, rgb(255 255 255 / 0.04), transparent 60%),
+    linear-gradient(160deg, rgb(255 255 255 / 0.085), rgb(255 255 255 / 0.025) 55%, rgb(255 255 255 / 0.05));
+  border-color: rgb(255 255 255 / 0.1);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    inset 1px 0 0 rgb(255 255 255 / 0.08),
+    inset 0 -1px 0 rgb(255 255 255 / 0.04),
+    inset 0 0 2.5rem rgb(255 255 255 / 0.025),
+    0 2rem 4rem -1.5rem rgb(0 0 0 / 0.8);
+}
+.cost-card.glass::before {
+  content: ''; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: linear-gradient(145deg, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0.08) 30%, transparent 55%, rgb(255 255 255 / 0.12));
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* Fine grain, the frosting itself. */
+.cost-card.glass::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.cost-card .cost-ic { background: rgb(255 255 255 / 0.08); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18); }
+.cost-card .cost-ex { background: rgb(255 255 255 / 0.035); border-color: rgb(255 255 255 / 0.08); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06); }
+.cost-card { --metal-w: 1.5px; }
+/* Over the card's own 1px edge, so the ring follows the outer curve. */
+.cost-card .metal-rim { inset: -1px; }
+/* Both modes earn the rim: it passes from one card to the other (n.js),
+   the lit one shown, the other faded out. */
+.cost-card .metal-rim.is-on { opacity: 0; transition-duration: 1200ms; }
+.cost-card.is-lit .metal-rim.is-on { opacity: 0.85; }
+.cost-head { display: grid; justify-items: start; }
+.cost-ic {
+  display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-bottom: 1.1rem;
+  border-radius: 0.8rem; background: rgb(255 255 255 / 0.06); border: 1px solid var(--line-2);
+  font-size: 1.2rem; color: var(--ink);
+}
+.cost-mode { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.cost-head h4 { margin: 0.3rem 0 0; font-size: clamp(1.3rem, 1.1rem + 0.7vw, 1.6rem); font-weight: 700; letter-spacing: var(--track-head); }
+.cost-tag { margin-top: 0.35rem; font-size: 0.92rem; color: var(--ink-2); }
+.cost-spec { display: grid; gap: 0.85rem; margin: 0; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.cost-spec div { display: grid; gap: 0.2rem; }
+.cost-spec dt { font-size: 0.74rem; font-weight: 600; color: var(--ink-3); }
+.cost-spec dd { margin: 0; font-size: 0.92rem; line-height: 1.55; color: var(--ink); }
+.cost-ex {
+  margin-top: auto; display: grid; gap: 0.35rem;
+  padding: 0.9rem 1rem; border-radius: var(--r-sm, 0.85rem);
+  background: rgb(0 0 0 / 0.22); border: 1px solid rgb(255 255 255 / 0.06);
+}
+.cost-ex-k { font-size: 0.74rem; font-weight: 600; color: var(--ink-3); }
+.cost-ex-v { display: flex; align-items: center; flex-wrap: wrap; gap: 0.2rem 0; font-size: 1.02rem; font-variant-numeric: tabular-nums; }
+.cost-ex-v b { font-weight: 700; color: var(--ink); }
+.cost-ex-v small { margin-left: 0.35rem; font-size: 0.8rem; font-weight: 500; color: var(--ink-3); }
+.cost-ex-v i { width: 1px; height: 0.8em; margin-inline: 0.7rem; background: var(--line-2); }
+.cost-note { position: relative; z-index: 1; margin-top: 1.25rem; text-align: center; font-size: 0.8rem; color: var(--ink-3); text-wrap: balance; }
+@media (max-width: 760px) {
+  .cost-grid { grid-template-columns: minmax(0, 1fr); }
+  /* While the modes take turns (n.js), a phone keeps one card: the grid
+     draws the glass once, both cards sit bare in one cell over it, and
+     their contents cross-fade together. Without the turns, they stack. */
+  .cost-grid.is-cycling { isolation: isolate; border-radius: var(--r-lg); }
+  .cost-grid.is-cycling > .cost-card { grid-area: 1 / 1; }
+  .cost-grid.is-cycling > .cost-card.glass {
+    background: none; border-color: transparent; box-shadow: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .cost-grid.is-cycling > .cost-card.glass::before,
+  .cost-grid.is-cycling > .cost-card.glass::after { content: none; }
+  .cost-grid.is-cycling::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background:
+      radial-gradient(120% 70% at 0% 0%, rgb(255 255 255 / 0.13), transparent 55%),
+      radial-gradient(90% 60% at 100% 100%, rgb(255 255 255 / 0.04), transparent 60%),
+      linear-gradient(160deg, rgb(255 255 255 / 0.085), rgb(255 255 255 / 0.025) 55%, rgb(255 255 255 / 0.05));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.22),
+      inset 1px 0 0 rgb(255 255 255 / 0.08),
+      inset 0 0 2.5rem rgb(255 255 255 / 0.025),
+      0 2rem 4rem -1.5rem rgb(0 0 0 / 0.8);
+  }
+  .cost-grid.is-cycling > .cost-card > :not(.metal-rim) { transition: opacity 900ms cubic-bezier(0.45, 0, 0.25, 1); }
+  .cost-grid.is-cycling > .cost-card:not(.is-lit) { pointer-events: none; }
+  .cost-grid.is-cycling > .cost-card:not(.is-lit) > :not(.metal-rim) { opacity: 0; }
+}
 @media (max-width: 760px) { .ana-sphere { aspect-ratio: 1; } }
 /* bg2.png turned on its side (bg2_h.jpg), filling the box whatever its shape */
 .ana-bg { position: relative; overflow: hidden; border-radius: var(--r-card); justify-self: center; width: min(100%, 64rem); aspect-ratio: 1024 / 632; border: 0; background: none; }   /* 1024 x 632 at full width */
@@ -1506,12 +1641,15 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 .fx-nodes i.ph { width: 100%; height: 100%; font-size: calc(var(--u) * 18); }
 
 @media (max-width: 760px) {
-  .ana-bg { aspect-ratio: 400 / 640; }
-  .fx { --u: calc(100cqi / 400); }
+  /* The 400 x 640 drawing cropped 60 off the top and bottom (the SVG's
+     viewBox starts at 60, so the --my numbers drop by 60), and the whole
+     figure drawn a little smaller inside it, lines and pieces together. */
+  .ana-bg { aspect-ratio: 400 / 520; }
+  .fx { --u: calc(100cqi / 400); transform: scale(0.92); }
   .fx-lines.is-wide { display: none; }
   .fx-lines.is-narrow { display: block; }
-  .fx-cap { left: calc(var(--u) * 200); top: calc(var(--u) * 320); transform: translate(-50%, -50%) scale(0.7); }
-  .fx-nodes li { --d: 52; left: calc(var(--u) * (var(--mx) - var(--d) / 2)); top: calc(var(--u) * (var(--my) - var(--d) / 2)); }
+  .fx-cap { left: calc(var(--u) * 200); top: calc(var(--u) * 260); transform: translate(-50%, -50%) scale(0.7); }
+  .fx-nodes li { --d: 52; left: calc(var(--u) * (var(--mx) - var(--d) / 2)); top: calc(var(--u) * (var(--my) - 60 - var(--d) / 2)); }
   .fx-nodes i.ph { font-size: calc(var(--u) * 24 * 0.7); }   /* the capsule icons on a phone: 24 at its 0.7 scale */
 }
 
@@ -1976,7 +2114,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
    JOIN
    ============================================================ */
 
-.join { position: relative; padding-top: var(--band); }
+.join { position: relative; padding-top: calc(var(--band) * 2.4); }   /* more air after the cost cards above */
 .join-sub {
   margin-top: 0.2rem;
   font-size: var(--fs-sub);   /* the same size as the section subtitles */
@@ -2038,7 +2176,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   color: var(--ink); text-decoration: none; font-size: 0.88rem; font-weight: 600; letter-spacing: -0.02em;
   transition: color var(--t-hover) var(--ease);
 }
-.foot-col a:hover { color: var(--accent-text); }
+.foot-col a:hover { color: var(--ink-3); }
 .foot-col a em {
   padding: 0.3em 0.5em; border-radius: 0.35rem;
   background: rgb(255 255 255 / 0.1); color: var(--ink-2);
@@ -2058,11 +2196,15 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 }
 .foot-info { display: grid; gap: 0.35rem; font-style: normal; font-size: 0.76rem; line-height: 1.6; color: var(--ink-3); }
 .foot-row { display: flex; flex-wrap: wrap; align-items: center; row-gap: 0.15rem; }
-.foot-row > span { display: inline-flex; align-items: center; }
-.foot-row > span + span::before {
+/* Wide, a pair is just two more fields in the row. */
+.foot-pair { display: contents; }
+.foot-row span:not(.foot-pair) { display: inline-flex; align-items: center; }
+.foot-row span:not(.foot-pair)::before {
   content: ''; width: 1px; height: 0.7em; margin-inline: 0.6rem;
   background: var(--line-2);
 }
+.foot-row > span:first-child::before,
+.foot-row > .foot-pair:first-child > span:first-child::before { display: none; }
 .foot-info a { color: inherit; text-decoration: none; transition: color var(--t-hover) var(--ease); }
 .foot-info a:hover { color: var(--ink); }
 
@@ -2085,11 +2227,19 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   .foot-brand { grid-column: 1 / -1; }
   .foot-biz { flex-direction: column; }
 }
-/* Narrow, the fields wrap anyway: one per line, no rules to start a line. */
+/* Narrow, the fields wrap anyway: one line per pair or lone field, no
+   rules to start a line. */
 @media (max-width: 640px) {
   .foot-info { gap: 0.15rem; }
   .foot-row { display: grid; }
-  .foot-row > span + span::before { display: none; }
+  .foot-pair { display: flex; flex-wrap: wrap; align-items: center; }
+  .foot-row > span:not(.foot-pair)::before,
+  .foot-pair > span:first-child::before { display: none; }
+}
+/* A phone cannot fit the long pair on one line: its two fields stack. */
+@media (max-width: 30rem) {
+  .foot-pair.is-long { display: grid; }
+  .foot-pair.is-long > span::before { display: none; }
 }
 
 /* ============================================================

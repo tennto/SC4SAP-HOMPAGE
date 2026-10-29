@@ -120,8 +120,25 @@ code {
 .doc-foot-brand b { font-weight: 800; }
 .foot-info { display: grid; gap: 0.35rem; font-style: normal; font-size: 0.78rem; line-height: 1.6; color: var(--ink-3); }
 .foot-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; row-gap: 0.15rem; }
-.foot-row > span { display: inline-flex; align-items: center; }
-.foot-row > span + span::before { content: ''; width: 1px; height: 0.7em; margin-inline: 0.6rem; background: var(--line-2); }
+/* Wide, a pair is just two more fields in its line, a rule between each. */
+.foot-pair { display: contents; }
+.foot-row span:not(.foot-pair) { display: inline-flex; align-items: center; }
+.foot-row span:not(.foot-pair)::before { content: ''; width: 1px; height: 0.7em; margin-inline: 0.6rem; background: var(--line-2); }
+.foot-row > span:first-child::before,
+.foot-row > .foot-pair:first-child > span:first-child::before { display: none; }
+/* Before the first line would wrap, each pair or lone field gets its own
+   line, so no rule ever starts one. */
+@media (max-width: 52rem) {
+  .foot-row { display: grid; justify-items: center; }
+  .foot-pair { display: flex; flex-wrap: wrap; justify-content: center; }
+  .foot-row > span:not(.foot-pair)::before,
+  .foot-pair > span:first-child::before { display: none; }
+}
+/* A phone cannot fit the long pair on one line: its two fields stack. */
+@media (max-width: 30rem) {
+  .foot-pair.is-long { display: grid; justify-items: center; }
+  .foot-pair.is-long > span::before { display: none; }
+}
 .foot-info a { color: inherit; text-decoration: none; }
 .foot-info a:hover { color: var(--ink); }
 .doc-foot-meta { display: grid; gap: 0.4rem; font-size: 0.78rem; color: var(--ink-3); }
@@ -224,3 +241,282 @@ code {
 .g-steps .n, .g-layer-tag { padding-top: 0; }
 /* Notes in the tree are Korean: set in the sans, the mono has no Hangul. */
 .g-cmd .t-note { font-family: var(--sans); letter-spacing: var(--track-body); }
+
+/* ---- Inquiry form (contact/inquiry.html) ---- */
+.iq { margin-top: 2.5rem; }
+.iq-legend { margin: 0; font-size: 0.84rem; color: var(--ink-3); }
+.iq-req { color: var(--ink); margin-left: 0.15em; }
+.iq-opt { color: var(--ink-3); }
+.iq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 1.25rem; }
+.iq-grid + .iq-set, .iq-set + .iq-set, .iq-set + .iq-grid, .iq-grid + .iq-f, .doc-sec > .iq-f + .iq-f { margin-top: 1.4rem; }
+.iq-f { display: grid; gap: 0.45rem; min-width: 0; }
+.iq-half { max-width: calc(50% - 0.625rem); }
+.iq-l { font-size: 0.88rem; font-weight: 650; color: var(--ink); }
+.iq-l small { margin-left: 0.5rem; font-size: 0.78rem; font-weight: 500; color: var(--ink-3); }
+.iq input:not([type="checkbox"]):not([type="radio"]), .iq select, .iq textarea {
+  width: 100%; min-height: 2.9rem; padding: 0.65rem 0.9rem;
+  border: 1px solid var(--line-2); border-radius: var(--r-sm); background: var(--bg);
+  font: inherit; font-size: 0.95rem; letter-spacing: var(--track-body); color: var(--ink);
+  transition: border-color 300ms var(--ease), box-shadow 300ms var(--ease);
+}
+.iq textarea { min-height: 9rem; resize: vertical; line-height: 1.6; }
+.iq select {
+  appearance: none; padding-right: 2.4rem; cursor: pointer;
+  background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2371717A' stroke-width='1.5'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E") right 0.85rem center / 1rem no-repeat;
+}
+.iq ::placeholder { color: #A1A1AA; }
+.iq input:hover, .iq select:hover, .iq textarea:hover { border-color: var(--ink-3); }
+.iq input:focus-visible, .iq select:focus-visible, .iq textarea:focus-visible {
+  outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgb(17 17 19 / 0.08);
+}
+
+.iq-set { margin: 0; padding: 0; border: 0; min-width: 0; }
+.iq-set > legend { padding: 0; margin-bottom: 0.6rem; }
+.iq-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.iq-chips label { position: relative; }
+.iq-chips input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.iq-chips span {
+  display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0 1rem;
+  border: 1px solid var(--line-2); border-radius: 999px;
+  font-size: 0.88rem; font-weight: 550; color: var(--ink-2);
+  transition: background 300ms var(--ease), border-color 300ms var(--ease), color 300ms var(--ease);
+}
+.iq-chips label:hover span { border-color: var(--ink-3); }
+.iq-chips input:checked + span { background: var(--ink); border-color: var(--ink); color: #fff; }
+.iq-chips input:focus-visible + span { box-shadow: 0 0 0 3px rgb(17 17 19 / 0.16); }
+
+.iq-check { --lh: 1.6; display: flex; align-items: flex-start; gap: 0.65rem; margin-top: 0.8rem; font-size: 0.92rem; line-height: var(--lh); color: var(--ink); cursor: pointer; }
+.iq-check .iq-req { margin-left: 0; }
+/* Drawn, not the browser's box: a rounded square that fills with the ink
+   and shows its tick at once, no easing. */
+.iq-check input {
+  flex: none; position: relative; appearance: none; -webkit-appearance: none;
+  width: 1.2rem; height: 1.2rem;
+  /* centred on the first line, so a label that wraps keeps it there */
+  margin: calc((0.92rem * var(--lh) - 1.2rem) / 2) 0 0;
+  border: 1.5px solid var(--line-2); border-radius: 0.35rem; background: var(--bg);
+  cursor: pointer;
+}
+.iq-check input::after {
+  content: ''; position: absolute; inset: 0;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8.1l2.6 2.6L12 5.3'/%3E%3C/svg%3E") center / 82% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8.1l2.6 2.6L12 5.3'/%3E%3C/svg%3E") center / 82% no-repeat;
+  opacity: 0;
+}
+.iq-check:hover input { border-color: var(--ink-3); }
+.iq-check input:checked { background: var(--ink); border-color: var(--ink); }
+.iq-check input:checked::after { opacity: 1; }
+.iq-check input:focus-visible { outline: none; box-shadow: 0 0 0 3px rgb(17 17 19 / 0.14); }
+.iq-check.is-invalid input { border-color: #B42318; }
+.iq-fine { font-size: 0.86rem; }
+
+/* Errors show only after a send attempt. */
+.iq-err { display: none; margin: 0.5rem 0 0 !important; font-size: 0.82rem; color: #B42318 !important; }
+.iq-set.is-invalid .iq-err { display: block; }
+.iq-set.is-invalid .iq-chips span { border-color: rgb(180 35 24 / 0.5); }
+/* Matched to the base field rule's weight (its :not()s count), or it loses. */
+.iq .iq-f.is-invalid input:not([type="checkbox"]):not([type="radio"]),
+.iq .iq-f.is-invalid textarea,
+.iq .iq-f.is-invalid .iq-dd-btn { border-color: #B42318; }
+.iq .iq-f.is-invalid input:not([type="checkbox"]):not([type="radio"]):focus-visible,
+.iq .iq-f.is-invalid .iq-dd-btn:focus-visible { box-shadow: 0 0 0 3px rgb(180 35 24 / 0.12); }
+.iq-check.is-invalid { color: #B42318; }
+
+.iq-submit { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--line); display: grid; justify-items: center; gap: 0.9rem; text-align: center; }
+.iq-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  height: 3.2rem; padding: 0 1.8rem; border: 0; border-radius: 999px;
+  background: var(--ink); color: #fff; font: inherit; font-size: 0.98rem; font-weight: 650; cursor: pointer;
+  transition: background 300ms var(--ease), opacity 300ms var(--ease);
+}
+.iq-btn:hover { background: #2A2A2E; }
+.iq-btn:disabled { opacity: 0.5; cursor: progress; }
+.iq-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.iq-status { margin: 0; min-height: 1.5em; font-size: 0.88rem; color: var(--ink-2); }
+
+.iq-done[hidden] { display: none; }
+.iq-nw, .iq-done a { white-space: nowrap; }   /* a number or address never splits */
+.iq-done { margin-top: 3rem; padding: 2.5rem 1.5rem; border: 1px solid var(--line); border-radius: var(--r-card); display: grid; justify-items: center; gap: 0.6rem; text-align: center; }
+.iq-done:focus { outline: none; }
+.iq-done .ph { font-size: 2.4rem; }
+.iq-done h2 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -0.03em; }
+.iq-done p { margin: 0 0 0.8rem; font-size: 0.9rem; line-height: 1.7; color: var(--ink-2); }
+
+/* Dropdowns: the native select stays for its value and the check; the
+   script draws this button and list over it, in the page's own style. */
+.iq-dd { position: relative; }
+.iq-dd select { display: none; }
+.iq-dd-btn {
+  width: 100%; min-height: 2.9rem; padding: 0.65rem 0.9rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+  border: 1px solid var(--line-2); border-radius: var(--r-sm); background: var(--bg);
+  font: inherit; font-size: 0.95rem; letter-spacing: var(--track-body); color: var(--ink); text-align: left; cursor: pointer;
+  transition: border-color 300ms var(--ease), box-shadow 300ms var(--ease);
+}
+.iq-dd-btn:hover { border-color: var(--ink-3); }
+.iq-dd-btn:focus-visible, .iq-dd.is-open .iq-dd-btn { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgb(17 17 19 / 0.08); }
+.iq-dd-val { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iq-dd-val.is-empty { color: #A1A1AA; }
+.iq-dd-btn .ph { flex: none; font-size: 1rem; color: var(--ink-3); transition: transform 300ms var(--ease); }
+.iq-dd.is-open .iq-dd-btn .ph { transform: rotate(180deg); }
+.iq-dd-list {
+  position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 0.4rem);
+  /* Tall enough for the longest list (nine), so it never scrolls. The
+     inset matches the button's, so the options start under its text. */
+  margin: 0; padding: 0.3rem; list-style: none;
+  color: var(--ink-2);
+  background: var(--bg); border: 1px solid var(--line-2); border-radius: var(--r-sm);
+  box-shadow: 0 0.75rem 2rem rgb(17 17 19 / 0.1), 0 0.15rem 0.4rem rgb(17 17 19 / 0.05);
+  animation: iq-dd-in 220ms var(--ease);
+}
+.iq-dd-list:focus { outline: none; }
+@keyframes iq-dd-in { from { opacity: 0; transform: translateY(-0.3rem); } to { opacity: 1; transform: none; } }
+.iq-dd-list li {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+  padding: 0.55rem 0.6rem; border-radius: 0.5rem;
+  font-size: 0.92rem; color: var(--ink-2); cursor: pointer;
+}
+.iq-dd-list li.is-active { background: var(--wash); color: var(--ink); }
+.iq-dd-list li[aria-selected="true"] { color: var(--ink); font-weight: 650; }
+.iq-dd-list li .ph { display: none; font-size: 0.95rem; }
+.iq-dd-list li[aria-selected="true"] .ph { display: inline; }
+/* .doc-sec ul / li indent and space the legal pages' lists; not this one. */
+.doc-sec .iq-dd-list { padding: 0.3rem; margin: 0; color: var(--ink-2); }
+.doc-sec .iq-dd-list li { margin: 0; }
+@media (prefers-reduced-motion: reduce) { .iq-dd-list { animation: none; } }
+
+@media (max-width: 640px) {
+  .iq-grid { grid-template-columns: minmax(0, 1fr); }
+  .iq-half { max-width: none; }
+  .iq-btn { width: 100%; justify-content: center; }
+  .iq-done p { font-size: 0.84rem; }
+}
+/* The bot trap: out of sight and out of the tab order, not display:none
+   (some bots skip hidden fields). */
+.iq-trap { position: absolute; left: -100vw; width: 1px; height: 1px; overflow: hidden; }
+
+/* ============================================================
+   Dark document pages (service/about.html): the same column with the
+   tokens turned over, white on black like the landing page.
+   ============================================================ */
+.doc-dark {
+  --bg:     #0A0A0B;
+  --ink:    #EDEDEF;
+  --ink-2:  #A1A1AA;
+  --ink-3:  #71717A;
+  --line:   rgb(255 255 255 / 0.1);
+  --line-2: rgb(255 255 255 / 0.18);
+  --wash:   #141416;
+  color-scheme: dark;
+}
+.doc-dark ::selection { background: rgb(255 255 255 / 0.18); }
+.doc-dark .doc-bar { background: rgb(10 10 11 / 0.8); }
+.doc-dark .g-opt.is-main .g-tag, .doc-dark .g-flag { color: var(--bg); }
+.doc-dark .doc-foot { background: #0E0E10; }
+
+/* A filled button for the one action that matters on the page. */
+.g-btn.is-solid { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.g-btn.is-solid:hover { background: var(--ink-2); border-color: var(--ink-2); }
+
+/* ---- About pieces ---- */
+.ab-products { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.4rem; }
+.ab-product { display: flex; flex-direction: column; padding: 1.6rem 1.6rem 1.5rem; border: 1px solid var(--line); border-radius: var(--r-card); min-width: 0; }
+.ab-product.is-main { border-color: var(--line-2); background: var(--wash); }
+.ab-product-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1.1rem; }
+.ab-icon { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 0.7rem; border: 1px solid var(--line-2); font-size: 1.25rem; }
+.ab-product h3 { margin: 0; font-size: 1.25rem; font-weight: 750; letter-spacing: -0.03em; }
+.ab-product-k { margin: 0.15rem 0 0.9rem !important; font-size: 0.88rem; color: var(--ink-3) !important; }
+.ab-product p { margin: 0 0 1rem; color: var(--ink-2); font-size: 0.95rem; }
+.ab-points { margin: 0 0 1.3rem; padding: 0; list-style: none; display: grid; gap: 0.45rem; }
+.g-sec .ab-points li { margin: 0; padding-left: 1.4rem; position: relative; font-size: 0.9rem; color: var(--ink-2); }
+.ab-points li::before { content: ''; position: absolute; left: 0.2rem; top: 0.72em; width: 0.45rem; height: 1px; background: var(--ink-3); }
+.ab-links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
+
+.ab-skills { margin: 1.2rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--r-card); overflow: hidden; }
+.g-sec .ab-skills li {
+  margin: 0; padding: 1.1rem 1.15rem 1.15rem; display: grid; grid-template-columns: 1.4rem minmax(0, 1fr); column-gap: 0.7rem; row-gap: 0.2rem; align-items: center;
+  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.ab-skills li:nth-child(3n) { border-right: 0; }
+.ab-skills li:nth-last-child(-n + 3) { border-bottom: 0; }
+.ab-skills .ph { font-size: 1.15rem; color: var(--ink); }
+.ab-skills b { font-size: 0.93rem; font-weight: 650; color: var(--ink); letter-spacing: -0.02em; }
+.ab-skills span { grid-column: 2; font-size: 0.82rem; line-height: 1.5; color: var(--ink-3); }
+
+.ab-end { margin-top: clamp(4rem, 8vw, 5.5rem); padding: clamp(2rem, 5vw, 2.75rem) 1.5rem; border: 1px solid var(--line); border-radius: var(--r-card); text-align: center; }
+.ab-end h2 { margin: 0 0 0.5rem; font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.6rem); font-weight: 800; letter-spacing: var(--track-head); }
+.ab-end p { margin: 0 0 1.3rem; color: var(--ink-2); }
+
+@media (max-width: 760px) {
+  .ab-products { grid-template-columns: minmax(0, 1fr); }
+  .ab-skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ab-skills li:nth-child(3n) { border-right: 1px solid var(--line); }
+  .ab-skills li:nth-child(2n) { border-right: 0; }
+  .ab-skills li:nth-last-child(-n + 3) { border-bottom: 1px solid var(--line); }
+  .ab-skills li:nth-last-child(-n + 2) { border-bottom: 0; }
+}
+@media (max-width: 30rem) {
+  .ab-skills { grid-template-columns: minmax(0, 1fr); }
+  .g-sec .ab-skills li { border-right: 0; border-bottom: 1px solid var(--line); }
+  .g-sec .ab-skills li:last-child { border-bottom: 0; }
+}
+
+/* ---- Security pieces (service/security.html) ---- */
+.sc-principles { margin: 2.75rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+.sc-principles li { display: grid; gap: 0.35rem; align-content: start; padding: 1.25rem 1.2rem; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--wash); }
+.sc-principles .ph { font-size: 1.35rem; margin-bottom: 0.35rem; }
+.sc-principles b { font-size: 0.98rem; font-weight: 700; letter-spacing: -0.02em; }
+.sc-principles span { font-size: 0.86rem; line-height: 1.6; color: var(--ink-2); }
+/* The layer tags are Korean here: set in the sans, the mono has no Hangul. */
+.sc-layers .g-layer-tag { font-family: var(--sans); letter-spacing: 0; }
+.doc-sec .g-note { margin: 1rem 0 0; }
+.doc-sec .g-list { margin: 0; padding: 0; }
+.doc-sec .g-list li { margin: 0; }
+.doc-sec .g-list b { color: var(--ink); }
+.ab-end a:not(.g-btn) { color: var(--ink); }
+@media (max-width: 760px) {
+  .sc-principles { grid-template-columns: minmax(0, 1fr); }
+}
+.sc-net td:first-child { width: 9.5rem; color: var(--ink); font-weight: 600; }
+@media (max-width: 30rem) { .sc-net td:first-child { width: 6.5rem; } }
+
+/* Liquid-metal rim, as on the landing page's prompt bar (n.css .metal-rim):
+   the shader draws on a canvas under the box, masked to a ring. Until it
+   mounts, or with reduced motion, the plain border stays. */
+.g-layer.is-hard { position: relative; isolation: isolate; border-color: var(--line-2); }
+.metal-rim {
+  position: absolute; inset: -1px; z-index: -1;
+  border-radius: inherit;
+  padding: var(--metal-w, 1.5px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms var(--ease);
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.metal-rim.is-on { opacity: 0.85; }
+.metal-rim canvas { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; display: block; }
+/* Bold lead, a short rule, then the detail: like the footer's separators. */
+.sc-web b::after {
+  content: ''; display: inline-block; width: 1px; height: 0.8em; margin-inline: 0.6rem;
+  background: var(--line-2); vertical-align: -0.05em;
+}
+
+/* ---- Brochure placeholder (resources/brochure.html) ---- */
+.bro-card { margin-top: 2.75rem; display: flex; align-items: center; gap: 1.1rem; padding: 1.4rem 1.5rem; border: 1px dashed var(--line-2); border-radius: var(--r-card); background: var(--wash); }
+.bro-icon { flex: none; display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 0.75rem; background: var(--bg); border: 1px solid var(--line); font-size: 1.45rem; }
+.bro-name { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-weight: 700; letter-spacing: -0.02em; }
+.bro-desc { margin: 0.15rem 0 0; font-size: 0.9rem; color: var(--ink-2); }
+.bro-now { margin-top: clamp(3rem, 6vw, 4rem); }
+.bro-now > h2 { font-size: 1.2rem; }
+.g-reading a .ph { color: var(--ink-3); }
+
+/* ---- Sponsorship pieces (service/sponsorship.html) ---- */
+.sp-mail { margin: 1.1rem 0 0 !important; font-size: 0.84rem; color: var(--ink-3) !important; letter-spacing: 0; }
+.g-steps li > div { min-width: 0; }
+
+/* Closed-test notice on the inquiry page: the note, with its icon. */
+.iq-closed { display: flex; gap: 0.7rem; align-items: flex-start; }
+.iq-closed .ph { flex: none; margin-top: 0.3em; font-size: 1.05rem; color: var(--ink); }
+.iq-closed b { color: var(--ink); font-weight: 650; }
