@@ -643,7 +643,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   /* The photograph is bright in places (cream, sky blue), so it always sits
      under two scrims: a vignette behind the copy and a fade into the black
      page at the bottom. Raise --hero-dim if a lighter image comes in. */
-  --hero-image: url(../img/hero_bg-2400.jpg);
+  --hero-image: url(../img/hero-bg-2400.jpg);
   --hero-dim: 0.32;              /* overall darkening; 0.32 keeps the colour and still clears contrast */
   --hero-vignette: 0.58;         /* extra darkness behind the copy: amber h1 3.4:1 worst case (large-text 3:1) */
   position: relative;
@@ -693,7 +693,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 }
 /* Phones get the smaller file. */
 @media (max-width: 760px) {
-  .hero { --hero-image: url(../img/hero_bg-1280.jpg); }
+  .hero { --hero-image: url(../img/hero-bg-1280.jpg); }
 }
 
 .hero-copy { display: grid; justify-items: center; gap: 2rem; }
@@ -1564,10 +1564,10 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   .cost-grid.is-cycling > .cost-card:not(.is-lit) > :not(.metal-rim) { opacity: 0; }
 }
 @media (max-width: 760px) { .ana-sphere { aspect-ratio: 1; } }
-/* bg2.png turned on its side (bg2_h.jpg), filling the box whatever its shape */
+/* The bg2 picture turned on its side (img/analyze-map-bg.jpg), filling the box whatever its shape */
 .ana-bg { position: relative; overflow: hidden; border-radius: var(--r-card); justify-self: center; width: min(100%, 64rem); aspect-ratio: 1024 / 632; border: 0; background: none; }   /* 1024 x 632 at full width */
 /* The picture on its own layer, eased back a little, so what goes on it later keeps full strength. */
-.ana-bg::before { content: ""; position: absolute; inset: 0; z-index: -1; background: url(../bg2_h.jpg) center / cover no-repeat; opacity: 0.7; }
+.ana-bg::before { content: ""; position: absolute; inset: 0; z-index: -1; background: url(../img/analyze-map-bg.jpg) center / cover no-repeat; opacity: 0.7; }
 .ana-bg {
   isolation: isolate;
   /* The page is black, so a dark shadow would not show: a faint grey glow
@@ -1620,7 +1620,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
 .fx .ph-graph::before            { transform: translateY(0.015em); }
 .fx-pill i.ph { height: calc(var(--u) * 50); font-size: calc(var(--u) * 24); }
 .fx-claude { flex: none; width: calc(var(--u) * 50); height: calc(var(--u) * 50); display: grid; place-items: center; }
-/* claude2.png: the mark sits dead centre of its 96px canvas with a 6px
+/* img/logo-claude.png: the mark sits dead centre of its 96px canvas with a 6px
    margin, so 27 units here draws it at the other icons' 24. */
 .fx-pill .fx-claude img { width: calc(var(--u) * 27); height: calc(var(--u) * 27); padding: 0; }
 .fx-sep { align-self: stretch; margin: calc(var(--u) * 18) 0; background: linear-gradient(rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.14)) center / 1px 100% no-repeat; }
