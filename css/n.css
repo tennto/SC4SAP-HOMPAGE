@@ -2144,13 +2144,16 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   color: var(--ink-3);
 }
 /* The globe: square, centred, and pulled down so the footer (drawn over
-   it, below) covers its lower part (--globe-hidden). */
-.join-globe {
+   it, below) covers its lower part (--globe-hidden). The two sizes live on
+   :root because the footer needs them too, to stay at least that tall. */
+:root {
   --globe-size: min(44rem, 88vw);
+  --globe-hidden: 0.6;    /* share of the globe's height the footer covers */
+}
+.join-globe {
   --globe-dot: var(--ink-2);
   width: var(--globe-size);
   aspect-ratio: 1;
-  --globe-hidden: 0.6;    /* share of the globe's height the footer covers */
   margin: clamp(2.5rem, 5vw, 3.5rem) auto calc(var(--globe-size) * var(--globe-hidden) * -1);
   touch-action: pan-y;
   cursor: grab;
@@ -2185,7 +2188,7 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
    FOOTER
    ============================================================ */
 
-.foot { position: relative; z-index: 1; padding-block: 4.5rem 2.5rem; border-top: 1px solid var(--line); background: var(--bg); }   /* opaque and on top: it hides the globe's lower half */
+.foot { position: relative; z-index: 1; min-height: calc(var(--globe-size) * var(--globe-hidden)); padding-block: 4.5rem 2.5rem; border-top: 1px solid var(--line); background: var(--bg); }   /* opaque and on top: it hides the globe's lower half */
 
 /* Link columns: small grey headings over bold white entries. */
 .foot-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr)); gap: 2.5rem 2rem; }
