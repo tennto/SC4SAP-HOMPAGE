@@ -71,7 +71,7 @@
   --r-pill: 999em;
 
   /* ---- Fixed top: the notice strip, then the floating nav below it ---- */
-  --notice-h: 3rem;
+  --notice-h: 0rem;   /* the strip is hidden; 3rem when it shows */
   --nav-w: 68rem;          /* the capsule's measure */
   --nav-inset: 1.4rem;    /* where the wordmark starts inside it */
   --nav-pad: 0.35rem;     /* capsule padding; the CTA keeps this gap on top, bottom and right */
@@ -277,6 +277,7 @@ html[lang="ja"] .hero .display { max-width: 18ch; }
   background: #000;
   border-bottom: 1px solid var(--line);
 }
+.notice[hidden] { display: none; }
 /* Same measure as the nav capsule, so the label starts at the capsule's
    left edge. */
 .notice-inner {
