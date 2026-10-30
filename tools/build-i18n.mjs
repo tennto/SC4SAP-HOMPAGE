@@ -14,8 +14,8 @@
      files (css, js, img, fonts, Korean-only pages) one level up,
      while links between translated pages stay inside the language;
    - copies per-language data files (updates.data.js);
-   - writes the canonical and hreflang links into every page of all
-     three languages, and sitemap.xml;
+   - writes the canonical, hreflang and link-preview (Open Graph) tags
+     into every page of all three languages, and sitemap.xml;
    - writes the forwarding pages left at the old install URLs.
 
    After changing a Korean page, change its two copies under _i18n/
@@ -81,12 +81,38 @@ function relinkAll(page, html) {
   return html.replace(/\b(href|src)="([^"]*)"/g, (m, attr, ref) => attr + '="' + relink(page, ref) + '"');
 }
 
-/* The canonical and hreflang links, between marker comments so a
-   second run replaces them instead of adding more. */
-function alternates(lang, page, nl) {
+const LOCALE = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP' };
+const OG_IMAGE = SITE + 'assets/tumbnail.png';   // 1200 x 630
+
+/* Link-preview tags for a page, from its own <title> and description.
+   The landing page writes its own by hand, so it is skipped. */
+function social(lang, page, html) {
+  if (page === 'index.html') return [];
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
+  const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1];
+  if (!title || !desc) throw new Error(lang + ' ' + page + ': no <title> or description for the preview tags');
+  return [
+    '<meta property="og:type" content="website" />',
+    '<meta property="og:site_name" content="Super-Claude for SAP" />',
+    '<meta property="og:title" content="' + title + '" />',
+    '<meta property="og:description" content="' + desc + '" />',
+    '<meta property="og:url" content="' + url(lang, page) + '" />',
+    '<meta property="og:locale" content="' + LOCALE[lang] + '" />',
+    '<meta property="og:image" content="' + OG_IMAGE + '" />',
+    '<meta property="og:image:width" content="1200" />',
+    '<meta property="og:image:height" content="630" />',
+    '<meta name="twitter:card" content="summary_large_image" />',
+    '<meta name="twitter:image" content="' + OG_IMAGE + '" />',
+  ];
+}
+
+/* The canonical, hreflang and link-preview tags, between marker comments
+   so a second run replaces them instead of adding more. */
+function alternates(lang, page, html, nl) {
   const lines = ['<!-- i18n:alt -->', '<link rel="canonical" href="' + url(lang, page) + '" />'];
   for (const l of ['ko', ...LANGS]) lines.push('<link rel="alternate" hreflang="' + l + '" href="' + url(l, page) + '" />');
   lines.push('<link rel="alternate" hreflang="x-default" href="' + url(X_DEFAULT, page) + '" />');
+  lines.push(...social(lang, page, html));
   lines.push('<!-- /i18n:alt -->');
   return lines.join(nl);
 }
@@ -98,7 +124,7 @@ function withHead(lang, page, html) {
   html = html.replace(/(<meta property="og:url" content=")[^"]*(")/, '$1' + url(lang, page) + '$2');
   const anchor = /<script src="\/js\/lang\.js"><\/script>\r?\n/;
   if (!anchor.test(html)) throw new Error(lang + ' ' + page + ': no lang.js script in <head>');
-  return html.replace(anchor, (m) => m + alternates(lang, page, nl) + nl);
+  return html.replace(anchor, (m) => m + alternates(lang, page, html, nl) + nl);
 }
 
 for (const page of PAGES) {
