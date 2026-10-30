@@ -503,7 +503,7 @@
   // into its own span below; English keeps its space inside the unit.
   var UNITS = {
     ko: { about: '약 ', day: '일', days: '일', min: '분' },
-    en: { about: 'about ', day: ' day', days: ' days', min: ' min' },
+    en: { about: '', day: ' day', days: ' days', min: ' min' },   // English reads cleaner without 'about'
     ja: { about: '約', day: '日', days: '日', min: '分' }
   }[lang];
   var FAST = UNITS.about + '10' + UNITS.min;
