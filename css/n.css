@@ -139,7 +139,7 @@ code { font-family: var(--mono); font-size: 0.88em; letter-spacing: 0; }
 html[lang="ko"] :is(h1, h2, h3, p, li, dt, dd, span) { word-break: keep-all; overflow-wrap: anywhere; }
 /* Japanese has no spaces to break on; let the browser find phrase
    boundaries so a headline never splits inside a word. */
-html[lang="ja"] :is(.display, .h2, .item-h, .statement, .sec-sub, .hero-sub, .launch-title, .launch-sub) { word-break: auto-phrase; }
+html[lang="ja"] :is(.display, .h2, .item-h, .statement, .sec-sub, .hero-sub, .launch-title, .launch-sub, .join-sub, .foot-brand p, .cost-note) { word-break: auto-phrase; overflow-wrap: anywhere; }
 html[lang="ja"] .hero .display { max-width: 18ch; }
 
 ::selection { background: rgb(255 255 255 / 0.22); color: #fff; }   /* one fixed grey, not a token some sections re-point */
@@ -843,6 +843,8 @@ html:not(.js) .nav-top:hover { background: rgb(255 255 255 / 0.12); }
   white-space: nowrap;
   font-size: min(calc(var(--fs-display) * 0.86), 8.6vw);
 }
+/* The English headline is longer (11.6em), so its viewport cap is lower. */
+html[lang="en"] .hero .display { font-size: min(calc(var(--fs-display) * 0.86), 7.2vw); }
 .hero-sub { max-width: 40rem;   /* rem, not ch: ch is a Latin digit and wraps Hangul early */ font-size: var(--fs-sub); color: var(--ink-2); text-wrap: balance; }
 .hero .actions { margin-top: 1.2rem; }
 @media (max-width: 26rem) {
