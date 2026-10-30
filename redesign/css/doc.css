@@ -139,6 +139,7 @@ code {
   .foot-pair.is-long { display: grid; justify-items: center; }
   .foot-pair.is-long > span::before { display: none; }
 }
+.foot-info[hidden] { display: none; }   /* the closed test hides the business details */
 .foot-info a { color: inherit; text-decoration: none; }
 .foot-info a:hover { color: var(--ink); }
 .doc-foot-meta { display: grid; gap: 0.4rem; font-size: 0.78rem; color: var(--ink-3); }

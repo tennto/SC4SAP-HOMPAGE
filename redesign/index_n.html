@@ -69,7 +69,7 @@
         <button type="button" data-lang-btn="ja" aria-pressed="false">JP</button>
       </div>
       <!-- The inquiry page is hidden; this links to the web app (placeholder until its URL exists). -->
-      <a class="btn btn-sm nav-cta" href="#contact"><span data-i="ctaUse">워크스페이스로</span></a>
+      <a class="btn btn-sm nav-cta" href="#contact" data-launch-open><span data-i="ctaUse">워크스페이스로</span></a>
       <!-- Two strokes that turn into an X. An SVG rather than the icon font,
            whose glyphs sit on a text baseline and never centre exactly. -->
       <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-panel" data-nav-toggle>
@@ -155,7 +155,7 @@
     </div>
 
     <div class="actions enter" style="--d:420ms">
-      <a class="btn btn-light" href="#contact"><span data-i="ctaUseLong">워크스페이스로</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      <a class="btn btn-light" href="#contact" data-launch-open><span data-i="ctaUseLong">워크스페이스로</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">서비스 둘러보기</span></a>
     </div>
   </div>
@@ -194,7 +194,7 @@
           </div>
           <div class="shift-ratio">
             <p data-i="shiftRatio">표준 모드 · 업무시간 기준 <b>약 240배</b> 빠르게</p>
-            <p class="shift-eco" data-i="shiftEco">절약 모드 기준 약 150초 내외</p>
+            <p class="shift-eco" data-i="shiftEco">에코 모드 기준 약 150초 내외</p>
           </div>
         </div>
 
@@ -457,7 +457,7 @@
       </li>
       <li class="ana-item">
         <h3 class="ana-h" data-i="ana5">작업 규모에 맞춰<br>비용을 선택할 수 있어요</h3>
-        <p class="sec-sub ana-sub" data-i="ana5Sub">같은 기능도 쓰임에 따라 필요한 깊이가 달라요<br>빠르게 훑어볼 땐 절약 모드, 그대로 넘길 문서가 필요할 땐 표준 모드</p>
+        <p class="sec-sub ana-sub" data-i="ana5Sub">같은 기능도 쓰임에 따라 필요한 깊이가 달라요<br>빠르게 훑어볼 땐 에코 모드, 그대로 넘길 문서가 필요할 땐 표준 모드</p>
         <!-- The PoC's two run modes, as its skill forms describe them
              (web/src/lib/i18n/skills.ts). The figures are Program -> Spec's
              own estimates in the form, in dollars at the pricing doc's ₩1,400/$;
@@ -469,7 +469,7 @@
               <header class="cost-head">
                 <span class="cost-ic"><i class="ph ph-leaf" aria-hidden="true"></i></span>
                 <p class="cost-mode" data-i="costEcoK">Economy</p>
-                <h4 data-i="costEcoH">절약 모드</h4>
+                <h4 data-i="costEcoH">에코 모드</h4>
                 <p class="cost-tag" data-i="costEcoT">빠르고 가볍게, 비용은 최소로</p>
               </header>
               <dl class="cost-spec">
@@ -560,7 +560,8 @@
       </nav>
     </div>
 
-    <div class="foot-biz">
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <div class="foot-biz" hidden>
       <!-- Business details as registered. PLACEHOLDER: the mail-order
            registration number and the hosting provider are still to come. -->
       <address class="foot-info">
@@ -586,6 +587,19 @@
     </div>
   </div>
 </footer>
+
+<!-- ===================== LAUNCH NOTICE =====================
+     The workspace buttons open this until the closed test starts. On the
+     day, point their href at the PoC web app and drop data-launch-open. -->
+<dialog class="launch glass" data-launch aria-labelledby="launch-title" aria-describedby="launch-sub">
+  <span class="notice-label launch-dday" data-launch-dday>D-12</span>
+  <h2 class="launch-title" id="launch-title">SC4 워크스페이스 클로즈 테스트는<br><em>2026년 11월 11일 (수)</em>에 오픈됩니다</h2>
+  <p class="launch-sub" id="launch-sub">지금은 우리 SAP와 연결되는 마지막 점검 중이에요<br>문이 열리는 날, 이 버튼이 바로 워크스페이스로 이어집니다</p>
+  <div class="launch-actions">
+    <button class="btn btn-light" type="button" data-launch-close autofocus><span>기다릴게요</span></button>
+    <a class="btn btn-glass glass" href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener"><span class="metal-rim" aria-hidden="true"></span><span>그동안 오픈소스 둘러보기</span></a>
+  </div>
+</dialog>
 
 <script src="js/n.i18n.js" defer></script>
 <script src="js/n.js" defer></script>

@@ -70,7 +70,7 @@
           <li>시스템을 아는 AI와 채팅으로 협업</li>
           <li>분석 결과가 쌓이는 지식 그래프, Obsidian 양방향 동기화</li>
           <li>VS Code · Obsidian · Notion 연동</li>
-          <li>작업 규모에 맞춘 표준 · 절약 모드</li>
+          <li>작업 규모에 맞춘 표준 · 에코 모드</li>
         </ul>
         <!-- The inquiry page is hidden.
         <div class="ab-links">
@@ -85,18 +85,24 @@
     <h2>할 수 있는 일</h2>
     <p>실제 구축과 운영에서 반복되는 일을 스킬로 묶었어요. 플러그인과 웹이 같은 스킬을 써요.</p>
     <ul class="ab-skills">
-      <li><i class="ph ph-chat-teardrop-text" aria-hidden="true"></i><b>컨설턴트에게 묻기</b><span>모듈 · 설정 질문에 시스템 값으로 답해요</span></li>
+      <li><i class="ph ph-chat-teardrop-text" aria-hidden="true"></i><b>컨설턴트에게 묻기</b><span>시스템 값으로 답하는 모듈 질문</span></li>
       <li><i class="ph ph-code" aria-hidden="true"></i><b>코드 분석</b><span>리뷰 관점별 발견 사항과 수정 제안</span></li>
       <li><i class="ph ph-bug" aria-hidden="true"></i><b>증상 분석</b><span>덤프 · 오류에서 원인 후보 찾기</span></li>
-      <li><i class="ph ph-stethoscope" aria-hidden="true"></i><b>SAP 진단</b><span>운영 서버 상태와 성능 점검</span></li>
-      <li><i class="ph ph-package" aria-hidden="true"></i><b>CBO 패키지 인벤토리</b><span>커스텀 오브젝트 목록과 사용처</span></li>
-      <li><i class="ph ph-git-diff" aria-hidden="true"></i><b>프로그램 비교</b><span>두 프로그램 · 버전의 차이</span></li>
+      <li><i class="ph ph-package" aria-hidden="true"></i><b>CBO 인벤토리</b><span>재사용 자산과 모듈 간 갭</span></li>
+      <li><i class="ph ph-git-diff" aria-hidden="true"></i><b>프로그램 비교</b><span>갈라진 프로그램 2~5개 비교</span></li>
       <li><i class="ph ph-file-text" aria-hidden="true"></i><b>프로그램 → 명세</b><span>기능 · 기술 명세서와 화면 목업</span></li>
       <li><i class="ph ph-book-open-text" aria-hidden="true"></i><b>프로그램 → 매뉴얼</b><span>현업용 사용자 매뉴얼</span></li>
-      <li><i class="ph ph-flow-arrow" aria-hidden="true"></i><b>패키지 → 프로세스</b><span>패키지가 맡는 업무 흐름도</span></li>
+      <li><i class="ph ph-flow-arrow" aria-hidden="true"></i><b>모듈 → 프로세스</b><span>실사용 TCode로 그린 업무 흐름</span></li>
+      <li><i class="ph ph-sliders-horizontal" aria-hidden="true"></i><b>설정 → 문서</b><span>실제 설정값을 IMG 순서로 문서화</span></li>
+      <li><i class="ph ph-arrows-left-right" aria-hidden="true"></i><b>인터페이스 매핑 정의서</b><span>필드 매핑과 변환 규칙</span></li>
       <li><i class="ph ph-file-plus" aria-hidden="true"></i><b>프로그램 생성</b><span>요구사항에서 ABAP 프로그램까지</span></li>
-      <li><i class="ph ph-cube" aria-hidden="true"></i><b>오브젝트 생성</b><span>테이블 · 구조 · CDS 등 DDIC 오브젝트</span></li>
-      <li><i class="ph ph-tree-structure" aria-hidden="true"></i><b>WBS 관리</b><span>프로젝트 작업 분해와 진척 관리</span></li>
+      <li><i class="ph ph-cube" aria-hidden="true"></i><b>오브젝트 생성</b><span>테이블 · 클래스 생성과 활성화</span></li>
+      <li><i class="ph ph-file-pdf" aria-hidden="true"></i><b>PDF → SmartForm</b><span>인쇄 양식 PDF에서 바로 생성</span></li>
+      <li><i class="ph ph-printer" aria-hidden="true"></i><b>SmartForm 미리보기</b><span>예상 출력물을 이미지로</span></li>
+      <li><i class="ph ph-presentation-chart" aria-hidden="true"></i><b>프로젝트 대시보드</b><span>마일스톤 · WBS · 실적 한 페이지</span></li>
+      <li><i class="ph ph-identification-card" aria-hidden="true"></i><b>권한 매트릭스</b><span>역할 · T-code · SoD 권한 문서</span></li>
+      <li><i class="ph ph-stethoscope" aria-hidden="true"></i><b>SAP 진단</b><span>플러그인 · MCP · SAP 연결 점검</span></li>
+      <li><i class="ph ph-leaf" aria-hidden="true"></i><b>에코 모드</b><span>같은 결과물을 더 적은 비용으로</span></li>
     </ul>
   </section>
 
@@ -125,7 +131,8 @@
 <footer class="doc-foot">
   <div class="doc-foot-in">
     <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
-    <address class="foot-info">
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <address class="foot-info" hidden>
       <!-- One line each wide; narrow, each pair or lone field takes a line. -->
       <span class="foot-row">
         <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>대표 백승현</span></span>

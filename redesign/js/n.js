@@ -844,6 +844,52 @@
     location.href = a.href;
   });
 
+  /* ---------- Launch notice: the workspace opens on 11 November ---------- */
+
+  (function launchNotice() {
+    var dlg = document.querySelector('[data-launch]');
+    if (!dlg || typeof dlg.showModal !== 'function') return;   // old browsers follow the href
+    var dday = dlg.querySelector('[data-launch-dday]');
+    var OPENS = Date.UTC(2026, 10, 10, 15);                      // 2026-11-11 00:00 KST
+
+    function count() {
+      var days = Math.ceil((OPENS - Date.now()) / 86400000);
+      dday.textContent = days > 0 ? 'D-' + days : 'D-DAY';
+    }
+
+    document.querySelectorAll('[data-launch-open]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        count();
+        dlg.showModal();
+      });
+    });
+    dlg.querySelector('[data-launch-close]').addEventListener('click', function () { dlg.close(); });
+    // The page stays put behind the panel. Not overflow: hidden on <html>:
+    // that removes the scrollbar, so the page shifts sideways and the empty
+    // gutter shows as a strip the backdrop does not cover.
+    // Wheel over the dimmed area lands on the document, not the dialog, so
+    // listen on window; a panel taller than a short screen may still scroll.
+    function hold(e) {
+      if (!dlg.open) return;
+      if (dlg.contains(e.target) && dlg.scrollHeight > dlg.clientHeight) return;
+      e.preventDefault();
+    }
+    window.addEventListener('wheel', hold, { passive: false });
+    window.addEventListener('touchmove', hold, { passive: false });
+    dlg.addEventListener('keydown', function (e) {
+      if (/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End)$/.test(e.key) ||
+          (e.key === ' ' && !e.target.closest('button, a'))) e.preventDefault();
+    });
+    // A click on the dimmed page around the panel closes it too.
+    dlg.addEventListener('click', function (e) {
+      if (e.target !== dlg) return;
+      var r = dlg.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
+    });
+  })();
+
   /* ---------- Run modes: the rim takes turns, both modes have their case ---------- */
 
   (function costRim() {
