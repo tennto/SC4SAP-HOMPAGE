@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/js/lang.js"></script>
+<!-- i18n:alt -->
+<link rel="canonical" href="https://sc4sap.dev/resources/update.html" />
+<link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/update.html" />
+<link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/update.html" />
+<link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/update.html" />
+<link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/update.html" />
+<!-- /i18n:alt -->
+<title>업데이트 · Super-Claude for SAP</title>
+<meta name="description" content="SC4 플러그인의 버전별 업데이트 상세 내역이에요." />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="512x512" href="/img/icon-black-rounded.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-black-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-black-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/icon-black-180.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../css/doc.css" />
+</head>
+<body>
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="updates.html" data-up-back><i class="ph ph-arrow-left" aria-hidden="true"></i>업데이트 목록</a>
+  </div>
+</header>
+
+<!-- One release, chosen by ?v=0.6.57. js/updates.js fills
+     it from updates.data.js. -->
+<main class="doc up" data-up-detail>
+  <header class="doc-head">
+    <p class="doc-eyebrow" data-up-eyebrow>업데이트</p>
+    <h1 data-up-title>불러오는 중이에요</h1>
+    <p class="doc-lede" data-up-summary></p>
+    <ul class="doc-meta" data-up-meta></ul>
+  </header>
+
+  <div class="up-body" data-up-body></div>
+
+  <nav class="up-pager" aria-label="다른 버전" data-up-pager></nav>
+</main>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <address class="foot-info" hidden>
+      <!-- One line each wide; narrow, each pair or lone field takes a line. -->
+      <span class="foot-row">
+        <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>대표 백승현</span></span>
+        <span class="foot-pair is-long"><span>사업자등록번호 556-39-01540</span><span>통신판매업 신고 【통신판매업 신고번호】</span></span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+      </span>
+      <span class="foot-row">
+        <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+        <span>호스팅 【호스팅 업체】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">이용약관</a><a href="../legal/privacy.html">개인정보처리방침</a><!-- Billing terms and refund policy are hidden: they live in the PoC web app. --></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<script src="updates.data.js"></script>
+<script src="../js/updates.js"></script>
+</body>
+</html>

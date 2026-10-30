@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/js/lang.js"></script>
+<!-- i18n:alt -->
+<link rel="canonical" href="https://sc4sap.dev/service/about.html" />
+<link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/about.html" />
+<link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/about.html" />
+<link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/about.html" />
+<link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/about.html" />
+<!-- /i18n:alt -->
+<title>About · Super-Claude for SAP</title>
+<meta name="description" content="SC4SAP는 내 SAP 시스템에 연결해 코드와 설정, 업무 흐름을 읽어내는 AI 워크스페이스예요. Claude Code 플러그인과 웹 워크스페이스, 두 가지로 쓸 수 있어요." />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="512x512" href="/img/icon-black-rounded.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-black-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-black-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/icon-black-180.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../css/doc.css" />
+</head>
+<body class="doc-dark">
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="../"><i class="ph ph-arrow-left" aria-hidden="true"></i>홈으로</a>
+  </div>
+</header>
+
+<!-- About: what SC4SAP is, the plug-in and the web workspace side by side,
+     then what it does. The brochure carries the rest. Copy follows the
+     landing page and the install guide; nothing here goes beyond them. -->
+<main class="doc">
+  <header class="doc-head">
+    <p class="doc-eyebrow">About</p>
+    <h1>SAP를 이해하는<br>AI 워크스페이스</h1>
+    <p class="doc-lede">SC4SAP(Super-Claude for SAP)는 내 SAP 시스템에 연결해 코드와 설정, 업무 흐름까지 읽어내는 AI예요. 분석부터 문서화, 개발까지 같은 자리에서 이어져요.</p>
+  </header>
+
+  <section class="g-sec">
+    <h2>SC4SAP는</h2>
+    <p>SAP 업무의 대부분은 시스템을 읽는 일이에요. 프로그램 한 본을 이해하려고 소스를 한 줄씩 따라가고, 테이블 관계를 추적하고, 담당자에게 묻고 답을 기다려요. 명세서 한 건에 며칠이 걸리는 이유예요.</p>
+    <p>SC4SAP는 ADT로 시스템에 직접 연결된 Claude가 이 일을 대신해요. 묻는 말에 실제 테이블과 소스를 조회해 답하고, 업무 스킬로 명세서 · 매뉴얼 · 프로세스 문서를 만들고, 분석한 관계는 지식 그래프로 쌓아 다음 답변에 다시 써요.</p>
+  </section>
+
+  <section class="g-sec">
+    <h2>두 가지 방식으로 쓸 수 있어요</h2>
+    <div class="ab-products">
+      <article class="ab-product">
+        <div class="ab-product-top">
+          <span class="ab-icon"><i class="ph ph-terminal-window" aria-hidden="true"></i></span>
+          <span class="g-tag">오픈소스</span>
+        </div>
+        <h3>SC4SAP Plugin</h3>
+        <p class="ab-product-k">Claude Code CLI 플러그인</p>
+        <p>터미널이나 VS Code의 Claude Code 세션에 마켓플레이스로 추가해 써요. 설정 위저드 <code>/sc4sap:setup</code>을 한 번 돌리면 SAP 연결용 MCP 서버까지 알아서 설치돼요.</p>
+        <ul class="ab-points">
+          <li>스킬 명령으로 분석 · 생성 · 진단</li>
+          <li>개발자 한 명이 바로 시작</li>
+          <li>GitHub에 공개된 소스</li>
+        </ul>
+        <div class="ab-links">
+          <a class="g-btn" href="../resources/guide.html"><i class="ph ph-book-open" aria-hidden="true"></i>설치 가이드(CLI)</a>
+          <a class="g-btn" href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener"><i class="ph ph-github-logo" aria-hidden="true"></i>GitHub</a>
+        </div>
+      </article>
+
+      <article class="ab-product is-main">
+        <div class="ab-product-top">
+          <span class="ab-icon"><i class="ph ph-browser" aria-hidden="true"></i></span>
+          <span class="g-tag">PoC · 클로즈 테스트</span>
+        </div>
+        <h3>SC4SAP Web</h3>
+        <p class="ab-product-k">팀을 위한 웹 워크스페이스</p>
+        <p>설치 없이 브라우저에서 써요. 시스템을 한 번 연결하면 대화, 업무 스킬, 모니터링, 지식 그래프가 한 화면에서 이어져요.</p>
+        <ul class="ab-points">
+          <li>시스템을 아는 AI와 채팅으로 협업</li>
+          <li>분석 결과가 쌓이는 지식 그래프, Obsidian 양방향 동기화</li>
+          <li>VS Code · Obsidian · Notion 연동</li>
+          <li>작업 규모에 맞춘 표준 · 에코 모드</li>
+        </ul>
+        <!-- The inquiry page is hidden.
+        <div class="ab-links">
+          <a class="g-btn is-solid" href="../contact/inquiry.html"><i class="ph ph-arrow-right" aria-hidden="true"></i>도입 문의</a>
+        </div>
+        -->
+      </article>
+    </div>
+  </section>
+
+  <section class="g-sec">
+    <h2>할 수 있는 일</h2>
+    <p>실제 구축과 운영에서 반복되는 일을 스킬로 묶었어요. 플러그인과 웹이 같은 스킬을 써요.</p>
+    <ul class="ab-skills">
+      <li><i class="ph ph-chat-teardrop-text" aria-hidden="true"></i><b>컨설턴트에게 묻기</b><span>시스템 값으로 답하는 모듈 질문</span></li>
+      <li><i class="ph ph-code" aria-hidden="true"></i><b>코드 분석</b><span>리뷰 관점별 발견 사항과 수정 제안</span></li>
+      <li><i class="ph ph-bug" aria-hidden="true"></i><b>증상 분석</b><span>덤프 · 오류에서 원인 후보 찾기</span></li>
+      <li><i class="ph ph-package" aria-hidden="true"></i><b>CBO 인벤토리</b><span>재사용 자산과 모듈 간 갭</span></li>
+      <li><i class="ph ph-git-diff" aria-hidden="true"></i><b>프로그램 비교</b><span>갈라진 프로그램 2~5개 비교</span></li>
+      <li><i class="ph ph-file-text" aria-hidden="true"></i><b>프로그램 → 명세</b><span>기능 · 기술 명세서와 화면 목업</span></li>
+      <li><i class="ph ph-book-open-text" aria-hidden="true"></i><b>프로그램 → 매뉴얼</b><span>현업용 사용자 매뉴얼</span></li>
+      <li><i class="ph ph-flow-arrow" aria-hidden="true"></i><b>모듈 → 프로세스</b><span>실사용 TCode로 그린 업무 흐름</span></li>
+      <li><i class="ph ph-sliders-horizontal" aria-hidden="true"></i><b>설정 → 문서</b><span>실제 설정값을 IMG 순서로 문서화</span></li>
+      <li><i class="ph ph-arrows-left-right" aria-hidden="true"></i><b>인터페이스 매핑 정의서</b><span>필드 매핑과 변환 규칙</span></li>
+      <li><i class="ph ph-file-plus" aria-hidden="true"></i><b>프로그램 생성</b><span>요구사항에서 ABAP 프로그램까지</span></li>
+      <li><i class="ph ph-cube" aria-hidden="true"></i><b>오브젝트 생성</b><span>테이블 · 클래스 생성과 활성화</span></li>
+      <li><i class="ph ph-file-pdf" aria-hidden="true"></i><b>PDF → SmartForm</b><span>인쇄 양식 PDF에서 바로 생성</span></li>
+      <li><i class="ph ph-printer" aria-hidden="true"></i><b>SmartForm 미리보기</b><span>예상 출력물을 이미지로</span></li>
+      <li><i class="ph ph-presentation-chart" aria-hidden="true"></i><b>프로젝트 대시보드</b><span>마일스톤 · WBS · 실적 한 페이지</span></li>
+      <li><i class="ph ph-identification-card" aria-hidden="true"></i><b>권한 매트릭스</b><span>역할 · T-code · SoD 권한 문서</span></li>
+      <li><i class="ph ph-stethoscope" aria-hidden="true"></i><b>SAP 진단</b><span>플러그인 · MCP · SAP 연결 점검</span></li>
+      <li><i class="ph ph-leaf" aria-hidden="true"></i><b>에코 모드</b><span>같은 결과물을 더 적은 비용으로</span></li>
+    </ul>
+  </section>
+
+  <section class="g-sec">
+    <h2>지원 환경</h2>
+    <dl class="g-spec">
+      <div><dt>SAP 시스템</dt><dd>ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud (Public · Private), ADT 활성화</dd></div>
+      <div><dt>AI</dt><dd>Anthropic Claude (Claude Code)</dd></div>
+      <div><dt>연동</dt><dd>VS Code · Obsidian · Notion</dd></div>
+    </dl>
+  </section>
+
+  <section class="ab-end">
+    <h2>더 자세한 내용은 SC4 소개서에서</h2>
+    <p>제품 구성과 도입 방식은 소개서에서 더 자세히 볼 수 있어요.</p>
+    <div class="g-links">
+      <a class="g-btn is-solid" href="../resources/brochure.html" target="_blank" rel="noopener"><i class="ph ph-file-pdf" aria-hidden="true"></i>SC4 소개서 받기</a>
+      <!-- The inquiry page is hidden.
+      <a class="g-btn" href="../contact/inquiry.html">도입 문의</a>
+      -->
+    </div>
+  </section>
+</main>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <address class="foot-info" hidden>
+      <!-- One line each wide; narrow, each pair or lone field takes a line. -->
+      <span class="foot-row">
+        <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>대표 백승현</span></span>
+        <span class="foot-pair is-long"><span>사업자등록번호 556-39-01540</span><span>통신판매업 신고 【통신판매업 신고번호】</span></span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+      </span>
+      <span class="foot-row">
+        <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+        <span>호스팅 【호스팅 업체】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">이용약관</a><a href="../legal/privacy.html">개인정보처리방침</a><!-- Billing terms and refund policy are hidden: they live in the PoC web app. --></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

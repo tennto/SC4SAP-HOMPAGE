@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/js/lang.js"></script>
+<title>User guide · Super-Claude for SAP</title>
+<meta name="description" content="SC4SAP installation and setup guide" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="512x512" href="/img/icon-black-rounded.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-black-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-black-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/icon-black-180.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../css/doc.css" />
+</head>
+<body>
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="../"><i class="ph ph-arrow-left" aria-hidden="true"></i>Home</a>
+  </div>
+</header>
+
+<!-- Text: the landing site's install guide (install.html), in the redesign's type on white. -->
+<main class="doc">
+  <header class="doc-head">
+    <p class="doc-eyebrow">User guide</p>
+    <h1>Installation guide (CLI)</h1>
+    <p class="doc-lede">Add the marketplace inside a Claude Code session and run the setup wizard once, and you're done. The wizard installs the MCP server for you</p>
+    <div class="g-links">
+      <a class="g-btn" href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.md" target="_blank" rel="noopener"><i class="ph ph-book-open" aria-hidden="true"></i>Full original document</a>
+    </div>
+  </header>
+
+  <section class="g-sec">
+    <h2>Requirements</h2>
+    <dl class="g-spec">
+      <div><dt>Node.js</dt><dd>20.0.0 or later</dd></div>
+      <div><dt>Claude Code</dt><dd>CLI installed (Max or Pro subscription, or an API key)</dd></div>
+      <div><dt>SAP system</dt><dd>ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud (Public·Private), with ADT enabled</dd></div>
+    </dl>
+    <p class="g-note"><i class="ph ph-info" aria-hidden="true"></i><span>The MCP server <code>abap-mcp-adt-powerup</code> is installed and configured automatically during <code>/sc4sap:setup</code>. You don't need to download it in advance</span></p>
+  </section>
+
+  <section class="g-sec" id="install-steps">
+    <h2>Installation</h2>
+    <p class="g-note"><i class="ph ph-warning-circle" aria-hidden="true"></i><span>sc4sap is not yet listed in the official Claude Code plugin marketplace. For now, add the repository as a custom marketplace and then install</span></p>
+    <div class="g-opts">
+      <div class="g-opt is-main">
+        <span class="g-tag">Recommended</span>
+        <h3>Add as a custom marketplace</h3>
+        <p>Run these two lines in order inside a Claude Code session</p>
+        <div class="g-cmd"><pre><code>/plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
+/plugin install sc4sap</code></pre><button type="button" class="g-copy" data-copy aria-label="Copy command"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+        <p class="g-opt-sub">To update</p>
+        <div class="g-cmd"><pre><code>/plugin marketplace update babamba2/superclaude-for-sap
+/plugin install sc4sap</code></pre><button type="button" class="g-copy" data-copy aria-label="Copy command"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+      </div>
+      <div class="g-opt">
+        <span class="g-tag">Alternative</span>
+        <h3>Install from source</h3>
+        <p>Clone and build, then point Claude Code at that directory with <code>/plugin marketplace add &lt;local-path&gt;</code></p>
+        <div class="g-cmd"><pre><code>git clone https://github.com/babamba2/superclaude-for-sap.git
+cd superclaude-for-sap
+npm install &amp;&amp; npm run build</code></pre><button type="button" class="g-copy" data-copy aria-label="Copy command"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="g-sec">
+    <h2>Setup wizard</h2>
+    <p>The wizard asks one question at a time. If a value already exists, it shows it and you can press Enter to keep it</p>
+    <div class="g-cmd"><pre><code>/sc4sap:setup</code></pre><button type="button" class="g-copy" data-copy aria-label="Copy command"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+    <ol class="g-steps">
+      <li><span class="n">01</span><div><h3>System and industry</h3><p>Choose S4 or ECC, enter the ABAP release, and pick from a menu of 15 industries. These values determine the SPRO tables, BAPIs and TCodes, and ABAP syntax gating</p></div></li>
+      <li><span class="n">02</span><div><h3>Install the MCP server</h3><p>Clones <code>abap-mcp-adt-powerup</code> into <code>&lt;PLUGIN_ROOT&gt;/vendor/abap-mcp-adt/</code> and builds it. Skipped if it's already there</p></div></li>
+      <li><span class="n">03</span><div><h3>Create a profile and connect</h3><p>Set an alias (the <code>KR-DEV</code> format is recommended) and a tier (<code>DEV</code>·<code>QA</code>·<code>PRD</code>), then enter the URL, client, authentication method, account and language one by one. Choose the RFC backend from soap · native · gateway · odata · zrfc</p></div></li>
+      <li><span class="n">04</span><div><h3>Verify the connection</h3><p>After reconnecting with <code>/mcp</code>, it runs a <code>GetSession</code> round trip, checks the system info, and confirms ADT permissions with <code>GetInactiveObjects</code>. No Claude Code restart is needed</p></div></li>
+      <li><span class="n">05</span><div><h3>Create ABAP utility objects</h3><p>Installed only on DEV profiles. Creates the <code>ZMCP_ADT_UTILS</code> function group and the <code>ZIF_S4SAP_CM</code> · <code>ZCL_S4SAP_CM_*</code> ALV handlers. On QA and PRD it refuses and prints guidance for a CTS transport</p></div></li>
+      <li class="is-required"><span class="n">06</span><div><h3>Install permission hooks <span class="g-flag">required</span></h3><p>Setup isn't complete without this step. Registers <code>block-forbidden-tables.mjs</code> (blocks row extraction) and <code>tier-readonly-guard.mjs</code> (blocks changes by tier) in <code>.claude/settings.json</code> and runs smoke tests for both</p></div></li>
+    </ol>
+    <h3 class="g-sub">Optional steps</h3>
+    <ul class="g-list">
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>SPRO configuration extraction - uses a lot of tokens, but the cache greatly reduces token use in later work</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>Customization inventory - scans <code>Z*</code>·<code>Y*</code> enhancements and append structures</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>HUD status line - after a restart, shows the active profile and tier, and token usage</span></li>
+    </ul>
+    <h3 class="g-sub">Subcommands</h3>
+    <div class="g-cmd"><pre><code>/sc4sap:setup                # full wizard
+/sc4sap:setup doctor         # route to health check
+/sc4sap:setup mcp            # route to MCP setup
+/sc4sap:setup spro           # SPRO config extraction only
+/sc4sap:setup customizations # Z*/Y* inventory only</code></pre><button type="button" class="g-copy" data-copy aria-label="Copy command"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+  </section>
+
+  <section class="g-sec">
+    <h2>Multiple profiles</h2>
+    <p>Work with several SAP connections in one Claude Code session. Each connection is one profile, and the project records only which profile is active</p>
+    <div class="g-cmd"><pre><code><span class="t-dir">~/.sc4sap/</span>                      <span class="t-note">shared across repos</span>
+└── profiles/
+    ├── <span class="t-dir">KR-DEV/</span>  sap.env · config.json
+    ├── <span class="t-dir">KR-QA/</span>   sap.env · config.json
+    └── <span class="t-dir">KR-PRD/</span>  sap.env · config.json
+
+<span class="t-dir">&lt;project&gt;/.sc4sap/</span>              <span class="t-note">project scope</span>
+├── active-profile.txt          <span class="t-note">"KR-DEV"</span>
+└── work/
+    ├── <span class="t-dir">KR-DEV/</span>  program · cbo · ...
+    └── <span class="t-dir">KR-PRD/</span>  ...</code></pre></div>
+    <ul class="g-list g-tiers">
+      <li><i class="ph ph-lock-key" aria-hidden="true"></i><span><b>The tier drives read-only enforcement</b> On QA and PRD profiles, <code>Create*</code> · <code>Update*</code> · <code>Delete*</code> are blocked at two layers: the hooks and the MCP server</span></li>
+      <li><i class="ph ph-prohibit" aria-hidden="true"></i><span><b>The tier can't be changed</b> To change it, delete the profile and create it again</span></li>
+      <li><i class="ph ph-key" aria-hidden="true"></i><span><b>Passwords are stored in the OS keychain</b> Windows Credential Manager · macOS Keychain · Linux libsecret. Where no keychain is available, it falls back to plain text in the profile env and shows a warning</span></li>
+    </ul>
+  </section>
+
+  <section class="g-sec">
+    <h2>Three layers of defense</h2>
+    <p>This is the first thing reviewed before connecting to production. It's enforced in code, not in documentation</p>
+    <div class="g-layers">
+      <div class="g-layer"><span class="g-layer-tag">L1a</span><div><h3>Row extraction block</h3><p>A Claude Code <code>PreToolUse</code> hook. Based on the profile's <code>blocklistProfile</code>, it rejects <code>GetTableContents</code> · <code>GetSqlQuery</code> on sensitive tables</p></div></div>
+      <div class="g-layer"><span class="g-layer-tag">L1b</span><div><h3>Tier change block</h3><p>A Claude Code <code>PreToolUse</code> hook. On every call it rereads the active profile's <code>SAP_TIER</code> and blocks changes on QA and PRD. It keeps no state</p></div></div>
+      <div class="g-layer is-hard"><span class="g-layer-tag">L2</span><div><h3>MCP server's own guard</h3><p>The layer that can't be bypassed. Even if the hooks are missing or misconfigured, the guard inside <code>abap-mcp-adt-powerup</code> always runs</p></div></div>
+    </div>
+    <p class="g-note"><i class="ph ph-shield-check" aria-hidden="true"></i><span>The L1 hooks let calls through on IO or parsing errors, while the L2 MCP guard is always on. The recommended defaults are L1a <code>strict</code> and MCP server blocklist <code>standard</code></span></p>
+  </section>
+
+  <section class="g-sec">
+    <h2>After setup</h2>
+    <dl class="g-ref">
+      <div><dt>Switch the active system</dt><dd><code>/sc4sap:sap-option switch &lt;alias&gt;</code></dd></div>
+      <div><dt>Add a company or tier</dt><dd><code>/sc4sap:sap-option add</code></dd></div>
+      <div><dt>List profiles</dt><dd><code>/sc4sap:sap-option list</code></dd></div>
+      <div><dt>Health check</dt><dd><code>/sc4sap:sap-doctor</code></dd></div>
+      <div><dt>Re-extract SPRO</dt><dd><code>/sc4sap:setup spro</code></dd></div>
+    </dl>
+    <h3 class="g-sub">Further reading</h3>
+    <div class="g-reading">
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.md" target="_blank" rel="noopener"><span>Installation and setup (original)</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/FEATURES.md" target="_blank" rel="noopener"><span>Feature details</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/CHANGELOG.md" target="_blank" rel="noopener"><span>Changelog</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+    </div>
+  </section>
+</main>
+<script>
+// Copy buttons: the command text, then a tick for a moment.
+document.querySelectorAll('[data-copy]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var t = b.parentElement.querySelector('code').textContent;
+    var label = b.querySelector('[data-copy-label]');
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(t).then(function () {
+      b.classList.add('is-done'); label.textContent = 'Copied';
+      setTimeout(function () { b.classList.remove('is-done'); label.textContent = 'Copy'; }, 1600);
+    }, function () {});
+  });
+});
+</script>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <address class="foot-info" hidden>
+      <!-- One line each wide; narrow, each pair or lone field takes a line. -->
+      <span class="foot-row">
+        <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>CEO 백승현</span></span>
+        <span class="foot-pair is-long"><span>Business registration no. 556-39-01540</span><span>Mail-order business registration 【mail-order business registration no.】</span></span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+      </span>
+      <span class="foot-row">
+        <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+        <span>Hosting 【hosting provider】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">Terms of Use</a><a href="../legal/privacy.html">Privacy Policy</a><!-- Billing terms and refund policy are hidden: they live in the PoC web app. --></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

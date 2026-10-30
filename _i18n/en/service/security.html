@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/js/lang.js"></script>
+<title>Security · Super-Claude for SAP</title>
+<meta name="description" content="How SC4SAP protects your SAP system: tier-based read-only access, sensitive table blocking, human approval, network setup, operational data and auditing, and the security level of the web workspace." />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="512x512" href="/img/icon-black-rounded.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-black-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-black-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/icon-black-180.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../css/doc.css" />
+</head>
+<body class="doc-dark">
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="../"><i class="ph ph-arrow-left" aria-hidden="true"></i>Home</a>
+  </div>
+</header>
+
+<!-- Security. Every claim here comes from the terms (articles 5, 8, 9, 12,
+     16, 24), the install guide's three-layer section, and the web
+     workspace's deployment checklist. Nothing is promised beyond them;
+     keep it that way when editing. -->
+<main class="doc">
+  <header class="doc-head">
+    <p class="doc-eyebrow">Security</p>
+    <h1>SC4SAP security architecture</h1>
+    <p class="doc-lede">SC4SAP's safeguards are enforced in code, not in documents. This page sets out what they block, what they ask you about, and what they cannot block.</p>
+  </header>
+
+  <ul class="sc-principles">
+    <li><i class="ph ph-user-focus" aria-hidden="true"></i><b>Your SAP authorizations, and nothing more</b><span>It operates only within the authorizations the registered SAP user already has</span></li>
+    <li><i class="ph ph-lock-simple" aria-hidden="true"></i><b>Production is read-only</b><span>In the QA and production tiers, the create, change and delete tools are removed entirely</span></li>
+    <li><i class="ph ph-prohibit" aria-hidden="true"></i><b>Sensitive data is not extracted</b><span>Row extraction from tables such as bank and payroll cannot be unlocked, even with approval</span></li>
+  </ul>
+
+  <section class="doc-sec" id="verify">
+    <h2><span class="n">1.</span>How your system is protected</h2>
+    <p>What the AI can do is limited in layers. Each layer is designed to fail in a different way, so if one layer is missing or misconfigured, the next one still blocks.</p>
+    <div class="g-layers sc-layers">
+      <div class="g-layer"><span class="g-layer-tag">Tier</span><div><h3>Tools are excluded by tier</h3><p>Every connection is given a development, QA or production tier. In the QA and production tiers, tools that change the system are left out of the session altogether. The AI cannot call a tool it cannot see, so even a cleverly written prompt cannot get around this. A tier cannot be changed once created; to change it, you delete the connection and create it again.</p></div></div>
+      <div class="g-layer"><span class="g-layer-tag">Block</span><div><h3>Row extraction from sensitive tables is blocked</h3><p>Bank and payroll tables, and tables of a similar nature, are on a permanent block list. Content reads and SQL queries against these tables are refused before the request ever reaches the user, and no approval from anywhere can unlock them.</p></div></div>
+      <div class="g-layer"><span class="g-layer-tag">Approval</span><div><h3>Sensitive calls stop and ask a person</h3><p>Sensitive calls that pass the first two layers show the tool and its exact input before running, then wait. If no answer comes, the call is automatically denied when the time limit expires, and closing the browser is also treated as a denial.</p></div></div>
+      <div class="g-layer is-hard"><span class="metal-rim" aria-hidden="true"></span><span class="g-layer-tag">Server</span><div><h3>The MCP server's own guard is always on</h3><p>The MCP server that talks directly to SAP (<code>abap-mcp-adt-powerup</code>) contains the same blocks. Even if the plug-in's hooks are missing or misconfigured, this layer does not switch off.</p></div></div>
+    </div>
+    <h3>Verified during installation</h3>
+    <p>Right after connecting, the setup wizard checks the session round trip, system information and ADT authorizations, registers the row-extraction block hook and the tier block hook, and then runs a smoke test to confirm that both actually block. If this step does not pass, setup does not finish.</p>
+  </section>
+
+  <section class="doc-sec" id="network">
+    <h2><span class="n">2.</span>A setup that fits your network</h2>
+    <p>SC4SAP connects through SAP's ADT (ABAP Development Tools) interface. You choose the connection path to match your company's security policy, and there is no need to open a path your policy forbids just for SC4SAP.</p>
+    <div class="legal-table-wrap"><table class="legal-table sc-net">
+      <thead><tr><th>Environment</th><th>Setup</th></tr></thead>
+      <tbody>
+        <tr><td>Internal network</td><td>The plug-in runs inside Claude Code on the user's PC. That PC only needs to reach the SAP server; the SAP side is not opened to the outside.</td></tr>
+        <tr><td>Remote · external access</td><td>Use the routes your company already has in place, such as VPN, allowlists or gateways. How the route is set up follows your company's policy.</td></tr>
+        <tr><td>S/4HANA Cloud</td><td>Both the Public and Private editions can connect, as long as ADT is enabled.</td></tr>
+        <tr><td>Multiple systems · entities</td><td>One connection is one profile. Register development, QA, production and each entity's systems separately, and give each its own tier.</td></tr>
+        <tr><td>Segregated networks · on-premises installation</td><td>Conditions differ from one environment to another, so we review them with you in an adoption consultation.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="g-note"><i class="ph ph-info" aria-hidden="true"></i><span>The source code and query results the AI reads to produce its answers are sent to the model provider's (Anthropic) API, so a route out to that API is required. Do not connect it to data that cannot leave your network.</span></p>
+  </section>
+
+  <section class="doc-sec" id="data">
+    <h2><span class="n">3.</span>Operational data and auditing</h2>
+    <dl class="g-spec">
+      <div><dt>SAP data</dt><dd>We do not store separate copies or backups of your SAP system. Data is read only as needed, at the time of each task.</dd></div>
+      <div><dt>Model training</dt><dd>We do not use customer content to train models, and we do not share or sell it to anyone other than the providers needed to run the service.</dd></div>
+      <div><dt>Credentials</dt><dd>The plug-in keeps SAP passwords in the OS keychain (Windows Credential Manager · macOS Keychain · Linux libsecret). The web workspace stores connection details encrypted and never shows them in the browser again after they are saved.</dd></div>
+      <div><dt>Audit log</dt><dd>The web workspace records every prompt, skill run, approval and denial for each account, so you can check later who allowed what.</dd></div>
+      <div><dt>System changes</dt><dd>Changes made in a tier that allows writes are not simulations. They are recorded in SAP with the registered technical user as the author and carried in transports, so they remain in SAP's change history as is.</dd></div>
+    </dl>
+    <h3>Your part in keeping it safe</h3>
+    <ul>
+      <li>Connect with a dedicated technical user that has only the authorizations the work requires, not a personal administrator account. Review those authorizations regularly.</li>
+      <li>Give every system the correct tier. SC4SAP cannot tell when a production system has been registered as development.</li>
+      <li>Run new skills in a non-production environment first. Outputs are drafts for a reviewer and do not replace your company's review, approval and transport procedures.</li>
+      <li>Do not approve a request without reading it.</li>
+    </ul>
+  </section>
+
+  <section class="doc-sec" id="web">
+    <h2><span class="n">4.</span>Security of SC4SAP Web (PoC)</h2>
+    <p>The web workspace is in the PoC / closed test stage. Below are the standards we currently apply; the setup may change before the official release.</p>
+    <ul class="g-list sc-web">
+      <li><i class="ph ph-lock-key" aria-hidden="true"></i><span><b>Served over HTTPS only</b>Login cookies are set to be sent over HTTPS only. You sign in with a Google account.</span></li>
+      <li><i class="ph ph-shield-check" aria-hidden="true"></i><span><b>Only the web app is exposed</b>The backend that runs AI sessions is not exposed publicly, and it accepts requests from the web app only after verifying their signatures.</span></li>
+      <li><i class="ph ph-key" aria-hidden="true"></i><span><b>Connection details are stored encrypted</b>SAP connection details and API keys are encrypted with AES-256-GCM and are never sent back to the browser.</span></li>
+      <li><i class="ph ph-users-three" aria-hidden="true"></i><span><b>Concurrent sessions are limited per account</b>There is a cap on the number of AI sessions a single account can open.</span></li>
+      <li><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span><b>Dependencies are checked for vulnerabilities before every deployment</b>When a known vulnerability turns up, we upgrade the affected version to close it before deploying.</span></li>
+    </ul>
+    <p class="g-note"><i class="ph ph-info" aria-hidden="true"></i><span>To connect a production system during the PoC stage, we first review the setup with you in an adoption consultation.</span></p>
+  </section>
+
+  <section class="doc-sec" id="limits">
+    <h2><span class="n">5.</span>What the safeguards cannot block</h2>
+    <p>The safeguards are a safety net that reduces risk, not a compliance program.</p>
+    <ul>
+      <li>They cannot classify your data for you. They do not know which of your custom tables contain personal information.</li>
+      <li>Values written directly into source code are part of the source, so if a program you ask it to read contains sensitive values, those values are read as they are.</li>
+      <li>AI output can be wrong or incomplete. Applying it to important systems must remain the responsibility of a qualified person.</li>
+    </ul>
+  </section>
+
+  <section class="ab-end">
+    <h2>Need a security review?</h2>
+    <p>We go through the setup for your environment and your security team's review together in an adoption consultation. Please report suspected vulnerabilities to <a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a>.</p>
+    <div class="g-links">
+      <!-- The inquiry page is hidden.
+      <a class="g-btn is-solid" href="../contact/inquiry.html"><i class="ph ph-arrow-right" aria-hidden="true"></i>Contact sales</a>
+      -->
+      <a class="g-btn" href="../legal/terms.html#guardrails">Read Article 8 of the Terms of Use</a>
+    </div>
+  </section>
+</main>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <address class="foot-info" hidden>
+      <!-- One line each wide; narrow, each pair or lone field takes a line. -->
+      <span class="foot-row">
+        <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>CEO 백승현</span></span>
+        <span class="foot-pair is-long"><span>Business registration no. 556-39-01540</span><span>Mail-order business registration 【mail-order business registration no.】</span></span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+      </span>
+      <span class="foot-row">
+        <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+        <span>Hosting 【hosting provider】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">Terms of Use</a><a href="../legal/privacy.html">Privacy Policy</a><!-- Billing terms and refund policy are hidden: they live in the PoC web app. --></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<script type="module">
+// The liquid-metal rim of the landing page's prompt bar, on the one layer
+// that cannot be switched off. Same shader and settings as the landing page (index.html).
+import { ShaderMount, liquidMetalFragmentShader, ShaderFitOptions } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@0.0.81/+esm';
+const SPEED = 0.6;
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  for (const rim of document.querySelectorAll('.metal-rim')) {
+    const mount = new ShaderMount(rim, liquidMetalFragmentShader, {
+      u_colorBack: [0, 0, 0, 0], u_colorTint: [1, 1, 1, 1],
+      u_image: undefined, u_isImage: false,
+      u_repetition: 4, u_softness: 0.5, u_shiftRed: 0.3, u_shiftBlue: 0.3,
+      u_distortion: 0, u_contour: 0, u_angle: 45, u_shape: 1,
+      u_fit: ShaderFitOptions.cover, u_scale: 1.3, u_rotation: 0,
+      u_originX: 0.5, u_originY: 0.5, u_offsetX: 0, u_offsetY: 0,
+      u_worldWidth: 0, u_worldHeight: 0,
+    }, undefined, SPEED);
+    rim.classList.add('is-on');
+    // Idle off screen.
+    new IntersectionObserver(([e]) => mount.setSpeed(e.isIntersecting ? SPEED : 0)).observe(rim);
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ja" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/js/lang.js"></script>
+<title>SC4SAP — ERP AXの新たな第一歩</title>
+<meta name="description" content="SC4SAPは、自社のSAPに直接つながり、コード分析からドキュメント・プログラム生成までこなすAIワークスペースです。" />
+<link rel="canonical" href="https://sc4sap.dev/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Super-Claude for SAP" />
+<meta property="og:title" content="SC4SAP — ERP AXの新たな第一歩" />
+<meta property="og:description" content="SC4SAPは、自社のSAPに直接つながり、コード分析からドキュメント・プログラム生成までこなすAIワークスペースです。" />
+<meta property="og:url" content="https://sc4sap.dev/" />
+<meta property="og:locale" content="ja_JP" />
+<meta property="og:image" content="https://sc4sap.dev/assets/tumbnail.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://sc4sap.dev/assets/tumbnail.png" />
+<meta name="google-site-verification" content="2xZ2mbceS386_QWnVunYUDkvQtaaiKH0DnHpxnmZPIg" />
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://sc4sap.dev/#site","name":"Super-Claude for SAP","alternateName":"SC4SAP","url":"https://sc4sap.dev/","inLanguage":"ja","about":{"@id":"https://sc4sap.dev/#app"}},{"@type":"SoftwareApplication","@id":"https://sc4sap.dev/#app","name":"Super-Claude for SAP","alternateName":"SC4SAP","url":"https://sc4sap.dev/","description":"SC4SAPは、自社のSAPに直接つながり、コード分析からドキュメント・プログラム生成までこなすAIワークスペースです。","inLanguage":"ja","applicationCategory":"BusinessApplication","operatingSystem":"Web","image":"https://sc4sap.dev/assets/tumbnail.png","sameAs":["https://github.com/babamba2/superclaude-for-sap","https://www.npmjs.com/package/@babamba2/abap-mcp-adt-powerup"],"author":[{"@type":"Person","name":"백승현","sameAs":"https://www.linkedin.com/in/seunghyun-paek-5b83b7183/"},{"@type":"Person","name":"김시훈","sameAs":"https://www.linkedin.com/in/sihun-kim-27737132b/"}]}]}</script>
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#000000" />
+
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="512x512" href="/img/icon-black-rounded.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-black-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-black-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/icon-black-180.png" />
+
+<!-- Pretendard for Korean and Latin, Pretendard JP for Japanese. Both are
+     dynamic subsets, so a page only downloads the glyphs it renders. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-jp-dynamic-subset.min.css" />
+<!-- IBM Plex Mono only, for commands and object names. -->
+<link rel="stylesheet" href="css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="css/n.css" />
+
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body>
+
+<a class="skip" href="#platform" data-i="skip">本文へスキップ</a>
+
+<!-- ===================== NOTICE =====================
+     A thin strip above the nav. Hidden for now: to bring it back, drop
+     `hidden` here and set --notice-h in n.css back to 3rem. -->
+<div class="notice" data-notice hidden>
+  <div class="notice-inner">
+    <a class="notice-link" href="#contact">
+      <span class="notice-label">NOTICE</span>
+      <span class="notice-text"><span data-i="noticeText">SC4SAP クローズドテスト</span><span class="notice-sep" aria-hidden="true">|</span><span data-i="noticeCta">SC4SAP WEBを今すぐ使う（テスター専用）</span></span>
+      <!-- An SVG, not the icon font: the font's glyph sits on the text
+           baseline and never centres against Hangul. -->
+      <svg class="notice-chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg>
+    </a>
+  </div>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" data-nav>
+  <div class="nav-capsule glass">
+    <a href="#top" class="brand">
+      <span class="brand-text"><b>Super-Claude</b> for SAP</span>
+    </a>
+
+    <!-- Three groups. Pointing at one grows the capsule downward and shows
+         that group's entries inside it; every entry opens in a new tab.
+         PLACEHOLDER: the pages behind these URLs are not built yet. -->
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary">
+      <button type="button" class="nav-top" data-group="res" aria-expanded="false" aria-controls="grp-res"><span data-i="navRes">リソース</span></button>
+      <button type="button" class="nav-top" data-group="svc" aria-expanded="false" aria-controls="grp-svc"><span data-i="navSvc">サービス</span></button>
+      <button type="button" class="nav-top" data-group="legal" aria-expanded="false" aria-controls="grp-legal"><span data-i="navLegal">規約</span></button>
+    </nav>
+
+    <div class="nav-tools">
+      <!-- Hidden until the copy is settled section by section; English and
+           Japanese are translated once, from the final Korean. -->
+      <div class="lang" role="group" aria-label="Language" data-lang hidden>
+        <button type="button" data-lang-btn="ko" aria-pressed="true">KO</button>
+        <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang-btn="ja" aria-pressed="false">JP</button>
+      </div>
+      <!-- The inquiry page is hidden; this links to the web app (placeholder until its URL exists). -->
+      <a class="btn btn-sm nav-cta" href="#contact" data-launch-open><span data-i="ctaUse">ワークスペースへ</span></a>
+      <!-- Two strokes that turn into an X. An SVG rather than the icon font,
+           whose glyphs sit on a text baseline and never centre exactly. -->
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-panel" data-nav-toggle>
+        <span class="sr-only" data-i="menu">メニュー</span>
+        <svg class="nav-burger" viewBox="0 0 16 16" aria-hidden="true"><path class="b1" d="M3 5.5h10" /><path class="b2" d="M3 10.5h10" /></svg>
+      </button>
+    </div>
+    <!-- The capsule's second row: one group at a time on wide screens,
+         all three as headed lists inside the phone menu. -->
+    <div class="nav-panel" id="nav-panel">
+      <div class="nav-panel-in">
+        <div class="nav-group" id="grp-res" data-group="res">
+          <p class="nav-group-h" data-i="navRes">リソース</p>
+          <div class="nav-group-links">
+            <a href="resources/brochure.html" target="_blank" rel="noopener"><b><span data-i="dResBrochure">SC4 紹介資料</span> <em>PDF</em></b><span class="pl-desc" data-i="dResBrochureD">製品紹介資料をご覧いただけます</span></a>
+            <a href="resources/updates.html" target="_blank" rel="noopener"><b><span data-i="dResUpdates">アップデート</span></b><span class="pl-desc" data-i="dResUpdatesD">新機能と変更履歴</span></a>
+            <a href="resources/guide.html" target="_blank" rel="noopener"><b><span data-i="dResGuide">利用ガイド</span></b><span class="pl-desc" data-i="dResGuideD">接続から最初の分析まで</span></a>
+          </div>
+        </div>
+        <div class="nav-group" id="grp-svc" data-group="svc">
+          <p class="nav-group-h" data-i="navSvc">サービス</p>
+          <div class="nav-group-links">
+            <a href="service/about.html" target="_blank" rel="noopener"><b><span data-i="dSvcAbout">About</span></b><span class="pl-desc" data-i="dSvcAboutD">SC4SAPプラグインとWebのご紹介</span></a>
+            <a href="service/security.html" target="_blank" rel="noopener"><b><span data-i="dSvcSecurity">Security</span></b><span class="pl-desc" data-i="dSvcSecurityD">データ保護と権限設計</span></a>
+            <a href="service/sponsorship.html" target="_blank" rel="noopener"><b><span data-i="dSvcSponsor">Sponsorship</span></b><span class="pl-desc" data-i="dSvcSponsorD">プロジェクト支援のご案内</span></a>
+          </div>
+        </div>
+        <div class="nav-group" id="grp-legal" data-group="legal">
+          <p class="nav-group-h" data-i="navLegal">規約</p>
+          <div class="nav-group-links">
+            <a href="legal/terms.html" target="_blank" rel="noopener"><b><span data-i="dLegalTerms">利用規約</span></b><span class="pl-desc" data-i="dLegalTermsD">サービスの利用条件</span></a>
+            <a href="legal/privacy.html" target="_blank" rel="noopener"><b><span data-i="dLegalPrivacy">プライバシーポリシー</span></b><span class="pl-desc" data-i="dLegalPrivacyD">個人情報の収集と保管</span></a>
+            <!-- Billing terms and refund policy are hidden: they live in the PoC web app.
+            <a href="legal/billing-terms.html" target="_blank" rel="noopener"><b><span data-i="dLegalBilling">有料サービス利用規約</span></b><span class="pl-desc" data-i="dLegalBillingD">決済とサブスクリプションの条件</span></a>
+            <a href="legal/refund-policy.html" target="_blank" rel="noopener"><b><span data-i="dLegalRefund">返金ポリシー</span></b><span class="pl-desc" data-i="dLegalRefundD">返金の基準と手続き</span></a>
+            -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Sections" data-rail>
+  <a href="#top"><span data-i="railTop">紹介</span></a>
+  <a href="#platform"><span data-i="navPlatform">プラットフォーム</span></a>
+  <a href="#analyze"><span data-i="navAnalyze">私たちについて</span></a>
+</nav>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section id="top" class="hero" data-section>
+  <!-- Photograph plus scrims; the image and its darkening are set on .hero in n.css. -->
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <div class="wrap hero-copy">
+    <h1 class="display enter" style="--d:0ms" data-i="heroTitle">ERP AXの新たな第一歩</h1>
+    <p class="hero-sub enter" style="--d:140ms" data-i="heroSub">コードや設定、業務フローまで読み解くAI<br>SC4SAPはEnterprise AXに最適化されたワークスペースです</p>
+
+    <!-- Questions people ask SC4SAP, typed out one after another in a glass
+         prompt bar. The list is the source: the script reads it, and screen
+         readers get it as plain text while the animated bar stays hidden. -->
+    <div class="ask-wrap enter" style="--d:280ms" data-ask>
+      <p class="sr-only">SC4SAPにはこんなことを聞けます</p>
+      <ul class="sr-only">
+        <li>A社の発注のうち、納期が遅れているものを見せて</li>
+        <li>新しいプラントを追加するには、どのIMG設定から手を付ければいい？</li>
+        <li>ZCTTR203テーブルに口座情報を保存しているRFCって何だっけ？</li>
+        <li>昨日から本番サーバーの応答が遅いので、原因を診断して</li>
+        <li>ZSDR0150を実行するとダンプが出るので、原因を探して</li>
+        <li>前回プロジェクトの設計書から返品プロセスの部分を探して</li>
+        <li>今月の締め前に、未決のまま残っている仕入伝票だけ整理して</li>
+        <li>納期遅延の照会ロジックをCDSビューで作り直して</li>
+        <li>ZMMR0420のプログラム仕様書を作って、現場共有用にまとめて</li>
+        <li>旧WMSの入庫確定ロジックがどこでTOを作っているか探して、添付のExcelと比較して</li>
+      </ul>
+      <div class="ask" aria-hidden="true">
+        <span class="metal-rim"></span>
+        <span class="ask-line"><span class="ask-text"></span><span class="ask-caret"></span></span>
+        <span class="ask-send"><i class="ph ph-arrow-elbow-down-left"></i></span>
+      </div>
+    </div>
+
+    <div class="actions enter" style="--d:420ms">
+      <a class="btn btn-light" href="#contact" data-launch-open><span data-i="ctaUseLong">ワークスペースへ</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">サービスを見る</span></a>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== PROBLEM ===================== -->
+<section id="problem" class="problem" data-section>
+  <div class="wrap">
+    <p class="statement" data-statement data-i="statement">複雑なSAPは、もうSC4SAPにお任せください<br>既存コードの把握だけで何日もかかっていた作業を<br><em>SC4SAPが分析からドキュメント化まで</em> <br class="br-m"><em>一度に解決します</em></p>
+  </div>
+
+  <!-- Before -> After, pinned. Scrolling strikes the manual steps one by
+       one while the time counts down, then the generated spec rises in
+       their place. Stacked and fully shown on narrow or short screens. -->
+  <div class="shift" data-shift>
+    <div class="shift-pin">
+      <div class="aura" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span></div>
+      <div class="wrap shift-grid">
+
+        <div class="shift-meter">
+          <p class="shift-kicker"><span>BEFORE</span><i class="ph ph-arrow-right" aria-hidden="true"></i><span>AFTER</span></p>
+          <p class="shift-k" data-i="shiftK">仕様書1件の作成にかかる時間</p>
+          <p class="shift-num" data-shift-num>約10<span class="u">分</span></p>
+          <div class="shift-bars">
+            <div class="bar is-before">
+              <span class="bar-name" data-i="shiftBarA">人の手で</span>
+              <span class="bar-track"><i></i></span>
+              <span class="bar-val" data-i="shiftBarAv">約5日</span>
+            </div>
+            <div class="bar is-after">
+              <span class="bar-name">SC4SAP</span>
+              <span class="bar-track"><i><span class="metal-rim" aria-hidden="true"></span></i></span>
+              <span class="bar-val" data-shift-val>約10分</span>
+            </div>
+          </div>
+          <div class="shift-ratio">
+            <p data-i="shiftRatio">標準モード・業務時間換算で<b>約240倍</b>速く</p>
+            <p class="shift-eco" data-i="shiftEco">エコモードなら約150秒前後</p>
+          </div>
+        </div>
+
+        <div class="shift-stage">
+          <div class="shift-before">
+            <p class="shift-label"><span>BEFORE</span><span data-i="shiftBeforeL">人が手作業でしていたこと</span></p>
+            <ol class="task-list">
+              <li class="task" data-task="1.5"><span class="task-n">01</span><span class="task-t"><b data-i="task1">ソースコードを1行ずつ読む</b><small>SE38 · SE80</small></span><span class="task-time" data-i="task1v">1〜2日</span></li>
+              <li class="task" data-task="0.5"><span class="task-n">02</span><span class="task-t"><b data-i="task2">テーブル・項目の関係を追う</b><small>SE11 · SE16</small></span><span class="task-time" data-i="task2v">半日</span></li>
+              <li class="task" data-task="1"><span class="task-n">03</span><span class="task-t"><b data-i="task3">Include・呼び出しフローをたどる</b><small>SE80 · SE37</small></span><span class="task-time" data-i="task3v">1日</span></li>
+              <li class="task" data-task="1"><span class="task-n">04</span><span class="task-t"><b data-i="task4">仕様書テンプレートに書き写す</b><small>Excel · Word</small></span><span class="task-time" data-i="task4v">1日</span></li>
+              <li class="task" data-task="1"><span class="task-n">05</span><span class="task-t"><b data-i="task5">担当者に聞いて返事を待つ</b><small data-i="task5s">メール・メッセンジャー</small></span><span class="task-time" data-i="task5v">めど立たず</span></li>
+            </ol>
+            <p class="task-sum"><span data-i="taskSum">従来</span><b data-i="taskSumV">約5日</b></p>
+          </div>
+
+          <div class="shift-after">
+            <div class="spec-win glass win">
+              <div class="win-bar"><em class="win-label">Program → Spec</em></div>
+              <!-- The Program -> Spec screen of the app, after motion/spec_b.html.
+                   Narrow it is still working; wide, the result arrives and the
+                   cursor walks the document the way the demo does (n.js). -->
+              <p class="sr-only" data-i="dxAlt">SC4SAPがプログラムZMMR00020を読み、機能/技術仕様書を作成した結果画面</p>
+              <div class="dx-view" data-dx aria-hidden="true">
+                <div class="dx-page">
+                  <span class="dx-chip">/sc4sap:program-to-spec</span>
+                  <p class="dx-h"><i class="ph ph-file-text"></i>プログラム → 仕様</p>
+                  <p class="dx-desc">プログラムをリバースエンジニアリングして機能または技術仕様書にまとめ、選択画面とALVのモックアップを添付します</p>
+                  <div class="dx-result">
+                    <p class="dx-label">結果</p>
+                    <div class="dx-work"><i class="dx-spin"></i><canvas class="dx-orb"></canvas>処理中</div>
+                    <div class="dx-out">
+                      <div class="dx-panel">
+                        <div class="dx-head"><i class="ph ph-note"></i>要約<span class="dx-tools">最終結果のみ表示<i class="dx-toggle"></i></span></div>
+                        <div class="dx-sum">
+                          <p>ZMMR00020は、購買発注（PO）明細の変更履歴を照会する監査用ALVレポートです。独自の変更履歴テーブルZMMT00120を起点にEKKOと結合して仕入先コードを取得し、LFA1から仕入先名を補完して、変更前/後の値・変更理由・変更者・変更日時をドッキングコンテナALVで表示します。</p>
+                          <p>特記事項：標準のCDHDR/CDPOSではなくカスタムテーブルを変更履歴のソースとしており、購買伝票/仕入先の照会に対するAUTHORITY-CHECKが一切ないため、本番移送前にセキュリティレビューが必要です。</p>
+                          <p>成果物：<code>.sc4sap/out/…/ZMMR00020-ko.md</code>および<code>.html</code>、画面イメージは<code>_assets/</code>フォルダに保存されました。</p>
+                        </div>
+                      </div>
+                      <div class="dx-panel" data-dx-prev>
+                        <div class="dx-head"><i class="ph ph-file-text"></i>HTMLプレビュー<span class="dx-tools"><i class="dx-zoom"></i>100%<span class="dx-dl"><i class="ph ph-download-simple"></i>.htmlをダウンロード</span></span></div>
+                        <div class="dx-doc">
+                          <div class="dx-doc-bar">機能/技術仕様書：ZMMR00020<span class="dx-doc-tools"><span class="dx-edit"><span>編集</span></span>すべて折りたたむ</span></div>
+                          <div class="dx-doc-body">
+                            <div class="dx-toc">
+                              <b>目次</b>
+                              <ol>
+                                <li>1. Business context</li><li>2. Data model</li><li>3. Inputs &amp; screens</li>
+                                <li>4. Main logic</li><li>5. Outputs</li><li>6. Authorizations</li>
+                                <li>7. Exceptions &amp; messages</li><li>8. Dependencies</li><li>9. Routines</li>
+                                <li>10. Open questions</li>
+                              </ol>
+                            </div>
+                            <div class="dx-scroll">
+                              <h3>機能/技術仕様書：ZMMR00020</h3>
+                              <span class="dx-k">目的（一行）</span>
+                              <p class="dx-lead">購買発注（PO）明細の変更履歴（項目別の変更前/後の値、変更理由、変更者/変更日時）を監査（Audit）目的で照会するレポート</p>
+                              <div class="dx-meta">
+                                <div><span class="dx-k">オブジェクトタイプ</span><span>ABAP Report (Executable Program)、Include構成 (T/S/A/O/I/F)</span></div>
+                                <div><span class="dx-k">パッケージ</span><span>ZMMPAEK</span></div>
+                                <div><span class="dx-k">アーキタイプ</span><span>選択画面 → 照会 → ALV Grid（ドッキングコンテナ）表示型レポート</span></div>
+                              </div>
+
+                              <h4 data-sec="1">1. Business context</h4>
+                              <p class="dx-p">本プログラムは、購買発注（Purchase Order）データの変更履歴を追跡する監査用レポートである。購買担当者や内部統制/監査担当者が、特定のPOまたは特定の期間について、どの項目が誰によっていつ、どのような理由で変更されたかを確認できるよう支援する。</p>
+
+                              <h4 data-sec="2">2. Data model</h4>
+                              <table class="dx-table">
+                                <tr><th>Table</th><th>Access</th><th>Key fields</th><th class="dx-x">Notes</th></tr>
+                                <tr><td>ZMMT00120</td><td>R</td><td>EBELN, EBELP, SEQ_NO</td><td class="dx-x">カスタムPO変更履歴テーブル。変更前後の値、理由、変更者、変更時刻を保持</td></tr>
+                                <tr><td>EKKO</td><td>R</td><td>EBELN</td><td class="dx-x">POヘッダから仕入先（LIFNR）を取得する目的でのみ結合</td></tr>
+                                <tr><td>LFA1</td><td>R</td><td>LIFNR</td><td class="dx-x">仕入先名（NAME1）照会、ループ内で1件ずつSELECT SINGLE</td></tr>
+                              </table>
+
+                              <h4 data-sec="3">3. Inputs &amp; screens</h4>
+                              <table class="dx-table">
+                                <tr><th>Field</th><th class="dx-x">Type</th><th class="dx-x">Required</th><th>Description</th></tr>
+                                <tr><td>S_EBELN</td><td class="dx-x">SELECT-OPTIONS (EBELN)</td><td class="dx-x">任意</td><td>PO番号範囲</td></tr>
+                                <tr><td>S_EBELP</td><td class="dx-x">SELECT-OPTIONS (EBELP)</td><td class="dx-x">任意</td><td>PO明細番号範囲</td></tr>
+                                <tr><td>S_CHDATE</td><td class="dx-x">SELECT-OPTIONS (DATS)</td><td class="dx-x">任意</td><td>変更日範囲</td></tr>
+                                <tr><td>P_FIELD</td><td class="dx-x">PARAMETERS (CHAR 30)</td><td class="dx-x">任意</td><td>変更項目名パターン（ワイルドカード比較）</td></tr>
+                              </table>
+
+                              <h4 data-sec="4">4. Main logic</h4>
+                              <ol class="dx-steps">
+                                <li>ユーザーが選択画面でPO番号、PO明細、変更日、項目名の条件を入力する。</li>
+                                <li>START-OF-SELECTIONでデータ照会FORMを呼び出す。</li>
+                                <li>ZMMT00120とEKKOをPO番号でINNER JOINし、変更履歴を照会する。</li>
+                              </ol>
+                              <div class="dx-flow">
+                                <div class="dx-node is-io"><span class="dx-node-n">01</span><i class="ph ph-browser"></i><b>選択画面</b><small>ZMMR00020S</small></div>
+                                <span class="dx-edge"></span>
+                                <div class="dx-node"><span class="dx-node-n">02</span><i class="ph ph-database"></i><b>データ照会</b><small>ZMMT00120</small></div>
+                                <span class="dx-edge"></span>
+                                <div class="dx-node"><span class="dx-node-n">03</span><i class="ph ph-funnel"></i><b>仕入先結合</b><small>LFA1</small></div>
+                                <span class="dx-edge"></span>
+                                <div class="dx-node is-io"><span class="dx-node-n">04</span><i class="ph ph-table"></i><b>ALV表示</b><small>画面 0100</small></div>
+                              </div>
+
+                              <h4 data-sec="5">5. Outputs</h4>
+                              <table class="dx-table">
+                                <tr><th>Column</th><th>Field</th><th>Description</th></tr>
+                                <tr><td>PO Number</td><td>EBELN</td><td>購買発注番号</td></tr>
+                                <tr><td>Changed Field</td><td>CH_FIELD</td><td>変更された項目名</td></tr>
+                                <tr><td>Old Value</td><td>CH_OLD</td><td>変更前の値</td></tr>
+                                <tr><td>New Value</td><td>CH_NEW</td><td>変更後の値</td></tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dx-cursor"><svg viewBox="0 0 20 20"><path d="M3 2l13.2 6.4-5.7 1.7-1.9 5.7L3 2z" stroke-width="1" stroke-linejoin="round"/></svg></div>
+              </div>
+            </div>
+            <p class="shift-done"><span class="metal-rim" aria-hidden="true"></span><i class="ph ph-check-circle" aria-hidden="true"></i><span data-i="shiftDone">仕様書完成</span><span class="shift-done-t" data-i="shiftDoneT">標準モード</span></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PLATFORM ===================== -->
+<section id="platform" class="platform" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 class="h2" data-i="platH">ひとつのワークスペースで<br>すべてのSAP業務を</h2>
+      <p class="sec-sub" data-i="platSub">システムを一度つなげば、対話・業務スキル・モニタリング・ナレッジグラフが同じ場所でつながります</p>
+    </header>
+
+    <!-- The section's picture: the Fibre Arc shader (js/fibre-arc.js).
+         A placeholder box until the canvas mounts; the edges fade into the
+         page so it never reads as a panel. -->
+    <div class="plat-visual" data-fibre aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ===================== ANALYZE: what the workspace is ===================== -->
+<section id="analyze" class="ph-sec" data-section>
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 class="h2" data-i="anaH">SC4SAPは<br>どんなワークスペースですか？</h2>
+    </header>
+    <!-- Text first; each box waits for its picture. -->
+    <ol class="ana-list" role="list">
+      <li class="ana-item">
+        <h3 class="ana-h" data-i="ana1">自社システムにつながった<br>AIと対話し、協働できます</h3>
+        <p class="sec-sub ana-sub" data-i="ana1Sub">システムを理解するAIにすぐ質問でき<br>自分で調べる手間がなくなります</p>
+        <!-- Two windows laid over each other, as flex.team does: a chat answer,
+             then a code analysis with a follow-up being typed. Every size inside
+             is in --u (1/680 of a window's width), so each scales as one piece. -->
+        <div class="cw-stage" aria-hidden="true">
+          <!-- Chat: the PoC transcript (Transcript.tsx) and its docked composer -->
+          <div class="cw cw-back"><div class="cw-in cw-chat">
+            <div class="cw-transcript">
+              <article class="cw-msg is-user">
+                <span class="cw-who">あなた</span>
+                <div class="cw-text">C23TA0045Bの資材の入庫勘定はどれに設定されてる？</div>
+              </article>
+              <article class="cw-msg is-agent">
+                <span class="cw-who">エージェント</span>
+                <div class="cw-text cw-md">
+                  <p><b>C23TA0045B</b>はプラント<b>1100</b>で評価クラス<code>3000</code>（原材料）として管理されています。入庫（移動タイプ101）時のOBYC自動勘定決定は以下のとおりです。</p>
+                  <div class="cw-table">
+                    <div class="cw-table-bar"><span class="cw-table-title"><i class="ph ph-table"></i>テーブルビュー</span><span>3件・4項目</span></div>
+                    <table>
+                      <thead><tr><th>トランザクション</th><th>G/L勘定</th><th>勘定名</th><th>用途</th></tr></thead>
+                      <tbody>
+                        <tr><td>BSX</td><td>13100000</td><td>原材料</td><td>在庫金額の記帳</td></tr>
+                        <tr><td>WRX</td><td>21100000</td><td>未着品</td><td>請求書前のGR/IR精算</td></tr>
+                        <tr><td>PRD</td><td>51000000</td><td>購買価格差異</td><td>標準価格とPO単価の差</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <blockquote>価格管理が<code>S</code>（標準価格1,250ウォン）なので、PO単価が異なると差額はPRDに計上されます。</blockquote>
+                  <p><code>MARC</code>・<code>MBEW</code>・<code>T030</code>を直接照会して確認した値です。勘定コード表は<code>INT</code>です。</p>
+                </div>
+              </article>
+            </div>
+            <div class="cw-composer">
+              <span class="cw-placeholder">SC4SAPエージェントに質問してください…</span>
+              <div class="cw-composer-foot">
+                <span class="cw-attach"><i class="ph ph-plus"></i></span>
+                <span class="cw-model">Sonnet</span>
+                <span class="cw-send"><i class="ph ph-arrow-up"></i></span>
+              </div>
+            </div>
+          </div></div>
+          <!-- Code analysis: the PoC skill result panel (SkillForm.tsx) and its follow-up box -->
+          <div class="cw cw-front"><div class="cw-in cw-panel">
+            <div class="cw-panel-head"><span class="cw-panel-h">結果</span><span class="cw-ghost"><i class="ph ph-chat-teardrop-text"></i>チャットで続ける</span></div>
+            <div class="cw-doc-box">
+              <div class="cw-doc-bar">
+                <span class="cw-doc-kind"><i class="ph ph-markdown-logo"></i>Markdown</span>
+                <span class="cw-switch">最終結果のみ表示<span class="cw-track"><span></span></span></span>
+                <span class="cw-ghost"><i class="ph ph-download-simple"></i>.mdをダウンロード</span>
+                <span class="cw-ghost"><i class="ph ph-notebook"></i>Obsidianに送る</span>
+              </div>
+              <div class="cw-doc cw-md">
+                <h1>ZMMR00020 — コードレビュー</h1>
+                <p>購買発注明細の変更履歴を照会するALVレポートです。変更履歴テーブル<code>ZMMT00120</code>を読み、<code>EKKO</code>、<code>LFA1</code>で仕入先情報を付加します。構造はシンプルですが、照会件数が増えると遅くなる箇所が1つあります。</p>
+                <p><b>オブジェクト</b> <code>ZMMR00020</code> · <b>レビュー観点</b> 全体 · <b>品質スコア</b> 6/10 · <b>検出事項</b> 高 1、中 2、低 1</p>
+                <blockquote><b>最も効果の大きい修正</b> — LOOP内の<code>SELECT SINGLE</code>をループ外の一括照会に置き換えてください。</blockquote>
+                <h2>修正提案</h2>
+                <h3>1. 仕入先名の照会をループの外へ</h3>
+                <p><code>高</code> · <code>ZMMR00020</code> · 元ソース118–121行 · 関連検出 #1</p>
+                <pre class="cw-diff"><span>  LOOP AT gt_log INTO gs_log.</span><span class="del">-   SELECT SINGLE name1 FROM lfa1</span><span class="del">-     INTO gs_out-name1</span><span class="del">-     WHERE lifnr = gs_log-lifnr.</span><span class="add">+   READ TABLE gt_lfa1 INTO gs_lfa1</span><span class="add">+     WITH KEY lifnr = gs_log-lifnr BINARY SEARCH.</span><span class="add">+   gs_out-name1 = gs_lfa1-name1.</span><span>    APPEND gs_out TO gt_out.</span></pre>
+              </div>
+            </div>
+            <div class="cw-reply">
+              <div class="cw-reply-box"><span class="cw-typed">じゃあ、このプログラムの使用箇所リストを確認して</span><span class="cw-send is-on"><i class="ph ph-arrow-up"></i></span></div>
+            </div>
+          </div></div>
+        </div>
+      </li>
+      <li class="ana-item">
+        <h3 class="ana-h" data-i="ana2">開発、モジュール、<br>そしてプロジェクト管理まで</h3>
+        <p class="sec-sub ana-sub" data-i="ana2Sub">実際の構築と運用業務に必要な<br>機能をそろえました</p>
+        <div class="ph-box ana-bg">
+          <!-- The PoC and plug-in at a glance: one glass capsule (SC4SAP, its
+               workspace, the tools it works through) with its twelve skills
+               branching off both ends. Wide it is a 1024 x 632 frame with the
+               skills in two columns; on a phone, 400 x 520 with a row above
+               and below. Each frame has its own SVG of lines, and the pieces
+               are placed on the same numbers. -->
+          <figure class="fx" aria-label="SC4SAPの構成：チャット・スキル・グラフのワークスペースがVS Code CLIプラグイン、Obsidian RAG、Notionと連携し、両側に12のスキルがつながります">
+            <svg class="fx-lines is-wide" viewBox="0 0 1024 632" aria-hidden="true"><path d="M259 316.5H196.5"/><path d="M765 316.5H827.5"/><path d="M154 126.5H186.5Q196.5 126.5 196.5 136.5V496.5Q196.5 506.5 186.5 506.5H154"/><path d="M196.5 202.5H154"/><path d="M196.5 278.5H154"/><path d="M196.5 354.5H154"/><path d="M196.5 430.5H154"/><path d="M870 126.5H837.5Q827.5 126.5 827.5 136.5V496.5Q827.5 506.5 837.5 506.5H870"/><path d="M827.5 202.5H870"/><path d="M827.5 278.5H870"/><path d="M827.5 354.5H870"/><path d="M827.5 430.5H870"/></svg>
+            <svg class="fx-lines is-narrow" viewBox="0 60 400 520" aria-hidden="true"><path d="M200.5 280.8V214.5"/><path d="M200.5 359.2V426.5"/><path d="M45.5 176V204.5Q45.5 214.5 55.5 214.5H345.5Q355.5 214.5 355.5 204.5V176"/><path d="M107.5 214.5V176"/><path d="M169.5 214.5V176"/><path d="M231.5 214.5V176"/><path d="M293.5 214.5V176"/><path d="M45.5 464V436.5Q45.5 426.5 55.5 426.5H345.5Q355.5 426.5 355.5 436.5V464"/><path d="M107.5 426.5V464"/><path d="M169.5 426.5V464"/><path d="M231.5 426.5V464"/><path d="M293.5 426.5V464"/></svg>
+            <div class="fx-cap" aria-hidden="true">
+              <img class="fx-mark" src="img/logo-sc4-white.png" alt="">
+              <span class="fx-pill"><span class="fx-claude" title="Claude"><img src="img/logo-claude.png" alt=""></span><i class="ph ph-squares-four" title="スキル"></i><i class="ph ph-graph" title="グラフ"></i><span class="fx-sep"></span><img src="img/logo-vscode.svg" alt="" title="VS Code · CLIプラグイン"><img src="img/logo-obsidian.svg" alt="" title="Obsidian · RAG"><img src="img/logo-notion.svg" alt="" title="Notion"></span>
+            </div>
+            <ul class="fx-nodes" role="list" aria-hidden="true">
+              <li style="--x:126;--y:126;--mx:45;--my:150" title="コンサルタントに聞く"><i class="ph ph-chat-teardrop-text"></i></li>
+              <li style="--x:126;--y:202;--mx:107;--my:150" title="コード分析"><i class="ph ph-code"></i></li>
+              <li style="--x:126;--y:278;--mx:169;--my:150" title="症状分析"><i class="ph ph-bug"></i></li>
+              <li style="--x:126;--y:354;--mx:231;--my:150" title="CBOパッケージインベントリ"><i class="ph ph-package"></i></li>
+              <li style="--x:126;--y:430;--mx:293;--my:150" title="プログラム比較"><i class="ph ph-git-diff"></i></li>
+              <li style="--x:126;--y:506;--mx:355;--my:150" title="プログラム → 仕様"><i class="ph ph-file-text"></i></li>
+              <li style="--x:898;--y:126;--mx:45;--my:490" title="プログラム → マニュアル"><i class="ph ph-book-open-text"></i></li>
+              <li style="--x:898;--y:202;--mx:107;--my:490" title="パッケージ → プロセス"><i class="ph ph-flow-arrow"></i></li>
+              <li style="--x:898;--y:278;--mx:169;--my:490" title="プログラム生成"><i class="ph ph-file-plus"></i></li>
+              <li style="--x:898;--y:354;--mx:231;--my:490" title="オブジェクト生成"><i class="ph ph-cube"></i></li>
+              <li style="--x:898;--y:430;--mx:293;--my:490" title="SAP診断"><i class="ph ph-stethoscope"></i></li>
+              <li style="--x:898;--y:506;--mx:355;--my:490" title="WBS管理"><i class="ph ph-tree-structure"></i></li>
+            </ul>
+          </figure>
+        </div>
+      </li>
+      <li class="ana-item after-box">
+        <h3 class="ana-h" data-i="ana4">聞くほど蓄積され<br>賢くなります</h3>
+        <p class="sec-sub ana-sub" data-i="ana4Sub">分析するほど、プログラム・テーブル・プロセスの関係がグラフとして蓄積されます<br>Obsidianボールトと双方向に同期し<br>できあがった関係は次の回答にそのまま反映されます</p>
+        <!-- Stardrift Sphere (js/stardrift.js): knowledge falling in and settling. -->
+        <div class="ana-sphere" data-stardrift aria-hidden="true"></div>
+      </li>
+      <li class="ana-item">
+        <h3 class="ana-h" data-i="ana5">作業規模に合わせて<br>コストを選べます</h3>
+        <p class="sec-sub ana-sub" data-i="ana5Sub">同じ機能でも、用途によって必要な深さは異なります<br>さっと確認するならエコモード、そのまま渡せるドキュメントが必要なら標準モード</p>
+        <!-- The PoC's two run modes, as its skill forms describe them
+             (web/src/lib/i18n/skills.ts). The figures are Program -> Spec's
+             own estimates in the form, in dollars at the pricing doc's ₩1,400/$;
+             keep them in step with the app. -->
+        <div class="cost-stage">
+          <div class="cost-grid" data-cost>
+            <article class="cost-card glass">
+              <span class="metal-rim" data-box aria-hidden="true"></span>
+              <header class="cost-head">
+                <span class="cost-ic"><i class="ph ph-leaf" aria-hidden="true"></i></span>
+                <p class="cost-mode" data-i="costEcoK">Economy</p>
+                <h4 data-i="costEcoH">エコモード</h4>
+                <p class="cost-tag" data-i="costEcoT">速く軽く、コストは最小限に</p>
+              </header>
+              <dl class="cost-spec">
+                <div><dt data-i="costHow">作業方法</dt><dd data-i="costEcoHow">1つのエージェントがソースを読み、最後まで書き上げます</dd></div>
+                <div><dt data-i="costFit">こんなときに</dt><dd data-i="costEcoFit">クイック確認、下書き、多数の繰り返し作業</dd></div>
+              </dl>
+              <div class="cost-ex">
+                <span class="cost-ex-k" data-i="costEx">プログラム → 仕様の場合</span>
+                <span class="cost-ex-v"><b>$0.15~0.30</b><small>（約200〜400ウォン）</small><i></i><b data-i="costEcoTime">1〜3分</b></span>
+              </div>
+            </article>
+            <article class="cost-card glass is-lit">
+              <span class="metal-rim" data-box aria-hidden="true"></span>
+              <header class="cost-head">
+                <span class="cost-ic"><i class="ph ph-target" aria-hidden="true"></i></span>
+                <p class="cost-mode" data-i="costStdK">Standard</p>
+                <h4 data-i="costStdH">標準モード</h4>
+                <p class="cost-tag" data-i="costStdT">深く丁寧に、品質を最後まで</p>
+              </header>
+              <dl class="cost-spec">
+                <div><dt data-i="costHow">作業方法</dt><dd data-i="costStdHow">分析エージェントとモジュールコンサルタントが先に確認し、作成エージェントがまとめます</dd></div>
+                <div><dt data-i="costFit">こんなときに</dt><dd data-i="costStdFit">納品用ドキュメント、性能・権限など隠れた問題まで</dd></div>
+              </dl>
+              <div class="cost-ex">
+                <span class="cost-ex-k" data-i="costEx">プログラム → 仕様の場合</span>
+                <span class="cost-ex-v"><b>$0.70~1.15</b><small>（約1,000〜1,600ウォン）</small><i></i><b data-i="costStdTime">5〜10分</b></span>
+              </div>
+            </article>
+          </div>
+          <p class="cost-note" data-i="costNote">どちらのモードも実行前に予想コストと時間を表示し、機能ごとに定められた予算上限を超えることはありません</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section id="contact" class="join">
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 class="h2" data-i="ctaH">「世界は速く変わるから」</h2>
+      <p class="join-sub" data-i="ctaSub">エンタープライズAXの革新にすばやく対応しましょう</p>
+    </header>
+  </div>
+  <!-- The landing page's dotted globe, without its labels (js/globe.js).
+       The footer is drawn over its lower half, so it rises from the
+       footer's top edge like a horizon. Drag to turn it. -->
+  <div class="join-globe" data-globe aria-hidden="true"><canvas></canvas></div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <!-- The nav's three groups, plus the open-source projects. Every entry
+         opens in a new tab, as in the nav. PLACEHOLDER: the pages behind
+         the resource, service and legal URLs are not built yet. -->
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="brand-text"><b>Super-Claude</b> for SAP</span>
+        <p data-i="footTag">自社のSAPシステムを理解するAXパートナー</p>
+      </div>
+      <nav class="foot-col" aria-labelledby="foot-res">
+        <h3 id="foot-res" data-i="navRes">リソース</h3>
+        <a href="resources/brochure.html" target="_blank" rel="noopener"><span data-i="dResBrochure">SC4 紹介資料</span><em>PDF</em></a>
+        <a href="resources/updates.html" target="_blank" rel="noopener" data-i="dResUpdates">アップデート</a>
+        <a href="resources/guide.html" target="_blank" rel="noopener" data-i="dResGuide">利用ガイド</a>
+      </nav>
+      <nav class="foot-col" aria-labelledby="foot-svc">
+        <h3 id="foot-svc" data-i="navSvc">サービス</h3>
+        <a href="service/about.html" target="_blank" rel="noopener" data-i="dSvcAbout">About</a>
+        <a href="service/security.html" target="_blank" rel="noopener" data-i="dSvcSecurity">Security</a>
+        <a href="service/sponsorship.html" target="_blank" rel="noopener" data-i="dSvcSponsor">Sponsorship</a>
+      </nav>
+      <nav class="foot-col" aria-labelledby="foot-legal">
+        <h3 id="foot-legal" data-i="navLegal">規約</h3>
+        <a href="legal/terms.html" target="_blank" rel="noopener" data-i="dLegalTerms">利用規約</a>
+        <a href="legal/privacy.html" target="_blank" rel="noopener" data-i="dLegalPrivacy">プライバシーポリシー</a>
+        <!-- Billing terms and refund policy are hidden: they live in the PoC web app.
+        <a href="legal/billing-terms.html" target="_blank" rel="noopener" data-i="dLegalBilling">有料サービス利用規約</a>
+        <a href="legal/refund-policy.html" target="_blank" rel="noopener" data-i="dLegalRefund">返金ポリシー</a>
+        -->
+      </nav>
+      <nav class="foot-col" aria-labelledby="foot-open">
+        <h3 id="foot-open" data-i="footOpen">テクノロジー</h3>
+        <a href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener">SC4SAP PLUGIN</a>
+      </nav>
+    </div>
+
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <div class="foot-biz" hidden>
+      <!-- Business details as registered. PLACEHOLDER: the mail-order
+           registration number and the hosting provider are still to come. -->
+      <address class="foot-info">
+        <!-- Pairs stay on one line on a phone; the address has its own. -->
+        <span class="foot-row">
+          <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>代表 백승현</span></span>
+          <span class="foot-pair is-long"><span>事業者登録番号 556-39-01540</span><span>通信販売業届出 【通信販売業届出番号】</span></span>
+        </span>
+        <span class="foot-row">
+          <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+          <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+          <span>ホスティング 【ホスティング事業者】</span>
+        </span>
+      </address>
+    </div>
+
+    <div class="foot-meta">
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+      <p class="foot-legal">
+        <a href="legal/privacy.html" target="_blank" rel="noopener"><b data-i="dLegalPrivacy">プライバシーポリシー</b></a>
+        <a href="legal/terms.html" target="_blank" rel="noopener" data-i="dLegalTerms">利用規約</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== LAUNCH NOTICE =====================
+     The workspace buttons open this until the closed test starts. On the
+     day, point their href at the PoC web app and drop data-launch-open. -->
+<dialog class="launch glass" data-launch aria-labelledby="launch-title" aria-describedby="launch-sub">
+  <span class="notice-label launch-dday" data-launch-dday>D-12</span>
+  <h2 class="launch-title" id="launch-title">SC4ワークスペースのクローズドテストは<br><em>2026年11月11日（水）</em>にオープンします</h2>
+  <p class="launch-sub" id="launch-sub">現在、皆さまのSAPとつながる最終点検を行っています<br>オープン当日には、このボタンからそのままワークスペースへ移動できます</p>
+  <div class="launch-actions">
+    <button class="btn btn-light" type="button" data-launch-close autofocus><span>楽しみに待ちます</span></button>
+    <a class="btn btn-glass glass" href="https://github.com/babamba2/superclaude-for-sap" target="_blank" rel="noopener"><span class="metal-rim" aria-hidden="true"></span><span>それまでオープンソースを見る</span></a>
+  </div>
+</dialog>
+
+<script src="js/n.js" defer></script>
+<script src="js/fibre-arc.js" defer></script>
+<script src="js/globe.data.js" defer></script>
+<script src="js/globe.js" defer></script>
+<script src="js/stardrift.js" defer></script>
+<!-- The thinking orb in the spec window's working state, as the demo draws
+     it (motion/spec_b.html). If the engine cannot load, the dotted spinner stays. -->
+<script type="module">
+import { resolvePreset, MODE_DRAWS } from 'https://cdn.jsdelivr.net/npm/thinking-orbs@0.3.2/dist/engine.es.js';
+const win = document.querySelector('.spec-win');
+const cv = win && win.querySelector('.dx-orb');
+const ctx = cv && cv.getContext('2d');
+if (ctx) {
+  const SIZE = 20, RES = 3;                 // the engine has presets for 20 and 32 only
+  const preset = resolvePreset('working', SIZE), draw = MODE_DRAWS[preset.mode];
+  cv.width = cv.height = SIZE * RES;
+  win.classList.add('has-orb');
+  const t0 = performance.now();
+  (function frame(now) {
+    // Drawn only while the working line is on screen.
+    if (!win.classList.contains('is-done') && cv.offsetParent) {
+      ctx.setTransform(RES, 0, 0, RES, 0, 0);
+      ctx.clearRect(0, 0, SIZE, SIZE);
+      draw(ctx, SIZE, (now - t0) / 1000 * preset.speed, true, preset.opts);
+    }
+    requestAnimationFrame(frame);
+  })(t0);
+}
+</script>
+<script type="module">
+// Liquid-metal rims (hero prompt bar, spec badge, the SC4SAP bar). Settings follow the
+// LiquidMetalButton component; the circle shape is fitted to cover so it
+// spans the whole width of the bar instead of only its middle.
+import { ShaderMount, liquidMetalFragmentShader, ShaderFitOptions } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@0.0.81/+esm';
+const SPEED = 0.6;
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  for (const rim of document.querySelectorAll('.metal-rim')) {
+    const speed = SPEED;
+    // A box (data-box) is near square, so the circle fitted to cover it
+    // leaves the corners outside, dark. It gets a bigger circle instead.
+    const box = 'box' in rim.dataset;
+    const mount = new ShaderMount(rim, liquidMetalFragmentShader, {
+      u_colorBack: [0, 0, 0, 0], u_colorTint: [1, 1, 1, 1],
+      u_image: undefined, u_isImage: false,
+      u_repetition: 4, u_softness: 0.5, u_shiftRed: 0.3, u_shiftBlue: 0.3,
+      u_distortion: 0, u_contour: 0, u_angle: 45, u_shape: 1,
+      u_fit: ShaderFitOptions.cover, u_scale: box ? 1.9 : 1.3, u_rotation: 0,
+      u_originX: 0.5, u_originY: 0.5, u_offsetX: 0, u_offsetY: 0,
+      u_worldWidth: 0, u_worldHeight: 0,
+    }, undefined, speed);
+    rim.classList.add('is-on');
+    // Idle off screen.
+    new IntersectionObserver(([e]) => mount.setSpeed(e.isIntersecting ? speed : 0)).observe(rim);
+  }
+}
+</script>
+</body>
+</html>

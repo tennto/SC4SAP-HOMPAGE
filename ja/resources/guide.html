@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/js/lang.js"></script>
+<!-- i18n:alt -->
+<link rel="canonical" href="https://sc4sap.dev/ja/resources/guide.html" />
+<link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/guide.html" />
+<link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/guide.html" />
+<link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/guide.html" />
+<link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/guide.html" />
+<!-- /i18n:alt -->
+<title>利用ガイド · Super-Claude for SAP</title>
+<meta name="description" content="SC4SAP のインストールと設定のガイド" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="512x512" href="/img/icon-black-rounded.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-black-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-black-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/icon-black-180.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../../css/doc.css" />
+</head>
+<body>
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="../"><i class="ph ph-arrow-left" aria-hidden="true"></i>ホーム</a>
+  </div>
+</header>
+
+<!-- Text: the landing site's install guide (install.html), in the redesign's type on white. -->
+<main class="doc">
+  <header class="doc-head">
+    <p class="doc-eyebrow">利用ガイド</p>
+    <h1>インストールガイド(CLI)</h1>
+    <p class="doc-lede">Claude Code のセッション内でマーケットプレイスを追加し、設定ウィザードを一度実行すれば完了です。MCP サーバーはウィザードが自動でインストールします</p>
+    <div class="g-links">
+      <a class="g-btn" href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.ja.md" target="_blank" rel="noopener"><i class="ph ph-book-open" aria-hidden="true"></i>原文ドキュメント全文</a>
+    </div>
+  </header>
+
+  <section class="g-sec">
+    <h2>動作要件</h2>
+    <dl class="g-spec">
+      <div><dt>Node.js</dt><dd>20.0.0 以上</dd></div>
+      <div><dt>Claude Code</dt><dd>CLI インストール済み(Max・Pro サブスクリプションまたは API キー)</dd></div>
+      <div><dt>SAP システム</dt><dd>ECC 6.0 · S/4HANA On-Premise · S/4HANA Cloud (Public·Private)、ADT 有効化済み</dd></div>
+    </dl>
+    <p class="g-note"><i class="ph ph-info" aria-hidden="true"></i><span>MCP サーバー <code>abap-mcp-adt-powerup</code> は <code>/sc4sap:setup</code> の実行中に自動でインストール・設定されます。事前にダウンロードしておく必要はありません</span></p>
+  </section>
+
+  <section class="g-sec" id="install-steps">
+    <h2>インストール</h2>
+    <p class="g-note"><i class="ph ph-warning-circle" aria-hidden="true"></i><span>sc4sap はまだ公式の Claude Code プラグインマーケットプレイスに登録されていません。当面は、リポジトリをカスタムマーケットプレイスとして追加してからインストールしてください</span></p>
+    <div class="g-opts">
+      <div class="g-opt is-main">
+        <span class="g-tag">推奨</span>
+        <h3>カスタムマーケットプレイスとして追加</h3>
+        <p>Claude Code のセッション内で 2 行を順に実行します</p>
+        <div class="g-cmd"><pre><code>/plugin marketplace add https://github.com/babamba2/superclaude-for-sap.git
+/plugin install sc4sap</code></pre><button type="button" class="g-copy" data-copy aria-label="コマンドをコピー"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>コピー</span></button></div>
+        <p class="g-opt-sub">アップデートするとき</p>
+        <div class="g-cmd"><pre><code>/plugin marketplace update babamba2/superclaude-for-sap
+/plugin install sc4sap</code></pre><button type="button" class="g-copy" data-copy aria-label="コマンドをコピー"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>コピー</span></button></div>
+      </div>
+      <div class="g-opt">
+        <span class="g-tag">代替</span>
+        <h3>ソースからインストール</h3>
+        <p>クローンしてビルドした後、Claude Code で <code>/plugin marketplace add &lt;ローカルパス&gt;</code> を使ってそのディレクトリを指定します</p>
+        <div class="g-cmd"><pre><code>git clone https://github.com/babamba2/superclaude-for-sap.git
+cd superclaude-for-sap
+npm install &amp;&amp; npm run build</code></pre><button type="button" class="g-copy" data-copy aria-label="コマンドをコピー"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>コピー</span></button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="g-sec">
+    <h2>設定ウィザード</h2>
+    <p>ウィザードは一度に 1 つずつ質問します。既存の値があれば表示され、Enter でそのまま維持できます</p>
+    <div class="g-cmd"><pre><code>/sc4sap:setup</code></pre><button type="button" class="g-copy" data-copy aria-label="コマンドをコピー"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>コピー</span></button></div>
+    <ol class="g-steps">
+      <li><span class="n">01</span><div><h3>システムと業種</h3><p>S4 か ECC を選び、ABAP リリースを入力し、15 業種のメニューから選択します。これらの値によって SPRO テーブル・BAPI・TCode と ABAP 構文のゲーティングが決まります</p></div></li>
+      <li><span class="n">02</span><div><h3>MCP サーバーのインストール</h3><p><code>abap-mcp-adt-powerup</code> を <code>&lt;PLUGIN_ROOT&gt;/vendor/abap-mcp-adt/</code> にクローンしてビルドします。すでにある場合はスキップします</p></div></li>
+      <li><span class="n">03</span><div><h3>プロファイルの作成と接続</h3><p>alias(<code>KR-DEV</code> 形式を推奨)と tier(<code>DEV</code>・<code>QA</code>・<code>PRD</code>)を決めた後、URL・クライアント・認証方式・アカウント・言語を 1 つずつ入力します。RFC バックエンドは soap · native · gateway · odata · zrfc から選択します</p></div></li>
+      <li><span class="n">04</span><div><h3>接続の検証</h3><p><code>/mcp</code> で再接続した後、<code>GetSession</code> の往復、システム情報の確認、<code>GetInactiveObjects</code> による ADT 権限の確認まで行います。Claude Code の再起動は不要です</p></div></li>
+      <li><span class="n">05</span><div><h3>ABAP ユーティリティオブジェクトの作成</h3><p>DEV プロファイルでのみインストールされます。<code>ZMCP_ADT_UTILS</code> 汎用モジュールグループと <code>ZIF_S4SAP_CM</code> · <code>ZCL_S4SAP_CM_*</code> ALV ハンドラを作成します。QA・PRD では拒否し、CTS 移送の案内を出力します</p></div></li>
+      <li class="is-required"><span class="n">06</span><div><h3>権限フックのインストール <span class="g-flag">required</span></h3><p>このステップなしでは設定は完了しません。<code>block-forbidden-tables.mjs</code>(行抽出のブロック)と <code>tier-readonly-guard.mjs</code>(tier による変更のブロック)を <code>.claude/settings.json</code> に登録し、両方のスモークテストを実行します</p></div></li>
+    </ol>
+    <h3 class="g-sub">任意のステップ</h3>
+    <ul class="g-list">
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>SPRO 設定の抽出 - トークンを多く使いますが、キャッシュによって以降の作業のトークン使用量が大きく減ります</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>カスタマイズインベントリ - <code>Z*</code>・<code>Y*</code> の拡張とアペンド構造をスキャンします</span></li>
+      <li><i class="ph ph-plus-circle" aria-hidden="true"></i><span>HUD ステータスライン - 再起動後、アクティブなプロファイルと tier、トークン使用量を表示します</span></li>
+    </ul>
+    <h3 class="g-sub">サブコマンド</h3>
+    <div class="g-cmd"><pre><code>/sc4sap:setup                # ウィザード全体
+/sc4sap:setup doctor         # 状態チェックへルーティング
+/sc4sap:setup mcp            # MCP 設定へルーティング
+/sc4sap:setup spro           # SPRO 設定の抽出のみ
+/sc4sap:setup customizations # Z*/Y* インベントリのみ</code></pre><button type="button" class="g-copy" data-copy aria-label="コマンドをコピー"><i class="ph ph-copy" aria-hidden="true"></i><i class="ph ph-check" aria-hidden="true"></i><span data-copy-label>コピー</span></button></div>
+  </section>
+
+  <section class="g-sec">
+    <h2>マルチプロファイル</h2>
+    <p>1 つの Claude Code セッションで複数の SAP 接続を扱えます。1 つの接続が 1 つのプロファイルで、プロジェクトにはどのプロファイルがアクティブかだけが記録されます</p>
+    <div class="g-cmd"><pre><code><span class="t-dir">~/.sc4sap/</span>                      <span class="t-note">リポジトリ間で共有</span>
+└── profiles/
+    ├── <span class="t-dir">KR-DEV/</span>  sap.env · config.json
+    ├── <span class="t-dir">KR-QA/</span>   sap.env · config.json
+    └── <span class="t-dir">KR-PRD/</span>  sap.env · config.json
+
+<span class="t-dir">&lt;project&gt;/.sc4sap/</span>              <span class="t-note">プロジェクト単位</span>
+├── active-profile.txt          <span class="t-note">"KR-DEV"</span>
+└── work/
+    ├── <span class="t-dir">KR-DEV/</span>  program · cbo · ...
+    └── <span class="t-dir">KR-PRD/</span>  ...</code></pre></div>
+    <ul class="g-list g-tiers">
+      <li><i class="ph ph-lock-key" aria-hidden="true"></i><span><b>tier は読み取り専用を強制する基準です</b> QA・PRD プロファイルでは、<code>Create*</code> · <code>Update*</code> · <code>Delete*</code> がフックと MCP サーバーの 2 層でブロックされます</span></li>
+      <li><i class="ph ph-prohibit" aria-hidden="true"></i><span><b>tier は変更できません</b> 変更するには、プロファイルを削除して作り直す必要があります</span></li>
+      <li><i class="ph ph-key" aria-hidden="true"></i><span><b>パスワードは OS のキーチェーンに保存されます</b> Windows 資格情報マネージャー · macOS キーチェーン · Linux libsecret。キーチェーンが使えない環境では、プロファイルの env に平文で保存し、警告を表示します</span></li>
+    </ul>
+  </section>
+
+  <section class="g-sec">
+    <h2>3 層の防御</h2>
+    <p>本番環境に接続する前に、まず最初に確認される部分です。ドキュメントではなく、コードで強制されます</p>
+    <div class="g-layers">
+      <div class="g-layer"><span class="g-layer-tag">L1a</span><div><h3>行抽出のブロック</h3><p>Claude Code の <code>PreToolUse</code> フックです。プロファイルの <code>blocklistProfile</code> に基づき、機密テーブルに対する <code>GetTableContents</code> · <code>GetSqlQuery</code> を拒否します</p></div></div>
+      <div class="g-layer"><span class="g-layer-tag">L1b</span><div><h3>tier による変更のブロック</h3><p>Claude Code の <code>PreToolUse</code> フックです。呼び出しのたびにアクティブなプロファイルの <code>SAP_TIER</code> を読み直し、QA・PRD での変更を防ぎます。状態は保持しません</p></div></div>
+      <div class="g-layer is-hard"><span class="g-layer-tag">L2</span><div><h3>MCP サーバー自体のガード</h3><p>回避できない層です。フックが外れていたり設定を誤っていたりしても、<code>abap-mcp-adt-powerup</code> 内部のガードが常に動作します</p></div></div>
+    </div>
+    <p class="g-note"><i class="ph ph-shield-check" aria-hidden="true"></i><span>L1 フックは IO・パースエラー時には通過させ、L2 の MCP ガードは常に有効です。推奨デフォルトは L1a <code>strict</code>、MCP サーバーのブロックリスト <code>standard</code> です</span></p>
+  </section>
+
+  <section class="g-sec">
+    <h2>設定完了後</h2>
+    <dl class="g-ref">
+      <div><dt>アクティブなシステムの切り替え</dt><dd><code>/sc4sap:sap-option switch &lt;alias&gt;</code></dd></div>
+      <div><dt>法人や tier の追加</dt><dd><code>/sc4sap:sap-option add</code></dd></div>
+      <div><dt>プロファイル一覧</dt><dd><code>/sc4sap:sap-option list</code></dd></div>
+      <div><dt>状態チェック</dt><dd><code>/sc4sap:sap-doctor</code></dd></div>
+      <div><dt>SPRO の再抽出</dt><dd><code>/sc4sap:setup spro</code></dd></div>
+    </dl>
+    <h3 class="g-sub">関連資料</h3>
+    <div class="g-reading">
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/INSTALLATION.ja.md" target="_blank" rel="noopener"><span>インストールと設定(原文)</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/FEATURES.ja.md" target="_blank" rel="noopener"><span>機能の詳細</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="https://github.com/babamba2/superclaude-for-sap/blob/main/docs/CHANGELOG.ja.md" target="_blank" rel="noopener"><span>変更履歴</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+    </div>
+  </section>
+</main>
+<script>
+// Copy buttons: the command text, then a tick for a moment.
+document.querySelectorAll('[data-copy]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var t = b.parentElement.querySelector('code').textContent;
+    var label = b.querySelector('[data-copy-label]');
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(t).then(function () {
+      b.classList.add('is-done'); label.textContent = 'コピーしました';
+      setTimeout(function () { b.classList.remove('is-done'); label.textContent = 'コピー'; }, 1600);
+    }, function () {});
+  });
+});
+</script>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <address class="foot-info" hidden>
+      <!-- One line each wide; narrow, each pair or lone field takes a line. -->
+      <span class="foot-row">
+        <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>代表 백승현</span></span>
+        <span class="foot-pair is-long"><span>事業者登録番号 556-39-01540</span><span>通信販売業届出 【通信販売業届出番号】</span></span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+      </span>
+      <span class="foot-row">
+        <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+        <span>ホスティング 【ホスティング事業者】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">利用規約</a><a href="../legal/privacy.html">プライバシーポリシー</a><!-- Billing terms and refund policy are hidden: they live in the PoC web app. --></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

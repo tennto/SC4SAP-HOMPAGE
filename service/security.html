@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="/js/lang.js"></script>
+<!-- i18n:alt -->
+<link rel="canonical" href="https://sc4sap.dev/service/security.html" />
+<link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/security.html" />
+<link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/security.html" />
+<link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/security.html" />
+<link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/security.html" />
+<!-- /i18n:alt -->
+<title>Security · Super-Claude for SAP</title>
+<meta name="description" content="SC4SAP가 SAP 시스템을 어떻게 보호하는지: 등급별 읽기전용, 민감 테이블 차단, 사람의 승인, 네트워크 구성, 운영 데이터와 감사, 웹 워크스페이스의 보안 수준." />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="512x512" href="/img/icon-black-rounded.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-black-192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/icon-black-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/img/icon-black-180.png" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../css/fonts.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+<link rel="stylesheet" href="../css/doc.css" />
+</head>
+<body class="doc-dark">
+<header class="doc-bar">
+  <div class="doc-bar-in">
+    <a class="doc-brand" href="../"><b>Super-Claude</b> for SAP</a>
+    <a class="doc-back" href="../"><i class="ph ph-arrow-left" aria-hidden="true"></i>홈으로</a>
+  </div>
+</header>
+
+<!-- Security. Every claim here comes from the terms (articles 5, 8, 9, 12,
+     16, 24), the install guide's three-layer section, and the web
+     workspace's deployment checklist. Nothing is promised beyond them;
+     keep it that way when editing. -->
+<main class="doc">
+  <header class="doc-head">
+    <p class="doc-eyebrow">Security</p>
+    <h1>SC4SAP 보안 아키텍처</h1>
+    <p class="doc-lede">SC4SAP의 안전장치는 문서가 아니라 코드로 강제돼요. 무엇을 막고, 무엇을 묻고, 무엇은 막지 못하는지까지 이 페이지에 적었어요.</p>
+  </header>
+
+  <ul class="sc-principles">
+    <li><i class="ph ph-user-focus" aria-hidden="true"></i><b>SAP 권한, 그 이상은 없어요</b><span>등록한 SAP 사용자에게 이미 있는 권한 안에서만 동작해요</span></li>
+    <li><i class="ph ph-lock-simple" aria-hidden="true"></i><b>운영계는 읽기전용</b><span>QA · 운영 등급에서는 생성 · 변경 · 삭제 도구 자체가 사라져요</span></li>
+    <li><i class="ph ph-prohibit" aria-hidden="true"></i><b>민감 데이터는 꺼내지 않아요</b><span>은행 · 급여 같은 테이블의 행 추출은 승인으로도 풀리지 않아요</span></li>
+  </ul>
+
+  <section class="doc-sec" id="verify">
+    <h2><span class="n">1.</span>시스템을 지키는 방식</h2>
+    <p>AI가 할 수 있는 일을 겹겹이 제한해요. 층마다 실패하는 방향이 다르게 설계돼 있어서, 한 층이 빠지거나 잘못 설정돼도 다음 층이 막아요.</p>
+    <div class="g-layers sc-layers">
+      <div class="g-layer"><span class="g-layer-tag">등급</span><div><h3>등급에 따라 도구를 제외해요</h3><p>연결마다 개발 · QA · 운영 등급을 붙여요. QA와 운영 등급에서는 시스템을 바꾸는 도구가 세션에서 아예 빠져요. AI는 보이지 않는 도구를 부를 수 없어서, 프롬프트를 교묘하게 써도 우회되지 않아요. 등급은 만든 뒤 바꿀 수 없고, 바꾸려면 연결을 지우고 다시 만들어야 해요.</p></div></div>
+      <div class="g-layer"><span class="g-layer-tag">차단</span><div><h3>민감 테이블의 행 추출을 막아요</h3><p>은행 · 급여와 이에 준하는 테이블은 상시 차단 목록에 있어요. 이 테이블의 내용 조회와 SQL 조회는 요청이 사용자에게 닿기 전에 거부되고, 어디서 받은 승인으로도 풀리지 않아요.</p></div></div>
+      <div class="g-layer"><span class="g-layer-tag">승인</span><div><h3>민감한 호출은 멈추고 사람에게 물어요</h3><p>앞의 두 층을 통과한 민감한 호출은 실행 전에 도구와 정확한 입력을 보여 주고 기다려요. 답이 없으면 제한 시간이 지나 자동으로 거부되고, 브라우저를 닫는 것도 거부로 처리돼요.</p></div></div>
+      <div class="g-layer is-hard"><span class="metal-rim" aria-hidden="true"></span><span class="g-layer-tag">서버</span><div><h3>MCP 서버 자체 가드는 항상 켜져 있어요</h3><p>SAP와 직접 통신하는 MCP 서버(<code>abap-mcp-adt-powerup</code>) 안에도 같은 차단이 들어 있어요. 플러그인의 훅이 빠지거나 잘못 설정돼도 이 층은 꺼지지 않아요.</p></div></div>
+    </div>
+    <h3>설치할 때 직접 확인해요</h3>
+    <p>설정 위저드는 연결 직후 세션 왕복, 시스템 정보, ADT 권한을 점검하고, 행 추출 차단과 등급 차단 훅을 등록한 뒤 둘 다 실제로 막히는지 스모크 테스트를 돌려요. 이 단계를 통과하지 못하면 설정이 끝나지 않아요.</p>
+  </section>
+
+  <section class="doc-sec" id="network">
+    <h2><span class="n">2.</span>네트워크 환경에 맞춘 구성</h2>
+    <p>SC4SAP는 SAP의 ADT(ABAP Development Tools) 인터페이스로 연결해요. 연결 경로는 회사의 보안 정책에 맞춰 고르고, SC4SAP를 위해 정책이 금지하는 경로를 새로 열 필요는 없어요.</p>
+    <div class="legal-table-wrap"><table class="legal-table sc-net">
+      <thead><tr><th>환경</th><th>구성</th></tr></thead>
+      <tbody>
+        <tr><td>사내망</td><td>플러그인은 사용자 PC의 Claude Code 안에서 돌아요. 그 PC에서 SAP 서버에 닿기만 하면 되고, SAP 쪽을 외부에 열지 않아요.</td></tr>
+        <tr><td>원격 · 외부 접속</td><td>VPN, 허용 목록, 게이트웨이처럼 회사가 이미 쓰는 경로를 그대로 써요. 경로 구성은 회사 정책을 따라요.</td></tr>
+        <tr><td>S/4HANA Cloud</td><td>Public · Private 에디션 모두 ADT가 켜져 있으면 연결할 수 있어요.</td></tr>
+        <tr><td>여러 시스템 · 법인</td><td>연결 하나가 프로필 하나예요. 개발 · QA · 운영과 법인별 시스템을 각각 등록하고, 등급도 각각 붙여요.</td></tr>
+        <tr><td>망분리 · 사내 설치</td><td>환경마다 조건이 달라서 도입 상담에서 함께 검토해요.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="g-note"><i class="ph ph-info" aria-hidden="true"></i><span>답변을 만들기 위해 AI가 읽은 소스와 조회 결과는 모델 제공자(Anthropic)의 API로 전송돼요. 그래서 그 API로 나가는 경로는 필요해요. 네트워크 밖으로 보낼 수 없는 데이터에는 연결하지 마세요.</span></p>
+  </section>
+
+  <section class="doc-sec" id="data">
+    <h2><span class="n">3.</span>운영 데이터와 감사</h2>
+    <dl class="g-spec">
+      <div><dt>SAP 데이터</dt><dd>SAP 시스템의 사본이나 백업을 따로 저장하지 않아요. 작업에 필요한 만큼 그때그때 읽어요.</dd></div>
+      <div><dt>모델 학습</dt><dd>고객의 콘텐츠를 모델 학습에 쓰지 않고, 서비스 운영에 필요한 제공자 말고는 누구와도 공유하거나 팔지 않아요.</dd></div>
+      <div><dt>자격 증명</dt><dd>플러그인은 SAP 비밀번호를 OS 키체인(Windows 자격 증명 관리자 · macOS 키체인 · Linux libsecret)에 둬요. 웹 워크스페이스는 연결 정보를 암호화해 저장하고, 저장한 뒤에는 브라우저에 다시 보여 주지 않아요.</dd></div>
+      <div><dt>감사 기록</dt><dd>웹 워크스페이스는 계정마다 모든 프롬프트, 스킬 실행, 승인 · 거부를 기록해요. 누가 무엇을 허용했는지 나중에 확인할 수 있어요.</dd></div>
+      <div><dt>시스템 변경</dt><dd>쓰기가 허용된 등급에서 만든 변경은 시뮬레이션이 아니에요. 등록한 기술 사용자를 작성자로 SAP에 기록되고 트랜스포트에 실려서, SAP의 변경 이력에 그대로 남아요.</dd></div>
+    </dl>
+    <h3>함께 지켜 주세요</h3>
+    <ul>
+      <li>개인 관리자 계정 대신, 업무에 필요한 권한만 준 전용 기술 사용자로 연결하세요. 권한은 주기적으로 검토하세요.</li>
+      <li>시스템마다 정확한 등급을 붙이세요. SC4SAP는 개발로 등록된 운영 시스템을 알아차릴 수 없어요.</li>
+      <li>새 스킬은 비운영 환경에서 먼저 돌려 보세요. 결과물은 검토자를 위한 초안이고, 회사의 검토 · 승인 · 이관 절차를 대신하지 않아요.</li>
+      <li>요청 내용을 읽지 않은 채 승인하지 마세요.</li>
+    </ul>
+  </section>
+
+  <section class="doc-sec" id="web">
+    <h2><span class="n">4.</span>SC4SAP Web(PoC)의 보안 수준</h2>
+    <p>웹 워크스페이스는 PoC · 클로즈 테스트 단계예요. 아래는 지금 적용하고 있는 기준이고, 정식 출시까지 구성이 바뀔 수 있어요.</p>
+    <ul class="g-list sc-web">
+      <li><i class="ph ph-lock-key" aria-hidden="true"></i><span><b>HTTPS로만 서비스해요</b>로그인 쿠키는 HTTPS에서만 전송되도록 설정돼요. 로그인은 Google 계정으로 해요.</span></li>
+      <li><i class="ph ph-shield-check" aria-hidden="true"></i><span><b>외부에 열린 건 웹 하나예요</b>AI 세션을 돌리는 백엔드는 외부에 공개하지 않고, 웹에서 오는 요청도 서명을 확인한 뒤에만 받아요.</span></li>
+      <li><i class="ph ph-key" aria-hidden="true"></i><span><b>연결 정보는 암호화해 저장해요</b>SAP 접속 정보와 API 키는 AES-256-GCM으로 암호화되고, 브라우저로 다시 내려가지 않아요.</span></li>
+      <li><i class="ph ph-users-three" aria-hidden="true"></i><span><b>계정마다 동시 세션 수를 제한해요</b>한 계정이 여는 AI 세션 수에 상한이 있어요.</span></li>
+      <li><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span><b>배포 전마다 의존성 취약점을 점검해요</b>알려진 취약점이 나오면 버전을 올려 막고 배포해요.</span></li>
+    </ul>
+    <p class="g-note"><i class="ph ph-info" aria-hidden="true"></i><span>PoC 단계에서 운영 시스템을 연결하려면 도입 상담에서 구성을 먼저 같이 검토해요.</span></p>
+  </section>
+
+  <section class="doc-sec" id="limits">
+    <h2><span class="n">5.</span>안전장치가 막지 못하는 것</h2>
+    <p>안전장치는 위험을 줄이는 안전망이지 컴플라이언스 프로그램이 아니에요.</p>
+    <ul>
+      <li>데이터를 대신 분류하지 못해요. 커스텀 테이블 중 어느 것에 개인정보가 들어 있는지 알지 못해요.</li>
+      <li>소스 코드 안에 직접 적힌 값은 소스의 일부라서, 읽기를 요청한 프로그램에 민감한 값이 있으면 그대로 읽혀요.</li>
+      <li>AI의 결과는 틀리거나 불완전할 수 있어요. 중요한 시스템에 반영하는 것은 자격 있는 사람이 책임져야 해요.</li>
+    </ul>
+  </section>
+
+  <section class="ab-end">
+    <h2>보안 검토가 필요하신가요</h2>
+    <p>환경별 구성과 보안팀 검토는 도입 상담에서 함께 봐요. 취약점으로 의심되는 사례는 <a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a>으로 알려 주세요.</p>
+    <div class="g-links">
+      <!-- The inquiry page is hidden.
+      <a class="g-btn is-solid" href="../contact/inquiry.html"><i class="ph ph-arrow-right" aria-hidden="true"></i>도입 문의</a>
+      -->
+      <a class="g-btn" href="../legal/terms.html#guardrails">이용약관 제8조 보기</a>
+    </div>
+  </section>
+</main>
+
+<!-- Business details, as in the landing page's footer. -->
+<footer class="doc-foot">
+  <div class="doc-foot-in">
+    <p class="doc-foot-brand"><b>Super-Claude</b> for SAP</p>
+    <!-- Hidden during the closed test: business details are not shown until public release. Fill in the placeholders, then remove `hidden`. -->
+    <address class="foot-info" hidden>
+      <!-- One line each wide; narrow, each pair or lone field takes a line. -->
+      <span class="foot-row">
+        <span class="foot-pair"><span>에스에이치랩솔루션즈</span><span>대표 백승현</span></span>
+        <span class="foot-pair is-long"><span>사업자등록번호 556-39-01540</span><span>통신판매업 신고 【통신판매업 신고번호】</span></span>
+      </span>
+      <span class="foot-row">
+        <span>서울특별시 강서구 마곡중앙6로 10, 401호(마곡동, 마곡역센트럴푸르지오시티)</span>
+      </span>
+      <span class="foot-row">
+        <span class="foot-pair"><span>010-8257-5798</span><span><a href="mailto:sc4sap.dev@gmail.com">sc4sap.dev@gmail.com</a></span></span>
+        <span>호스팅 【호스팅 업체】</span>
+      </span>
+    </address>
+    <div class="doc-foot-meta">
+      <p class="doc-foot-links"><a href="../legal/terms.html">이용약관</a><a href="../legal/privacy.html">개인정보처리방침</a><!-- Billing terms and refund policy are hidden: they live in the PoC web app. --></p>
+      <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<script type="module">
+// The liquid-metal rim of the landing page's prompt bar, on the one layer
+// that cannot be switched off. Same shader and settings as the landing page (index.html).
+import { ShaderMount, liquidMetalFragmentShader, ShaderFitOptions } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@0.0.81/+esm';
+const SPEED = 0.6;
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  for (const rim of document.querySelectorAll('.metal-rim')) {
+    const mount = new ShaderMount(rim, liquidMetalFragmentShader, {
+      u_colorBack: [0, 0, 0, 0], u_colorTint: [1, 1, 1, 1],
+      u_image: undefined, u_isImage: false,
+      u_repetition: 4, u_softness: 0.5, u_shiftRed: 0.3, u_shiftBlue: 0.3,
+      u_distortion: 0, u_contour: 0, u_angle: 45, u_shape: 1,
+      u_fit: ShaderFitOptions.cover, u_scale: 1.3, u_rotation: 0,
+      u_originX: 0.5, u_originY: 0.5, u_offsetX: 0, u_offsetY: 0,
+      u_worldWidth: 0, u_worldHeight: 0,
+    }, undefined, SPEED);
+    rim.classList.add('is-on');
+    // Idle off screen.
+    new IntersectionObserver(([e]) => mount.setSpeed(e.isIntersecting ? SPEED : 0)).observe(rim);
+  }
+}
+</script>
+</body>
+</html>

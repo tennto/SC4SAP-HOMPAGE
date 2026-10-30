@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://sc4sap.dev/</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/" />
     <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/" />
@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://sc4sap.dev/en/</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-30</lastmod>
     <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/" />
     <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/" />
@@ -18,34 +18,202 @@
   </url>
   <url>
     <loc>https://sc4sap.dev/ja/</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-30</lastmod>
     <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/" />
     <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/" />
   </url>
   <url>
-    <loc>https://sc4sap.dev/install.html</loc>
-    <lastmod>2026-10-12</lastmod>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/install.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/install.html" />
-    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/install.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/install.html" />
+    <loc>https://sc4sap.dev/service/about.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/about.html" />
   </url>
   <url>
-    <loc>https://sc4sap.dev/en/install.html</loc>
-    <lastmod>2026-10-12</lastmod>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/install.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/install.html" />
-    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/install.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/install.html" />
+    <loc>https://sc4sap.dev/en/service/about.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/about.html" />
   </url>
   <url>
-    <loc>https://sc4sap.dev/ja/install.html</loc>
-    <lastmod>2026-10-12</lastmod>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/install.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/install.html" />
-    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/install.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/install.html" />
+    <loc>https://sc4sap.dev/ja/service/about.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/about.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/service/security.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/security.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/service/security.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/security.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/service/security.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/security.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/security.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/service/sponsorship.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/sponsorship.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/service/sponsorship.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/sponsorship.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/service/sponsorship.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/service/sponsorship.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/service/sponsorship.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/resources/guide.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/guide.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/resources/guide.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/guide.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/resources/guide.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/guide.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/guide.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/resources/brochure.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/brochure.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/resources/brochure.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/brochure.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/resources/brochure.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/brochure.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/brochure.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/resources/updates.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/updates.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/resources/updates.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/updates.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/resources/updates.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/resources/updates.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/resources/updates.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/legal/terms.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/legal/terms.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/legal/terms.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/legal/terms.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/legal/terms.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/legal/terms.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/legal/terms.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/legal/privacy.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/legal/privacy.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/en/legal/privacy.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/legal/privacy.html" />
+  </url>
+  <url>
+    <loc>https://sc4sap.dev/ja/legal/privacy.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://sc4sap.dev/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sc4sap.dev/en/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://sc4sap.dev/ja/legal/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sc4sap.dev/en/legal/privacy.html" />
   </url>
 </urlset>
