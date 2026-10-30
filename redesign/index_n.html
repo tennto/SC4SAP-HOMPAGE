@@ -68,7 +68,8 @@
         <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
         <button type="button" data-lang-btn="ja" aria-pressed="false">JP</button>
       </div>
-      <a class="btn btn-sm nav-cta" href="contact/inquiry.html" target="_blank" rel="noopener"><span data-i="ctaContact">도입 문의</span></a>
+      <!-- The inquiry page is hidden; this links to the web app (placeholder, same as the notice). -->
+      <a class="btn btn-sm nav-cta" href="#contact"><span data-i="ctaUse">워크스페이스로</span></a>
       <!-- Two strokes that turn into an X. An SVG rather than the icon font,
            whose glyphs sit on a text baseline and never centre exactly. -->
       <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-panel" data-nav-toggle>
@@ -96,13 +97,15 @@
             <a href="service/sponsorship.html" target="_blank" rel="noopener"><b><span data-i="dSvcSponsor">Sponsorship</span></b><span class="pl-desc" data-i="dSvcSponsorD">프로젝트 후원 안내</span></a>
           </div>
         </div>
-        <div class="nav-group is-four" id="grp-legal" data-group="legal">
+        <div class="nav-group" id="grp-legal" data-group="legal">
           <p class="nav-group-h" data-i="navLegal">약관</p>
           <div class="nav-group-links">
             <a href="legal/terms.html" target="_blank" rel="noopener"><b><span data-i="dLegalTerms">이용약관</span></b><span class="pl-desc" data-i="dLegalTermsD">서비스 이용 조건</span></a>
             <a href="legal/privacy.html" target="_blank" rel="noopener"><b><span data-i="dLegalPrivacy">개인정보처리방침</span></b><span class="pl-desc" data-i="dLegalPrivacyD">개인정보 수집과 보관</span></a>
+            <!-- Billing terms and refund policy are hidden: they live in the PoC web app.
             <a href="legal/billing-terms.html" target="_blank" rel="noopener"><b><span data-i="dLegalBilling">유료 서비스 이용약관</span></b><span class="pl-desc" data-i="dLegalBillingD">결제와 구독 조건</span></a>
             <a href="legal/refund-policy.html" target="_blank" rel="noopener"><b><span data-i="dLegalRefund">환불정책</span></b><span class="pl-desc" data-i="dLegalRefundD">환불 기준과 절차</span></a>
+            -->
           </div>
         </div>
       </div>
@@ -152,7 +155,7 @@
     </div>
 
     <div class="actions enter" style="--d:420ms">
-      <a class="btn btn-light" href="contact/inquiry.html" target="_blank" rel="noopener"><span data-i="ctaContactLong">도입 문의하기</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      <a class="btn btn-light" href="#contact"><span data-i="ctaUseLong">워크스페이스로</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       <a class="btn btn-glass glass" href="#platform"><span data-i="ctaTour">서비스 둘러보기</span></a>
     </div>
   </div>
@@ -546,8 +549,10 @@
         <h3 id="foot-legal" data-i="navLegal">약관</h3>
         <a href="legal/terms.html" target="_blank" rel="noopener" data-i="dLegalTerms">이용약관</a>
         <a href="legal/privacy.html" target="_blank" rel="noopener" data-i="dLegalPrivacy">개인정보처리방침</a>
+        <!-- Billing terms and refund policy are hidden: they live in the PoC web app.
         <a href="legal/billing-terms.html" target="_blank" rel="noopener" data-i="dLegalBilling">유료 서비스 이용약관</a>
         <a href="legal/refund-policy.html" target="_blank" rel="noopener" data-i="dLegalRefund">환불정책</a>
+        -->
       </nav>
       <nav class="foot-col" aria-labelledby="foot-open">
         <h3 id="foot-open" data-i="footOpen">기술</h3>
