@@ -822,8 +822,12 @@
     var dday = dlg.querySelector('[data-launch-dday]');
     var OPENS = Date.UTC(2026, 10, 10, 15);                      // 2026-11-11 00:00 KST
 
+    // Counted in calendar days in Korea: today's date there against the
+    // opening date, so it reads D-11 all day on 31 October, whatever the hour.
     function count() {
-      var days = Math.ceil((OPENS - Date.now()) / 86400000);
+      var DAY = 86400000, KST = 9 * 3600000;
+      var today = Math.floor((Date.now() + KST) / DAY) * DAY - KST;   // 00:00 KST today
+      var days = Math.round((OPENS - today) / DAY);
       dday.textContent = days > 0 ? 'D-' + days : 'D-DAY';
     }
 

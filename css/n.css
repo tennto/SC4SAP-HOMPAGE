@@ -2472,7 +2472,7 @@ body.is-swapping :is(main, .foot, .rail) { opacity: 0; }
   line-height: 1.4;
   text-wrap: balance;
 }
-.launch-title em { font-style: normal; color: var(--accent-text); }
+.launch-title em { font-style: normal; color: var(--accent-text); white-space: nowrap; }   /* the date never splits */
 
 .launch-sub {
   margin: 1rem 0 0;
@@ -2491,7 +2491,6 @@ body.is-swapping :is(main, .foot, .rail) { opacity: 0; }
 }
 
 @media (max-width: 30rem) {
-  .launch-sub br { display: none; }
   .launch-actions .btn { flex: 1 1 100%; }
 }
 
