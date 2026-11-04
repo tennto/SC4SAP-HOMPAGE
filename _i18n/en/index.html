@@ -73,7 +73,7 @@
     <nav class="nav-menu" id="nav-menu" aria-label="Primary">
       <button type="button" class="nav-top" data-group="res" aria-expanded="false" aria-controls="grp-res"><span data-i="navRes">Resources</span></button>
       <button type="button" class="nav-top" data-group="svc" aria-expanded="false" aria-controls="grp-svc"><span data-i="navSvc">Services</span></button>
-      <button type="button" class="nav-top" data-group="legal" aria-expanded="false" aria-controls="grp-legal"><span data-i="navLegal">Legal</span></button>
+      <!-- Legal links are in the footer only. --><button type="button" class="nav-top" data-group="legal" hidden style="display:none" aria-expanded="false" aria-controls="grp-legal"><span data-i="navLegal">Legal</span></button>
     </nav>
 
     <div class="nav-tools">
@@ -100,9 +100,9 @@
         <div class="nav-group" id="grp-res" data-group="res">
           <p class="nav-group-h" data-i="navRes">Resources</p>
           <div class="nav-group-links">
-            <a href="resources/brochure.html" target="_blank" rel="noopener"><b><span data-i="dResBrochure">SC4 brochure</span> <em>PDF</em></b><span class="pl-desc" data-i="dResBrochureD">Get the product overview</span></a>
+            <a href="resources/brochure.html" target="_blank" rel="noopener"><b><span data-i="dResBrochure">SC4 brochure</span> <em>PDF</em></b><span class="pl-desc" data-i="dResBrochureD">Get the SC4SAP overview</span></a>
             <a href="resources/updates.html" target="_blank" rel="noopener"><b><span data-i="dResUpdates">Updates</span></b><span class="pl-desc" data-i="dResUpdatesD">New features and changes</span></a>
-            <a href="resources/guide.html" target="_blank" rel="noopener"><b><span data-i="dResGuide">User guide</span></b><span class="pl-desc" data-i="dResGuideD">From connecting to your first analysis</span></a>
+            <a href="resources/guide.html" target="_blank" rel="noopener"><b><span data-i="dResGuide">User guide (Plug-in)</span></b><span class="pl-desc" data-i="dResGuideD">From connecting to your first analysis</span></a>
           </div>
         </div>
         <div class="nav-group" id="grp-svc" data-group="svc">
@@ -113,7 +113,7 @@
             <a href="service/sponsorship.html" target="_blank" rel="noopener"><b><span data-i="dSvcSponsor">Sponsorship</span></b><span class="pl-desc" data-i="dSvcSponsorD">How to support the project</span></a>
           </div>
         </div>
-        <div class="nav-group" id="grp-legal" data-group="legal">
+        <div class="nav-group" id="grp-legal" data-group="legal" hidden style="display:none">
           <p class="nav-group-h" data-i="navLegal">Legal</p>
           <div class="nav-group-links">
             <a href="legal/terms.html" target="_blank" rel="noopener"><b><span data-i="dLegalTerms">Terms of Use</span></b><span class="pl-desc" data-i="dLegalTermsD">Conditions for using the service</span></a>
@@ -553,7 +553,7 @@
         <h3 id="foot-res" data-i="navRes">Resources</h3>
         <a href="resources/brochure.html" target="_blank" rel="noopener"><span data-i="dResBrochure">SC4 brochure</span><em>PDF</em></a>
         <a href="resources/updates.html" target="_blank" rel="noopener" data-i="dResUpdates">Updates</a>
-        <a href="resources/guide.html" target="_blank" rel="noopener" data-i="dResGuide">User guide</a>
+        <a href="resources/guide.html" target="_blank" rel="noopener" data-i="dResGuide">User guide (Plug-in)</a>
       </nav>
       <nav class="foot-col" aria-labelledby="foot-svc">
         <h3 id="foot-svc" data-i="navSvc">Services</h3>
@@ -561,7 +561,8 @@
         <a href="service/security.html" target="_blank" rel="noopener" data-i="dSvcSecurity">Security</a>
         <a href="service/sponsorship.html" target="_blank" rel="noopener" data-i="dSvcSponsor">Sponsorship</a>
       </nav>
-      <nav class="foot-col" aria-labelledby="foot-legal">
+      <!-- Hidden during the closed test, like the legal menu above. -->
+      <nav class="foot-col" aria-labelledby="foot-legal" hidden style="display:none">
         <h3 id="foot-legal" data-i="navLegal">Legal</h3>
         <a href="legal/terms.html" target="_blank" rel="noopener" data-i="dLegalTerms">Terms of Use</a>
         <a href="legal/privacy.html" target="_blank" rel="noopener" data-i="dLegalPrivacy">Privacy Policy</a>
@@ -596,7 +597,7 @@
 
     <div class="foot-meta">
       <p>© 2026 SC4SAP Dev Unit. All rights reserved.</p>
-      <p class="foot-legal">
+      <p class="foot-legal" hidden style="display:none">
         <a href="legal/privacy.html" target="_blank" rel="noopener"><b data-i="dLegalPrivacy">Privacy Policy</b></a>
         <a href="legal/terms.html" target="_blank" rel="noopener" data-i="dLegalTerms">Terms of Use</a>
       </p>
