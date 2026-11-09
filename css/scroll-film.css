@@ -1,0 +1,232 @@
+/* ============================================================
+   scroll-film.css — #film, the mascot film played by the scrollbar.
+
+   The plain rules are the resting state: captions beside still frames,
+   for no JavaScript, reduced motion and data saving. js/scroll-film.js
+   adds .is-live, and the rules under it turn the section into a pinned
+   stage with the captions laid over the picture.
+   ============================================================ */
+
+/* Not in css/fonts.css or fonts/: tools/fetch-fonts.mjs rewrites both. */
+@font-face {
+  font-family: 'REATIC';
+  font-weight: 700;
+  font-display: swap;
+  src: url(../assets/fonts/REATIC-Bold.ttf) format('truetype');
+}
+
+.film {
+  /* Scroll length is the film's speed: longer plays slower. */
+  --film-scroll: 1500svh;
+  --film-scroll-portrait: 1100svh;
+  --film-fade: 420ms;
+  /* Headline size, as a share of the original. */
+  --film-title-scale: 0.8;
+  /* The opening clip plays by itself after the first pull of the scroll;
+     1 is its real speed. */
+  --film-opening-speed: 2.5;
+  /* Extra weight on the headlines: 0 is the font as drawn. */
+  --film-title-stroke: 0;
+  /* Landscape picture size, read by js/scroll-film.js: share of the stage's
+     width and height, and how far past its native size a frame may stretch. */
+  --film-picture-width: 0.4;
+  --film-picture-height: 0.88;
+  --film-max-upscale: 1;
+  /* The opening clip, as a share of filling the stage (1 is edge to edge). */
+  --film-opening-scale: 0.78;
+  /* Edge fade, as a share of the way from the frame's centre to its edge. */
+  --film-feather: 0.16;
+  position: relative;
+  background: #000;
+  padding-block: var(--band);
+}
+
+.film-canvas,
+.film-load { display: none; }
+
+.film-copy {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: grid;
+  gap: clamp(3rem, 8vw, 6rem);
+}
+
+.film-beat {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.film-still { width: 100%; height: auto; display: block; }
+
+.film-text { display: grid; justify-items: start; gap: 0.6rem; }
+.film-eyebrow {
+  font-family: var(--mono, 'IBM Plex Mono', monospace);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--accent-text);
+}
+.film-title {
+  font-size: calc(clamp(1.3rem, 1rem + 1.2vw, 2rem) * var(--film-title-scale));
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.film-sub {
+  font-size: clamp(0.92rem, 0.86rem + 0.3vw, 1.08rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+.film-beat--end .film-sub { color: var(--ink-3); }
+.film-beat--end .h2 { font-size: calc(var(--fs-h2) * var(--film-title-scale)); }
+/* Only the opening caption, "Super-Claude for SAP", is set in REATIC. */
+.film-copy > .film-beat:first-of-type .film-title {
+  font-family: 'REATIC', var(--sans);
+  font-weight: 700;
+  -webkit-text-stroke: var(--film-title-stroke) currentColor;
+}
+.film-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+
+@media (max-width: 47.99rem) {
+  .film-beat { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- The pinned stage ---------- */
+
+.film.is-live {
+  height: var(--film-scroll);
+  padding-block: 0;
+}
+
+.is-live .film-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.is-live .film-canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.is-live .film-still { display: none; }
+
+/* The scrollbar's pill reads as a stray line on the black stage. It stays
+   usable: pointing at it brings it back. Must outrank the rules in n.css. */
+html.film-pinned::-webkit-scrollbar-thumb { background-color: transparent; }
+html.film-pinned::-webkit-scrollbar-thumb:hover { background-color: rgb(255 255 255 / 0.42); }
+html.film-pinned::-webkit-scrollbar-thumb:active { background-color: rgb(255 255 255 / 0.6); }
+
+/* Dark band under the captions, so copy stays legible over the props. */
+.is-live .film-stage::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.92) 30%, rgb(0 0 0 / 0));
+  opacity: 0;
+  transition: opacity var(--film-fade) var(--ease);
+  pointer-events: none;
+}
+.is-live.has-band .film-stage::after { opacity: 1; }
+
+.is-live .film-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  max-width: none;
+  padding: 0;
+  pointer-events: none;
+}
+
+.is-live .film-beat {
+  position: absolute;
+  inset: auto var(--gutter) clamp(2rem, 7svh, 4.5rem);
+  display: block;
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+.is-armed .film-beat {
+  transition: opacity var(--film-fade) var(--ease), transform var(--film-fade) var(--ease);
+}
+.is-live .film-beat.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.is-live .film-text { max-width: 34rem; }
+.is-live .film-beat--center .film-text { margin-inline: auto; justify-items: center; text-align: center; }
+.is-live .film-beat--right .film-text { margin-left: auto; justify-items: end; text-align: right; }
+
+/* The closing frame keeps its right half empty for this. */
+.is-live .film-beat--end {
+  inset: 50% var(--gutter) auto 52%;
+  transform: translateY(calc(-50% + 0.75rem));
+}
+.is-live .film-beat--end.is-on {
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.is-live .film-load {
+  display: block;
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  height: 2px;
+  background: var(--line);
+  transition: opacity 400ms linear;
+}
+.is-live .film-load span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.is-loaded .film-load { opacity: 0; }
+
+/* One line where it fits; narrow screens would overflow, so they still wrap. */
+@media (min-aspect-ratio: 1/1) and (min-width: 64rem) {
+  .is-live .film-beat:not(.film-beat--end) .film-text { max-width: none; }
+  .is-live .film-title { white-space: nowrap; }
+}
+
+/* Portrait: the picture sits above, the copy below it. */
+@media (max-aspect-ratio: 1/1) {
+  .film.is-live { height: var(--film-scroll-portrait); }
+  .is-live .film-stage::after { display: none; }
+
+  .is-live .film-beat,
+  .is-live .film-beat--end {
+    inset: 62svh var(--gutter) auto;
+    transform: translateY(0.75rem);
+  }
+  .is-live .film-beat.is-on,
+  .is-live .film-beat--end.is-on { transform: none; }
+
+  .is-live .film-text,
+  .is-live .film-beat--right .film-text,
+  .is-live .film-beat--center .film-text {
+    max-width: none;
+    margin-inline: 0;
+    justify-items: start;
+    text-align: left;
+  }
+  .film-actions .btn { min-height: 2.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-beat { transition: none; }
+}
