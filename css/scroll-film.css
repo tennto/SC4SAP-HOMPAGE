@@ -1,0 +1,364 @@
+/* ============================================================
+   scroll-film.css — #film, the mascot film played by the scrollbar.
+
+   The plain rules are the resting state: captions beside still frames,
+   for no JavaScript, reduced motion and data saving. js/scroll-film.js
+   adds .is-live, and the rules under it turn the section into a pinned
+   stage with the captions laid over the picture.
+   ============================================================ */
+
+/* Not in css/fonts.css or fonts/: tools/fetch-fonts.mjs rewrites both. */
+@font-face {
+  font-family: 'REATIC';
+  font-weight: 700;
+  /* Held invisible until it arrives rather than shown in a stand-in face
+     first. It is cut down (tools: fontTools subset) to the glyphs of
+     "Super-Claude for SAP", 2.5 KB from 2.9 MB, and preloaded in the head. */
+  font-display: block;
+  src: url(../assets/fonts/REATIC-Bold-sub.woff2) format('woff2');
+}
+
+.film {
+  /* Scroll length is the film's speed: longer plays slower. */
+  --film-scroll: 2400svh;
+  --film-fade: 420ms;
+  /* Headline size, as a share of the original. */
+  --film-title-scale: 0.8;
+  /* The film plays by itself after one pull of the scroll; 1 is its real
+     speed. The opening clip has its own speed. */
+  --film-opening-speed: 2.3;
+  --film-play-speed: 1.7;
+  /* The developer and consultant, a little slower than the rest. */
+  --film-dc-speed: 1.6;
+  /* Held on the last frame, the mascot keeps waving at this speed. */
+  --film-wave-speed: 1;
+  /* Edge fade past the opening, where the backgrounds are pure black: thin,
+     so it stays off the mascots and their props. */
+  --film-feather-close: 0.04;
+  /* The maintenance scene: its size against the other scenes, and how much
+     taller than its source it is drawn (1 is as rendered). */
+  --film-mt-scale: 1.15;
+  --film-mt-stretch: 1.05;
+  /* Its two captions, placed on the picture as shares of its width and
+     height: one to the right of the mechanic, above the secretary, the
+     other below the mechanic, left of the secretary. */
+  --film-mt-a-x: 0.44;
+  --film-mt-a-y: 0.19;
+  --film-mt-b-x: 0.04;
+  --film-mt-b-y: 0.74;
+  /* Their size, as a share of the other captions'. */
+  --film-mt-title-scale: 0.88;
+  /* Extra weight on the headlines: 0 is the font as drawn. */
+  --film-title-stroke: 0;
+  /* Landscape picture size, read by js/scroll-film.js: share of the stage's
+     width and height, and how far past its native size a frame may stretch. */
+  --film-picture-width: 0.4;
+  /* The largest share it grows to on a narrow screen. */
+  --film-picture-width-max: 0.56;
+  --film-picture-height: 0.88;
+  --film-max-upscale: 1;
+  /* The opening clip, as a share of filling the stage (1 is edge to edge). */
+  --film-opening-scale: 0.78;
+  /* Edge fade, as a share of the way from the frame's centre to its edge. */
+  --film-feather: 0.16;
+  /* The developer scene: the mascot's left edge, as a share of the frame's
+     width, sits on the nav capsule's left end. Its caption is set flush
+     right to the capsule's right end, and keeps clear of the picture up to
+     --film-dev-text of its width. */
+  --film-dev-edge: 0.11;
+  --film-dev-text: 0.7;
+  /* The consultant scene, mirrored: the mascot's right edge on the capsule's
+     right end, its caption flush left to the capsule's left end. */
+  --film-con-edge: 0.955;
+  --film-con-text: 0.32;
+  /* How far the mascots and captions sit inside the capsule's ends, as a
+     share of the stage's width, per scene. */
+  --film-dev-mascot-inset: 0.06;
+  --film-dev-text-inset: 0.05;
+  --film-con-mascot-inset: 0.045;
+  --film-con-text-inset: 0.05;
+  /* On narrower screens the developer's and consultant's copy is drawn in
+     towards the mascot by up to this share of the stage (the mascot by half
+     of it), in full at 1024 wide and none at 1920. */
+  --film-narrow-pull: 0.06;
+  /* How much of each step between two frames is a blend of both while the
+     film moves: 0 shows one frame at a time, 1 blends all the way. Higher
+     is smoother but leaves a ghost on fast motion. */
+  --film-blend: 0.35;
+  /* The project leader scene: the picture lifts by this share of the
+     stage's height, and its caption sits this high off the bottom. */
+  --film-pl-lift: 0.07;
+  --film-pl-caption: 17svh;
+  /* Strength of the glow behind the closing copy; 0 turns it off. */
+  --film-end-glow: 0.2;
+  /* Where the closing copy starts, as a share of the picture's width from
+     its left edge. The pair (mascot and copy) is centred on the stage. */
+  --film-end-text-at: 0.59;
+  /* How long the glow takes to come in, after the copy has. */
+  --film-end-glow-in: 1400ms;
+  position: relative;
+  background: #000;
+  padding-block: var(--band);
+}
+
+/* Phones and touch tablets keep the page as it was before the film:
+   playback and the pinned scroll do not hold up there. Same query as
+   js/scroll-film.js, which stops before loading any frame. */
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  .film { display: none; }
+}
+
+/* On a desktop the film opens the page in place of the hero (html.has-film,
+   set by a script in the head). Phones keep the hero. */
+/* Only while the screen is still a desktop's: a window narrowed after
+   load, or a phone view, takes the hero back (the film is hidden there).
+   This is the inverse of the handheld query above. */
+@media (min-width: 761px) and (hover: hover), (min-width: 761px) and (pointer: fine) {
+  .has-film .hero { display: none; }
+  /* Until js/scroll-film.js takes over (it is deferred), the film's plain
+     layout, captions beside still frames, would flash for a moment on a
+     reload. On a desktop it holds one black screen instead. */
+  .has-film .film:not(.is-live) { min-height: 100svh; padding-block: 0; }
+  .has-film .film:not(.is-live) .film-copy { visibility: hidden; }
+}
+
+.film-canvas,
+.film-load { display: none; }
+
+.film-copy {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: grid;
+  gap: clamp(3rem, 8vw, 6rem);
+}
+
+.film-beat {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.film-still { width: 100%; height: auto; display: block; }
+
+.film-text { display: grid; justify-items: start; gap: 0.6rem; }
+.film-title {
+  font-size: calc(clamp(1.3rem, 1rem + 1.2vw, 2rem) * var(--film-title-scale));
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.film-sub {
+  font-size: clamp(0.92rem, 0.86rem + 0.3vw, 1.08rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+.film-beat--end .film-sub { color: var(--ink-3); }
+.film-beat--end .h2 { font-size: calc(var(--fs-h2) * var(--film-title-scale)); }
+/* Only the opening caption, "Super-Claude for SAP", is set in REATIC. */
+.film-copy > .film-beat:first-of-type .film-title {
+  font-family: 'REATIC', var(--sans);
+  font-weight: 700;
+  -webkit-text-stroke: var(--film-title-stroke) currentColor;
+}
+.film-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+/* On the stage, the closing buttons sit a little further below the copy. */
+.is-live .film-actions { margin-top: 1.75rem; }
+
+@media (max-width: 47.99rem) {
+  .film-beat { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- The pinned stage ---------- */
+
+.film.is-live {
+  height: var(--film-scroll);
+  padding-block: 0;
+}
+
+/* Played through: one screen, the last one (js/scroll-film.js). */
+.film.is-live.is-done { height: 100svh; }
+
+.is-live .film-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.is-live .film-canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.is-live .film-still { display: none; }
+
+/* The scrollbar's pill reads as a stray line on the black stage. It stays
+   usable: pointing at it brings it back. Must outrank the rules in n.css. */
+html.film-pinned::-webkit-scrollbar-thumb { background-color: transparent; }
+html.film-pinned::-webkit-scrollbar-thumb:hover { background-color: rgb(255 255 255 / 0.42); }
+html.film-pinned::-webkit-scrollbar-thumb:active { background-color: rgb(255 255 255 / 0.6); }
+
+/* Dark band under the captions, so copy stays legible over the props. */
+.is-live .film-stage::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.92) 30%, rgb(0 0 0 / 0));
+  opacity: 0;
+  transition: opacity var(--film-fade) var(--ease);
+  pointer-events: none;
+}
+.is-live.has-band .film-stage::after { opacity: 1; }
+
+.is-live .film-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  max-width: none;
+  padding: 0;
+  pointer-events: none;
+}
+
+.is-live .film-beat {
+  position: absolute;
+  inset: auto var(--gutter) clamp(2rem, 7svh, 4.5rem);
+  display: block;
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+.is-armed .film-beat {
+  transition: opacity var(--film-fade) var(--ease), transform var(--film-fade) var(--ease);
+}
+.is-live .film-beat.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.is-live .film-text { max-width: 34rem; }
+.is-live .film-beat--center .film-text { margin-inline: auto; justify-items: center; text-align: center; }
+.is-live .film-beat--right .film-text { margin-left: auto; justify-items: end; text-align: right; }
+
+/* Beside the mascot: js/scroll-film.js moves the picture left for the
+   scene and sets --film-beside-x to the picture's right side. */
+.is-live .film-beat--beside {
+  inset: 50% var(--film-text-r, var(--gutter)) auto var(--film-beside-x, 52%);
+  transform: translateY(calc(-50% + 0.75rem));
+}
+.is-live .film-beat--beside.is-on { transform: translateY(-50%); }
+.is-live .film-beat--beside .film-text {
+  max-width: 34rem;
+  margin-left: auto;
+  justify-items: end;
+  text-align: right;
+}
+.is-live .film-beat--beside .film-sub { white-space: normal; }
+
+/* The mirror of it, for a mascot that stands right: --film-beside-end is
+   the picture's left side, measured from the stage's right edge. */
+.is-live .film-beat--before {
+  inset: 50% var(--film-beside-end, 52%) auto var(--film-text-l, var(--gutter));
+  transform: translateY(calc(-50% + 0.75rem));
+}
+.is-live .film-beat--before.is-on { transform: translateY(-50%); }
+.is-live .film-beat--before .film-text { max-width: 34rem; }
+
+/* The maintenance captions sit on the picture itself, in its empty
+   corners; js/scroll-film.js sets --film-pic-* to where the picture is. */
+.is-live .film-beat--mt {
+  inset: auto;
+  transform: translateY(0.75rem);
+}
+.is-live .film-beat--mt.is-on { transform: none; }
+.is-live .film-beat--mt .film-title {
+  white-space: normal;
+  font-size: calc(clamp(1.3rem, 1rem + 1.2vw, 2rem) * var(--film-title-scale) * var(--film-mt-title-scale));
+}
+.is-live .film-beat--mt-a {
+  left: calc(var(--film-pic-l, 30%) + var(--film-pic-w, 40%) * var(--film-mt-a-x));
+  top: calc(var(--film-pic-t, 20%) + var(--film-pic-h, 60%) * var(--film-mt-a-y));
+  max-width: calc(var(--film-pic-w, 40%) * 0.52);
+}
+.is-live .film-beat--mt-b {
+  left: calc(var(--film-pic-l, 30%) + var(--film-pic-w, 40%) * var(--film-mt-b-x));
+  top: calc(var(--film-pic-t, 20%) + var(--film-pic-h, 60%) * var(--film-mt-b-y));
+  /* Up to just short of the secretary, so it stays on one line. */
+  max-width: calc(var(--film-pic-w, 40%) * 0.66);
+}
+
+/* The project leader caption rides up with its lifted picture. */
+.is-live .film-beat--lift { bottom: var(--film-pl-caption); }
+
+/* The closing frame keeps its right half empty for this. */
+.is-live .film-beat--end {
+  inset: 50% auto auto var(--film-end-x, 50%);
+  transform: translateY(calc(-50% + 0.75rem));
+}
+.is-live .film-beat--end.is-on {
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+/* A faint glow behind the closing copy in the hero photograph's colours
+   (amber, teal, cream), fading out before it reaches the mascot on the
+   left. It fades in and out with the copy. --film-end-glow sets its
+   strength: 0 is off. */
+.is-live .film-beat--end::before {
+  content: '';
+  position: absolute;
+  inset: -130% 4% -130% -24%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms var(--ease);
+  background:
+    radial-gradient(ellipse 46% 42% at 48% 43%, rgb(216 135 34 / 0.55), transparent 70%),
+    radial-gradient(ellipse 46% 44% at 32% 58%, rgb(110 150 160 / 0.75), transparent 70%),
+    radial-gradient(ellipse 55% 50% at 40% 52%, rgb(225 205 175 / 0.25), transparent 72%);
+  filter: blur(2rem);
+}
+/* It comes in only once the copy has: after the copy's own fade, slowly. */
+.is-live .film-beat--end.is-on::before {
+  opacity: var(--film-end-glow);
+  transition: opacity var(--film-end-glow-in) var(--ease) var(--film-fade);
+}
+
+/* The loading bar is kept for reference but not shown: on the black stage
+   it read as a stray yellow line at the bottom. */
+.is-live .film-load {
+  display: none;
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  height: 2px;
+  background: var(--line);
+  transition: opacity 400ms linear;
+}
+.is-live .film-load span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.is-loaded .film-load { opacity: 0; }
+
+/* One line where it fits; narrow screens would overflow, so they still wrap. */
+@media (min-aspect-ratio: 1/1) and (min-width: 64rem) {
+  .is-live .film-beat:not(.film-beat--end):not(.film-beat--beside):not(.film-beat--before) .film-text { max-width: none; }
+  .is-live .film-title,
+  .is-live .film-beat--end .h2 { white-space: nowrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-beat { transition: none; }
+}

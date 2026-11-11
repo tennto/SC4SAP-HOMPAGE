@@ -38,8 +38,15 @@
 <link rel="stylesheet" href="css/fonts.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
 <link rel="stylesheet" href="css/n.css" />
+<link rel="stylesheet" href="css/scroll-film.css" />
 
 <script>document.documentElement.classList.replace('no-js', 'js');</script>
+<!-- On a desktop the scroll film (js/scroll-film.js) stands in for the hero;
+     set here, before paint, so the hero never flashes. Same conditions as
+     the script: not on phones or touch tablets, nor with reduced motion or
+     data saving. -->
+<script>if (!matchMedia('(max-width: 760px), (hover: none) and (pointer: coarse), (prefers-reduced-motion: reduce)').matches && !(navigator.connection && navigator.connection.saveData)) document.documentElement.classList.add('has-film');</script>
+<link rel="preload" href="/assets/fonts/REATIC-Bold-sub.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
 
@@ -176,6 +183,68 @@
     </div>
   </div>
 
+</section>
+
+<!-- ===================== FILM: js/scroll-film.js plays it by scroll ===================== -->
+<section id="film" class="film" data-section aria-labelledby="film-h">
+  <div class="film-stage">
+    <canvas class="film-canvas" aria-hidden="true"></canvas>
+    <div class="film-load" aria-hidden="true"><span></span></div>
+    <div class="film-copy">
+      <h2 id="film-h" class="sr-only">SC4SAPにできること</h2>
+
+      <div class="film-beat film-beat--center" data-in="1.2" data-out="7.2">
+        <img class="film-still" src="assets/scroll-film/d/0138.webp" alt="" width="1280" height="720" loading="lazy" />
+        <div class="film-text"><h3 class="film-title">Super-Claude for SAP</h3></div>
+      </div>
+
+      <div class="film-beat film-beat--beside" data-in="13.4" data-out="18.6">
+        <img class="film-still" src="assets/scroll-film/d/0374.webp" alt="" width="1280" height="720" loading="lazy" />
+        <div class="film-text">
+          <h3 class="film-title">スペックとRule Setを守って開発します</h3>
+          <p class="film-sub">命名規則やOOPパターン、コードスタイルの参照まで</p>
+        </div>
+      </div>
+
+      <div class="film-beat film-beat--before" data-in="20.6" data-out="25.6">
+        <img class="film-still" src="assets/scroll-film/d/0538.webp" alt="" width="1280" height="720" loading="lazy" />
+        <div class="film-text">
+          <h3 class="film-title">推測ではなく、実際の設定値で答えます</h3>
+          <p class="film-sub">モジュール別のコンサルタントAgentがIMG設定とプロセスを読み取り、スペックにまとめます</p>
+        </div>
+      </div>
+
+      <div class="film-beat film-beat--mt film-beat--mt-a" data-in="28.9" data-out="39.6">
+        <img class="film-still" src="assets/scroll-film/d/0731.webp" alt="" width="1280" height="720" loading="lazy" />
+        <div class="film-text"><h3 class="film-title">SAPシステムを診断し、Dumpを分析します</h3></div>
+      </div>
+
+      <div class="film-beat film-beat--mt film-beat--mt-b" data-in="32.2" data-out="39.6">
+        <img class="film-still" src="assets/scroll-film/d/0841.webp" alt="" width="1280" height="720" loading="lazy" />
+        <div class="film-text"><h3 class="film-title">プログラムとパッケージをドキュメント化し、マニュアルにまとめます</h3></div>
+      </div>
+
+      <div class="film-beat film-beat--center film-beat--lift" data-in="48.17" data-out="52.57">
+        <img class="film-still" src="assets/scroll-film/d/1101.webp" alt="" width="1280" height="720" loading="lazy" />
+        <div class="film-text">
+          <h3 class="film-title">プロジェクトのスケジュールと移送状況がひと目でわかります</h3>
+          <p class="film-sub">Q-gateマイルストーンとWBSを一画面で管理します</p>
+        </div>
+      </div>
+
+      <div class="film-beat film-beat--end" data-in="56.97">
+        <img class="film-still" src="assets/scroll-film/d/1284.webp" alt="" width="1280" height="720" loading="lazy" />
+        <div class="film-text">
+          <h3 class="h2">ERP AXの新たな第一歩</h3>
+          <p class="film-sub">SAP業務のためのClaude Codeプラグインとウェブワークスペース</p>
+          <div class="film-actions">
+            <a class="btn btn-light" href="https://workspace.sc4sap.dev"><span>ワークスペースへ</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+            <a class="btn btn-glass glass" href="resources/guide.html" target="_blank" rel="noopener"><span class="metal-rim" aria-hidden="true"></span><span>プラグインのインストールガイド</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ===================== PROBLEM ===================== -->
@@ -619,6 +688,7 @@
 </dialog>
 
 <script src="js/n.js" defer></script>
+<script src="js/scroll-film.js" defer></script>
 <script src="js/fibre-arc.js" defer></script>
 <script src="js/globe.data.js" defer></script>
 <script src="js/globe.js" defer></script>
