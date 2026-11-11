@@ -81,7 +81,7 @@
      left and the caption follows on its right; the consultant mirrors it. */
   var SCENES = [
     { from: 12, to: 19.3, name: 'dev', side: 'left' },
-    { from: 19.4, to: 26.95, name: 'con', side: 'right' }
+    { from: 19.4, to: 27.04, name: 'con', side: 'right' }
   ];
   /* The project leader scene plays with the picture lifted. It starts on
      empty black, but runs straight on into the closing shot, so the lift
@@ -92,17 +92,32 @@
      or a slow device would trail far behind the scrollbar. */
   var SMOOTH_MS = 200;
 
-  var HANDHELD = '(max-width: 760px), (hover: none) and (pointer: coarse)';
   var saveData = navigator.connection && navigator.connection.saveData;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || saveData) return;
   /* Phones and touch tablets do not get the film (css/scroll-film.css hides
-     the section): playback and the pinned scroll do not hold up there. The
-     query is n.js's "handheld". */
-  if (window.matchMedia(HANDHELD).matches) return;
-  /* The head script decides, before paint, whether the film stands in for
-     the hero (html.has-film); this script follows that decision. */
-  if (!document.documentElement.classList.contains('has-film')) return;
+     the section): playback and the pinned scroll do not hold up there.
+     DESKTOP is the inverse of n.js's "handheld" query. The head script
+     decides at load, before paint, whether the film stands in for the hero
+     (html.has-film). A page opened at a phone's width that is then widened
+     to a desktop's gets the film at that moment. */
+  var DESKTOP = '(min-width: 761px) and (hover: hover), (min-width: 761px) and (pointer: fine)';
+  var html = document.documentElement;
+  if (html.classList.contains('has-film')) {
+    init();
+  } else {
+    var desktop = window.matchMedia(DESKTOP);
+    var onDesktop = function () {
+      if (!desktop.matches) return;
+      if (desktop.removeEventListener) desktop.removeEventListener('change', onDesktop);
+      else desktop.removeListener(onDesktop);
+      html.classList.add('has-film');
+      init();
+    };
+    if (desktop.addEventListener) desktop.addEventListener('change', onDesktop);
+    else desktop.addListener(onDesktop);
+  }
 
+  function init() {
   var stage = root.querySelector('.film-stage');
   var canvas = root.querySelector('.film-canvas');
   var bar = root.querySelector('.film-load span');
@@ -212,8 +227,11 @@
   function startLoading() {
     if (started) return;
     started = true;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var set = portrait || stage.clientWidth * dpr < 900 ? 'm' : 'd';
+    /* Always the full set: the film only runs on a desktop's width, where
+       the opening fills the stage, and the small set (m, 720 wide) drawn
+       that large breaks up. The choice is also made once, so a window
+       narrow at first would have kept the small set when widened. */
+    var set = 'd';
     var order = loadOrder();
     var next = 0;
 
@@ -276,8 +294,10 @@
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     var sw0 = stage.clientWidth;
     pictureShare = sw0 >= WIDE ? PICTURE_W : Math.min(PICTURE_W_MAX, PICTURE_W * Math.sqrt(WIDE / sw0));
-    canvas.width = Math.round(stage.clientWidth * dpr);
-    canvas.height = Math.round(stage.clientHeight * dpr);
+    /* Only when it changes: setting a canvas's size clears it. */
+    var cwNew = Math.round(stage.clientWidth * dpr), chNew = Math.round(stage.clientHeight * dpr);
+    if (canvas.width !== cwNew) canvas.width = cwNew;
+    if (canvas.height !== chNew) canvas.height = chNew;
     portrait = stage.clientWidth < stage.clientHeight;
     if (capsule) {
       var c = capsule.getBoundingClientRect(), sw = stage.clientWidth;
@@ -715,6 +735,9 @@
       lastTick = 0;
       /* Coming back from afar should not play the distance as a rewind. */
       current = Math.min(progress() / FILM_END, 1) * (FRAMES - 1);
+      /* Back at the top of the page, unplayed (say, a window narrowed to a
+         phone's width mid-film and widened again): play it from there. */
+      if (!done && window.scrollY === 0) autoStart = true;
       requestAnimationFrame(tick);
     } else if (!visible) {
       running = false;
@@ -732,6 +755,19 @@
 
   window.addEventListener('resize', resize, { passive: true });
   resize();
-  /* The copy's width depends on its font, which may arrive later. */
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureEnd);
+  /* The layout is measured on the stage, the nav capsule and the closing
+     copy, and right after a load those change size without the window
+     doing so: the web fonts arrive (the capsule and the copy re-set), the
+     scrollbar appears as the page grows. Each change is measured again;
+     otherwise a reload could leave the picture stretched and the captions
+     off their marks, differently each time. */
+  if ('ResizeObserver' in window) {
+    var reMeasure = new ResizeObserver(function () { resize(); });
+    reMeasure.observe(stage);
+    if (capsule) reMeasure.observe(capsule);
+    var endCopy = root.querySelector('.film-beat--end .film-text');
+    if (endCopy) reMeasure.observe(endCopy);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
+  }
 })();
