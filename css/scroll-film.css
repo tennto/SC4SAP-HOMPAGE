@@ -21,7 +21,6 @@
 .film {
   /* Scroll length is the film's speed: longer plays slower. */
   --film-scroll: 2400svh;
-  --film-scroll-portrait: 1760svh;
   --film-fade: 420ms;
   /* Headline size, as a share of the original. */
   --film-title-scale: 0.8;
@@ -358,38 +357,6 @@ html.film-pinned::-webkit-scrollbar-thumb:active { background-color: rgb(255 255
   .is-live .film-beat:not(.film-beat--end):not(.film-beat--beside):not(.film-beat--before) .film-text { max-width: none; }
   .is-live .film-title,
   .is-live .film-beat--end .h2 { white-space: nowrap; }
-}
-
-/* Portrait: the picture sits above, the copy below it. */
-@media (max-aspect-ratio: 1/1) {
-  .film.is-live { height: var(--film-scroll-portrait); }
-  .is-live .film-stage::after { display: none; }
-
-  .is-live .film-beat,
-  .is-live .film-beat--beside,
-  .is-live .film-beat--before,
-  .is-live .film-beat--mt,
-  .is-live .film-beat--end {
-    inset: 62svh var(--gutter) auto;
-    transform: translateY(0.75rem);
-  }
-  .is-live .film-beat.is-on,
-  .is-live .film-beat--beside.is-on,
-  .is-live .film-beat--before.is-on,
-  .is-live .film-beat--mt.is-on,
-  .is-live .film-beat--end.is-on { transform: none; }
-
-  .is-live .film-text,
-  .is-live .film-beat--right .film-text,
-  .is-live .film-beat--before .film-text,
-  .is-live .film-beat--beside .film-text,
-  .is-live .film-beat--center .film-text {
-    max-width: none;
-    margin-inline: 0;
-    justify-items: start;
-    text-align: left;
-  }
-  .film-actions .btn { min-height: 2.75rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

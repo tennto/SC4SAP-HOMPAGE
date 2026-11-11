@@ -65,11 +65,13 @@
   /* The film ends here; the rest of the scroll holds the last frame so
      the closing copy can be read and its buttons reached. */
   var FILM_END = 0.94;
-  /* Share of the frame's width shown on a portrait screen. The frame is
-     letterboxed into pure black rather than cropped hard to the mascot. */
-  var PORTRAIT_SHOW = 0.72;
-  /* Vertical centre of the picture on a portrait screen, above the copy. */
-  var PORTRAIT_Y = 0.38;
+  /* Share of the frame's width shown on a portrait screen (a desktop window
+     taller than wide, like a tablet's; phones do not get the film). The
+     whole frame: some scenes have a mascot at each side. */
+  var PORTRAIT_SHOW = 1;
+  /* Vertical centre of the picture on a portrait screen: a little above the
+     middle, so picture and the copy under it sit centred as a pair. */
+  var PORTRAIT_Y = 0.44;
   /* [seconds, horizontal centre of the view]: follows the mascot on a
      portrait screen. The jumps sit where the frame is empty black. */
   var FOCUS = [[0, 0.5], [12, 0.5], [12.1, 0.36], [19.4, 0.36], [19.7, 0.66],
@@ -298,7 +300,9 @@
     var cwNew = Math.round(stage.clientWidth * dpr), chNew = Math.round(stage.clientHeight * dpr);
     if (canvas.width !== cwNew) canvas.width = cwNew;
     if (canvas.height !== chNew) canvas.height = chNew;
-    portrait = stage.clientWidth < stage.clientHeight;
+    /* A window taller than wide keeps the desktop layout too: the film only
+       runs on desktops, where a tall window is still a desktop's. */
+    portrait = false;
     if (capsule) {
       var c = capsule.getBoundingClientRect(), sw = stage.clientWidth;
       navL = c.left / sw;
