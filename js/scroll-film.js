@@ -116,11 +116,17 @@
 
   root.classList.add('is-live');
 
-  /* The hero is hidden here, so links to it (#top: the brand, the rail's
-     first mark) lead to the film, which now opens the page. */
-  [].forEach.call(document.querySelectorAll('a[href="#top"]'), function (a) {
-    a.setAttribute('href', '#film');
-  });
+  /* While the hero is hidden, links to it (#top: the brand, the rail's
+     first mark) lead to the film, which then opens the page. A window
+     narrowed to a phone's width gets the hero back, and the links with it. */
+  var hero = document.getElementById('top');
+  var topLinks = [].slice.call(document.querySelectorAll('a[href="#top"]'));
+  function syncTopLinks() {
+    var heroShown = hero && getComputedStyle(hero).display !== 'none';
+    topLinks.forEach(function (a) { a.setAttribute('href', heroShown ? '#top' : '#film'); });
+  }
+  syncTopLinks();
+  window.addEventListener('resize', syncTopLinks, { passive: true });
 
   /* A reload starts at the top of the page. Restoring the old position
      would glide down through the film (html has smooth scrolling) and play

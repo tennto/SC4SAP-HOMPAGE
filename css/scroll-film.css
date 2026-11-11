@@ -111,12 +111,17 @@
 
 /* On a desktop the film opens the page in place of the hero (html.has-film,
    set by a script in the head). Phones keep the hero. */
-.has-film .hero { display: none; }
-/* Until js/scroll-film.js takes over (it is deferred), the film's plain
-   layout, captions beside still frames, would flash for a moment on a
-   reload. On a desktop it holds one black screen instead. */
-.has-film .film:not(.is-live) { min-height: 100svh; padding-block: 0; }
-.has-film .film:not(.is-live) .film-copy { visibility: hidden; }
+/* Only while the screen is still a desktop's: a window narrowed after
+   load, or a phone view, takes the hero back (the film is hidden there).
+   This is the inverse of the handheld query above. */
+@media (min-width: 761px) and (hover: hover), (min-width: 761px) and (pointer: fine) {
+  .has-film .hero { display: none; }
+  /* Until js/scroll-film.js takes over (it is deferred), the film's plain
+     layout, captions beside still frames, would flash for a moment on a
+     reload. On a desktop it holds one black screen instead. */
+  .has-film .film:not(.is-live) { min-height: 100svh; padding-block: 0; }
+  .has-film .film:not(.is-live) .film-copy { visibility: hidden; }
+}
 
 .film-canvas,
 .film-load { display: none; }
