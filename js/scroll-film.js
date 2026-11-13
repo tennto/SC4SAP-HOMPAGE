@@ -555,6 +555,15 @@
      the film does not carry on past the closing copy. */
   var QUIET_MS = 350;
   var openingReady = false;
+  /* Frames of the opening, in a row from the first, that must have arrived
+     before it plays by itself: about two seconds of it. Waiting for all of
+     it held the first screen still for seconds on a slow connection. */
+  var START_BUFFER = 48;
+  var aheadAt = 0;
+  function openingAhead() {
+    while (aheadAt < OPENING_FRAMES && loaded[aheadAt]) aheadAt++;
+    return aheadAt;
+  }
   var playing = null;
   var holding = false;
   var lastWheel = 0;
@@ -657,7 +666,7 @@
        arrived, without waiting for a scroll. Once per visit. */
     if (autoStart && !playing && !done) {
       if (window.scrollY > 0 || box.top < 0) autoStart = false;
-      else if (openingLoaded >= OPENING_FRAMES) { autoStart = false; playing = CHAPTERS[0]; }
+      else if (openingAhead() >= START_BUFFER) { autoStart = false; playing = CHAPTERS[0]; }
     }
 
     /* Armed only by arriving from above; a jump into the middle stays scrubbed. */
@@ -669,6 +678,9 @@
 
     if (playing) {
       current += Math.min(elapsed, 100) / 1000 * fpsAt(current) * speedAt(current);
+      /* The opening starts before all of it has arrived: it waits at the
+         first frame still on its way rather than skipping past it. */
+      if (current < OPENING_FRAMES) current = Math.min(current, Math.max(0, openingAhead() - 1));
       if (current >= playing.end) {
         current = playing.end;
         finishChapter(box);
