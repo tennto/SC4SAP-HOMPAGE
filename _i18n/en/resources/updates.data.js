@@ -5,6 +5,300 @@ window.SC4_UPDATES = {
  "plugin": [
   {
    "repo": "plugin",
+   "version": "0.6.69",
+   "date": "2026-11-17",
+   "title": "SmartForm to Adobe conversion and S/4 RAP objects",
+   "summary": "You can now plan how SAP's own migration turns a SmartForm into an Adobe form, and run the conversion on DEV. RAP object creation and a weekly portfolio status were added too.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "`/sc4sap:smartform-to-adobe`: before anything is written, shows the interface, context, layout and log that SAP's own migration (`CL_SSF_MIGRATION`) would produce. What SAP drops without a message (sort-level events, running totals in page-break footers, layouts in several languages and more) is listed separately, each with a manual step.",
+      "Runs SAP's own migration on DEV into new names (`ZSC4SAP_AFM_*`, `$TMP`). It never overwrites an existing name, and fixes what SAP's run leaves broken before saving, such as duplicate context nodes or every migrated form sharing one cached template.",
+      "`/sc4sap:adobe-preview`: draws an Adobe form from its XDP layout with sample data and scores the drawing against SAP's own PDF. Reading Adobe forms, rendering SAP example forms to PDF, and rendering SmartForms to PDF on an S/4HANA DEV client were added as well.",
+      "`/sc4sap:create-object` builds RAP objects in order, from the table to the service definition. On ECC, CDS and RAP types are refused right away, with no MCP call.",
+      "`/sc4sap:project-dashboard` `portfolio-status`: every project in the folder on one weekly page. RAG and the change since last week, late items, go-live and cutover D-days, this and next week's milestones, open high risks and pending decisions, and team load across projects, as HTML, JSON and Excel.",
+      "Remote mode: the MCP can run over HTTP to a backend relay, with no local `sap.env`."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "Form rendering tools are blocked on QA and production, since rendering runs the form's own code.",
+      "The table blocklist checks every table of a `FROM` list (commas, aliases and brackets included).",
+      "SmartForm symbol handling covers protected text, conditional prefixes and suffixes, `&&` and comment lines."
+     ]
+    },
+    {
+     "type": "fixed",
+     "items": [
+      "`/sc4sap:analyze-symptom`: job and IDoc facts are collected before any agent runs. If collecting fails, the run stops with the failed command and the TCode to use (SM37, WE02, BD87) instead of analysing without facts. A job history cut off at the read limit is read again, so the last good run is not lost.",
+      "`/sc4sap:project-dashboard`: actuals reads that come back full are reported as cut off."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.68",
+   "date": "2026-11-16",
+   "title": "Cutover readiness, gap analysis and authorization triage",
+   "summary": "The project dashboard gains a cutover tab and a weekly status, and job and IDoc incident analysis, a gap analysis document and authorization error triage were added. Generated HTML pages now read well on phones.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "`/sc4sap:project-dashboard` cutover tab: a runbook per project type, task start times computed from their predecessors, the critical path, window fit against rehearsal actuals, a rule-based go / no-go suggestion (the PM decides) and the transport list in release order.",
+      "Weekly status and Q-gate check: what moved since the last status, the UAT pass rate, risks and decisions on one or two A4 pages, with a proposed verdict per Q-gate criterion. The PM's verdict wins.",
+      "`/sc4sap:analyze-symptom` handles background job and IDoc incidents. It first collects the facts (30 days of runs, the last good run against the failed one, requests that changed the program in between) and then forms hypotheses.",
+      "`/sc4sap:module-to-process` gap mode: rates each task of the process map as fit, partial, gap and so on, and picks WRICEF candidates with their ST03N usage for the project dashboard.",
+      "`/sc4sap:transport-readiness` CAB change notes: one card per request with objects, affected TCodes, scheduled jobs, test evidence, risk and rollback notes. The business text is marked as an AI draft, and people make the decision.",
+      "`/sc4sap:uat-scenarios`: defects are linked to the requests that fix them, with their CTS state and retest status.",
+      "`/sc4sap:role-matrix` authorization triage: for one user's missing authorization in one T-code, works out the cause (missing, held but not in effect, not valid today, unclear) and suggests candidate roles, least privilege first. Read-only.",
+      "Japanese role workbooks and relation maps, attached functional specs in `/sc4sap:create-program`, and choices from the system's own codes in `/sc4sap:assist`.",
+      "Config notes show whether they were checked against this system's values, and whether the values changed since."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "Every generated HTML page reads well on phones: wide tables scroll inside their box and inputs are at least 44px. Desktop and print output are unchanged.",
+      "The router that sends plain chat to the right skill now also recognises weekly status, SoD reviews and operations reports.",
+      "MCP 4.12.1: the operations check gets a complete week of dumps on S/4HANA."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.67",
+   "date": "2026-11-13",
+   "title": "Remote table reads and automatic skill routing",
+   "summary": "Tables of another SAP system can be read through an SM59 destination to build test data, and plain chat is routed to the right skill.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "`GetRemoteTableContents`: reads table rows of another system through an SM59 ABAP destination with the standard `RFC_READ_TABLE`. Nothing is installed in the remote system. Credential, user and authorization tables are refused, and the destination is never guessed: it is picked from the saved list.",
+      "Chat routing: question skills run directly; skills that write a deliverable or write to SAP are proposed in one line and run on yes."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "`/sc4sap:ask-consultant` costs less. It reads the local SPRO cache compactly and sends each consultant the context it needs in one kit. Measured on an ECC DEV system: a single-module question went from $2.04 to $1.33.",
+      "Upload the dispatcher change on each connected system before using the remote read. A system with that change can read production data through its SM59 destinations, so filter on key fields and mask personal fields."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.66",
+   "date": "2026-11-12",
+   "title": "ECC DDIC through MCP, and .NET Connector support",
+   "summary": "Domains, data elements, structures and tables are created with the MCP tools on ECC too, and Windows can connect over RFC through the SAP .NET Connector. Unused RFC connection types were removed.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "On ECC, `/sc4sap:create-object` and `/sc4sap:create-program` create DDIC objects (domain, data element, structure, table, table type) with the MCP tools. The SE38 helper report is only a fallback for listed errors.",
+      "RFC over the SAP .NET Connector (NCo) on Windows can be chosen in setup. `/sc4sap:sap-doctor` checks NCo, the port and an RFC read."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "`/sc4sap:config-to-document` notes cost less: about 70% less for the writer and about 45% less for the reviewer.",
+      "Setup step 9 runs an authorization preflight.",
+      "The RFC connection types `native`, `gateway` and `zrfc` were removed. Setup offers `odata` (default) or `soap`, and a profile that still uses a removed value says how to fix it at start."
+     ]
+    },
+    {
+     "type": "fixed",
+     "items": [
+      "On a fresh ECC install the OData classes lacked the DDIC actions, so every DDIC read and write failed.",
+      "Deleting a data element never worked, and objects created in `$TMP` were not registered in TADIR.",
+      "In the reference graph, includes pulled in by a program showed up on their own."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.65",
+   "date": "2026-11-12",
+   "title": "Missing includes in the reference graph",
+   "summary": "Includes that no program of the package pulls in, such as user exits, are now read and added to the graph.",
+   "sections": [
+    {
+     "type": "fixed",
+     "items": [
+      "`/sc4sap:stock-cbo` and `/sc4sap:cbo-relation-map`: includes that nothing in the package pulls in, such as user-exit includes included by SAP programs, were never read, so their reads, writes and calls were missing from the graph and the Fields tab. They are now found and read."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.64",
+   "date": "2026-11-11",
+   "title": "Missing files in the npm package",
+   "summary": "An npm install no longer misses the rules, the blocklist and the keyring.",
+   "sections": [
+    {
+     "type": "changed",
+     "items": [
+      "MCP 4.8.20 adds `GetAreaMenu`, so the area menu cross-check of 0.6.63 works on a fresh install."
+     ]
+    },
+    {
+     "type": "fixed",
+     "items": [
+      "The npm package carries every folder the plugin reads at run time."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.63",
+   "date": "2026-11-11",
+   "title": "Field-level CRUD and area menu cross-check",
+   "summary": "The CBO relation map gains a Fields tab showing who creates, reads and changes each table field, and process maps can be checked against the customer area menu.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "`/sc4sap:cbo-relation-map` Fields tab: per field, which objects create, read, update or delete it and which use it as a condition (C / R / U / D / F), with the source line. Customer appends of standard tables are included; CSV per table.",
+      "`/sc4sap:module-to-process` checks a map against the customer area menu (SE43) and sorts menu TCodes into core, gap, other module, unused and so on. An existing map is supplemented without a rebuild."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "The `analyze-cbo-obj` skill is now `/sc4sap:stock-cbo`. Outputs and paths are unchanged.",
+      "`/sc4sap:package-to-process` was removed. Use `/sc4sap:module-to-process`.",
+      "The blocklist hook also checks source uploads: a test class or CDS view that reads a deny-tier table is refused, because running it returns the rows to the agent.",
+      "Deny-tier tables have no exception, not even 'just this once' in chat. Only the user can widen the scope, by choosing another blocklist profile."
+     ]
+    },
+    {
+     "type": "fixed",
+     "items": [
+      "Integration maps: maps covering several modules, following customer function modules, and wrongly reported hand-offs."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.62",
+   "date": "2026-11-10",
+   "title": "Offline profiles and evidence receipts",
+   "summary": "Consultants who cannot connect to the customer system get offline profiles, and program creation results carry verdicts taken from the actual check log.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "Offline profiles: no host, user or password, only the SAP version, industry, country and modules. Each skill is full, limited (marked 'not checked in the system') or blocked.",
+      "`/sc4sap:create-program` evidence receipt: every SAP check and write is logged, activation, inactive objects and unit tests are judged PASS / FAIL / INCOMPLETE, and the final report copies those verdicts as they are.",
+      "`/sc4sap:cbo-relation-map` shows the SAP short text under every related object in the side panel."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "On ECC, object names containing `SELECT` or `JOIN` are left out of the text reads."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.61",
+   "date": "2026-11-06",
+   "title": "CBO relation map",
+   "summary": "`/sc4sap:cbo-relation-map` shows how the customer objects of a package relate, on one HTML page.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "`/sc4sap:cbo-relation-map`: an overview with hubs and groups, an explore view drawn like Obsidian's graph, a detail card per node, impact up to the TCodes, shortest paths, a table CRUD tab, source snippets, and PNG and CSV export. Several packages merge into one page, and the graph is collected first when missing.",
+      "DDIC relations in the reference graph: check tables, search helps, value tables, view base tables, includes and appends.",
+      "`docs/GETTING-STARTED.md` (English, Korean) walks through a first install on Windows."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "MCP 4.8.19: full source answers stay under the tool-result limit even on large function groups."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.60",
+   "date": "2026-11-06",
+   "title": "Text read from SAP is data, not instructions",
+   "summary": "If text read from SAP, such as source, comments, dumps or table rows, holds instructions addressed to an AI, they are not followed but reported as a finding.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "Every agent treats text read from SAP and fetched web pages as data only. A sentence addressed to an AI or a tool is never acted on and is reported as a finding. Developer comments such as 'DO NOT CHANGE' are read as usual.",
+      "When an agent's result block is malformed, the same agent rewrites only that block and the result is checked against the original. If that fails, the original result is shown with the gap marked."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.59",
+   "date": "2026-11-05",
+   "title": "Done criteria and verification evidence",
+   "summary": "Program creation and symptom analysis results show what the agent decided on its own, what was run to prove it, and what that proof does not cover.",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "`/sc4sap:create-program`: the spec carries done criteria (tool and pass result) and is approved with them. The final report starts with the check results (PASS, FAIL, NOT RUN), then lists the decisions made and one thing to check by hand.",
+      "`/sc4sap:analyze-symptom`: first asks whether you already suspect a cause, and gives that guess its own verdict: confirmed, refuted or not testable."
+     ]
+    },
+    {
+     "type": "fixed",
+     "items": [
+      "A build of the plugin registered under another marketplace name could be deleted as a stale cache.",
+      "The `project-dashboard` command path, and a `bin` entry in `package.json` that pointed to a file that never existed."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
+   "version": "0.6.58",
+   "date": "2026-11-03",
+   "title": "Programs in your company's code template",
+   "summary": "`/sc4sap:create-program` can build a program in your company's own layout (code template).",
+   "sections": [
+    {
+     "type": "added",
+     "items": [
+      "Pick the default sample, a saved template or a new template learned from an existing program, or mix them per include. A template sets the style (include names and order, header, naming, field catalog method), and the sc4sap rules still apply. Templates are saved per profile."
+     ]
+    },
+    {
+     "type": "changed",
+     "items": [
+      "MCP 4.8.18: DDIC structures are created and activated over RFC on ECC too, so a template whose field catalog comes from a structure needs no helper report."
+     ]
+    }
+   ]
+  },
+  {
+   "repo": "plugin",
    "version": "0.6.57",
    "date": "2026-10-30",
    "title": "Better selection-text handling on S/4HANA",
