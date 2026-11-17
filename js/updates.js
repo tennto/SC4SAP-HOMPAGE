@@ -53,6 +53,9 @@
     });
   }
   function inline(s) { return esc(s).replace(/`([^`]+)`/g, '<code>$1</code>'); }
+  // Titles and summaries are set large: a code label there takes the
+  // heading's size and stands out, so it is kept as plain text.
+  function plain(s) { return String(s).replace(/`([^`]+)`/g, '$1'); }
   function fmtDate(d) { return d.split('-').join('.'); }
   function href(v) { return 'update.html?v=' + encodeURIComponent(v); }
 
@@ -79,7 +82,7 @@
         html += '<li><a class="up-row" href="' + href(u.version) + '">' +
           '<span class="up-vd"><span class="up-v">v' + esc(u.version) + '</span>' +
           '<time class="up-d" datetime="' + esc(u.date) + '">' + fmtDate(u.date).slice(2) + '</time></span>' +
-          '<span class="up-t"><b>' + inline(u.title) + '</b><span>' + inline(u.summary || '') + '</span></span>' +
+          '<span class="up-t"><b>' + esc(plain(u.title)) + '</b><span>' + esc(plain(u.summary || '')) + '</span></span>' +
           '<i class="ph ph-arrow-right" aria-hidden="true"></i></a></li>';
       });
       list.innerHTML = html + '</ol></section>';
@@ -106,10 +109,10 @@
       if (i < 0) { missing(L.notFound); return; }
       var u = rows[i];
 
-      document.title = NAME + ' v' + u.version + ' · ' + u.title + ' · Super-Claude for SAP';
+      document.title = NAME + ' v' + u.version + ' · ' + plain(u.title) + ' · Super-Claude for SAP';
       $('[data-up-eyebrow]').textContent = NAME + ' · v' + u.version;
-      $('[data-up-title]').innerHTML = inline(u.title);
-      $('[data-up-summary]').innerHTML = inline(u.summary || '');
+      $('[data-up-title]').textContent = plain(u.title);
+      $('[data-up-summary]').textContent = plain(u.summary || '');
       var meta = '<li><b>' + L.date + '</b><time datetime="' + esc(u.date) + '">' + fmtDate(u.date) + '</time></li>';
       if (i === 0) meta += '<li><b>' + L.latest + '</b></li>';
       $('[data-up-meta]').innerHTML = meta;
