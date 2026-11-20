@@ -2497,3 +2497,6 @@ body.is-swapping :is(main, .foot, .rail) { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   .launch, .launch::backdrop { transition: none; }
 }
+
+/* The GitHub entry is a link, not a group button: same look, no underline. */
+a.nav-top { text-decoration: none; }

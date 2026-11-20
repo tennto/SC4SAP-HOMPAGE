@@ -149,7 +149,7 @@
       capsule.classList.toggle('is-expanded', !!name);
       tops.forEach(function (b) {
         var on = b.getAttribute('data-group') === name;
-        b.setAttribute('aria-expanded', String(on));
+        if (b.hasAttribute('data-group')) b.setAttribute('aria-expanded', String(on));
         if (on) glowAt(b);
       });
       groups.forEach(function (g) { g.classList.toggle('is-on', g.getAttribute('data-group') === name); });
@@ -162,6 +162,12 @@
 
     tops.forEach(function (b) {
       var name = b.getAttribute('data-group');
+      // A plain link (GitHub) opens no group: it closes any open one and takes the glow.
+      if (!name) {
+        b.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') { show(null); glowAt(b); } });
+        b.addEventListener('focus', function () { show(null); glowAt(b); });
+        return;
+      }
       b.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') show(name); });
       b.addEventListener('click', function () { show(active === name ? null : name); });
       b.addEventListener('focus', function () { show(name); });
