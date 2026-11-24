@@ -144,7 +144,9 @@
     var show = function (name) {
       if (!wide.matches) return;
       clearTimeout(closeTimer);
-      if (name === active) return;
+      // Nothing open can still leave a glow behind (the GitHub link takes it
+      // without opening a group), so closing always clears it.
+      if (name === active) { if (!name) glowAt(null); return; }
       active = name;
       capsule.classList.toggle('is-expanded', !!name);
       tops.forEach(function (b) {
